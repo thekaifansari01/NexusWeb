@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus - Secure AI Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        background: '#09090b',
+                        surface: '#18181b',
+                        border: '#27272a',
+                        primary: '#a855f7',
+                        primaryHover: '#9333ea'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="src/css/styles.css" />
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
+            <div class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight">Nexus</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Documentation</a>
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+            <div class="relative" id="auth-container">
+                <button id="signInBtn" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="ph-bold ph-google-logo text-base"></i> Sign In
+                </button>
+                <div id="userArea" class="hidden relative">
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
+                        <img id="userAvatar" src="" alt="avatar" />
+                    </div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <button id="signOutBtn">
+                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-6 pt-40 pb-20 relative z-10 flex flex-col items-center text-center">
+        <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-zinc-300 text-xs font-medium mb-8 hover:text-white transition-colors">
+            <span class="flex h-2 w-2 rounded-full bg-primary"></span>
+            Nexus v1.2.0 is now available <i class="ph ph-arrow-right"></i>
+        </a>
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] text-gradient">
+            Embed intelligent AI <br />
+            <span class="text-gradient-primary">without compromising security.</span>
+        </h1>
+        <p class="text-lg text-zinc-400 max-w-2xl mb-10 leading-relaxed font-normal">
+            Turn your website into a conversational knowledge base. Securely vault your Groq API key, enforce strict domain access, and drop in our lightweight widget in seconds.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <button id="heroSignInBtn" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
+                <i class="ph-bold ph-google-logo text-lg"></i> Continue with Google
+            </button>
+            <a href="dashboard.html" id="heroDashboardBtn" class="hidden bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
+                <i class="ph-bold ph-grid-four text-lg"></i> Dashboard
+            </a>
+            <button class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2">
+                <i class="ph-bold ph-play-circle text-lg"></i> View Demo
+            </button>
+        </div>
+    </main>
+
+    <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
+                    <i class="ph-bold ph-lock-key text-xl"></i>
+                </div>
+                <h3 class="text-base font-semibold text-zinc-100 mb-2">Vault-Grade Security</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Your Groq API key is encrypted and stored safely. We issue a separate, secure Nexus Key for your frontend widget.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
+                    <i class="ph-bold ph-globe-hemisphere-west text-xl"></i>
+                </div>
+                <h3 class="text-base font-semibold text-zinc-100 mb-2">Strict Whitelisting</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Our backend verifies the origin of every request. Nobody can steal your Nexus Key and use it on unauthorized domains.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
+                    <i class="ph-bold ph-lightning text-xl"></i>
+                </div>
+                <h3 class="text-base font-semibold text-zinc-100 mb-2">Zero Friction</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Drop a single script tag into your HTML. The widget automatically adapts to your site's theme and reads your content.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 mt-12 py-8 text-center text-zinc-500 text-xs font-medium">
+        <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
+    </footer>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>

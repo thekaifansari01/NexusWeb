@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard · Nexus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        background: '#09090b',
+                        surface: '#18181b',
+                        border: '#27272a',
+                        primary: '#a855f7',
+                        primaryHover: '#9333ea'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <link rel="stylesheet" href="src/css/dashboard.css" />
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <!-- ===== NAV ===== -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 flex justify-center">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-4 sm:px-6 py-2.5 flex justify-between items-center shadow-lg shadow-black/20">
+            <a href="index.html" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight">Nexus</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Documentation</a>
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
+                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+            <div class="relative" id="auth-container">
+                <div id="userArea" class="relative">
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
+                        <img id="userAvatar" src="" alt="avatar" />
+                    </div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <button id="signOutBtn">
+                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-16 relative z-10">
+
+        <!-- Greeting -->
+        <div class="dashboard-greeting mb-8 fade-in-up" style="animation-delay:0.05s;">
+            <h1>Welcome back, <span id="greetingName">User</span> 👋</h1>
+            <p class="sub">Manage your API keys, Groq key, and authorized domains.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="stat-card flex items-center gap-4 fade-in-up" style="animation-delay:0.10s;">
+                <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
+                    <i class="ph-bold ph-key"></i>
+                </div>
+                <div>
+                    <div class="stat-number" id="totalKeys">0</div>
+                    <div class="stat-label">Total Keys</div>
+                </div>
+            </div>
+            <div class="stat-card flex items-center gap-4 fade-in-up" style="animation-delay:0.15s;">
+                <div class="stat-icon bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
+                    <i class="ph-bold ph-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-number" id="activeKeys">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+            </div>
+            <div class="stat-card flex items-center gap-4 fade-in-up" style="animation-delay:0.20s;">
+                <div class="stat-icon bg-rose-500/10 text-rose-400 border border-rose-500/10">
+                    <i class="ph-bold ph-x-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-number" id="revokedKeys">0</div>
+                    <div class="stat-label">Revoked</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Keys -->
+        <section class="mb-12 fade-in-up" style="animation-delay:0.25s;">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                <div class="section-header">
+                    <h2>🔑 API Keys</h2>
+                    <p>Create and manage API keys for your applications.</p>
+                </div>
+                <button id="createKeyBtn" class="btn-primary">
+                    <i class="ph-bold ph-plus-circle text-base"></i> New Key
+                </button>
+            </div>
+            <div id="createKeyForm" class="glass-panel p-5 sm:p-6 rounded-2xl mb-5 hidden slide-down">
+                <div class="flex flex-col sm:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full">
+                        <label for="keyNameInput" class="form-label">Key Name</label>
+                        <input type="text" id="keyNameInput" placeholder="e.g. Production Server, Mobile App" class="form-input" />
+                    </div>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button id="saveKeyBtn" class="btn-primary">
+                            <i class="ph-bold ph-floppy-disk"></i> Generate & Save
+                        </button>
+                        <button id="cancelKeyBtn" class="btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div id="keysContainer" class="space-y-3 scrollbar-custom max-h-[420px] overflow-y-auto pr-1">
+                <div class="empty-state" id="emptyState">
+                    <div class="icon-wrap"><i class="ph-bold ph-key"></i></div>
+                    <h4>No API keys yet</h4>
+                    <p>Create your first API key to start integrating Nexus with your applications.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider" />
+
+        <!-- Groq API Key -->
+        <section class="fade-in-up" style="animation-delay:0.35s;">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                <div class="section-header">
+                    <h2>⚡ Groq API Key</h2>
+                    <p>Store your Groq API key securely. Only one key per account.</p>
+                </div>
+            </div>
+            <div class="glass-panel p-5 sm:p-6 rounded-2xl">
+                <div class="flex flex-col sm:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full">
+                        <label for="groqApiInput" class="form-label">API Key</label>
+                        <div class="relative">
+                            <input type="password" id="groqApiInput" placeholder="Enter your Groq API key" class="form-input pr-10" />
+                            <button id="toggleGroqVisibility" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
+                                <i class="ph-bold ph-eye"></i>
+                            </button>
+                        </div>
+                        <div id="groqKeyStatus" class="text-xs mt-1.5 text-zinc-500">No key saved</div>
+                    </div>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button id="saveGroqBtn" class="btn-primary">
+                            <i class="ph-bold ph-floppy-disk"></i> Save Key
+                        </button>
+                        <button id="deleteGroqBtn" class="btn-secondary hidden" style="border-color: rgba(251,113,133,0.3); color: #fb7185;">
+                            <i class="ph-bold ph-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+                <p class="text-xs text-zinc-500 mt-3 border-t border-white/5 pt-3">
+                    <i class="ph-bold ph-shield-check text-primary/40"></i>
+                    Your API key is encrypted and stored securely. Only you can access it.
+                </p>
+            </div>
+        </section>
+
+        <hr class="section-divider" />
+
+        <!-- Authorized Domains -->
+        <section class="fade-in-up" style="animation-delay:0.45s;">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                <div class="section-header">
+                    <h2>🌐 Authorized Domains</h2>
+                    <p>Restrict API key usage to specific domains. Max 10 domains.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="domain-limit-badge" id="domainLimitBadge">0 / 10 used</span>
+                    <button id="addDomainBtn" class="btn-primary">
+                        <i class="ph-bold ph-plus-circle text-base"></i> Add Domain
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 mb-5">
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
+                        <i class="ph-bold ph-globe-hemisphere-west"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number" id="totalDomains">0/10</div>
+                        <div class="stat-label">Total Domains</div>
+                    </div>
+                </div>
+            </div>
+            <div id="addDomainForm" class="glass-panel p-5 sm:p-6 rounded-2xl mb-5 hidden slide-down">
+                <div class="flex flex-col sm:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full">
+                        <label for="domainInput" class="form-label">Domain Name</label>
+                        <input type="text" id="domainInput" placeholder="e.g. example.com, myapp.com" class="form-input" />
+                        <p class="text-xs text-zinc-500 mt-1.5">Enter domain without http://, https://, or www.</p>
+                    </div>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button id="saveDomainBtn" class="btn-primary">
+                            <i class="ph-bold ph-floppy-disk"></i> Add Domain
+                        </button>
+                        <button id="cancelDomainBtn" class="btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div id="domainsContainer" class="space-y-3 scrollbar-custom max-h-[420px] overflow-y-auto pr-1">
+                <div class="empty-state" id="domainsEmptyState">
+                    <div class="icon-wrap"><i class="ph-bold ph-globe"></i></div>
+                    <h4>No domains added</h4>
+                    <p>Add authorized domains to restrict API key usage to specific websites.</p>
+                </div>
+            </div>
+            <div class="mt-5 text-xs text-zinc-600 flex items-center gap-2 border-t border-white/5 pt-4">
+                <i class="ph-bold ph-shield-check text-primary/40"></i>
+                <span>Only requests from these domains will be allowed. Add up to 10 domains.</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="border-t border-white/5 mt-8 py-6 text-center text-zinc-500 text-xs font-medium">
+        <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
+    </footer>
+
+    <!-- ===== TOAST (overlay) – empty container, JS fills it ===== -->
+
+    <!-- ===== FIREBASE ===== -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+
+    <script type="module" src="src/js/dashboard.js"></script>
+</body>
+</html>

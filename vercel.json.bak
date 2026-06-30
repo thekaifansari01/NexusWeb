@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/chat.py": {
+      "runtime": "python@3.12"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/chat",
+      "dest": "/api/chat.py"
+    }
+  ]
+}
