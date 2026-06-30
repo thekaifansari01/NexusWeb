@@ -33,16 +33,17 @@
 
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
-            <div class="flex items-center gap-2 cursor-pointer">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
                 <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
                 <span class="text-lg font-bold tracking-tight">Nexus</span>
-            </div>
+            </a>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Documentation</a>
-                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
-                <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Documentation</a>
+                <a href="/pricing" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
+                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
                     <i class="ph ph-github-logo text-lg"></i> GitHub
                 </a>
             </div>
@@ -81,12 +82,12 @@
             <button id="heroSignInBtn" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
                 <i class="ph-bold ph-google-logo text-lg"></i> Continue with Google
             </button>
-            <a href="dashboard.html" id="heroDashboardBtn" class="hidden bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
+            <a href="/dashboard" id="heroDashboardBtn" class="hidden bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
                 <i class="ph-bold ph-grid-four text-lg"></i> Dashboard
             </a>
-            <button class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2">
+            <a href="/demo" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 hover:border-primary/30">
                 <i class="ph-bold ph-play-circle text-lg"></i> View Demo
-            </button>
+            </a>
         </div>
     </main>
 

@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "/Documentation.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/Pricing.html"
+    },
+    {
+      "source": "/demo",
+      "destination": "/Demo.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ]
+}
