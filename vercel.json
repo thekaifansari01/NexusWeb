@@ -14,7 +14,7 @@
     },
     {
       "source": "/dashboard",
-      "destination": "/dashboard.html"
+      "destination": "/Dashboard.html"
     },
     {
       "source": "/(.*)",
