@@ -33,7 +33,6 @@
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
 
-    <!-- ===== STANDARD PRODUCT SIDEBAR ===== -->
     <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
         <div class="h-16 flex items-center px-6 border-b border-border">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -43,8 +42,6 @@
                 <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
             </a>
         </div>
-
-        <!-- Sidebar Navigation – only Dashboard & Docs -->
         <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
             <a href="/dashboard" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
                 <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
@@ -53,8 +50,6 @@
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
             </a>
         </nav>
-
-        <!-- User + Sign Out -->
         <div class="p-4 border-t border-border">
             <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
                 <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
@@ -69,11 +64,8 @@
         </div>
     </aside>
 
-    <!-- ===== MAIN CONTENT AREA ===== -->
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
         <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
-        
-        <!-- Header with breadcrumb (no extra nav links) -->
         <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10">
             <div class="flex items-center gap-4">
                 <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
@@ -85,46 +77,158 @@
                     <span id="breadcrumbCurrent" class="text-white">Overview</span>
                 </div>
             </div>
-            <!-- Right side empty (or can add a small Home link if needed) -->
         </header>
 
         <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
-            
-            <!-- ==== INTERNAL TABS (now inside main content) ==== -->
-            <div class="flex items-center gap-1 mb-8 border-b border-border pb-2">
-                <button class="tab-btn active px-4 py-2 text-sm font-medium rounded-lg transition-colors" data-tab="overview">
+            <div class="flex items-center gap-1 mb-8 border-b border-border pb-2 overflow-x-auto">
+                <button class="tab-btn active px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="overview">
                     <i class="ph-bold ph-squares-four mr-1.5"></i> Overview
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors" data-tab="api-keys">
+                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="api-keys">
                     <i class="ph-bold ph-key mr-1.5"></i> Nexus Keys
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors" data-tab="domains">
+                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="domains">
                     <i class="ph-bold ph-globe-hemisphere-west mr-1.5"></i> Domains
                 </button>
-                  <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors" data-tab="usage">
+                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="usage">
                     <i class="ph-bold ph-chart-pie-slice mr-1.5"></i> Usage
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors" data-tab="settings">
+                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="settings">
                     <i class="ph-bold ph-gear mr-1.5"></i> Settings
                 </button>
             </div>
 
-            <!-- ===== TAB CONTENT SECTIONS (unchanged except removed hidden class from first) ===== -->
             <section id="tab-overview" class="tab-content active fade-in-up">
-                <div class="mb-8">
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Overview</h1>
-                    <p class="text-sm text-zinc-400 mt-1">Monitor your Nexus API usage and configurations.</p>
+                <div class="welcome-banner p-6 md:p-8 rounded-3xl border border-primary/20 mb-8 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold tracking-widest uppercase bg-primary/20 text-primary px-2.5 py-1 rounded-full border border-primary/30">Developer Account</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span class="text-xs text-emerald-400 font-medium">All Systems Operational</span>
+                        </div>
+                        <h1 id="welcomeMessage" class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Welcome back, User!</h1>
+                        <p class="text-sm text-zinc-400 mt-1 max-w-xl">Yahan aapke Nexus platform ki poori live summary hai. Keys secure hain aur authorized domains se traffic load balanced hai.</p>
+                    </div>
+                    <div class="flex items-center gap-3 relative z-10 flex-shrink-0">
+                        <button class="btn-secondary py-2 px-4 text-xs flex items-center gap-2" onclick="document.querySelector('[data-tab=settings]').click()">
+                            <i class="ph-bold ph-sliders"></i> Configure Vault
+                        </button>
+                        <button class="btn-primary py-2 px-4 text-xs flex items-center gap-2" onclick="document.querySelector('[data-tab=api-keys]').click()">
+                            <i class="ph-bold ph-plus-circle"></i> Create New Key
+                        </button>
+                    </div>
+                    <div class="absolute -right-10 -top-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="stat-label text-zinc-400">Nexus Guard & Keys</span>
+                            <div class="w-8 h-8 rounded-xl bg-primary/10 text-primary border border-primary/10 flex items-center justify-center">
+                                <i class="ph-bold ph-key"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <div class="stat-number" id="totalKeys">0</div>
+                            <span class="text-xs text-zinc-500 font-medium">Total Provisioned</span>
+                        </div>
+                        <div class="mt-2 text-xs text-emerald-400 flex items-center gap-1">
+                            <span id="activeKeys" class="font-bold">0</span> Active <span class="text-zinc-600">|</span> <span id="revokedKeys" class="text-rose-400 font-bold">0</span> Revoked
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="stat-label text-zinc-400">Origin Whitelisting</span>
+                            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/10 flex items-center justify-center">
+                                <i class="ph-bold ph-globe-hemisphere-west"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <div class="stat-number" id="totalDomains">0/10</div>
+                            <span class="text-xs text-zinc-500">Slots Used</span>
+                        </div>
+                        <div class="mt-2 text-xs text-zinc-400 flex items-center gap-1">
+                            Origin CORS constraints are active and enforced.
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="stat-label text-zinc-400">Provider Core Gateway</span>
+                            <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/10 flex items-center justify-center">
+                                <i class="ph-bold ph-shield-check"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <div class="stat-number text-emerald-400 text-xl font-bold">Encrypted</div>
+                        </div>
+                        <div class="mt-2 text-xs text-zinc-500">
+                            Groq AI Vault-grade storage active.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
+                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                            <div>
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400">Active Gateways Snapshot</h3>
+                                <p class="text-xs text-zinc-500">Quick view of your top operational API keys.</p>
+                            </div>
+                            <button class="text-xs font-semibold text-primary hover:text-primaryHover transition-colors flex items-center gap-1" onclick="document.querySelector('[data-tab=api-keys]').click()">
+                                Manage Keys <i class="ph ph-arrow-up-right"></i>
+                            </button>
+                        </div>
+                        <div id="overviewKeysContainer" class="space-y-3">
+                            </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 flex flex-col justify-between">
+                        <div>
+                            <div class="mb-4 pb-2 border-b border-white/5">
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400">Platform Guard Status</h3>
+                                <p class="text-xs text-zinc-500">Real-time gateway parameter analysis.</p>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-white/5">
+                                    <div class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
+                                        <i class="ph-bold ph-fingerprint"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">Dynamic CORS Verification</div>
+                                        <div class="text-[11px] text-zinc-500 mt-0.5">Requests without matching whitelists are automatically dropped at edge.</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-white/5">
+                                    <div class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 text-xs">
+                                        <i class="ph-bold ph-lock-keyhole"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">Asymmetric Encryption</div>
+                                        <div class="text-[11px] text-zinc-500 mt-0.5">Your upstream provider Groq keys are masked with client-side block ciphers.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
+                            <span>Engine Build: v1.4.2</span>
+                            <button class="text-primary font-medium hover:underline" onclick="document.querySelector('[data-tab=usage]').click()">View Metrics</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-api-keys" class="tab-content hidden fade-in-up">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="stat-card">
                         <div class="flex items-center gap-4">
                             <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
                                 <i class="ph-bold ph-key"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="totalKeys">0</div>
-                                <div class="stat-label">Total Keys</div>
+                                <div class="stat-number" id="keysTotal">0</div>
+                                <div class="stat-label">Total</div>
                             </div>
                         </div>
                     </div>
@@ -134,62 +238,24 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="activeKeys">0</div>
-                                <div class="stat-label">Active Keys</div>
+                                <div class="stat-number" id="keysActive">0</div>
+                                <div class="stat-label">Active</div>
                             </div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
-                                <i class="ph-bold ph-globe-hemisphere-west"></i>
+                            <div class="stat-icon bg-rose-500/10 text-rose-400 border border-rose-500/10">
+                                <i class="ph-bold ph-x-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="totalDomains">0/10</div>
-                                <div class="stat-label">Domains Used</div>
+                                <div class="stat-number" id="keysRevoked">0</div>
+                                <div class="stat-label">Revoked</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-base font-semibold text-white">Recent Keys</h3>
-                            <button class="text-xs text-primary hover:text-primaryHover" onclick="document.querySelector('[data-tab=api-keys]').click()">View All</button>
-                        </div>
-                        <div id="overviewKeysContainer" class="space-y-3">
-                        </div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-base font-semibold text-white">Security Status</h3>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                                    <i class="ph-bold ph-shield-check"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-sm text-white font-medium">Groq Key Encrypted</div>
-                                    <div class="text-xs text-zinc-500">Vault-grade storage active</div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                                    <i class="ph-bold ph-check-circle"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-sm text-white font-medium">Domain Strict Mode</div>
-                                    <div class="text-xs text-zinc-500">Origin checks enforced</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="tab-api-keys" class="tab-content hidden fade-in-up">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">Nexus Keys</h1>
@@ -199,7 +265,7 @@
                         <i class="ph-bold ph-plus-circle text-base"></i> New Key
                     </button>
                 </div>
-
+                
                 <div id="createKeyForm" class="glass-panel p-6 rounded-2xl mb-6 hidden slide-down border border-primary/20 bg-black/40">
                     <h3 class="text-base font-semibold text-white mb-4">Create New API Key</h3>
                     <div class="flex flex-col gap-4 max-w-xl">
@@ -214,7 +280,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="keysContainer" class="space-y-4">
                     <div class="empty-state" id="emptyState">
                         <div class="icon-wrap"><i class="ph-bold ph-key"></i></div>
@@ -225,6 +290,42 @@
             </section>
 
             <section id="tab-domains" class="tab-content hidden fade-in-up">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
+                                <i class="ph-bold ph-globe-hemisphere-west"></i>
+                            </div>
+                            <div>
+                                <div class="stat-number" id="domainsTotal">0/10</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
+                                <i class="ph-bold ph-check-circle"></i>
+                            </div>
+                            <div>
+                                <div class="stat-number" id="domainsActive">0</div>
+                                <div class="stat-label">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center gap-4">
+                            <div class="stat-icon bg-rose-500/10 text-rose-400 border border-rose-500/10">
+                                <i class="ph-bold ph-x-circle"></i>
+                            </div>
+                            <div>
+                                <div class="stat-number" id="domainsInactive">0</div>
+                                <div class="stat-label">Inactive</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">Authorized Domains</h1>
@@ -237,7 +338,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div id="addDomainForm" class="glass-panel p-6 rounded-2xl mb-6 hidden slide-down border border-primary/20 bg-black/40">
                     <h3 class="text-base font-semibold text-white mb-4">Add Authorized Domain</h3>
                     <div class="flex flex-col gap-4 max-w-xl">
@@ -252,7 +352,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="domainsContainer" class="space-y-4">
                     <div class="empty-state" id="domainsEmptyState">
                         <div class="icon-wrap"><i class="ph-bold ph-globe"></i></div>
@@ -262,14 +361,13 @@
                 </div>
             </section>
 
-                        <section id="tab-usage" class="tab-content hidden fade-in-up">
+            <section id="tab-usage" class="tab-content hidden fade-in-up">
                 <div class="mb-8">
                     <h1 class="text-2xl font-bold text-white tracking-tight">Usage Analytics</h1>
                     <p class="text-sm text-zinc-400 mt-1">Track your API request usage and token consumption.</p>
                 </div>
-
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="stat-card">
                         <div class="flex items-center gap-4">
                             <div class="stat-icon bg-blue-500/10 text-blue-400 border border-blue-500/10">
@@ -304,8 +402,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- History List -->
+                
                 <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-base font-semibold text-white">Recent Requests</h3>
@@ -321,7 +418,6 @@
                     <h1 class="text-2xl font-bold text-white tracking-tight">Settings</h1>
                     <p class="text-sm text-zinc-400 mt-1">Manage external provider keys and account preferences.</p>
                 </div>
-
                 <div class="split-layout">
                     <div class="split-info">
                         <h3 class="text-base font-semibold text-white mb-1">Groq Configuration</h3>

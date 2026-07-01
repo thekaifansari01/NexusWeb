@@ -4,7 +4,7 @@ import {
     getApiKeys, deleteApiKey,
     getDomains, addDomain, deleteDomain, toggleDomainStatus,
     saveGroqApiKey, getGroqApiKey, deleteGroqApiKey,
-    getUsageHistory, getDailyUsageStats // <-- ONLY NEW IMPORT ADDED
+    getUsageHistory, getDailyUsageStats
 } from "./modules/firestore.js";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "./config/firebase.js";
@@ -15,12 +15,9 @@ const sidebarEmail = document.getElementById('sidebarEmail');
 const sidebarSignOut = document.getElementById('sidebarSignOut');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const sidebar = document.querySelector('aside');
-
-// NEW: Internal tab buttons (now inside main content)
 const tabBtns = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
-
 const keysContainer = document.getElementById('keysContainer');
 const overviewKeysContainer = document.getElementById('overviewKeysContainer');
 const emptyState = document.getElementById('emptyState');
@@ -31,7 +28,7 @@ const saveKeyBtn = document.getElementById('saveKeyBtn');
 const cancelKeyBtn = document.getElementById('cancelKeyBtn');
 const totalKeysEl = document.getElementById('totalKeys');
 const activeKeysEl = document.getElementById('activeKeys');
-
+const revokedKeysEl = document.getElementById('revokedKeys');
 const domainsContainer = document.getElementById('domainsContainer');
 const domainsEmptyState = document.getElementById('domainsEmptyState');
 const addDomainBtn = document.getElementById('addDomainBtn');
@@ -40,19 +37,25 @@ const domainInput = document.getElementById('domainInput');
 const saveDomainBtn = document.getElementById('saveDomainBtn');
 const cancelDomainBtn = document.getElementById('cancelDomainBtn');
 const totalDomainsEl = document.getElementById('totalDomains');
+const activeDomainsEl = document.getElementById('activeDomains');
+const inactiveDomainsEl = document.getElementById('inactiveDomains');
 const domainLimitBadge = document.getElementById('domainLimitBadge');
-
 const groqInput = document.getElementById('groqApiInput');
 const groqStatus = document.getElementById('groqKeyStatus');
 const saveGroqBtn = document.getElementById('saveGroqBtn');
 const deleteGroqBtn = document.getElementById('deleteGroqBtn');
 const toggleGroqBtn = document.getElementById('toggleGroqVisibility');
-
-// NEW: Usage DOM elements
 const totalRequestsEl = document.getElementById('totalRequests');
 const totalTokensEl = document.getElementById('totalTokens');
 const successRateEl = document.getElementById('successRate');
 const usageHistoryContainer = document.getElementById('usageHistoryContainer');
+const welcomeMessageEl = document.getElementById('welcomeMessage');
+const keysTotalEl = document.getElementById('keysTotal');
+const keysActiveEl = document.getElementById('keysActive');
+const keysRevokedEl = document.getElementById('keysRevoked');
+const domainsTotalEl = document.getElementById('domainsTotal');
+const domainsActiveEl = document.getElementById('domainsActive');
+const domainsInactiveEl = document.getElementById('domainsInactive');
 
 let currentUser = null;
 const MAX_DOMAINS = 10;
@@ -60,12 +63,10 @@ let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 
-// ---- Internal Tab Switching ----
 tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         tabBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const tabId = btn.getAttribute('data-tab');
         tabContents.forEach(tab => {
             tab.classList.add('hidden');
@@ -74,9 +75,7 @@ tabBtns.forEach(btn => {
         if (activeTab) {
             activeTab.classList.remove('hidden');
         }
-
         breadcrumbCurrent.textContent = btn.textContent.trim();
-
         if (window.innerWidth < 768 && sidebar) {
             sidebar.classList.add('hidden');
             sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
@@ -84,7 +83,6 @@ tabBtns.forEach(btn => {
     });
 });
 
-// Mobile menu toggle
 if (mobileMenuBtn && sidebar) {
     mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
@@ -96,7 +94,6 @@ if (mobileMenuBtn && sidebar) {
     });
 }
 
-// ---- Turnstile (unchanged) ----
 function renderTurnstile() {
     const container = document.getElementById('turnstile-container');
     if (!container || !window.turnstile) return;
@@ -144,7 +141,6 @@ function resetTurnstile() {
     }
 }
 
-// ---- Auth ----
 observeAuthState((user) => {
     if (!user) {
         window.location.href = 'index.html';
@@ -154,11 +150,13 @@ observeAuthState((user) => {
     if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
     if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
     if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
-    
+    if (welcomeMessageEl) {
+        welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
+    }
     loadKeys();
     loadDomains();
     loadGroqKey();
-    loadUsage(); // <-- NEW: Usage data load call added
+    loadUsage();
 });
 
 if (sidebarSignOut) {
@@ -167,7 +165,6 @@ if (sidebarSignOut) {
     });
 }
 
-// ---- Key creation (unchanged) ----
 createKeyBtn.addEventListener('click', () => {
     const isHidden = createKeyForm.classList.contains('hidden');
     createKeyForm.classList.toggle('hidden');
@@ -224,7 +221,6 @@ keyNameInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !saveKeyBtn.classList.contains('hidden')) saveKeyBtn.click();
 });
 
-// ---- Load & render keys (unchanged) ----
 async function loadKeys() {
     if (!currentUser) return;
     try {
@@ -240,8 +236,13 @@ async function loadKeys() {
 function updateStats(keys) {
     const total = keys.length;
     const active = keys.filter(k => k.status === 'active').length;
+    const revoked = keys.filter(k => k.status === 'revoked').length;
     if (totalKeysEl) totalKeysEl.textContent = total;
     if (activeKeysEl) activeKeysEl.textContent = active;
+    if (revokedKeysEl) revokedKeysEl.textContent = revoked;
+    if (keysTotalEl) keysTotalEl.textContent = total;
+    if (keysActiveEl) keysActiveEl.textContent = active;
+    if (keysRevokedEl) keysRevokedEl.textContent = revoked;
 }
 
 function renderOverviewKeys(keys) {
@@ -367,7 +368,6 @@ function renderKeys(keys) {
     });
 }
 
-// ---- Domains (unchanged) ----
 addDomainBtn.addEventListener('click', () => {
     const isHidden = addDomainForm.classList.contains('hidden');
     addDomainForm.classList.toggle('hidden');
@@ -428,7 +428,14 @@ async function loadDomains() {
 
 function updateDomainStats(domains) {
     const total = domains.length;
+    const active = domains.filter(d => d.status === 'active').length;
+    const inactive = domains.filter(d => d.status === 'inactive').length;
     if (totalDomainsEl) totalDomainsEl.textContent = `${total}/${MAX_DOMAINS}`;
+    if (activeDomainsEl) activeDomainsEl.textContent = active;
+    if (inactiveDomainsEl) inactiveDomainsEl.textContent = inactive;
+    if (domainsTotalEl) domainsTotalEl.textContent = `${total}/${MAX_DOMAINS}`;
+    if (domainsActiveEl) domainsActiveEl.textContent = active;
+    if (domainsInactiveEl) domainsInactiveEl.textContent = inactive;
     if (domainLimitBadge) {
         domainLimitBadge.textContent = `${total} / ${MAX_DOMAINS} used`;
         domainLimitBadge.className = 'domain-limit-badge';
@@ -517,7 +524,6 @@ function renderDomains(domains) {
     });
 }
 
-// ---- Groq Key (unchanged) ----
 if (toggleGroqBtn) {
     toggleGroqBtn.addEventListener('click', () => {
         const input = document.getElementById('groqApiInput');
@@ -588,15 +594,10 @@ if (deleteGroqBtn) {
     });
 }
 
-// ============================================
-// NEW: USAGE LOGIC (added at the end, nothing else changed)
-// ============================================
 async function loadUsage() {
     if (!currentUser) return;
     try {
-        // 1. Fetch History
         const history = await getUsageHistory(currentUser.uid, 10);
-        
         if (history.length === 0) {
             usageHistoryContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No usage data available yet.</div>';
         } else {
@@ -605,10 +606,8 @@ async function loadUsage() {
                 const div = document.createElement('div');
                 div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5 fade-in-up';
                 div.style.animationDelay = `${index * 0.04}s`;
-                
                 const date = log.timestamp?.toDate?.() || new Date();
                 const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-
                 div.innerHTML = `
                     <div class="flex items-center gap-3">
                         <div class="w-2 h-2 rounded-full ${log.status === 'success' ? 'bg-emerald-400' : 'bg-red-400'}"></div>
@@ -623,13 +622,9 @@ async function loadUsage() {
                 usageHistoryContainer.appendChild(div);
             });
         }
-
-        // 2. Fetch Aggregated Stats
         const stats = await getDailyUsageStats(currentUser.uid);
         if (totalRequestsEl) totalRequestsEl.textContent = stats.totalRequests || 0;
         if (totalTokensEl) totalTokensEl.textContent = stats.totalTokens || 0;
-
-        // 3. Calculate success rate from history
         if (history.length > 0 && successRateEl) {
             const successCount = history.filter(h => h.status === 'success').length;
             const rate = Math.round((successCount / history.length) * 100);
@@ -637,7 +632,6 @@ async function loadUsage() {
         } else if (successRateEl) {
             successRateEl.textContent = 'N/A';
         }
-
     } catch (error) {
         console.error("Usage load error:", error);
         if (usageHistoryContainer) {
