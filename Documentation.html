@@ -323,17 +323,17 @@
                             <div class="step-content">
                                 <h3 class="!mt-0">Add the script tag</h3>
                                 <p>Paste the following code into your HTML, preferably just before the closing <code>&lt;/body&gt;</code> tag.</p>
-                                <pre><code>&lt;!-- Nexus Widget --&gt;
+                            <pre><code>&lt;!-- Nexus Widget --&gt;
 &lt;script&gt;
   window.NexusConfig = {
-    apiKey: 'YOUR_NEXUS_API_KEY',
+    apiKey: '',
     theme: 'auto',
     botName: 'Nexus AI',
     greeting: '👋 Hello! How can I assist you today?',
-    model: 'llama3-8b-8192'
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct'
   };
 &lt;/script&gt;
-&lt;script src="https://cdn.nexus.ai/widget.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@2.2.0/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
                                 <p class="text-zinc-500 text-sm mt-2 flex items-start gap-1">
                                     <i class="ph-bold ph-info mt-1"></i>
                                     <span><strong>Note:</strong> The CDN URL is a placeholder. In production, you'll host the widget bundle yourself or use a provided CDN link.</span>
