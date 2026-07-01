@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -34,7 +35,6 @@
 
     <div class="ambient-glow"></div>
 
-    <!-- ===== NAV ===== -->
     <div class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-4 sm:px-6 py-2.5 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -67,16 +67,13 @@
         </nav>
     </div>
 
-    <!-- ===== MAIN ===== -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-16 relative z-10">
 
-        <!-- Greeting -->
         <div class="dashboard-greeting mb-8 fade-in-up" style="animation-delay:0.05s;">
             <h1>Welcome back, <span id="greetingName">User</span> 👋</h1>
             <p class="sub">Manage your API keys, Groq key, and authorized domains.</p>
         </div>
 
-        <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div class="stat-card flex items-center gap-4 fade-in-up" style="animation-delay:0.10s;">
                 <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
@@ -107,7 +104,6 @@
             </div>
         </div>
 
-        <!-- API Keys -->
         <section class="mb-12 fade-in-up" style="animation-delay:0.25s;">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div class="section-header">
@@ -119,14 +115,15 @@
                 </button>
             </div>
             <div id="createKeyForm" class="glass-panel p-5 sm:p-6 rounded-2xl mb-5 hidden slide-down">
-                <div class="flex flex-col sm:flex-row gap-4 items-end">
-                    <div class="flex-1 w-full">
+                <div class="flex flex-col gap-4">
+                    <div>
                         <label for="keyNameInput" class="form-label">Key Name</label>
                         <input type="text" id="keyNameInput" placeholder="e.g. Production Server, Mobile App" class="form-input" />
                     </div>
-                    <div class="flex gap-3 w-full sm:w-auto">
-                        <button id="saveKeyBtn" class="btn-primary">
-                            <i class="ph-bold ph-floppy-disk"></i> Generate & Save
+                    <div id="turnstile-container" class="mb-3"></div>
+                    <div class="flex gap-3 justify-end">
+                        <button id="saveKeyBtn" class="btn-primary hidden">
+                            <i class="ph-bold ph-floppy-disk"></i> Create Key
                         </button>
                         <button id="cancelKeyBtn" class="btn-secondary">Cancel</button>
                     </div>
@@ -143,7 +140,6 @@
 
         <hr class="section-divider" />
 
-        <!-- Groq API Key -->
         <section class="fade-in-up" style="animation-delay:0.35s;">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div class="section-header">
@@ -181,7 +177,6 @@
 
         <hr class="section-divider" />
 
-        <!-- Authorized Domains -->
         <section class="fade-in-up" style="animation-delay:0.45s;">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div class="section-header">
@@ -236,14 +231,10 @@
 
     </main>
 
-    <!-- ===== FOOTER ===== -->
     <footer class="border-t border-white/5 mt-8 py-6 text-center text-zinc-500 text-xs font-medium">
         <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
     </footer>
 
-    <!-- ===== TOAST (overlay) – empty container, JS fills it ===== -->
-
-    <!-- ===== FIREBASE ===== -->
     <script type="importmap">
         {
             "imports": {

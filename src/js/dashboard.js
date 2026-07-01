@@ -1,7 +1,7 @@
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { toggleDropdown, closeDropdown, showToast } from "./modules/ui.js";
 import {
-    createApiKey, getApiKeys, deleteApiKey, revokeApiKey,
+    getApiKeys, deleteApiKey,
     getDomains, addDomain, deleteDomain, toggleDomainStatus,
     saveGroqApiKey, getGroqApiKey, deleteGroqApiKey
 } from "./modules/firestore.js";
@@ -42,6 +42,65 @@ const toggleGroqBtn = document.getElementById('toggleGroqVisibility');
 
 let currentUser = null;
 const MAX_DOMAINS = 10;
+let captchaToken = null;
+let turnstileWidgetId = null;
+let turnstileRetryTimeout = null;
+
+function renderTurnstile() {
+    const container = document.getElementById('turnstile-container');
+    if (!container || !window.turnstile) return;
+
+    if (turnstileWidgetId !== null && turnstileWidgetId !== undefined) {
+        try {
+            turnstile.remove(turnstileWidgetId);
+        } catch (_) {}
+        turnstileWidgetId = null;
+    }
+
+    container.innerHTML = '';
+
+    try {
+        turnstileWidgetId = turnstile.render(container, {
+            sitekey: '0x4AAAAAADttl-ZBYJPZI8zP',
+            callback: function(token) {
+                captchaToken = token;
+                saveKeyBtn.classList.remove('hidden');
+            },
+            'expired-callback': function() {
+                captchaToken = null;
+                saveKeyBtn.classList.add('hidden');
+            },
+            'error-callback': function() {
+                captchaToken = null;
+                saveKeyBtn.classList.add('hidden');
+                console.warn('Turnstile error, retrying...');
+                if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+                turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
+            }
+        });
+    } catch (e) {
+        console.warn('Turnstile render error:', e);
+        if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+        turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
+    }
+}
+
+function resetTurnstile() {
+    try {
+        if (turnstileWidgetId !== null && turnstileWidgetId !== undefined && window.turnstile) {
+            turnstile.remove(turnstileWidgetId);
+            turnstileWidgetId = null;
+        }
+    } catch (e) {
+        console.warn('Turnstile reset skipped:', e);
+    }
+    captchaToken = null;
+    saveKeyBtn.classList.add('hidden');
+    if (turnstileRetryTimeout) {
+        clearTimeout(turnstileRetryTimeout);
+        turnstileRetryTimeout = null;
+    }
+}
 
 observeAuthState((user) => {
     if (!user) {
@@ -55,6 +114,7 @@ observeAuthState((user) => {
     loadKeys();
     loadDomains();
     loadGroqKey();
+    setTimeout(renderTurnstile, 100);
 });
 
 signOutBtn.addEventListener('click', async () => {
@@ -73,18 +133,14 @@ createKeyBtn.addEventListener('click', () => {
         createKeyForm.classList.add('slide-down');
         keyNameInput.value = '';
         keyNameInput.focus();
+        setTimeout(renderTurnstile, 200);
     }
 });
 
 cancelKeyBtn.addEventListener('click', () => {
     createKeyForm.classList.add('hidden');
+    resetTurnstile();
 });
-
-function generateKey() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-}
 
 saveKeyBtn.addEventListener('click', async () => {
     const name = keyNameInput.value.trim();
@@ -92,19 +148,33 @@ saveKeyBtn.addEventListener('click', async () => {
         showToast('Please enter a name for the key.', 3000, 'warning');
         return;
     }
-    const rawKey = generateKey();
+    if (!captchaToken) {
+        showToast('Please complete the CAPTCHA.', 3000, 'warning');
+        return;
+    }
+
     try {
-        await createApiKey(currentUser.uid, name, rawKey);
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: currentUser.uid,
+                name: name,
+                captchaToken: captchaToken
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            showToast(data.error || 'Failed to create key.', 3500, 'error');
+            return;
+        }
         showToast(`API key "${name}" created successfully!`, 3500, 'success');
         createKeyForm.classList.add('hidden');
         loadKeys();
+        resetTurnstile();
     } catch (error) {
         console.error(error);
-        if (error.code === 'permission-denied') {
-            showToast('Permission denied. Please check Firestore security rules.', 4000, 'error');
-        } else {
-            showToast('Failed to create key. Please try again.', 3500, 'error');
-        }
+        showToast('Network error. Please try again.', 3500, 'error');
     }
 });
 
@@ -120,11 +190,7 @@ async function loadKeys() {
         updateStats(keys);
     } catch (error) {
         console.error(error);
-        if (error.code === 'permission-denied') {
-            showToast('Unable to load keys. Please check Firestore security rules.', 4000, 'error');
-        } else {
-            showToast('Failed to load keys. Please refresh the page.', 3500, 'error');
-        }
+        showToast('Failed to load keys. Please refresh the page.', 3500, 'error');
     }
 }
 
@@ -217,11 +283,7 @@ function renderKeys(keys) {
                 loadKeys();
             } catch (error) {
                 console.error(error);
-                if (error.code === 'permission-denied') {
-                    showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-                } else {
-                    showToast(`Failed to ${action} key.`, 3500, 'error');
-                }
+                showToast(`Failed to ${action} key.`, 3500, 'error');
             }
         });
         actions.appendChild(toggleBtn);
@@ -238,11 +300,7 @@ function renderKeys(keys) {
                     loadKeys();
                 } catch (error) {
                     console.error(error);
-                    if (error.code === 'permission-denied') {
-                        showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-                    } else {
-                        showToast('Failed to delete key.', 3500, 'error');
-                    }
+                    showToast('Failed to delete key.', 3500, 'error');
                 }
             }
         });
@@ -274,9 +332,7 @@ saveDomainBtn.addEventListener('click', async () => {
         showToast('Please enter a domain name.', 3000, 'warning');
         return;
     }
-    domain = domain.replace(/^https?:\/\//, '');
-    domain = domain.replace(/^www\./, '');
-    domain = domain.replace(/\/.*$/, '');
+    domain = domain.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
     if (!domain.includes('.') || domain.length < 4) {
         showToast('Please enter a valid domain (e.g., example.com).', 3000, 'warning');
         return;
@@ -292,8 +348,6 @@ saveDomainBtn.addEventListener('click', async () => {
             showToast(`Domain "${domain}" already exists.`, 3000, 'warning');
         } else if (error.message === 'Maximum 10 domains allowed') {
             showToast('Maximum 10 domains allowed. Remove some first.', 3500, 'warning');
-        } else if (error.code === 'permission-denied') {
-            showToast('Permission denied. Check Firestore rules.', 4000, 'error');
         } else {
             showToast('Failed to add domain. Please try again.', 3500, 'error');
         }
@@ -312,16 +366,7 @@ async function loadDomains() {
         updateDomainStats(domains);
     } catch (error) {
         console.error(error);
-        if (error.code === 'permission-denied') {
-            showToast('Unable to load domains. Check Firestore security rules.', 4000, 'error');
-        } else if (error.code === 'failed-precondition' || error.message?.includes('index')) {
-            const linkMatch = error.message?.match(/https:\/\/[^\s]+/);
-            const link = linkMatch ? linkMatch[0] : 'Firebase Console';
-            showToast(`Please create the required Firestore index. See console for link.`, 5000, 'error');
-            console.error('Missing Firestore index. Create it at:', link);
-        } else {
-            showToast('Failed to load domains. Please refresh the page.', 3500, 'error');
-        }
+        showToast('Failed to load domains. Please refresh the page.', 3500, 'error');
     }
 }
 
@@ -393,11 +438,7 @@ function renderDomains(domains) {
                 loadDomains();
             } catch (error) {
                 console.error(error);
-                if (error.code === 'permission-denied') {
-                    showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-                } else {
-                    showToast(`Failed to ${action} domain.`, 3500, 'error');
-                }
+                showToast(`Failed to ${action} domain.`, 3500, 'error');
             }
         });
         actions.appendChild(toggleBtn);
@@ -414,11 +455,7 @@ function renderDomains(domains) {
                     loadDomains();
                 } catch (error) {
                     console.error(error);
-                    if (error.code === 'permission-denied') {
-                        showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-                    } else {
-                        showToast('Failed to remove domain.', 3500, 'error');
-                    }
+                    showToast('Failed to remove domain.', 3500, 'error');
                 }
             }
         });
@@ -476,11 +513,7 @@ saveGroqBtn.addEventListener('click', async () => {
         deleteGroqBtn.classList.remove('hidden');
     } catch (error) {
         console.error(error);
-        if (error.code === 'permission-denied') {
-            showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-        } else {
-            showToast('Failed to save key.', 3500, 'error');
-        }
+        showToast('Failed to save key.', 3500, 'error');
     }
 });
 
@@ -495,10 +528,6 @@ deleteGroqBtn.addEventListener('click', async () => {
         showToast('Groq API key deleted.', 3000, 'success');
     } catch (error) {
         console.error(error);
-        if (error.code === 'permission-denied') {
-            showToast('Permission denied. Check Firestore rules.', 4000, 'error');
-        } else {
-            showToast('Failed to delete key.', 3500, 'error');
-        }
+        showToast('Failed to delete key.', 3500, 'error');
     }
 });

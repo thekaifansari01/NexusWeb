@@ -4,6 +4,10 @@
       "source": "/docs",
       "destination": "/Documentation.html"
     },
+     {
+      "source": "/index",
+      "destination": "/index.html"
+    },
     {
       "source": "/pricing",
       "destination": "/Pricing.html"
