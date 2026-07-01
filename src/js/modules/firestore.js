@@ -1,14 +1,13 @@
 import { db } from "../config/firebase.js";
 import {
     collection, query, where, getDocs, addDoc, deleteDoc, doc,
-    updateDoc, Timestamp, getDoc, setDoc, orderBy // <-- orderBy add kiya
+    updateDoc, Timestamp, getDoc, setDoc, orderBy, limit 
 } from "firebase/firestore";
 
 const KEYS_COLLECTION = "apiKeys";
 const DOMAINS_COLLECTION = "authorizedDomains";
 const GROQ_COLLECTION = "userGroqKeys";
 
-// ===== API KEYS =====
 export async function createApiKey(userId, name, key) {
     const docRef = await addDoc(collection(db, KEYS_COLLECTION), {
         userId,
@@ -78,7 +77,6 @@ export async function toggleDomainStatus(domainId, currentStatus) {
     return newStatus;
 }
 
-// ===== GROQ API KEY (using userId as document ID) =====
 export async function getGroqApiKey(userId) {
     const docRef = doc(db, GROQ_COLLECTION, userId);
     const snapshot = await getDoc(docRef);
@@ -102,29 +100,17 @@ export async function deleteGroqApiKey(userId) {
     await deleteDoc(docRef);
 }
 
-// ==============================================
-// ===== NEW: USAGE & ANALYTICS FUNCTIONS =====
-// ==============================================
-
-/**
- * Fetch recent usage history for the dashboard.
- * Requires a Firestore Composite Index: usageLogs (userId Ascending, timestamp Descending)
- */
 export async function getUsageHistory(userId, limitCount = 10) {
     const q = query(
         collection(db, 'usageLogs'),
         where('userId', '==', userId),
         orderBy('timestamp', 'desc'),
-        limit(limitCount)
+        limit(limitCount) 
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-/**
- * Fetch aggregated daily stats to show Total Requests and Total Tokens.
- * Sums up all userDailyUsage documents for the given user.
- */
 export async function getDailyUsageStats(userId) {
     try {
         const q = query(collection(db, 'userDailyUsage'), where('userId', '==', userId));
