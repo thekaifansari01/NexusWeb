@@ -14,7 +14,9 @@ const sidebarEmail = document.getElementById('sidebarEmail');
 const sidebarSignOut = document.getElementById('sidebarSignOut');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const sidebar = document.querySelector('aside');
-const navItems = document.querySelectorAll('.nav-item');
+
+// NEW: Internal tab buttons (now inside main content)
+const tabBtns = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
 
@@ -51,22 +53,22 @@ let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 
-navItems.forEach(item => {
-    item.addEventListener('click', () => {
-        navItems.forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
+// ---- Internal Tab Switching ----
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-        const tabId = item.getAttribute('data-tab');
+        const tabId = btn.getAttribute('data-tab');
         tabContents.forEach(tab => {
             tab.classList.add('hidden');
         });
-        
         const activeTab = document.getElementById(`tab-${tabId}`);
         if (activeTab) {
             activeTab.classList.remove('hidden');
         }
 
-        breadcrumbCurrent.textContent = item.textContent.trim();
+        breadcrumbCurrent.textContent = btn.textContent.trim();
 
         if (window.innerWidth < 768 && sidebar) {
             sidebar.classList.add('hidden');
@@ -75,6 +77,7 @@ navItems.forEach(item => {
     });
 });
 
+// Mobile menu toggle
 if (mobileMenuBtn && sidebar) {
     mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
@@ -86,18 +89,15 @@ if (mobileMenuBtn && sidebar) {
     });
 }
 
+// ---- Turnstile (unchanged) ----
 function renderTurnstile() {
     const container = document.getElementById('turnstile-container');
     if (!container || !window.turnstile) return;
-
     if (turnstileWidgetId !== null && turnstileWidgetId !== undefined) {
-        try {
-            turnstile.remove(turnstileWidgetId);
-        } catch (_) {}
+        try { turnstile.remove(turnstileWidgetId); } catch (_) {}
         turnstileWidgetId = null;
     }
     container.innerHTML = '';
-
     try {
         turnstileWidgetId = turnstile.render(container, {
             sitekey: '0x4AAAAAADttl-ZBYJPZI8zP',
@@ -137,6 +137,7 @@ function resetTurnstile() {
     }
 }
 
+// ---- Auth ----
 observeAuthState((user) => {
     if (!user) {
         window.location.href = 'index.html';
@@ -158,6 +159,7 @@ if (sidebarSignOut) {
     });
 }
 
+// ---- Key creation (unchanged) ----
 createKeyBtn.addEventListener('click', () => {
     const isHidden = createKeyForm.classList.contains('hidden');
     createKeyForm.classList.toggle('hidden');
@@ -186,7 +188,6 @@ saveKeyBtn.addEventListener('click', async () => {
         showToast('Please complete the CAPTCHA.', 3000, 'warning');
         return;
     }
-
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
@@ -215,6 +216,7 @@ keyNameInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !saveKeyBtn.classList.contains('hidden')) saveKeyBtn.click();
 });
 
+// ---- Load & render keys (unchanged) ----
 async function loadKeys() {
     if (!currentUser) return;
     try {
@@ -237,12 +239,10 @@ function updateStats(keys) {
 function renderOverviewKeys(keys) {
     if (!overviewKeysContainer) return;
     overviewKeysContainer.innerHTML = '';
-    
     if (keys.length === 0) {
         overviewKeysContainer.innerHTML = '<p class="text-sm text-zinc-500">No keys created yet.</p>';
         return;
     }
-
     keys.slice(0, 3).forEach(key => {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
@@ -359,6 +359,7 @@ function renderKeys(keys) {
     });
 }
 
+// ---- Domains (unchanged) ----
 addDomainBtn.addEventListener('click', () => {
     const isHidden = addDomainForm.classList.contains('hidden');
     addDomainForm.classList.toggle('hidden');
@@ -508,6 +509,7 @@ function renderDomains(domains) {
     });
 }
 
+// ---- Groq Key (unchanged) ----
 if (toggleGroqBtn) {
     toggleGroqBtn.addEventListener('click', () => {
         const input = document.getElementById('groqApiInput');
