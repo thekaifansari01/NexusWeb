@@ -29,7 +29,6 @@
     </script>
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
-        /* Doc content styles */
         .doc-content h1 {
             font-size: 2.25rem;
             font-weight: 800;
@@ -147,38 +146,11 @@
             margin-top: 0.1rem;
         }
 
-        /* Table of Contents (now inside main) */
-        .doc-toc {
-            background: rgba(24,24,27,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 1.2rem 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .doc-toc a {
-            display: block;
-            padding: 0.3rem 0.8rem;
-            color: #a1a1aa;
-            font-size: 0.85rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        .doc-toc a:hover {
-            color: #fafafa;
-            background: rgba(255,255,255,0.04);
-        }
-        .doc-toc a.active-toc {
-            color: #a855f7;
-            background: rgba(168,85,247,0.08);
-            font-weight: 600;
-        }
-
         .scrollbar-custom::-webkit-scrollbar { width: 5px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-        /* Sidebar link styles (same as dashboard) */
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -203,11 +175,63 @@
             background: rgba(168,85,247,0.1);
             font-weight: 600;
         }
+
+        .toc-sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 1.5rem;
+            align-self: flex-start;
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+            padding-left: 2rem;
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+        .toc-sidebar::-webkit-scrollbar { width: 3px; }
+        .toc-sidebar::-webkit-scrollbar-track { background: transparent; }
+        .toc-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
+
+        .toc-link {
+            display: block;
+            padding: 0.25rem 0.75rem;
+            color: #71717a;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            margin-bottom: 0.1rem;
+        }
+        .toc-link:hover {
+            color: #e4e4e7;
+            background: rgba(255,255,255,0.02);
+        }
+        .toc-link.active-toc {
+            color: #a855f7;
+            background: rgba(168,85,247,0.06);
+            border-left-color: #a855f7;
+            font-weight: 500;
+        }
+        .toc-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #52525b;
+            padding: 0 0.75rem 0.5rem 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
 
-    <!-- ===== STANDARD PRODUCT SIDEBAR (same as Dashboard) ===== -->
     <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
         <div class="h-16 flex items-center px-6 border-b border-border">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -241,10 +265,9 @@
         </div>
     </aside>
 
-    <!-- ===== MAIN CONTENT AREA ===== -->
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
         <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
-        
+
         <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10 flex-shrink-0">
             <div class="flex items-center gap-4">
                 <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
@@ -264,155 +287,143 @@
         </header>
 
         <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom" id="main-scroll-area">
-            <div class="max-w-4xl mx-auto doc-content pb-20">
+            <div class="max-w-6xl mx-auto flex gap-8 pb-20">
 
-                <!-- ===== TABLE OF CONTENTS (now inside main) ===== -->
-                <div class="doc-toc" id="docToc">
-                    <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">On this page</div>
-                    <a href="#introduction" class="active-toc">Introduction</a>
-                    <a href="#quick-start">Quick Start</a>
-                    <a href="#configuration">Configuration</a>
-                    <a href="#theming">Theming</a>
-                    <a href="#features">Features</a>
-                    <a href="#advanced">Advanced</a>
-                    <a href="#api-reference">API Reference</a>
-                    <a href="#troubleshooting">Troubleshooting</a>
-                </div>
+                <div class="flex-1 min-w-0 doc-content">
 
-                <!-- ===== DOCUMENTATION CONTENT (unchanged) ===== -->
-                <section id="introduction" class="pt-2">
-                    <h1>📘 Nexus Web Documentation</h1>
-                    <p>
-                        <strong>Nexus Web</strong> is a zero‑friction, secure AI assistant that you can embed into any website in minutes. 
-                        It automatically reads your page content, understands the context, and answers user questions using Groq's powerful LLMs — 
-                        all while keeping your API keys safe.
-                    </p>
-                    <div class="glass-card">
-                        <p class="mb-0 flex items-center gap-2">
-                            <i class="ph-bold ph-shield-check text-primary text-xl"></i>
-                            <span><strong>Security first:</strong> Your Groq key is never exposed to the frontend. Nexus uses a separate, domain‑restricted key for widget communication.</span>
+                    <section id="introduction" class="pt-2">
+                        <h1>📘 Nexus Web Documentation</h1>
+                        <p>
+                            <strong>Nexus Web</strong> is a zero‑friction, secure AI assistant that you can embed into any website in minutes.
+                            It automatically reads your page content, understands the context, and answers user questions using Groq's powerful LLMs —
+                            all while keeping your API keys safe.
                         </p>
-                    </div>
-                </section>
-
-                <section id="quick-start">
-                    <h2>🚀 Quick Start</h2>
-                    <p>Embed the Nexus widget on your website in just two steps.</p>
-
-                    <div class="step-item">
-                        <span class="step-number">1</span>
-                        <div class="step-content">
-                            <h3 class="!mt-0">Get your Nexus API Key</h3>
-                            <p>Sign in to the <a href="/dashboard" class="text-primary hover:underline">Nexus Dashboard</a> and create a new API key. Copy the key — you'll need it in the next step.</p>
+                        <div class="glass-card">
+                            <p class="mb-0 flex items-center gap-2">
+                                <i class="ph-bold ph-shield-check text-primary text-xl"></i>
+                                <span><strong>Security first:</strong> Your Groq key is never exposed to the frontend. Nexus uses a separate, domain‑restricted key for widget communication.</span>
+                            </p>
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="step-item">
-                        <span class="step-number">2</span>
-                        <div class="step-content">
-                            <h3 class="!mt-0">Add the script tag</h3>
-                            <p>Paste the following code into your HTML, preferably just before the closing <code>&lt;/body&gt;</code> tag.</p>
-                            <pre><code>&lt;!-- Nexus Widget --&gt;
+                    <section id="quick-start">
+                        <h2>🚀 Quick Start</h2>
+                        <p>Embed the Nexus widget on your website in just two steps.</p>
+
+                        <div class="step-item">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <h3 class="!mt-0">Get your Nexus API Key</h3>
+                                <p>Sign in to the <a href="/dashboard" class="text-primary hover:underline">Nexus Dashboard</a> and create a new API key. Copy the key — you'll need it in the next step.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <h3 class="!mt-0">Add the script tag</h3>
+                                <p>Paste the following code into your HTML, preferably just before the closing <code>&lt;/body&gt;</code> tag.</p>
+                                <pre><code>&lt;!-- Nexus Widget --&gt;
 &lt;script&gt;
   window.NexusConfig = {
-    apiKey: 'YOUR_NEXUS_API_KEY', // Replace with your key
-    theme: 'auto',                // 'dark', 'light', or 'auto'
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    theme: 'auto',
     botName: 'Nexus AI',
     greeting: '👋 Hello! How can I assist you today?',
     model: 'llama3-8b-8192'
   };
 &lt;/script&gt;
 &lt;script src="https://cdn.nexus.ai/widget.js"&gt;&lt;/script&gt;</code></pre>
-                            <p class="text-zinc-500 text-sm mt-2 flex items-start gap-1">
-                                <i class="ph-bold ph-info mt-1"></i> 
-                                <span><strong>Note:</strong> The CDN URL is a placeholder. In production, you'll host the widget bundle yourself or use a provided CDN link. For local testing, you can serve the <code>index.js</code> file from your own server.</span>
+                                <p class="text-zinc-500 text-sm mt-2 flex items-start gap-1">
+                                    <i class="ph-bold ph-info mt-1"></i>
+                                    <span><strong>Note:</strong> The CDN URL is a placeholder. In production, you'll host the widget bundle yourself or use a provided CDN link.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="glass-card flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                                <i class="ph-bold ph-check text-lg"></i>
+                            </div>
+                            <p class="mb-0 text-sm">That's it! The widget will appear as a floating button on your site, ready to answer questions about your content.</p>
+                        </div>
+                    </section>
+
+                    <section id="configuration">
+                        <h2>⚙️ Configuration Options</h2>
+                        <p>You can customize the widget's behavior by setting the <code>window.NexusConfig</code> object before loading the script.</p>
+
+                        <table>
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>apiKey</code></td><td><span class="badge">string</span></td><td><code>''</code></td><td><strong>Required.</strong> Your Nexus API key from the dashboard.</td></tr>
+                                <tr><td><code>theme</code></td><td><span class="badge">string</span></td><td><code>'auto'</code></td><td><code>'dark'</code>, <code>'light'</code>, or <code>'auto'</code> (detects system preference).</td></tr>
+                                <tr><td><code>botName</code></td><td><span class="badge">string</span></td><td><code>'Nexus AI'</code></td><td>Display name of the assistant.</td></tr>
+                                <tr><td><code>greeting</code></td><td><span class="badge">string</span></td><td><em>See default</em></td><td>Welcome message shown when the chat opens. Supports Markdown.</td></tr>
+                                <tr><td><code>model</code></td><td><span class="badge">string</span></td><td><code>'llama3-8b-8192'</code></td><td>Groq model to use (e.g., <code>'llama3-70b-8192'</code>).</td></tr>
+                                <tr><td><code>systemPrompt</code></td><td><span class="badge">string</span></td><td><em>See source</em></td><td>Override the system prompt that guides the AI.</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="glass-card">
+                            <p class="mb-2 text-sm flex items-center gap-2 text-white font-medium">
+                                <i class="ph-bold ph-pencil-simple text-primary"></i> Example Configuration:
                             </p>
-                        </div>
-                    </div>
-                    <div class="glass-card flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                            <i class="ph-bold ph-check text-lg"></i>
-                        </div>
-                        <p class="mb-0 text-sm">That's it! The widget will appear as a floating button on your site, ready to answer questions about your content.</p>
-                    </div>
-                </section>
-
-                <section id="configuration">
-                    <h2>⚙️ Configuration Options</h2>
-                    <p>You can customize the widget's behavior by setting the <code>window.NexusConfig</code> object before loading the script.</p>
-
-                    <table>
-                        <thead>
-                            <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><code>apiKey</code></td><td><span class="badge">string</span></td><td><code>''</code></td><td><strong>Required.</strong> Your Nexus API key from the dashboard.</td></tr>
-                            <tr><td><code>theme</code></td><td><span class="badge">string</span></td><td><code>'auto'</code></td><td><code>'dark'</code>, <code>'light'</code>, or <code>'auto'</code> (detects system preference).</td></tr>
-                            <tr><td><code>botName</code></td><td><span class="badge">string</span></td><td><code>'Nexus AI'</code></td><td>Display name of the assistant.</td></tr>
-                            <tr><td><code>greeting</code></td><td><span class="badge">string</span></td><td><em>See default</em></td><td>Welcome message shown when the chat opens. Supports Markdown.</td></tr>
-                            <tr><td><code>model</code></td><td><span class="badge">string</span></td><td><code>'llama3-8b-8192'</code></td><td>Groq model to use (e.g., <code>'llama3-70b-8192'</code>).</td></tr>
-                            <tr><td><code>systemPrompt</code></td><td><span class="badge">string</span></td><td><em>See source</em></td><td>Override the system prompt that guides the AI.</td></tr>
-                        </tbody>
-                    </table>
-
-                    <div class="glass-card">
-                        <p class="mb-2 text-sm flex items-center gap-2 text-white font-medium">
-                            <i class="ph-bold ph-pencil-simple text-primary"></i> Example Configuration:
-                        </p>
-                        <pre class="!mt-2 !mb-0"><code>window.NexusConfig = {
+                            <pre class="!mt-2 !mb-0"><code>window.NexusConfig = {
   apiKey: 'nx_abc123',
   botName: 'DocBot',
   greeting: '📚 Welcome to our documentation! Ask me anything.'
 };</code></pre>
-                    </div>
-                </section>
-
-                <section id="theming">
-                    <h2>🎨 Theming</h2>
-                    <p>Nexus automatically adapts to your website's theme, but you can also force a specific mode.</p>
-
-                    <h3>Auto‑detection</h3>
-                    <p>By default (<code>theme: 'auto'</code>), the widget checks in this order:</p>
-                    <ul class="list-disc pl-6 text-zinc-400 space-y-1 mb-4 text-sm">
-                        <li>Your <code>window.NexusConfig.theme</code> override</li>
-                        <li>Saved user preference in <code>localStorage</code></li>
-                        <li><code>dark</code>/<code>light</code> class on <code>&lt;body&gt;</code> or <code>&lt;html&gt;</code></li>
-                        <li><code>data-theme</code> attribute</li>
-                        <li>System preference via <code>prefers-color-scheme</code></li>
-                        <li>Defaults to <code>dark</code></li>
-                    </ul>
-
-                    <h3>Manual control</h3>
-                    <p>Set <code>theme: 'dark'</code> or <code>'light'</code> to lock the appearance. Users can also toggle the theme via the moon/sun icon in the chat header.</p>
-                </section>
-
-                <section id="features">
-                    <h2>✨ Key Features</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div class="glass-card !m-0">
-                            <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-file-text text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Page Context</h3></div>
-                            <p class="text-xs !mb-0">Nexus scrapes your page content to provide the AI with rich context, enabling accurate answers.</p>
                         </div>
-                        <div class="glass-card !m-0">
-                            <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-image text-xl"></i><h3 class="text-white text-base font-semibold !m-0">File Attachments</h3></div>
-                            <p class="text-xs !mb-0">Users can attach images to their messages. The AI can analyze images if the model supports vision.</p>
-                        </div>
-                        <div class="glass-card !m-0">
-                            <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-arrows-counter-clockwise text-xl"></i><h3 class="text-white text-base font-semibold !m-0">SPA Support</h3></div>
-                            <p class="text-xs !mb-0">Automatically detects page navigation in single‑page apps and refreshes the context.</p>
-                        </div>
-                        <div class="glass-card !m-0">
-                            <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-highlighter text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Markdown Rendering</h3></div>
-                            <p class="text-xs !mb-0">Bot responses are rendered with Markdown and code blocks are beautifully highlighted.</p>
-                        </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section id="advanced">
-                    <h2>🔧 Advanced Customization</h2>
-                    <h3>Styling Overrides</h3>
-                    <p>Customize the widget's appearance by overriding CSS variables on <code>#ai-widget-root</code>:</p>
-                    <pre><code>#ai-widget-root {
+                    <section id="theming">
+                        <h2>🎨 Theming</h2>
+                        <p>Nexus automatically adapts to your website's theme, but you can also force a specific mode.</p>
+
+                        <h3>Auto‑detection</h3>
+                        <p>By default (<code>theme: 'auto'</code>), the widget checks in this order:</p>
+                        <ul class="list-disc pl-6 text-zinc-400 space-y-1 mb-4 text-sm">
+                            <li>Your <code>window.NexusConfig.theme</code> override</li>
+                            <li>Saved user preference in <code>localStorage</code></li>
+                            <li><code>dark</code>/<code>light</code> class on <code>&lt;body&gt;</code> or <code>&lt;html&gt;</code></li>
+                            <li><code>data-theme</code> attribute</li>
+                            <li>System preference via <code>prefers-color-scheme</code></li>
+                            <li>Defaults to <code>dark</code></li>
+                        </ul>
+
+                        <h3>Manual control</h3>
+                        <p>Set <code>theme: 'dark'</code> or <code>'light'</code> to lock the appearance. Users can also toggle the theme via the moon/sun icon in the chat header.</p>
+                    </section>
+
+                    <section id="features">
+                        <h2>✨ Key Features</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-file-text text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Page Context</h3></div>
+                                <p class="text-xs !mb-0">Nexus scrapes your page content to provide the AI with rich context, enabling accurate answers.</p>
+                            </div>
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-image text-xl"></i><h3 class="text-white text-base font-semibold !m-0">File Attachments</h3></div>
+                                <p class="text-xs !mb-0">Users can attach images to their messages. The AI can analyze images if the model supports vision.</p>
+                            </div>
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-arrows-counter-clockwise text-xl"></i><h3 class="text-white text-base font-semibold !m-0">SPA Support</h3></div>
+                                <p class="text-xs !mb-0">Automatically detects page navigation in single‑page apps and refreshes the context.</p>
+                            </div>
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-highlighter text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Markdown Rendering</h3></div>
+                                <p class="text-xs !mb-0">Bot responses are rendered with Markdown and code blocks are beautifully highlighted.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="advanced">
+                        <h2>🔧 Advanced Customization</h2>
+                        <h3>Styling Overrides</h3>
+                        <p>Customize the widget's appearance by overriding CSS variables on <code>#ai-widget-root</code>:</p>
+                        <pre><code>#ai-widget-root {
   --bg-panel: rgba(10, 10, 10, 0.92);
   --text-primary: #eee;
   --accent: #a855f7;
@@ -420,23 +431,23 @@
   --send-color: #fff;
 }</code></pre>
 
-                    <h3>Programmatic Control</h3>
-                    <p>The widget exposes a global API for advanced use cases:</p>
-                    <table>
-                        <thead><tr><th>Method</th><th>Description</th></tr></thead>
-                        <tbody>
-                            <tr><td><code>window.openNexus()</code></td><td>Opens the chat panel programmatically.</td></tr>
-                            <tr><td><code>window.closeNexus()</code></td><td>Closes the chat panel.</td></tr>
-                            <tr><td><code>window.toggleNexus()</code></td><td>Toggles the chat panel.</td></tr>
-                            <tr><td><code>window.refreshNexusContext()</code></td><td>Forces a rescrape of the page content.</td></tr>
-                        </tbody>
-                    </table>
-                </section>
+                        <h3>Programmatic Control</h3>
+                        <p>The widget exposes a global API for advanced use cases:</p>
+                        <table>
+                            <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>window.openNexus()</code></td><td>Opens the chat panel programmatically.</td></tr>
+                                <tr><td><code>window.closeNexus()</code></td><td>Closes the chat panel.</td></tr>
+                                <tr><td><code>window.toggleNexus()</code></td><td>Toggles the chat panel.</td></tr>
+                                <tr><td><code>window.refreshNexusContext()</code></td><td>Forces a rescrape of the page content.</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
 
-                <section id="api-reference">
-                    <h2>🔌 API Reference</h2>
-                    <p>The widget communicates with your backend proxy. The expected endpoint is <code>POST /api/chat</code> with the following payload:</p>
-                    <pre><code>{
+                    <section id="api-reference">
+                        <h2>🔌 API Reference</h2>
+                        <p>The widget communicates with your backend proxy. The expected endpoint is <code>POST /api/chat</code> with the following payload:</p>
+                        <pre><code>{
   "nexusKey": "nx_abc123",
   "messages": [
     { "role": "system", "content": "..." },
@@ -444,45 +455,58 @@
   ],
   "model": "llama3-8b-8192"
 }</code></pre>
-                    <p>The proxy validates the key, checks the domain against your authorized list, and forwards the request to Groq. You can find the serverless function implementation in <code>api/chat.py</code>.</p>
-                </section>
+                        <p>The proxy validates the key, checks the domain against your authorized list, and forwards the request to Groq. You can find the serverless function implementation in <code>api/chat.py</code>.</p>
+                    </section>
 
-                <section id="troubleshooting">
-                    <h2>🛠️ Troubleshooting</h2>
-                    <div class="space-y-4">
-                        <div class="glass-card !py-4">
-                            <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-x-circle text-rose-400"></i> Widget doesn't appear</h4>
-                            <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
-                                <li>Check the browser console for errors.</li>
-                                <li>Ensure <code>window.NexusConfig.apiKey</code> is set.</li>
-                            </ul>
+                    <section id="troubleshooting">
+                        <h2>🛠️ Troubleshooting</h2>
+                        <div class="space-y-4">
+                            <div class="glass-card !py-4">
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-x-circle text-rose-400"></i> Widget doesn't appear</h4>
+                                <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
+                                    <li>Check the browser console for errors.</li>
+                                    <li>Ensure <code>window.NexusConfig.apiKey</code> is set.</li>
+                                </ul>
+                            </div>
+                            <div class="glass-card !py-4">
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-lock text-yellow-400"></i> "Domain not authorized" error</h4>
+                                <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
+                                    <li>Add your website's domain to the <strong>Authorized Domains</strong> list in the dashboard.</li>
+                                    <li>Ensure the domain matches exactly (without https:// or www).</li>
+                                </ul>
+                            </div>
+                            <div class="glass-card !py-4">
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-key text-primary"></i> "Invalid Nexus API Key"</h4>
+                                <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
+                                    <li>Generate a new key from the dashboard and update your config.</li>
+                                    <li>Check that the key hasn't been revoked.</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="glass-card !py-4">
-                            <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-lock text-yellow-400"></i> "Domain not authorized" error</h4>
-                            <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
-                                <li>Add your website's domain to the <strong>Authorized Domains</strong> list in the dashboard.</li>
-                                <li>Ensure the domain matches exactly (without https:// or www).</li>
-                            </ul>
-                        </div>
-                        <div class="glass-card !py-4">
-                            <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-key text-primary"></i> "Invalid Nexus API Key"</h4>
-                            <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
-                                <li>Generate a new key from the dashboard and update your config.</li>
-                                <li>Check that the key hasn't been revoked.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+                    </section>
 
-                <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
-                    <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
-                    <p class="mt-1">Documentation v1.2.0</p>
-                </footer>
+                    <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
+                        <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
+                        <p class="mt-1">Documentation v1.2.0</p>
+                    </footer>
+                </div>
+
+                <aside class="toc-sidebar" id="tocSidebar">
+                    <div class="toc-label">On this page</div>
+                    <a href="#introduction" class="toc-link active-toc">Introduction</a>
+                    <a href="#quick-start" class="toc-link">Quick Start</a>
+                    <a href="#configuration" class="toc-link">Configuration</a>
+                    <a href="#theming" class="toc-link">Theming</a>
+                    <a href="#features" class="toc-link">Features</a>
+                    <a href="#advanced" class="toc-link">Advanced</a>
+                    <a href="#api-reference" class="toc-link">API Reference</a>
+                    <a href="#troubleshooting" class="toc-link">Troubleshooting</a>
+                </aside>
+
             </div>
         </main>
     </div>
 
-    <!-- ===== SCRIPTS ===== -->
     <script type="importmap">
         {
             "imports": {
@@ -494,35 +518,29 @@
         }
     </script>
     <script type="module">
-        // Import only what's needed for auth and sidebar
         import { observeAuthState, signOutUser } from "./src/js/modules/auth.js";
-        import { showToast } from "./src/js/modules/ui.js";
 
         const sidebarAvatar = document.getElementById('sidebarAvatar');
         const sidebarName = document.getElementById('sidebarName');
         const sidebarEmail = document.getElementById('sidebarEmail');
         const sidebarSignOut = document.getElementById('sidebarSignOut');
 
-        // Auth state observer – redirect if not logged in
         observeAuthState((user) => {
             if (!user) {
                 window.location.href = 'index.html';
                 return;
             }
-            // Update sidebar
             if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
             if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
             if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
         });
 
-        // Sign out
         if (sidebarSignOut) {
             sidebarSignOut.addEventListener('click', async () => {
                 await signOutUser();
             });
         }
 
-        // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.querySelector('aside');
         if (mobileMenuBtn && sidebar) {
@@ -536,17 +554,16 @@
             });
         }
 
-        // TOC scroll spy
         const mainArea = document.getElementById('main-scroll-area');
         const sections = document.querySelectorAll('.doc-content section');
-        const tocLinks = document.querySelectorAll('#docToc a');
+        const tocLinks = document.querySelectorAll('.toc-link');
 
         if (mainArea) {
             mainArea.addEventListener('scroll', () => {
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
-                    if (mainArea.scrollTop >= (sectionTop - 150)) {
+                    if (mainArea.scrollTop >= (sectionTop - 120)) {
                         current = section.getAttribute('id');
                     }
                 });
