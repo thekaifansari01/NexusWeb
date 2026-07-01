@@ -6,9 +6,11 @@
     <title>Nexus - Secure AI Assistant</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web">
+    </script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -32,6 +34,7 @@
 <body>
     <div class="ambient-glow"></div>
 
+    <!-- NAV -->
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -44,7 +47,7 @@
                 <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
                 <a href="/pricing" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
                 <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
-                <a href="https://github.com/thekaifansari01/NexusWeb" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
                     <i class="ph ph-github-logo text-lg"></i> GitHub
                 </a>
             </div>
@@ -58,6 +61,9 @@
                     </div>
                     <div class="avatar-dropdown" id="avatarDropdown">
                         <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <a href="/dashboard" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
+                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
+                        </a>
                         <button id="signOutBtn">
                             <i class="ph-bold ph-sign-out"></i> Sign Out
                         </button>
@@ -67,12 +73,13 @@
         </nav>
     </div>
 
+    <!-- HERO -->
     <main class="max-w-5xl mx-auto px-6 pt-40 pb-20 relative z-10 flex flex-col items-center text-center">
-        <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-zinc-300 text-xs font-medium mb-8 hover:text-white transition-colors">
-            <span class="flex h-2 w-2 rounded-full bg-primary"></span>
-            Nexus v1.2.0 is now available <i class="ph ph-arrow-right"></i>
+        <a href="/docs" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-zinc-300 text-xs font-medium mb-8 hover:text-white transition-colors border border-primary/20 bg-primary/5">
+            <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+            Nexus v1.2.0 is now available <i class="ph-bold ph-arrow-right"></i>
         </a>
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] text-gradient">
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1] text-gradient">
             Embed intelligent AI <br />
             <span class="text-gradient-primary">without compromising security.</span>
         </h1>
@@ -84,44 +91,131 @@
                 <i class="ph-bold ph-google-logo text-lg"></i> Continue with Google
             </button>
             <a href="/dashboard" id="heroDashboardBtn" class="hidden bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
-                <i class="ph-bold ph-grid-four text-lg"></i> Dashboard
+                <i class="ph-bold ph-layout-dashboard text-lg"></i> Go to Dashboard
             </a>
             <a href="/demo" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 hover:border-primary/30">
-                <i class="ph-bold ph-play-circle text-lg"></i> View Demo
+                <i class="ph-bold ph-play-circle text-lg"></i> View Live Demo
             </a>
         </div>
     </main>
 
+    <!-- WHY NEXUS -->
     <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-white mb-4">Why choose Nexus?</h2>
+            <p class="text-zinc-400">Everything you need to add AI to your site, built with security at its core.</p>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-6 rounded-2xl">
-                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
-                    <i class="ph-bold ph-lock-key text-xl"></i>
+            <div class="glass-panel p-8 rounded-2xl">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
+                    <i class="ph-bold ph-lock-key text-2xl"></i>
                 </div>
-                <h3 class="text-base font-semibold text-zinc-100 mb-2">Vault-Grade Security</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Your Groq API key is encrypted and stored safely. We issue a separate, secure Nexus Key for your frontend widget.</p>
+                <h3 class="text-lg font-bold text-zinc-100 mb-3">Vault-Grade Security</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Your Groq API key is encrypted and stored safely. We issue a separate, secure Nexus Key for your frontend widget, ensuring your billing is never compromised.</p>
             </div>
-            <div class="glass-panel p-6 rounded-2xl">
-                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
-                    <i class="ph-bold ph-globe-hemisphere-west text-xl"></i>
+            <div class="glass-panel p-8 rounded-2xl">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
+                    <i class="ph-bold ph-globe-hemisphere-west text-2xl"></i>
                 </div>
-                <h3 class="text-base font-semibold text-zinc-100 mb-2">Strict Whitelisting</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Our backend verifies the origin of every request. Nobody can steal your Nexus Key and use it on unauthorized domains.</p>
+                <h3 class="text-lg font-bold text-zinc-100 mb-3">Strict Whitelisting</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Our backend verifies the origin of every request. Nobody can steal your Nexus Key and use it on unauthorized domains. Total control over where your AI lives.</p>
             </div>
-            <div class="glass-panel p-6 rounded-2xl">
-                <div class="w-10 h-10 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/50 mb-5 text-primary">
-                    <i class="ph-bold ph-lightning text-xl"></i>
+            <div class="glass-panel p-8 rounded-2xl">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
+                    <i class="ph-bold ph-lightning text-2xl"></i>
                 </div>
-                <h3 class="text-base font-semibold text-zinc-100 mb-2">Zero Friction</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Drop a single script tag into your HTML. The widget automatically adapts to your site's theme and reads your content.</p>
+                <h3 class="text-lg font-bold text-zinc-100 mb-3">Zero Friction</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Drop a single script tag into your HTML. The widget automatically adapts to your site's theme, reads your page content, and provides context-aware answers instantly.</p>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-white/5 mt-12 py-8 text-center text-zinc-500 text-xs font-medium">
-        <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
+    <!-- STEPS -->
+    <section class="max-w-5xl mx-auto px-6 py-20 relative z-10 border-t border-white/5 mt-10">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-white mb-4">From zero to AI in minutes</h2>
+            <p class="text-zinc-400">No complex backend setup required. We handle the infrastructure.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="step-card text-center relative">
+                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">1</div>
+                <h3 class="text-lg font-bold text-white mb-2">Create an API Key</h3>
+                <p class="text-zinc-400 text-sm">Sign in to the dashboard and generate a secure Nexus Key for your project.</p>
+            </div>
+            <div class="step-card text-center relative">
+                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">2</div>
+                <h3 class="text-lg font-bold text-white mb-2">Whitelist Domains</h3>
+                <p class="text-zinc-400 text-sm">Add your website's domain to ensure requests are only accepted from your site.</p>
+            </div>
+            <div class="step-card text-center relative">
+                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">3</div>
+                <h3 class="text-lg font-bold text-white mb-2">Embed the Script</h3>
+                <p class="text-zinc-400 text-sm">Copy and paste a simple JavaScript snippet into your HTML. You're live!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GROQ -->
+    <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
+        <div class="glass-panel p-10 rounded-3xl border border-primary/20 bg-gradient-to-br from-black/60 to-primary/5 flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
+            <div class="flex-1">
+                <h2 class="text-3xl font-bold text-white mb-4">Powered by Groq's blazing fast inference</h2>
+                <p class="text-zinc-400 mb-6 leading-relaxed">
+                    Nexus utilizes Llama 3 and Mixtral models hosted on Groq's LPU™ Inference Engine. Deliver instant, human-like responses to your visitors without the wait.
+                </p>
+                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> llama3-8b-8192</span>
+                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> llama3-70b-8192</span>
+                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> mixtral-8x7b</span>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 flex justify-center">
+                <div class="w-40 h-40 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 relative">
+                    <div class="absolute inset-0 rounded-full border border-primary/50 animate-ping opacity-20"></div>
+                    <i class="ph-bold ph-rocket text-6xl text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA – now with auth‑aware toggle -->
+    <section class="max-w-3xl mx-auto px-6 py-24 relative z-10 text-center">
+        <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Ready to transform your website?</h2>
+        <p class="text-zinc-400 mb-10 text-lg">Join today. It's completely free, open-source, and takes less than 2 minutes to set up.</p>
+
+        <!-- Auth-aware button group – matches hero style -->
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
+            <button id="footerSignInBtn" class="bg-white text-black hover:bg-zinc-200 px-8 py-3.5 rounded-full text-base font-bold transition-all shadow-lg flex items-center justify-center gap-2">
+                <i class="ph-bold ph-google-logo text-lg"></i> Continue with Google
+            </button>
+            <a href="/dashboard" id="footerDashboardBtn" class="hidden bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-base font-bold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
+                <i class="ph-bold ph-layout-dashboard text-lg"></i> Go to Dashboard
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 mt-12 py-10 bg-black/40">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-sm"></i>
+                </div>
+                <span class="text-base font-bold text-white tracking-tight">Nexus Web Assistant</span>
+            </div>
+            <div class="flex items-center gap-6 text-sm text-zinc-500 font-medium">
+                <a href="/docs" class="hover:text-white transition-colors">Documentation</a>
+                <a href="/pricing" class="hover:text-white transition-colors">Pricing</a>
+                <a href="/demo" class="hover:text-white transition-colors">Demo</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+        <div class="text-center text-zinc-600 text-xs mt-8">
+            &copy; 2026 Nexus Web Assistant. Built for speed, designed for security.
+        </div>
     </footer>
 
+    <!-- FIREBASE IMPORTS -->
     <script type="importmap">
         {
             "imports": {
@@ -132,6 +226,7 @@
             }
         }
     </script>
-    <script type="module" src="src/js/app.js"></script>
+    <script type="module" src="src/js/app.js">
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus · Free forever</title>
+    <title>Pricing · Nexus</title>
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,12 +27,32 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="src/css/styles.css" />
     <style>
-        body {
-            background-color: #09090b;
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.6rem 1rem;
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-align: left;
+            margin-bottom: 0.2rem;
+        }
+        .nav-item i {
+            font-size: 1.25rem;
+        }
+        .nav-item:hover {
             color: #fafafa;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .nav-item.active {
+            color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+            font-weight: 600;
         }
         .glass-card {
             background: rgba(24,24,27,0.4);
@@ -60,17 +80,6 @@
         .feature-check {
             color: #34d399;
             font-weight: 600;
-        }
-        .ambient-glow {
-            position: absolute;
-            top: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 600px;
-            background: radial-gradient(ellipse at top, rgba(168,85,247,0.06) 0%, rgba(9,9,11,0) 70%);
-            z-index: -1;
-            pointer-events: none;
         }
         table {
             width: 100%;
@@ -124,169 +133,209 @@
             background: rgba(255,255,255,0.1);
             color: #fafafa;
         }
+        .scrollbar-custom::-webkit-scrollbar { width: 5px; }
+        .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
-<body>
-    <div class="ambient-glow"></div>
+<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
 
-    <!-- ===== NAV ===== -->
-    <nav class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 flex justify-center">
-        <div class="glass-card w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20 border border-white/5" style="padding: 0.75rem 1.5rem;">
-            <a href="/" class="flex items-center gap-2">
+    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
+        <div class="h-16 flex items-center px-6 border-b border-border">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
                 <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold tracking-tight">Nexus</span>
-                <span class="text-xs text-zinc-500 font-medium ml-1">Free</span>
+                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
             </a>
+        </div>
+
+        <nav class="flex-1 py-6 px-4 overflow-y-auto scrollbar-custom">
+            <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3 px-2">Navigation</div>
+            <a href="/" class="nav-item">
+                <i class="ph-bold ph-house"></i> Home
+            </a>
+            <a href="/dashboard" class="nav-item">
+                <i class="ph-bold ph-grid-four"></i> Dashboard
+            </a>
+            <a href="/docs" class="nav-item">
+                <i class="ph-bold ph-book-open"></i> Documentation
+            </a>
+            <a href="/pricing" class="nav-item active">
+                <i class="ph-bold ph-currency-circle-dollar"></i> Pricing
+            </a>
+            <a href="/demo" class="nav-item">
+                <i class="ph-bold ph-play-circle"></i> Demo
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-border">
+            <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="w-full flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors py-2 px-3 rounded-lg hover:bg-white/5">
+                <i class="ph-bold ph-github-logo text-lg"></i> GitHub
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 h-screen relative">
+        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
+        
+        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10 flex-shrink-0">
             <div class="flex items-center gap-4">
-                <a href="/" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Home</a>
-                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
-                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
-                <a href="/dashboard" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Dashboard</a>
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
-                    <i class="ph ph-github-logo text-lg"></i> GitHub
-                </a>
+                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                    <i class="ph-bold ph-list text-2xl"></i>
+                </button>
+                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <span id="breadcrumbRoot">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs"></i>
+                    <span id="breadcrumbCurrent" class="text-white">Pricing</span>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- ===== MAIN ===== -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-12 relative z-10">
-
-        <!-- Hero -->
-        <div class="text-center mb-12">
-            <span class="pricing-badge">💰 100% Free</span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-4 leading-[1.1]">
-                Nexus is <span class="text-gradient-primary">Completely Free</span>
-            </h1>
-            <p class="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
-                No hidden fees, no credit card required, no usage limits. Enjoy all features forever – 
-                because we believe AI should be accessible to everyone.
-            </p>
-            <div class="mt-8 flex flex-wrap justify-center gap-4">
-                <a href="/demo" class="btn-primary">
-                    <i class="ph-bold ph-rocket"></i> Try the Demo
-                </a>
-                <a href="/dashboard" class="btn-secondary">
-                    <i class="ph-bold ph-arrow-right"></i> Get Started
-                </a>
+            <div class="flex items-center gap-4 hidden md:flex">
+                <a href="/dashboard" class="btn-primary !py-1.5 !px-4 !text-xs">Go to Dashboard</a>
             </div>
-        </div>
+        </header>
 
-        <!-- ===== PRICING CARD ===== -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <!-- Free tier – highlighted -->
-            <div class="md:col-span-3 glass-card border-primary/20 relative overflow-hidden" style="border-color: rgba(168,85,247,0.25);">
-                <div class="absolute top-0 right-0 bg-primary/10 px-4 py-1 rounded-bl-xl text-xs font-semibold text-primary">Forever Free</div>
-                <div class="text-center">
-                    <div class="text-5xl font-extrabold text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">$0</div>
-                    <p class="text-zinc-400 text-sm mt-1">per month – no strings attached</p>
-                    <ul class="mt-6 space-y-3 text-left max-w-md mx-auto">
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Unlimited</strong> API requests</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">All models</strong> (Llama 3, Mixtral, and more)</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Up to 10</strong> authorized domains</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Vault‑grade</strong> encryption for your Groq key</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Community</strong> support</span>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        <a href="/dashboard" class="btn-primary">
-                            <i class="ph-bold ph-user-plus"></i> Start for Free
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom" id="main-scroll-area">
+            <div class="max-w-4xl mx-auto pb-20">
+
+                <div class="text-center mb-12 pt-4">
+                    <span class="pricing-badge">💰 100% Free</span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-4 leading-[1.1] text-white">
+                        Nexus is <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">Completely Free</span>
+                    </h1>
+                    <p class="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
+                        No hidden fees, no credit card required, no usage limits. Enjoy all features forever – 
+                        because we believe AI should be accessible to everyone.
+                    </p>
+                    <div class="mt-8 flex flex-wrap justify-center gap-4">
+                        <a href="/demo" class="btn-primary">
+                            <i class="ph-bold ph-rocket"></i> Try the Demo
+                        </a>
+                        <a href="/dashboard" class="btn-secondary">
+                            <i class="ph-bold ph-arrow-right"></i> Get Started
                         </a>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 mb-16">
+                    <div class="glass-card border-primary/20 relative overflow-hidden" style="border-color: rgba(168,85,247,0.25);">
+                        <div class="absolute top-0 right-0 bg-primary/10 px-4 py-1 rounded-bl-xl text-xs font-semibold text-primary">Forever Free</div>
+                        <div class="text-center py-6">
+                            <div class="text-5xl font-extrabold text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">$0</div>
+                            <p class="text-zinc-400 text-sm mt-1">per month – no strings attached</p>
+                            <ul class="mt-8 space-y-4 text-left max-w-md mx-auto">
+                                <li class="flex items-start gap-3">
+                                    <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                                    <span><strong class="text-white">Unlimited</strong> API requests</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                                    <span><strong class="text-white">All models</strong> (Llama 3, Mixtral, and more)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                                    <span><strong class="text-white">Up to 10</strong> authorized domains</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                                    <span><strong class="text-white">Vault‑grade</strong> encryption for your Groq key</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                                    <span><strong class="text-white">Community</strong> support</span>
+                                </li>
+                            </ul>
+                            <div class="mt-10 flex justify-center">
+                                <a href="/dashboard" class="btn-primary">
+                                    <i class="ph-bold ph-user-plus"></i> Start for Free
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="glass-card mb-12">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-white">
+                        <i class="ph-bold ph-list-checks text-primary"></i> All Features Included
+                    </h2>
+                    <div class="overflow-x-auto mt-6">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>AI Chat Widget</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Page Context Scraping (Readability + Turndown)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Markdown Rendering + Syntax Highlighting</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>File Attachments (images, PDFs, text)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Domain Whitelisting (up to 10 domains)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Groq API Key Vault</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Dashboard to manage keys & domains</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>SPA Navigation Detection</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Dark / Light Theme Auto‑detection</td><td><span class="feature-check">✓ Free</span></td></tr>
+                                <tr><td>Community Support</td><td><span class="feature-check">✓ Free</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-zinc-500 mt-5 flex items-center gap-1">
+                        <i class="ph-bold ph-info text-primary"></i> No paid plans – ever. Nexus is open‑source and community‑driven.
+                    </p>
+                </section>
+
+                <section class="glass-card">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-white">
+                        <i class="ph-bold ph-question text-primary"></i> Frequently Asked Questions
+                    </h2>
+                    <div class="mt-6 space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Is Nexus really free?</h4>
+                            <p class="text-sm text-zinc-400">Yes! Nexus is and will always be free for all users. We believe AI tools should be accessible without barriers.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Are there any usage limits?</h4>
+                            <p class="text-sm text-zinc-400">No – you can send as many requests as you like. The only limit is what your Groq account allows (free tier has rate limits, but that's on Groq's side).</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Do I need to provide a credit card?</h4>
+                            <p class="text-sm text-zinc-400">Not at all. Just sign in with Google and you're good to go.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">What about my Groq API key – is it safe?</h4>
+                            <p class="text-sm text-zinc-400">Absolutely. Your Groq key is encrypted and stored securely in Firestore. It never leaves our backend, and we use a separate Nexus key for the frontend widget.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Can I use it on multiple websites?</h4>
+                            <p class="text-sm text-zinc-400">Yes – you can authorise up to 10 domains per account. Each domain can have its own widget instance.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
+                    <p>&copy; 2026 Nexus Web Assistant – free for everyone.</p>
+                    <p class="mt-1">Built with ❤️ by <a href="https://github.com/thekaifansari01" target="_blank" class="text-primary hover:underline">Kaif Ansari</a></p>
+                </footer>
             </div>
-        </div>
+        </main>
+    </div>
 
-        <!-- ===== FEATURE COMPARISON TABLE ===== -->
-        <section class="glass-card mb-12">
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-                <i class="ph-bold ph-list-checks text-primary"></i> All Features Included
-            </h2>
-            <div class="overflow-x-auto mt-4">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Feature</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>AI Chat Widget</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Page Context Scraping (Readability + Turndown)</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Markdown Rendering + Syntax Highlighting</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>File Attachments (images, PDFs, text)</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Domain Whitelisting (up to 10 domains)</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Groq API Key Vault</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Dashboard to manage keys & domains</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>SPA Navigation Detection</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Dark / Light Theme Auto‑detection</td><td><span class="feature-check">✓ Free</span></td></tr>
-                        <tr><td>Community Support</td><td><span class="feature-check">✓ Free</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="text-xs text-zinc-500 mt-4">
-                <i class="ph-bold ph-info text-primary"></i> No paid plans – ever. Nexus is open‑source and community‑driven.
-            </p>
-        </section>
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.querySelector('aside');
 
-        <!-- ===== FAQ ===== -->
-        <section class="glass-card">
-            <h2 class="text-2xl font-bold flex items-center gap-2">
-                <i class="ph-bold ph-question text-primary"></i> Frequently Asked Questions
-            </h2>
-            <div class="mt-4 space-y-4">
-                <div>
-                    <h4 class="font-semibold text-white">Is Nexus really free?</h4>
-                    <p class="text-sm text-zinc-400">Yes! Nexus is and will always be free for all users. We believe AI tools should be accessible without barriers.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white">Are there any usage limits?</h4>
-                    <p class="text-sm text-zinc-400">No – you can send as many requests as you like. The only limit is what your Groq account allows (free tier has rate limits, but that's on Groq's side).</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white">Do I need to provide a credit card?</h4>
-                    <p class="text-sm text-zinc-400">Not at all. Just sign in with Google and you're good to go.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white">What about my Groq API key – is it safe?</h4>
-                    <p class="text-sm text-zinc-400">Absolutely. Your Groq key is encrypted and stored securely in Firestore. It never leaves our backend, and we use a separate Nexus key for the frontend widget.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white">Can I use it on multiple websites?</h4>
-                    <p class="text-sm text-zinc-400">Yes – you can authorise up to 10 domains per account. Each domain can have its own widget instance.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== CTA ===== -->
-        <div class="text-center mt-12">
-            <p class="text-zinc-400 text-sm">Ready to get started?</p>
-            <a href="/dashboard" class="btn-primary mt-3">
-                <i class="ph-bold ph-arrow-right"></i> Go to Dashboard
-            </a>
-        </div>
-
-        <!-- ===== FOOTER ===== -->
-        <footer class="border-t border-white/5 mt-12 pt-6 text-center text-zinc-500 text-xs font-medium">
-            <p>&copy; 2026 Nexus Web Assistant – free for everyone.</p>
-            <p class="mt-1">Built with ❤️ by <a href="https://github.com/thekaifansari01" target="_blank" class="text-primary hover:underline">Kaif Ansari</a></p>
-        </footer>
-    </main>
+        if (mobileMenuBtn && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                if (!sidebar.classList.contains('hidden')) {
+                    sidebar.classList.add('absolute', 'z-50', 'h-full', 'w-64');
+                } else {
+                    sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import { observeAuthState, signOutUser } from "./modules/auth.js";
-import { toggleDropdown, closeDropdown, showToast } from "./modules/ui.js";
+import { showToast } from "./modules/ui.js";
 import {
     getApiKeys, deleteApiKey,
     getDomains, addDomain, deleteDomain, toggleDomainStatus,
@@ -8,12 +8,18 @@ import {
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "./config/firebase.js";
 
-const userAvatar = document.getElementById('userAvatar');
-const userEmail = document.getElementById('userEmail');
-const signOutBtn = document.getElementById('signOutBtn');
-const avatarBtn = document.getElementById('avatarBtn');
+const sidebarAvatar = document.getElementById('sidebarAvatar');
+const sidebarName = document.getElementById('sidebarName');
+const sidebarEmail = document.getElementById('sidebarEmail');
+const sidebarSignOut = document.getElementById('sidebarSignOut');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const sidebar = document.querySelector('aside');
+const navItems = document.querySelectorAll('.nav-item');
+const tabContents = document.querySelectorAll('.tab-content');
+const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
 
 const keysContainer = document.getElementById('keysContainer');
+const overviewKeysContainer = document.getElementById('overviewKeysContainer');
 const emptyState = document.getElementById('emptyState');
 const createKeyBtn = document.getElementById('createKeyBtn');
 const createKeyForm = document.getElementById('createKeyForm');
@@ -22,7 +28,6 @@ const saveKeyBtn = document.getElementById('saveKeyBtn');
 const cancelKeyBtn = document.getElementById('cancelKeyBtn');
 const totalKeysEl = document.getElementById('totalKeys');
 const activeKeysEl = document.getElementById('activeKeys');
-const revokedKeysEl = document.getElementById('revokedKeys');
 
 const domainsContainer = document.getElementById('domainsContainer');
 const domainsEmptyState = document.getElementById('domainsEmptyState');
@@ -46,6 +51,41 @@ let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 
+navItems.forEach(item => {
+    item.addEventListener('click', () => {
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+
+        const tabId = item.getAttribute('data-tab');
+        tabContents.forEach(tab => {
+            tab.classList.add('hidden');
+        });
+        
+        const activeTab = document.getElementById(`tab-${tabId}`);
+        if (activeTab) {
+            activeTab.classList.remove('hidden');
+        }
+
+        breadcrumbCurrent.textContent = item.textContent.trim();
+
+        if (window.innerWidth < 768 && sidebar) {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
+        }
+    });
+});
+
+if (mobileMenuBtn && sidebar) {
+    mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+        if (!sidebar.classList.contains('hidden')) {
+            sidebar.classList.add('absolute', 'z-50', 'h-full', 'w-64');
+        } else {
+            sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
+        }
+    });
+}
+
 function renderTurnstile() {
     const container = document.getElementById('turnstile-container');
     if (!container || !window.turnstile) return;
@@ -56,7 +96,6 @@ function renderTurnstile() {
         } catch (_) {}
         turnstileWidgetId = null;
     }
-
     container.innerHTML = '';
 
     try {
@@ -73,13 +112,11 @@ function renderTurnstile() {
             'error-callback': function() {
                 captchaToken = null;
                 saveKeyBtn.classList.add('hidden');
-                console.warn('Turnstile error, retrying...');
                 if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
                 turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
             }
         });
     } catch (e) {
-        console.warn('Turnstile render error:', e);
         if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
         turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
     }
@@ -91,9 +128,7 @@ function resetTurnstile() {
             turnstile.remove(turnstileWidgetId);
             turnstileWidgetId = null;
         }
-    } catch (e) {
-        console.warn('Turnstile reset skipped:', e);
-    }
+    } catch (e) {}
     captchaToken = null;
     saveKeyBtn.classList.add('hidden');
     if (turnstileRetryTimeout) {
@@ -108,21 +143,20 @@ observeAuthState((user) => {
         return;
     }
     currentUser = user;
-    userAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
-    userEmail.textContent = user.email || 'user@example.com';
-    document.getElementById('greetingName').textContent = user.displayName || user.email || 'User';
+    if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+    if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
+    if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
+    
     loadKeys();
     loadDomains();
     loadGroqKey();
-    setTimeout(renderTurnstile, 100);
 });
 
-signOutBtn.addEventListener('click', async () => {
-    await signOutUser();
-});
-
-avatarBtn.addEventListener('click', toggleDropdown);
-document.addEventListener('click', closeDropdown);
+if (sidebarSignOut) {
+    sidebarSignOut.addEventListener('click', async () => {
+        await signOutUser();
+    });
+}
 
 createKeyBtn.addEventListener('click', () => {
     const isHidden = createKeyForm.classList.contains('hidden');
@@ -173,13 +207,12 @@ saveKeyBtn.addEventListener('click', async () => {
         loadKeys();
         resetTurnstile();
     } catch (error) {
-        console.error(error);
         showToast('Network error. Please try again.', 3500, 'error');
     }
 });
 
 keyNameInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') saveKeyBtn.click();
+    if (e.key === 'Enter' && !saveKeyBtn.classList.contains('hidden')) saveKeyBtn.click();
 });
 
 async function loadKeys() {
@@ -187,9 +220,9 @@ async function loadKeys() {
     try {
         const keys = await getApiKeys(currentUser.uid);
         renderKeys(keys);
+        renderOverviewKeys(keys);
         updateStats(keys);
     } catch (error) {
-        console.error(error);
         showToast('Failed to load keys. Please refresh the page.', 3500, 'error');
     }
 }
@@ -197,10 +230,32 @@ async function loadKeys() {
 function updateStats(keys) {
     const total = keys.length;
     const active = keys.filter(k => k.status === 'active').length;
-    const revoked = keys.filter(k => k.status === 'revoked').length;
-    totalKeysEl.textContent = total;
-    activeKeysEl.textContent = active;
-    revokedKeysEl.textContent = revoked;
+    if (totalKeysEl) totalKeysEl.textContent = total;
+    if (activeKeysEl) activeKeysEl.textContent = active;
+}
+
+function renderOverviewKeys(keys) {
+    if (!overviewKeysContainer) return;
+    overviewKeysContainer.innerHTML = '';
+    
+    if (keys.length === 0) {
+        overviewKeysContainer.innerHTML = '<p class="text-sm text-zinc-500">No keys created yet.</p>';
+        return;
+    }
+
+    keys.slice(0, 3).forEach(key => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
+        const isActive = key.status === 'active';
+        div.innerHTML = `
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-red-400'}"></div>
+                <span class="text-sm text-white font-medium">${key.name}</span>
+            </div>
+            <span class="text-xs font-mono text-zinc-500">${key.key ? key.key.slice(0, 8) + '...' : 'N/A'}</span>
+        `;
+        overviewKeysContainer.appendChild(div);
+    });
 }
 
 function renderKeys(keys) {
@@ -235,13 +290,9 @@ function renderKeys(keys) {
             const d = key.createdAt.toDate ? key.createdAt.toDate() : new Date(key.createdAt);
             const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            const dateEl = document.createElement('span');
-            dateEl.innerHTML = `<i class="ph ph-calendar-blank mr-1"></i> ${dateStr} at ${timeStr}`;
-            metaRow.appendChild(dateEl);
+            metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> ${dateStr} at ${timeStr}</span>`;
         } else {
-            const dateEl = document.createElement('span');
-            dateEl.innerHTML = `<i class="ph ph-calendar-blank mr-1"></i> Recently created`;
-            metaRow.appendChild(dateEl);
+            metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> Recently created</span>`;
         }
         left.appendChild(metaRow);
         const keyValRow = document.createElement('div');
@@ -282,7 +333,6 @@ function renderKeys(keys) {
                 showToast(`Key "${key.name}" ${action} successfully!`, 3000, 'success');
                 loadKeys();
             } catch (error) {
-                console.error(error);
                 showToast(`Failed to ${action} key.`, 3500, 'error');
             }
         });
@@ -293,13 +343,12 @@ function renderKeys(keys) {
         deleteBtn.title = 'Delete permanently';
         deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (confirm(`Delete key "${key.name}" permanently? This action cannot be undone.`)) {
+            if (confirm(`Delete key "${key.name}" permanently?`)) {
                 try {
                     await deleteApiKey(key.id);
                     showToast(`Key "${key.name}" deleted permanently.`, 3000, 'success');
                     loadKeys();
                 } catch (error) {
-                    console.error(error);
                     showToast('Failed to delete key.', 3500, 'error');
                 }
             }
@@ -343,7 +392,6 @@ saveDomainBtn.addEventListener('click', async () => {
         addDomainForm.classList.add('hidden');
         loadDomains();
     } catch (error) {
-        console.error(error);
         if (error.message === 'Domain already exists') {
             showToast(`Domain "${domain}" already exists.`, 3000, 'warning');
         } else if (error.message === 'Maximum 10 domains allowed') {
@@ -365,20 +413,21 @@ async function loadDomains() {
         renderDomains(domains);
         updateDomainStats(domains);
     } catch (error) {
-        console.error(error);
-        showToast('Failed to load domains. Please refresh the page.', 3500, 'error');
+        showToast('Failed to load domains.', 3500, 'error');
     }
 }
 
 function updateDomainStats(domains) {
     const total = domains.length;
-    totalDomainsEl.textContent = `${total}/${MAX_DOMAINS}`;
-    domainLimitBadge.textContent = `${total} / ${MAX_DOMAINS} used`;
-    domainLimitBadge.className = 'domain-limit-badge';
-    if (total >= MAX_DOMAINS) {
-        domainLimitBadge.classList.add('danger');
-    } else if (total >= MAX_DOMAINS - 2) {
-        domainLimitBadge.classList.add('warning');
+    if (totalDomainsEl) totalDomainsEl.textContent = `${total}/${MAX_DOMAINS}`;
+    if (domainLimitBadge) {
+        domainLimitBadge.textContent = `${total} / ${MAX_DOMAINS} used`;
+        domainLimitBadge.className = 'domain-limit-badge';
+        if (total >= MAX_DOMAINS) {
+            domainLimitBadge.classList.add('danger');
+        } else if (total >= MAX_DOMAINS - 2) {
+            domainLimitBadge.classList.add('warning');
+        }
     }
 }
 
@@ -413,13 +462,9 @@ function renderDomains(domains) {
         if (domain.createdAt) {
             const d = domain.createdAt.toDate ? domain.createdAt.toDate() : new Date(domain.createdAt);
             const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            const dateEl = document.createElement('span');
-            dateEl.innerHTML = `<i class="ph ph-calendar-blank mr-1"></i> Added ${dateStr}`;
-            metaRow.appendChild(dateEl);
+            metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> Added ${dateStr}</span>`;
         } else {
-            const dateEl = document.createElement('span');
-            dateEl.innerHTML = `<i class="ph ph-calendar-blank mr-1"></i> Recently added`;
-            metaRow.appendChild(dateEl);
+            metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> Recently added</span>`;
         }
         left.appendChild(metaRow);
         card.appendChild(left);
@@ -437,7 +482,6 @@ function renderDomains(domains) {
                 showToast(`Domain "${domain.domain}" ${action}.`, 3000, 'success');
                 loadDomains();
             } catch (error) {
-                console.error(error);
                 showToast(`Failed to ${action} domain.`, 3500, 'error');
             }
         });
@@ -454,7 +498,6 @@ function renderDomains(domains) {
                     showToast(`Domain "${domain.domain}" removed.`, 3000, 'success');
                     loadDomains();
                 } catch (error) {
-                    console.error(error);
                     showToast('Failed to remove domain.', 3500, 'error');
                 }
             }
@@ -465,20 +508,22 @@ function renderDomains(domains) {
     });
 }
 
-toggleGroqBtn.addEventListener('click', () => {
-    const input = document.getElementById('groqApiInput');
-    const icon = toggleGroqBtn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'ph-bold ph-eye-slash';
-    } else {
-        input.type = 'password';
-        icon.className = 'ph-bold ph-eye';
-    }
-});
+if (toggleGroqBtn) {
+    toggleGroqBtn.addEventListener('click', () => {
+        const input = document.getElementById('groqApiInput');
+        const icon = toggleGroqBtn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'ph-bold ph-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'ph-bold ph-eye';
+        }
+    });
+}
 
 async function loadGroqKey() {
-    if (!currentUser) return;
+    if (!currentUser || !groqInput) return;
     try {
         const key = await getGroqApiKey(currentUser.uid);
         if (key) {
@@ -493,41 +538,42 @@ async function loadGroqKey() {
             deleteGroqBtn.classList.add('hidden');
         }
     } catch (error) {
-        console.error(error);
         groqStatus.textContent = 'Failed to load key';
         groqStatus.style.color = '#fb7185';
     }
 }
 
-saveGroqBtn.addEventListener('click', async () => {
-    const key = groqInput.value.trim();
-    if (!key) {
-        showToast('Please enter a Groq API key.', 3000, 'warning');
-        return;
-    }
-    try {
-        await saveGroqApiKey(currentUser.uid, key);
-        showToast('Groq API key saved successfully!', 3500, 'success');
-        groqStatus.textContent = '✅ Key saved';
-        groqStatus.style.color = '#34d399';
-        deleteGroqBtn.classList.remove('hidden');
-    } catch (error) {
-        console.error(error);
-        showToast('Failed to save key.', 3500, 'error');
-    }
-});
+if (saveGroqBtn) {
+    saveGroqBtn.addEventListener('click', async () => {
+        const key = groqInput.value.trim();
+        if (!key) {
+            showToast('Please enter a Groq API key.', 3000, 'warning');
+            return;
+        }
+        try {
+            await saveGroqApiKey(currentUser.uid, key);
+            showToast('Groq API key saved successfully!', 3500, 'success');
+            groqStatus.textContent = '✅ Key saved';
+            groqStatus.style.color = '#34d399';
+            deleteGroqBtn.classList.remove('hidden');
+        } catch (error) {
+            showToast('Failed to save key.', 3500, 'error');
+        }
+    });
+}
 
-deleteGroqBtn.addEventListener('click', async () => {
-    if (!confirm('Are you sure you want to delete your Groq API key?')) return;
-    try {
-        await deleteGroqApiKey(currentUser.uid);
-        groqInput.value = '';
-        groqStatus.textContent = 'No key saved';
-        groqStatus.style.color = '#71717a';
-        deleteGroqBtn.classList.add('hidden');
-        showToast('Groq API key deleted.', 3000, 'success');
-    } catch (error) {
-        console.error(error);
-        showToast('Failed to delete key.', 3500, 'error');
-    }
-});
+if (deleteGroqBtn) {
+    deleteGroqBtn.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to delete your Groq API key?')) return;
+        try {
+            await deleteGroqApiKey(currentUser.uid);
+            groqInput.value = '';
+            groqStatus.textContent = 'No key saved';
+            groqStatus.style.color = '#71717a';
+            deleteGroqBtn.classList.add('hidden');
+            showToast('Groq API key deleted.', 3000, 'success');
+        } catch (error) {
+            showToast('Failed to delete key.', 3500, 'error');
+        }
+    });
+}
