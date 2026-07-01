@@ -3,7 +3,8 @@ import { showToast } from "./modules/ui.js";
 import {
     getApiKeys, deleteApiKey,
     getDomains, addDomain, deleteDomain, toggleDomainStatus,
-    saveGroqApiKey, getGroqApiKey, deleteGroqApiKey
+    saveGroqApiKey, getGroqApiKey, deleteGroqApiKey,
+    getUsageHistory, getDailyUsageStats // <-- ONLY NEW IMPORT ADDED
 } from "./modules/firestore.js";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "./config/firebase.js";
@@ -46,6 +47,12 @@ const groqStatus = document.getElementById('groqKeyStatus');
 const saveGroqBtn = document.getElementById('saveGroqBtn');
 const deleteGroqBtn = document.getElementById('deleteGroqBtn');
 const toggleGroqBtn = document.getElementById('toggleGroqVisibility');
+
+// NEW: Usage DOM elements
+const totalRequestsEl = document.getElementById('totalRequests');
+const totalTokensEl = document.getElementById('totalTokens');
+const successRateEl = document.getElementById('successRate');
+const usageHistoryContainer = document.getElementById('usageHistoryContainer');
 
 let currentUser = null;
 const MAX_DOMAINS = 10;
@@ -151,6 +158,7 @@ observeAuthState((user) => {
     loadKeys();
     loadDomains();
     loadGroqKey();
+    loadUsage(); // <-- NEW: Usage data load call added
 });
 
 if (sidebarSignOut) {
@@ -578,4 +586,63 @@ if (deleteGroqBtn) {
             showToast('Failed to delete key.', 3500, 'error');
         }
     });
+}
+
+// ============================================
+// NEW: USAGE LOGIC (added at the end, nothing else changed)
+// ============================================
+async function loadUsage() {
+    if (!currentUser) return;
+    try {
+        // 1. Fetch History
+        const history = await getUsageHistory(currentUser.uid, 10);
+        
+        if (history.length === 0) {
+            usageHistoryContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No usage data available yet.</div>';
+        } else {
+            usageHistoryContainer.innerHTML = '';
+            history.forEach((log, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5 fade-in-up';
+                div.style.animationDelay = `${index * 0.04}s`;
+                
+                const date = log.timestamp?.toDate?.() || new Date();
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full ${log.status === 'success' ? 'bg-emerald-400' : 'bg-red-400'}"></div>
+                        <span class="text-sm text-zinc-300 font-medium">${log.model || 'Unknown'}</span>
+                        <span class="text-xs text-zinc-500 font-mono">${dateStr}</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-zinc-400">
+                        <span>${log.totalTokens || 0} tokens</span>
+                        <span class="font-bold ${log.status === 'success' ? 'text-emerald-400' : 'text-red-400'}">${log.status}</span>
+                    </div>
+                `;
+                usageHistoryContainer.appendChild(div);
+            });
+        }
+
+        // 2. Fetch Aggregated Stats
+        const stats = await getDailyUsageStats(currentUser.uid);
+        if (totalRequestsEl) totalRequestsEl.textContent = stats.totalRequests || 0;
+        if (totalTokensEl) totalTokensEl.textContent = stats.totalTokens || 0;
+
+        // 3. Calculate success rate from history
+        if (history.length > 0 && successRateEl) {
+            const successCount = history.filter(h => h.status === 'success').length;
+            const rate = Math.round((successCount / history.length) * 100);
+            successRateEl.textContent = rate + '%';
+        } else if (successRateEl) {
+            successRateEl.textContent = 'N/A';
+        }
+
+    } catch (error) {
+        console.error("Usage load error:", error);
+        if (usageHistoryContainer) {
+            usageHistoryContainer.innerHTML = 
+                '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
+        }
+    }
 }

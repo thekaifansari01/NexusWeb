@@ -299,7 +299,48 @@ class handler(BaseHTTPRequestHandler):
             if not groq_res.ok:
                 return self.send_json(groq_res.status_code, {"error": "Groq API Error", "details": groq_res.json()})
 
-            return self.send_json(200, groq_res.json())
+            # Parse the response once to avoid calling .json() twice
+            groq_data = groq_res.json()
+
+            # --- START: USAGE LOGGING CODE ---
+            try:
+                usage = groq_data.get('usage', {})
+                prompt_tokens = usage.get('prompt_tokens', 0)
+                completion_tokens = usage.get('completion_tokens', 0)
+                total_tokens = usage.get('total_tokens', 0)
+
+                # 1. Detailed Request Log (History)
+                db.collection('usageLogs').add({
+                    'userId': user_id,
+                    'nexusKeyId': keys_ref[0].id,
+                    'nexusKeyName': key_data.get('name', 'Unknown'),
+                    'model': model,
+                    'promptTokens': prompt_tokens,
+                    'completionTokens': completion_tokens,
+                    'totalTokens': total_tokens,
+                    'status': 'success',
+                    'timestamp': firestore.SERVER_TIMESTAMP
+                })
+
+                # 2. Daily Aggregated Stats (Dashboard ki speed ke liye)
+                today = datetime.utcnow().date().isoformat()
+                daily_doc_id = f"{user_id}_{today}"
+                daily_ref = db.collection('userDailyUsage').document(daily_doc_id)
+                
+                daily_ref.set({
+                    'userId': user_id,
+                    'date': today,
+                    'totalRequests': firestore.Increment(1),
+                    'totalTokens': firestore.Increment(total_tokens),
+                    'promptTokens': firestore.Increment(prompt_tokens),
+                    'completionTokens': firestore.Increment(completion_tokens),
+                    'lastUpdated': firestore.SERVER_TIMESTAMP
+                }, merge=True)
+            except Exception as e:
+                print(f"Usage logging failed (non-critical): {e}")
+            # --- END: USAGE LOGGING CODE ---
+
+            return self.send_json(200, groq_data)
 
         except Exception as e:
             print(f"Chat error: {str(e)}")
