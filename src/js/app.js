@@ -16,7 +16,9 @@ signInBtn.addEventListener('click', async () => {
     }
 });
 
-heroSignInBtn.addEventListener('click', () => signInBtn.click());
+if (heroSignInBtn) {
+    heroSignInBtn.addEventListener('click', () => signInBtn.click());
+}
 
 signOutBtn.addEventListener('click', async () => {
     await signOutUser();
