@@ -37,13 +37,12 @@ def update_rate_limit(user_id):
     else:
         doc_ref.set({'date': today, 'count': 1})
 
-def handle_create_key(body):
+def handle_create_key(user_id, body):
     try:
-        user_id = body.get('userId')
         key_name = body.get('name')
         captcha_token = body.get('captchaToken')
 
-        if not all([user_id, key_name, captcha_token]):
+        if not all([key_name, captcha_token]):
             return 400, {"error": "Missing fields"}
 
         if not verify_captcha(captcha_token):

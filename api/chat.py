@@ -2,6 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler
 from api.chatService import handle_chat_request
 from api.keyService import handle_create_key
+from api.middleware import get_user_from_cookie
 
 class handler(BaseHTTPRequestHandler):
     def send_json(self, status_code, data):
@@ -29,8 +30,7 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        # Keep your HTML string here (omitted for brevity)
-        html = "<html><body><h1>Nexus API Status: Operational</h1></body></html>" 
+        html = "<html><body><h1>Nexus API Status: Operational</h1></body></html>"
         self.send_html(200, html)
 
     def do_POST(self):
@@ -43,7 +43,11 @@ class handler(BaseHTTPRequestHandler):
                 status, response = handle_chat_request(body, request_origin)
                 return self.send_json(status, response)
             else:
-                status, response = handle_create_key(body)
+                try:
+                    uid, _ = get_user_from_cookie(self)
+                except Exception:
+                    return self.send_json(401, {"error": "Authentication required"})
+                status, response = handle_create_key(uid, body)
                 return self.send_json(status, response)
 
         except json.JSONDecodeError:

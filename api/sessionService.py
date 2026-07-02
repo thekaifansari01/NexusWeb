@@ -2,8 +2,7 @@ import uuid
 from api.config import db
 from firebase_admin import firestore
 
-def create_session(user_id, device_info, ip_address, location):
-    session_id = str(uuid.uuid4())
+def create_session(user_id, session_id, device_info, ip_address, location):
     session_data = {
         'userId': user_id,
         'sessionId': session_id,
@@ -17,7 +16,7 @@ def create_session(user_id, device_info, ip_address, location):
     db.collection('active_sessions').document(session_id).set(session_data)
     return 200, {"success": True, "sessionId": session_id}
 
-def get_sessions(user_id):
+def get_sessions(user_id, current_session_id=None):
     docs = db.collection('active_sessions').where('userId', '==', user_id).where('status', '==', 'active').get()
     sessions = []
     for doc in docs:
@@ -27,14 +26,12 @@ def get_sessions(user_id):
         if 'lastActive' in data and data['lastActive']:
             data['lastActive'] = data['lastActive'].isoformat()
         sessions.append(data)
-    return 200, {"sessions": sessions}
+    return 200, {"sessions": sessions, "currentSessionId": current_session_id}
 
 def revoke_session(session_id, user_id):
     doc_ref = db.collection('active_sessions').document(session_id)
     doc = doc_ref.get()
-    
     if not doc.exists or doc.to_dict().get('userId') != user_id:
         return 403, {"error": "Unauthorized"}
-        
     doc_ref.update({'status': 'revoked'})
     return 200, {"success": True}

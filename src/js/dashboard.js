@@ -63,23 +63,99 @@ let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 
+function switchTab(tabId, updateHistory = true) {
+    const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+    if (!btn) return;
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    tabContents.forEach(tab => tab.classList.add('hidden'));
+    const activeTab = document.getElementById(`tab-${tabId}`);
+    if (activeTab) activeTab.classList.remove('hidden');
+    breadcrumbCurrent.textContent = btn.textContent.trim();
+    if (window.innerWidth < 768 && sidebar) {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
+    }
+    if (updateHistory) {
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabId);
+        url.searchParams.delete('action');
+        window.history.pushState({ tab: tabId }, '', url);
+    }
+}
+
+function openCreateKeyModal(updateHistory = true) {
+    createKeyForm.classList.remove('hidden');
+    createKeyForm.classList.remove('slide-down');
+    void createKeyForm.offsetWidth;
+    createKeyForm.classList.add('slide-down');
+    keyNameInput.value = '';
+    keyNameInput.focus();
+    setTimeout(renderTurnstile, 200);
+    if (updateHistory) {
+        const url = new URL(window.location);
+        url.searchParams.set('action', 'create-key');
+        window.history.pushState({ tab: 'api-keys', action: 'create-key' }, '', url);
+    }
+}
+
+function closeCreateKeyModal(updateHistory = true) {
+    createKeyForm.classList.add('hidden');
+    resetTurnstile();
+    if (updateHistory) {
+        const url = new URL(window.location);
+        url.searchParams.delete('action');
+        window.history.pushState({ tab: 'api-keys' }, '', url);
+    }
+}
+
+function openAddDomainModal(updateHistory = true) {
+    addDomainForm.classList.remove('hidden');
+    addDomainForm.classList.remove('slide-down');
+    void addDomainForm.offsetWidth;
+    addDomainForm.classList.add('slide-down');
+    domainInput.value = '';
+    domainInput.focus();
+    if (updateHistory) {
+        const url = new URL(window.location);
+        url.searchParams.set('action', 'add-domain');
+        window.history.pushState({ tab: 'domains', action: 'add-domain' }, '', url);
+    }
+}
+
+function closeAddDomainModal(updateHistory = true) {
+    addDomainForm.classList.add('hidden');
+    if (updateHistory) {
+        const url = new URL(window.location);
+        url.searchParams.delete('action');
+        window.history.pushState({ tab: 'domains' }, '', url);
+    }
+}
+
+function handleURLState() {
+    const url = new URL(window.location);
+    const tab = url.searchParams.get('tab') || 'overview';
+    const action = url.searchParams.get('action');
+    switchTab(tab, false);
+    if (tab === 'api-keys' && action === 'create-key') {
+        openCreateKeyModal(false);
+    } else {
+        closeCreateKeyModal(false);
+    }
+    if (tab === 'domains' && action === 'add-domain') {
+        openAddDomainModal(false);
+    } else {
+        closeAddDomainModal(false);
+    }
+}
+
+window.addEventListener('popstate', handleURLState);
+
 tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const tabId = btn.getAttribute('data-tab');
-        tabContents.forEach(tab => {
-            tab.classList.add('hidden');
-        });
-        const activeTab = document.getElementById(`tab-${tabId}`);
-        if (activeTab) {
-            activeTab.classList.remove('hidden');
-        }
-        breadcrumbCurrent.textContent = btn.textContent.trim();
-        if (window.innerWidth < 768 && sidebar) {
-            sidebar.classList.add('hidden');
-            sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
-        }
+        switchTab(tabId, true);
     });
 });
 
@@ -153,6 +229,7 @@ observeAuthState((user) => {
     if (welcomeMessageEl) {
         welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
     }
+    handleURLState();
     loadKeys();
     loadDomains();
     loadGroqKey();
@@ -166,22 +243,11 @@ if (sidebarSignOut) {
 }
 
 createKeyBtn.addEventListener('click', () => {
-    const isHidden = createKeyForm.classList.contains('hidden');
-    createKeyForm.classList.toggle('hidden');
-    if (isHidden) {
-        createKeyForm.classList.remove('slide-down');
-        void createKeyForm.offsetWidth;
-        createKeyForm.classList.add('slide-down');
-        keyNameInput.value = '';
-        keyNameInput.focus();
-        setTimeout(renderTurnstile, 200);
-    }
+    if (createKeyForm.classList.contains('hidden')) openCreateKeyModal(true);
+    else closeCreateKeyModal(true);
 });
 
-cancelKeyBtn.addEventListener('click', () => {
-    createKeyForm.classList.add('hidden');
-    resetTurnstile();
-});
+cancelKeyBtn.addEventListener('click', () => closeCreateKeyModal(true));
 
 saveKeyBtn.addEventListener('click', async () => {
     const name = keyNameInput.value.trim();
@@ -198,7 +264,6 @@ saveKeyBtn.addEventListener('click', async () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userId: currentUser.uid,
                 name: name,
                 captchaToken: captchaToken
             })
@@ -209,9 +274,8 @@ saveKeyBtn.addEventListener('click', async () => {
             return;
         }
         showToast(`API key "${name}" created successfully!`, 3500, 'success');
-        createKeyForm.classList.add('hidden');
+        closeCreateKeyModal(true);
         loadKeys();
-        resetTurnstile();
     } catch (error) {
         showToast('Network error. Please try again.', 3500, 'error');
     }
@@ -369,20 +433,11 @@ function renderKeys(keys) {
 }
 
 addDomainBtn.addEventListener('click', () => {
-    const isHidden = addDomainForm.classList.contains('hidden');
-    addDomainForm.classList.toggle('hidden');
-    if (isHidden) {
-        addDomainForm.classList.remove('slide-down');
-        void addDomainForm.offsetWidth;
-        addDomainForm.classList.add('slide-down');
-        domainInput.value = '';
-        domainInput.focus();
-    }
+    if (addDomainForm.classList.contains('hidden')) openAddDomainModal(true);
+    else closeAddDomainModal(true);
 });
 
-cancelDomainBtn.addEventListener('click', () => {
-    addDomainForm.classList.add('hidden');
-});
+cancelDomainBtn.addEventListener('click', () => closeAddDomainModal(true));
 
 saveDomainBtn.addEventListener('click', async () => {
     let domain = domainInput.value.trim();
@@ -398,7 +453,7 @@ saveDomainBtn.addEventListener('click', async () => {
     try {
         await addDomain(currentUser.uid, domain);
         showToast(`Domain "${domain}" added successfully!`, 3500, 'success');
-        addDomainForm.classList.add('hidden');
+        closeAddDomainModal(true);
         loadDomains();
     } catch (error) {
         if (error.message === 'Domain already exists') {
