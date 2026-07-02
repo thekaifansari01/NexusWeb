@@ -1,356 +1,448 @@
-# Nexus - Secure AI Assistant Integration
+# Nexus – Secure AI Assistant Integration
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.2.0-blue.svg" alt="Version 1.2.0" />
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black" alt="Firebase" />
-  <img src="https://img.shields.io/badge/Groq-00B4D8?style=flat&logo=groq&logoColor=white" alt="Groq" />
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" />
-</p>
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/thekaifansari01/NexusWeb/releases)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com)
+[![Groq](https://img.shields.io/badge/Groq-00B4D8?style=flat&logo=groq&logoColor=white)](https://groq.com)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com)
+
+---
 
 ## 📌 Overview
 
-**Nexus** is a secure, embeddable AI assistant platform that turns your website into a conversational knowledge base. It provides a lightweight widget that integrates with Groq's powerful language models while ensuring your API keys remain secure through encryption and strict domain whitelisting.
+**Nexus** is a turn‑key, self‑hosted AI assistant platform that transforms any website into a conversational knowledge base. It provides a lightweight, embeddable widget that leverages **Groq**’s ultra‑fast LLMs (Llama 3, Mixtral, and more) to answer user questions based on your site’s content – all while keeping your API keys secure through encryption and strict domain whitelisting.
 
-> 🔐 **Secure by Design** — Your Groq API key is never exposed to the frontend. Nexus uses a separate, domain-restricted key for widget communication.
+> 🔐 **Secure by design** – Your Groq API key is never exposed to the frontend. Nexus uses a separate, domain‑restricted key (Nexus Key) for widget communication. The backend verifies every request’s origin, ensuring that only your authorized domains can use your keys.
+
+---
 
 ## ✨ Key Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔑 **Vault-Grade Security** | Groq API keys are encrypted and stored securely; Nexus keys are separate for frontend use |
-| 🌐 **Domain Whitelisting** | Each Nexus key is restricted to authorized domains, preventing misuse |
-| 🎨 **Zero Friction Integration** | Add a single script tag to your HTML; the widget auto-adapts to your site's theme |
-| 👤 **User Management** | Google OAuth authentication with Firebase integration |
-| 📊 **Dashboard Control** | Manage API keys, authorized domains, and Groq API key in one place |
-| ⚡ **Real-time Stats** | Track active keys, revoked keys, and domain usage at a glance |
-| 🔄 **Key Lifecycle Management** | Create, revoke, activate, and delete API keys with instant updates |
-| 🛡️ **CORS Protection** | Backend verifies request origins against your authorized domains |
+| 🔑 **Vault‑Grade Security** | Groq API keys are stored encrypted (with planned hardening) and kept separate from the public‑facing Nexus Keys. |
+| 🌐 **Domain Whitelisting** | Each Nexus Key is restricted to a list of authorized domains (up to 10) – preventing misuse even if the key leaks. |
+| 🧩 **Zero‑Friction Integration** | Drop a single `<script>` tag into your HTML. The widget automatically scrapes your page content, adapts to your theme, and provides instant context‑aware answers. |
+| 👤 **User Management** | Google OAuth (Firebase) with session cookies (HttpOnly, Secure, SameSite=Strict) – no passwords to manage. |
+| 📊 **Dashboard Control** | Manage Nexus Keys, domains, and your Groq API key from a single, polished interface. |
+| ⚡ **Real‑time Stats** | Track active/revoked keys, domain usage, and request logs – all updated live. |
+| 🔄 **Full Lifecycle Management** | Create, copy, revoke, activate, or permanently delete keys; toggle domains on/off. |
+| 🛡️ **CORS & Origin Enforcement** | Backend verifies `Origin`/`Referer` headers against your whitelist before processing any AI request. |
+| 🚦 **Rate Limiting** | Prevents abuse when generating new Nexus Keys (5 per day per user). |
+| 🤖 **Multi‑Model Support** | Choose from `llama3-8b-8192` (default), `llama3-70b-8192`, or `mixtral-8x7b-32768` directly from the widget configuration. |
+| 🖼️ **File Attachments** | Users can attach images; the widget can forward them to the AI (if the model supports vision). |
+| 🌙 **Theme Auto‑Detection** | The widget automatically matches your site’s dark/light theme (with manual override). |
+
+---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Client Browser                         │
-│  ┌─────────────┐    ┌─────────────┐    ┌───────────────────┐  │
-│  │   Website   │───▶│  Nexus      │    │   Dashboard       │  │
-│  │   with      │    │  Widget     │    │   (Dashboard UI)  │  │
-│  │   Script    │    │  (iframe)   │    │                   │  │
-│  └─────────────┘    └──────┬──────┘    └────────┬──────────┘  │
-└─────────────────────────────┼────────────────────┼─────────────┘
-                              │                    │
-                              ▼                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                         Firebase Backend                        │
-│  ┌─────────────┐    ┌─────────────┐    ┌───────────────────┐  │
-│  │   Auth      │    │  Firestore  │    │   Serverless      │  │
-│  │   (Google)  │    │  Database   │    │   Functions       │  │
-│  └─────────────┘    └─────────────┘    └────────┬──────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                                          ┌─────────────────────┐
-                                          │   Groq API          │
-                                          │   (LLM Inference)   │
-                                          └─────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Client Browser                             │
+│  ┌─────────────┐    ┌─────────────┐    ┌───────────────────────┐  │
+│  │   Website   │───▶│  Nexus      │    │   Dashboard           │  │
+│  │   with      │    │  Widget     │    │   (Dashboard UI)      │  │
+│  │   Script    │    │  (iframe)   │    │                       │  │
+│  └─────────────┘    └──────┬──────┘    └───────────┬───────────┘  │
+└─────────────────────────────┼───────────────────────┼─────────────┘
+                              │                       │
+                              ▼                       ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Vercel (Serverless)                         │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │             Python HTTP Handlers (api/*.py)                │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌───────────────────┐  │   │
+│  │  │ auth.py     │  │ chat.py     │  │ session.py        │  │   │
+│  │  │ (session    │  │ (AI proxy,  │  │ (list/revoke      │  │   │
+│  │  │ creation)   │  │ key mgmt)   │  │  sessions)        │  │   │
+│  │  └─────────────┘  └──────┬──────┘  └───────────────────┘  │   │
+│  └───────────────────────────┼──────────────────────────────────┘   │
+└───────────────────────────────┼─────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         Firebase Backend                            │
+│  ┌─────────────┐    ┌─────────────┐    ┌───────────────────────┐  │
+│  │   Auth      │    │  Firestore  │    │   Security Rules      │  │
+│  │   (Google)  │    │  Database   │    │   (user‑scoped)       │  │
+│  └─────────────┘    └──────┬──────┘    └───────────────────────┘  │
+└─────────────────────────────┼─────────────────────────────────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │   Groq API          │
+                    │   (LLM Inference)   │
+                    └─────────────────────┘
 ```
 
-### Data Flow
+### Data Flow (Chat Request)
 
-1. **User Authentication** → Firebase Auth (Google OAuth)
-2. **Key Management** → Firestore storage with user-based security rules
-3. **Chat Requests** → Frontend → Serverless Function → Groq API → Response
-4. **Security** → Origin verification against authorized domains
+1. **User** sends a message through the widget.
+2. **Widget** scrapes current page content (via Readability + Turndown) and sends a `POST` request to `/api/chat` with the Nexus Key and message.
+3. **Backend** (`chat.py`) validates:
+   - The Nexus Key exists and is active.
+   - The request’s `Origin`/`Referer` matches a domain in the user’s whitelist.
+   - The user has a Groq API key stored.
+4. **Backend** forwards the request to Groq with the user’s key and returns the response.
+5. **Usage** is logged to Firestore (`usageLogs`, `userDailyUsage`) for analytics.
+
+---
+
+## 🧰 Tech Stack
+
+### Frontend
+- **HTML5** – semantic markup.
+- **CSS** – Tailwind CSS (CDN) + custom `styles.css`, `dashboard.css`.
+- **JavaScript (ES Modules)** – pure JS, no frameworks.
+- **Phosphor Icons** – clean, scalable icons.
+- **Firebase v9** – client‑side auth (`auth`, `firestore`).
+- **Google Identity Services** – One‑Tap sign‑in.
+- **Cloudflare Turnstile** – CAPTCHA for key generation.
+
+### Backend
+- **Python 3.9+** – using `http.server` for serverless functions on Vercel.
+- **Firebase Admin SDK** – authentication, Firestore database.
+- **PyJWT** – session token creation/verification.
+- **Requests** – Groq API and Turnstile verification.
+- **UUID** – session ID generation.
+
+### Infrastructure
+- **Vercel** – hosting and serverless functions.
+- **Firebase** – authentication and NoSQL database.
+- **Groq** – AI inference provider.
+- **Cloudflare Turnstile** – bot mitigation.
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ (for local development)
-- Python 3.9+ (for serverless function)
-- Firebase account with project setup
-- Groq API key
+- Python 3.9+ (for local function development)
+- Firebase project with **Authentication (Google)** and **Firestore** enabled.
+- Groq API key (obtain from [Groq Console](https://console.groq.com)).
+- Vercel account (for deployment) – optional for local testing.
 
-### Installation
+---
 
-#### 1. Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/thekaifansari01/NexusWeb.git
 cd NexusWeb
 ```
 
-#### 2. Firebase Configuration
+---
 
-Create a Firebase project and obtain your configuration:
+### 2. Firebase Configuration
+
+Create a Firebase project and enable **Authentication** (Google sign‑in) and **Firestore**.
+
+#### Client Configuration (`src/config/firebase.js`)
+
+Replace the placeholder values with your project’s configuration:
 
 ```javascript
-// src/config/firebase.js
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
 };
 ```
 
-#### 3. Set Up Firebase Security Rules
+#### Server‑side Credentials
+
+You need to provide Firebase service account credentials to the backend (for Firestore Admin SDK). You have two options:
+
+**Option A** – Environment variable `FIREBASE_SERVICE_ACCOUNT` (JSON string)  
+**Option B** – Separate environment variables:
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_CLIENT_EMAIL`
+- `FIREBASE_PRIVATE_KEY`
+- (Optional) `FIREBASE_PRIVATE_KEY_ID`, `FIREBASE_CLIENT_ID`
+
+> ⚠️ **Important**: Never commit service account keys to version control. Use environment variables or secrets in your deployment platform.
+
+---
+
+### 3. Firestore Security Rules
+
+Set up basic security rules to protect user data:
 
 ```javascript
-// Firestore Security Rules
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Users can only read/write their own API keys
     match /apiKeys/{document} {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
     }
+    // Authorized domains – same user ownership
     match /authorizedDomains/{document} {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
     }
+    // Groq keys – user‑scoped
     match /userGroqKeys/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    // Usage logs – user can read own logs
+    match /usageLogs/{document} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    // Daily usage aggregates – similar
+    match /userDailyUsage/{document} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    // Active sessions – user can read/update own sessions
+    match /active_sessions/{document} {
+      allow read, update: if request.auth != null && request.auth.uid == resource.data.userId;
     }
   }
 }
 ```
 
-#### 4. Deploy Serverless Function
+---
 
-The `chat.py` file is designed for Vercel serverless functions:
+### 4. Environment Variables (Backend)
 
-```bash
-# Create a vercel.json file
-{
-  "functions": {
-    "api/chat.py": {
-      "runtime": "python3.9"
-    }
-  },
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/$1" }]
-}
-```
-
-Set environment variables in Vercel:
+Set these in your deployment environment (Vercel) or create a `.env` file for local development:
 
 ```env
-FIREBASE_SERVICE_ACCOUNT=your_service_account_json
-# Or individually:
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_CLIENT_EMAIL=your_client_email
-FIREBASE_PRIVATE_KEY=your_private_key
+# Firebase (either full JSON or individual fields)
+FIREBASE_SERVICE_ACCOUNT='{"type":"service_account",...}'
+# OR
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account@...com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+
+# Cookie signing secret (must be strong, 32+ chars)
+COOKIE_SECRET=your-super-secret-cookie-key
+
+# Cloudflare Turnstile
+TURNSTILE_SECRET_KEY=your-turnstile-secret-key
 ```
 
-#### 5. Integrate the Widget
+---
 
-Add the Nexus widget to your website:
+### 5. Deploy to Vercel
 
-```html
-<!-- Add this script to your HTML -->
-<script>
-  window.NEXUS_CONFIG = {
-    apiKey: 'your-nexus-key',
-    position: 'bottom-right', // or 'bottom-left'
-    theme: 'dark', // or 'light'
-    greeting: 'Hello! How can I help you?'
-  };
-</script>
-<script src="https://cdn.nexus.ai/widget.js"></script>
-```
+The project is structured for Vercel:
 
-## 📁 Project Structure
+- Static files (`.html`, `src/`, `assets/`) are served as‑is.
+- Python functions in `/api` are automatically deployed as serverless functions.
 
-```
-NexusWeb/
-├── index.html                 # Landing page
-├── dashboard.html             # User dashboard
-├── src/
-│   ├── css/
-│   │   ├── styles.css         # Global styles
-│   │   └── dashboard.css      # Dashboard-specific styles
-│   ├── js/
-│   │   ├── app.js             # Main entry point
-│   │   ├── dashboard.js       # Dashboard logic
-│   │   ├── modules/
-│   │   │   ├── auth.js        # Firebase authentication
-│   │   │   ├── firestore.js   # Firestore CRUD operations
-│   │   │   └── ui.js          # UI helpers and toast notifications
-│   └── config/
-│       └── firebase.js        # Firebase configuration
-├── api/
-│   └── chat.py                # Vercel serverless function (Groq proxy)
-├── package.json
-└── README.md
-```
-
-## 💻 Usage
-
-### Dashboard Features
-
-#### API Key Management
-
-- **Create Keys**: Generate new Nexus API keys with custom names
-- **Copy Keys**: One-click copy to clipboard
-- **Revoke/Activate**: Toggle key status instantly
-- **Delete**: Permanently remove keys
-
-#### Domain Management
-
-- **Add Domains**: Whitelist domains for API key usage (max 10)
-- **Activate/Deactivate**: Control domain access
-- **Remove Domains**: Delete from whitelist
-
-#### Groq API Key Storage
-
-- **Secure Storage**: Encrypted storage of your Groq API key
-- **View/Hide**: Toggle visibility with password masking
-- **Delete**: Remove stored key when needed
-
-### Chat API Endpoint
-
-The serverless function at `/api/chat` accepts:
+Create a `vercel.json` (optional, but recommended):
 
 ```json
 {
-  "nexusKey": "your-nexus-key",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "functions": {
+    "api/*.py": {
+      "runtime": "python3.9"
+    }
+  }
+}
+```
+
+Then:
+
+```bash
+vercel --prod
+```
+
+> **Note**: Make sure all environment variables are added in the Vercel project settings.
+
+---
+
+### 6. Integrate the Widget
+
+Add the Nexus widget to your website by including the following snippet (replace `YOUR_NEXUS_KEY` with a key generated from your dashboard):
+
+```html
+<!-- Configuration -->
+<script>
+  window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_KEY',
+    theme: 'auto',          // 'dark', 'light', or 'auto'
+    botName: 'Nexus AI',
+    greeting: '👋 Hello! How can I assist you?',
+    model: 'llama3-8b-8192' // Optional, defaults to this
+  };
+</script>
+
+<!-- Load the widget (CDN) -->
+<script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@2.2.0/dist/nexus-assistant.min.js"></script>
+```
+
+The widget will appear as a floating chat button on your page, ready to answer questions based on your content.
+
+---
+
+## 📚 API Reference
+
+All endpoints are relative to your deployed domain (e.g., `https://your-domain.vercel.app`).
+
+### Authentication & Session
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/session` | `POST` | Creates a session from a Firebase ID token. Returns a secure, HttpOnly cookie. |
+| `/api/auth/logout` | `POST` | Revokes the current session and clears the cookie. |
+| `/api/auth/me` | `GET` | Returns the current user’s UID and session ID (requires valid cookie). |
+| `/api/session` | `GET` | Lists all active sessions for the authenticated user. |
+| `/api/session` | `DELETE` | Revokes a specific session (body: `{ "sessionId": "..." }`). |
+
+### AI Proxy & Key Management
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/chat` | `POST` | **AI proxy** – accepts `nexusKey`, `messages`, `model` (optional). Also used for **creating a new Nexus Key** when payload contains `name` and `captchaToken` (requires authentication via cookie). |
+
+#### Chat Request Example
+
+```json
+{
+  "nexusKey": "nxs_abc123...",
   "messages": [
-    { "role": "user", "content": "Hello" }
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": "What is Nexus?" }
   ],
   "model": "llama3-8b-8192"
 }
 ```
 
-Response:
+#### Chat Response
 
-```json
-{
-  "id": "chatcmpl-xxx",
-  "object": "chat.completion",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "Hello! How can I help you today?"
-      }
-    }
-  ]
-}
+Returns the raw Groq API response (success 200) or an error object.
+
+---
+
+## 🔒 Security Model
+
+Nexus employs multiple layers of security to protect your data and infrastructure:
+
+1. **Separation of Keys**  
+   - **Groq API Key** – stored in Firestore (encryption planned) and never exposed to the client.  
+   - **Nexus Key** – used by the widget; can be revoked independently without affecting your Groq key.
+
+2. **Domain Whitelisting**  
+   - Every chat request is validated against the `Origin` or `Referer` header.  
+   - Only domains you explicitly add to your account can use your Nexus Key.
+
+3. **HttpOnly, Secure, SameSite Cookies**  
+   - Session cookies are not accessible via JavaScript, preventing XSS theft.  
+   - Cookies are only sent over HTTPS and restricted to same‑site requests.
+
+4. **JWT Signing**  
+   - Session tokens are signed with a server‑side secret (`COOKIE_SECRET`) – no session data is stored in the database.
+
+5. **Rate Limiting**  
+   - Users can generate at most 5 Nexus Keys per day (prevents abuse).  
+   - (Planned) Rate limiting on the `/api/chat` endpoint.
+
+6. **CAPTCHA Protection**  
+   - Cloudflare Turnstile ensures that key creation requests come from real users, not bots.
+
+7. **Firestore Security Rules**  
+   - Ensure that users can only access documents they own.
+
+8. **CORS**  
+   - Proper CORS headers are set for all API responses.
+
+---
+
+## 📁 Project Structure
+
+```
+NexusWeb/
+├── index.html                     # Landing page
+├── dashboard.html                 # User dashboard
+├── activity.html                  # Session management page
+├── demo.html                      # Live demo page
+├── documentation.html             # Full documentation
+├── pricing.html                   # Pricing (free) page
+├── privacyPolicy.html             # Privacy policy
+├── 404.html                       # Custom 404
+├── assets/                        # Static assets (favicon, images)
+├── src/
+│   ├── css/
+│   │   ├── styles.css             # Global styles
+│   │   └── dashboard.css          # Dashboard‑specific styles
+│   ├── js/
+│   │   ├── app.js                 # Main entry for landing/demo
+│   │   ├── dashboard.js           # Dashboard logic
+│   │   ├── activity.js            # Session activity page
+│   │   ├── modules/
+│   │   │   ├── auth.js            # Firebase auth helpers
+│   │   │   ├── firestore.js       # Firestore CRUD operations
+│   │   │   └── ui.js              # Toast notifications, UI helpers
+│   └── config/
+│       └── firebase.js            # Firebase client configuration
+├── api/                           # Python serverless functions
+│   ├── auth.py                    # Session creation/logout/me
+│   ├── chat.py                    # AI proxy + key creation
+│   ├── chatService.py             # Core AI logic, domain check, logging
+│   ├── config.py                  # Firebase init, JWT helper, cookie utils
+│   ├── keyService.py              # Key creation, CAPTCHA, rate limiting
+│   ├── middleware.py              # Cookie parsing & verification
+│   ├── session.py                 # GET/DELETE /api/session
+│   └── sessionService.py          # Session listing/revocation logic
+└── README.md                      # This file
 ```
 
-## 🛠️ Technology Stack
-
-| Category | Technologies |
-|----------|--------------|
-| **Frontend** | HTML5, CSS3, JavaScript (ES Modules), Tailwind CSS |
-| **UI Framework** | Plus Jakarta Sans font, Phosphor Icons |
-| **Authentication** | Firebase Auth (Google OAuth) |
-| **Database** | Firebase Firestore |
-| **Backend** | Python 3.9, Flask-like serverless |
-| **LLM Provider** | Groq API |
-| **Hosting** | Vercel (frontend + serverless) |
-| **Package Management** | importmap with CDN dependencies |
-
-## 🔧 Configuration
-
-### Environment Variables (Serverless)
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `FIREBASE_SERVICE_ACCOUNT` | Firebase service account JSON (base64 or raw) | Conditional |
-| `FIREBASE_PROJECT_ID` | Firebase project ID | Conditional |
-| `FIREBASE_CLIENT_EMAIL` | Service account email | Conditional |
-| `FIREBASE_PRIVATE_KEY` | Service account private key | Conditional |
-| `FIREBASE_PRIVATE_KEY_ID` | Private key ID | Optional |
-| `FIREBASE_CLIENT_ID` | Client ID | Optional |
-
-### Client-side Configuration
-
-```javascript
-// Firebase config in src/config/firebase.js
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project",
-  // ... other config
-};
-```
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-#### 1. "Permission denied" errors in Firestore
-
-**Solution**: Ensure your Firebase security rules allow read/write for authenticated users and match the user ID.
-
-```javascript
-// Check user ownership in rules
-allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-```
-
-#### 2. "Domain not authorized" in chat API
-
-**Solution**: Add the domain to your authorized domains list in the dashboard. Domain must match the origin exactly (without protocol, www., or trailing slash).
-
-#### 3. Missing Firestore Index
-
-If you see an error about a missing index, create it using the URL provided in the error message:
-
-```bash
-# Example error URL
-https://console.firebase.google.com/v1/r/project/your-project/firestore/indexes?create_composite=...
-```
-
-#### 4. Groq API Key Not Working
-
-- Verify the key is correct and active in your Groq account
-- Check that you've saved it in the dashboard
-- Ensure the key has proper permissions for the models you're using
-
-#### 5. CORS Issues
-
-The serverless function includes CORS headers. If you're testing locally, ensure your origin is whitelisted:
-
-```python
-# In chat.py - already handles this
-self.send_header('Access-Control-Allow-Origin', '*')
-```
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how you can help:
+We welcome contributions! Please follow these steps:
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
+1. **Fork** the repository.
+2. **Create** a feature branch: `git checkout -b feature/your-feature-name`.
+3. **Commit** your changes with clear messages.
+4. **Push** to the branch.
+5. **Open** a Pull Request against `main`.
 
 ### Development Guidelines
 
-- Use **ES Modules** (`import`/`export`) for JavaScript
-- Follow **Google JavaScript Style Guide**
-- Write **clear commit messages**
-- Update **documentation** when adding features
-- Test your changes thoroughly
+- Use **ES Modules** (`import`/`export`) for JavaScript.
+- Follow the **Google JavaScript Style Guide**.
+- Write **meaningful commit messages**.
+- Update **documentation** when adding features.
+- Test changes locally before submitting.
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- [Groq](https://groq.com/) for providing fast LLM inference
-- [Firebase](https://firebase.google.com/) for backend infrastructure
-- [Tailwind CSS](https://tailwindcss.com/) for styling
-- [Phosphor Icons](https://phosphoricons.com/) for beautiful icons
+- [Groq](https://groq.com) – for their lightning‑fast LPU inference.
+- [Firebase](https://firebase.google.com) – for providing a robust backend.
+- [Tailwind CSS](https://tailwindcss.com) – for making styling a joy.
+- [Phosphor Icons](https://phosphoricons.com) – for the beautiful icon set.
+- [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) – for bot protection.
+
+---
+
+## 📬 Contact & Support
+
+- **GitHub Issues**: [Report a bug](https://github.com/thekaifansari01/NexusWeb/issues) or request a feature.
+- **Email**: [kaif.ansari.global@gmail.com](mailto:kaif.ansari.global@gmail.com)
+- **GitHub Profile**: [thekaifansari01](https://github.com/thekaifansari01)
 
 ---
 
@@ -359,6 +451,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 </p>
 
 <p align="center">
+  <a href="https://github.com/thekaifansari01/NexusWeb/stargazers">⭐ Star us on GitHub</a> ·
   <a href="https://github.com/thekaifansari01/NexusWeb/issues">Report Bug</a> ·
   <a href="https://github.com/thekaifansari01/NexusWeb/issues">Request Feature</a>
 </p>

@@ -1,7 +1,7 @@
 import { signInWithGoogle, signInWithGoogleOneTap, observeAuthState, signOutUser } from "./modules/auth.js";
 import { updateUIForUser, updateUIForSignedOut, toggleDropdown, closeDropdown } from "./modules/ui.js";
 
-const GOOGLE_CLIENT_ID = "69132729895-2fs9qcptsf53d8k4p124f0j0qjk7b8fn.apps.googleusercontent.com"; 
+const GOOGLE_CLIENT_ID = "69132729895-2fs9qcptsf53d8k4p124f0j0qjk7b8fn.apps.googleusercontent.com";
 
 const signInBtn = document.getElementById('signInBtn');
 const heroSignInBtn = document.getElementById('heroSignInBtn');
@@ -53,7 +53,7 @@ observeAuthState((user) => {
             google.accounts.id.initialize({
                 client_id: GOOGLE_CLIENT_ID,
                 callback: handleOneTapResponse,
-                auto_select: false, 
+                auto_select: false,
                 cancel_on_tap_outside: false
             });
             google.accounts.id.prompt();
