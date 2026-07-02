@@ -1,5 +1,5 @@
 import { auth } from "../config/firebase.js";
-import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, getIdToken } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, getIdToken, signInWithCredential } from "firebase/auth";
 
 const provider = new GoogleAuthProvider();
 let sessionCreated = false;
@@ -10,6 +10,18 @@ export function signInWithGoogle() {
         await createSession(result.user);
         return result;
     });
+}
+
+export async function signInWithGoogleOneTap(googleCredentialResponse) {
+    try {
+        const credential = GoogleAuthProvider.credential(googleCredentialResponse.credential);
+        const result = await signInWithCredential(auth, credential);
+        await createSession(result.user);
+        return result;
+    } catch (error) {
+        console.error("One Tap Sign-in error:", error);
+        throw error;
+    }
 }
 
 async function createSession(user) {
