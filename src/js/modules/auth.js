@@ -3,6 +3,7 @@ import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, getId
 
 const provider = new GoogleAuthProvider();
 let sessionCreated = false;
+let sessionChecked = false;
 
 export function signInWithGoogle() {
     return signInWithPopup(auth, provider).then(async (result) => {
@@ -24,16 +25,37 @@ async function createSession(user) {
     sessionCreated = true;
 }
 
+async function checkSession() {
+    try {
+        const response = await fetch('/api/auth/me');
+        return response.ok;
+    } catch {
+        return false;
+    }
+}
+
 export function observeAuthState(callback) {
     return onAuthStateChanged(auth, async (user) => {
-        if (user && !sessionCreated) {
-            try {
-                await createSession(user);
-            } catch (e) {
-                console.warn('Session creation failed:', e);
+        if (user) {
+            if (!sessionCreated && !sessionChecked) {
+                sessionChecked = true;
+                const hasValidSession = await checkSession();
+                if (hasValidSession) {
+                    sessionCreated = true;
+                } else {
+                    try {
+                        await createSession(user);
+                    } catch (e) {
+                        console.warn('Session creation failed:', e);
+                    }
+                }
             }
+            callback(user);
+        } else {
+            sessionCreated = false;
+            sessionChecked = false;
+            callback(null);
         }
-        callback(user);
     });
 }
 
@@ -44,5 +66,6 @@ export async function signOutUser() {
         console.warn('Logout API error:', e);
     }
     sessionCreated = false;
+    sessionChecked = false;
     return signOut(auth);
 }
