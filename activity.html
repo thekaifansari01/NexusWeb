@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        background: '#09090b',
+                        surface: '#18181b',
+                        border: '#27272a',
+                        primary: '#a855f7',
+                        primaryHover: '#9333ea'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <style>
+        .glass-panel { background: rgba(24, 24, 27, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        .scrollbar-custom::-webkit-scrollbar { width: 5px; }
+        .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.6rem 1rem;
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .sidebar-link i { font-size: 1.25rem; }
+        .sidebar-link:hover {
+            color: #fafafa;
+            background: rgba(255,255,255,0.03);
+        }
+        .sidebar-link.active {
+            color: #a855f7;
+            background: rgba(168,85,247,0.1);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
+        <div class="h-16 flex items-center px-6 border-b border-border">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
+            </a>
+        </div>
+
+        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
+            </a>
+            <a href="/activity" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
+            </a>
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-book-open text-lg"></i> Documentation
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-border">
+            <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
+                <div class="flex-1 min-w-0">
+                    <div id="sidebarName" class="text-sm font-semibold text-white truncate">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate">user@example.com</div>
+                </div>
+            </div>
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-red-400 transition-colors py-2">
+                <i class="ph-bold ph-sign-out"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 h-screen relative">
+        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
+
+        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                    <i class="ph-bold ph-list text-2xl"></i>
+                </button>
+                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <span id="breadcrumbRoot">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs"></i>
+                    <span id="breadcrumbCurrent" class="text-white">Activity</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 hidden md:flex">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph-bold ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
+            <div class="max-w-5xl mx-auto pb-20">
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">Login Activity & Sessions</h1>
+                    <p class="text-sm text-zinc-400">Monitor and manage your active sessions across different devices and locations.</p>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 border border-white/5 bg-black/20">
+                    <h2 class="text-lg font-bold text-zinc-200 mb-6 flex items-center gap-2">
+                        <i class="ph-bold ph-shield-check text-emerald-400"></i> Active Sessions
+                    </h2>
+                    
+                    <div id="sessionsContainer" class="space-y-4">
+                        <div id="loadingState" class="text-center py-8 text-zinc-500">
+                            <i class="ph ph-circle-notch animate-spin text-2xl mb-2"></i>
+                            <p class="text-sm">Loading your active sessions...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/activity.js"></script>
+</body>
+</html>

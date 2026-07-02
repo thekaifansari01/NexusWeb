@@ -9,6 +9,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/activity",
+      "destination": "/activity.html"
+    },
+    {
       "source": "/pricing",
       "destination": "/Pricing.html"
     },

@@ -5,12 +5,18 @@ from api.config import db
 
 def handle_chat_request(body, request_origin):
     try:
+        session_id = body.get('sessionId')
+        if session_id:
+            session_ref = db.collection('active_sessions').document(session_id).get()
+            if not session_ref.exists or session_ref.to_dict().get('status') != 'active':
+                return 401, {"error": "Session invalid or revoked"}
+
         nexus_key = body.get('nexusKey')
         messages = body.get('messages', [])
         model = body.get('model', 'llama3-8b-8192')
 
         if not request_origin:
-            return 400, {"error": "Missing Origin or Referer header"}
+            return 400, {"error": "Missing Origin header"}
 
         clean_origin = request_origin.replace('http://', '').replace('https://', '').replace('www.', '').split('/')[0].lower()
 
@@ -54,11 +60,8 @@ def handle_chat_request(body, request_origin):
 
         groq_data = groq_res.json()
 
-        # Usage Logging
         try:
             usage = groq_data.get('usage', {})
-            prompt_tokens = usage.get('prompt_tokens', 0)
-            completion_tokens = usage.get('completion_tokens', 0)
             total_tokens = usage.get('total_tokens', 0)
 
             db.collection('usageLogs').add({
@@ -66,31 +69,27 @@ def handle_chat_request(body, request_origin):
                 'nexusKeyId': keys_ref[0].id,
                 'nexusKeyName': key_data.get('name', 'Unknown'),
                 'model': model,
-                'promptTokens': prompt_tokens,
-                'completionTokens': completion_tokens,
+                'promptTokens': usage.get('prompt_tokens', 0),
+                'completionTokens': usage.get('completion_tokens', 0),
                 'totalTokens': total_tokens,
                 'status': 'success',
                 'timestamp': firestore.SERVER_TIMESTAMP
             })
 
             today = datetime.utcnow().date().isoformat()
-            daily_doc_id = f"{user_id}_{today}"
-            daily_ref = db.collection('userDailyUsage').document(daily_doc_id)
-            
-            daily_ref.set({
+            db.collection('userDailyUsage').document(f"{user_id}_{today}").set({
                 'userId': user_id,
                 'date': today,
                 'totalRequests': firestore.Increment(1),
                 'totalTokens': firestore.Increment(total_tokens),
-                'promptTokens': firestore.Increment(prompt_tokens),
-                'completionTokens': firestore.Increment(completion_tokens),
+                'promptTokens': firestore.Increment(usage.get('prompt_tokens', 0)),
+                'completionTokens': firestore.Increment(usage.get('completion_tokens', 0)),
                 'lastUpdated': firestore.SERVER_TIMESTAMP
             }, merge=True)
-        except Exception as e:
-            print(f"Usage logging failed (non-critical): {e}")
+        except Exception:
+            pass
 
         return 200, groq_data
 
     except Exception as e:
-        print(f"Chat error: {str(e)}")
-        return 500, {"error": "Chat processing error"}
+        return 500, {"error": str(e)}
