@@ -290,6 +290,18 @@
                         <p>Create your first API key to start integrating Nexus.</p>
                     </div>
                 </div>
+
+                <div id="captchaModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+                    <div class="glass-panel p-8 rounded-2xl border border-primary/20 bg-black/80 max-w-md w-full mx-4">
+                        <h3 id="captchaModalTitle" class="text-lg font-semibold text-white mb-2">Verify Action</h3>
+                        <p id="captchaModalDesc" class="text-sm text-zinc-400 mb-6">Please complete the CAPTCHA to proceed.</p>
+                        <div id="captchaModalContainer" class="flex justify-center mb-6"></div>
+                        <div class="flex gap-3">
+                            <button id="captchaModalConfirm" class="btn-primary flex-1 hidden">Confirm</button>
+                            <button id="captchaModalCancel" class="btn-secondary flex-1">Cancel</button>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section id="tab-domains" class="tab-content hidden fade-in-up">
@@ -430,14 +442,15 @@
                     </div>
                     <div class="split-content glass-panel p-6 rounded-2xl">
                         <label for="groqApiInput" class="form-label">Groq API Key</label>
-                        <div class="relative max-w-lg mb-4">
+                        <div class="relative max-w-lg mb-3">
                             <input type="password" id="groqApiInput" placeholder="gsk_..." class="form-input pr-10 font-mono text-sm" />
                             <button id="toggleGroqVisibility" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
                                 <i class="ph-bold ph-eye"></i>
                             </button>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <button id="saveGroqBtn" class="btn-primary py-2 px-4 text-sm">Save Changes</button>
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <button id="saveGroqBtn" class="btn-primary py-2 px-4 text-sm hidden">Save Changes</button>
+                            <button id="cancelGroqBtn" class="btn-secondary py-2 px-4 text-sm hidden">Cancel</button>
                             <button id="deleteGroqBtn" class="btn-secondary hidden py-2 px-4 text-sm !border-red-500/30 !text-red-400 hover:!bg-red-500/10">Delete Key</button>
                             <span id="groqKeyStatus" class="text-xs font-medium ml-2 text-zinc-500">No key saved</span>
                         </div>

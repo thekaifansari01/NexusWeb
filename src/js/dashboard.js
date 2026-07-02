@@ -44,6 +44,7 @@ const groqInput = document.getElementById('groqApiInput');
 const groqStatus = document.getElementById('groqKeyStatus');
 const saveGroqBtn = document.getElementById('saveGroqBtn');
 const deleteGroqBtn = document.getElementById('deleteGroqBtn');
+const cancelGroqBtn = document.getElementById('cancelGroqBtn');
 const toggleGroqBtn = document.getElementById('toggleGroqVisibility');
 const totalRequestsEl = document.getElementById('totalRequests');
 const totalTokensEl = document.getElementById('totalTokens');
@@ -57,11 +58,20 @@ const domainsTotalEl = document.getElementById('domainsTotal');
 const domainsActiveEl = document.getElementById('domainsActive');
 const domainsInactiveEl = document.getElementById('domainsInactive');
 
+const captchaModal = document.getElementById('captchaModal');
+const captchaModalTitle = document.getElementById('captchaModalTitle');
+const captchaModalDesc = document.getElementById('captchaModalDesc');
+const captchaModalContainer = document.getElementById('captchaModalContainer');
+const captchaModalConfirm = document.getElementById('captchaModalConfirm');
+const captchaModalCancel = document.getElementById('captchaModalCancel');
+
 let currentUser = null;
 const MAX_DOMAINS = 10;
 let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
+let pendingAction = null;
+let pendingActionData = null;
 
 function switchTab(tabId, updateHistory = true) {
     const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
@@ -170,8 +180,8 @@ if (mobileMenuBtn && sidebar) {
     });
 }
 
-function renderTurnstile() {
-    const container = document.getElementById('turnstile-container');
+function renderTurnstile(containerId = 'turnstile-container', callback = null) {
+    const container = document.getElementById(containerId);
     if (!container || !window.turnstile) return;
     if (turnstileWidgetId !== null && turnstileWidgetId !== undefined) {
         try { turnstile.remove(turnstileWidgetId); } catch (_) {}
@@ -183,22 +193,35 @@ function renderTurnstile() {
             sitekey: '0x4AAAAAADttl-ZBYJPZI8zP',
             callback: function(token) {
                 captchaToken = token;
-                saveKeyBtn.classList.remove('hidden');
+                if (containerId === 'turnstile-container') {
+                    saveKeyBtn.classList.remove('hidden');
+                } else if (containerId === 'captchaModalContainer') {
+                    captchaModalConfirm.classList.remove('hidden');
+                }
+                if (callback) callback(token);
             },
             'expired-callback': function() {
                 captchaToken = null;
-                saveKeyBtn.classList.add('hidden');
+                if (containerId === 'turnstile-container') {
+                    saveKeyBtn.classList.add('hidden');
+                } else if (containerId === 'captchaModalContainer') {
+                    captchaModalConfirm.classList.add('hidden');
+                }
             },
             'error-callback': function() {
                 captchaToken = null;
-                saveKeyBtn.classList.add('hidden');
+                if (containerId === 'turnstile-container') {
+                    saveKeyBtn.classList.add('hidden');
+                } else if (containerId === 'captchaModalContainer') {
+                    captchaModalConfirm.classList.add('hidden');
+                }
                 if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
-                turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
+                turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId, callback), 2000);
             }
         });
     } catch (e) {
         if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
-        turnstileRetryTimeout = setTimeout(renderTurnstile, 2000);
+        turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId, callback), 2000);
     }
 }
 
@@ -211,11 +234,49 @@ function resetTurnstile() {
     } catch (e) {}
     captchaToken = null;
     saveKeyBtn.classList.add('hidden');
+    captchaModalConfirm.classList.add('hidden');
     if (turnstileRetryTimeout) {
         clearTimeout(turnstileRetryTimeout);
         turnstileRetryTimeout = null;
     }
 }
+
+function showCaptchaModal(title, desc, action, data = null) {
+    captchaModalTitle.textContent = title;
+    captchaModalDesc.textContent = desc;
+    pendingAction = action;
+    pendingActionData = data;
+    captchaModal.classList.remove('hidden');
+    captchaModalConfirm.classList.add('hidden');
+    setTimeout(() => renderTurnstile('captchaModalContainer'), 200);
+}
+
+function closeCaptchaModal() {
+    captchaModal.classList.add('hidden');
+    resetTurnstile();
+    pendingAction = null;
+    pendingActionData = null;
+}
+
+captchaModalCancel.addEventListener('click', closeCaptchaModal);
+
+captchaModalConfirm.addEventListener('click', async () => {
+    if (!captchaToken) {
+        showToast('Please complete the CAPTCHA.', 3000, 'warning');
+        return;
+    }
+    if (!pendingAction) {
+        closeCaptchaModal();
+        return;
+    }
+    try {
+        await pendingAction(pendingActionData);
+        closeCaptchaModal();
+    } catch (error) {
+        showToast(error.message || 'Action failed.', 3500, 'error');
+        closeCaptchaModal();
+    }
+});
 
 observeAuthState((user) => {
     if (!user) {
@@ -399,15 +460,17 @@ function renderKeys(keys) {
         toggleBtn.title = isActive ? 'Revoke' : 'Activate';
         toggleBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            const newStatus = isActive ? 'revoked' : 'active';
-            const action = newStatus === 'active' ? 'activated' : 'revoked';
-            try {
-                await updateDoc(doc(db, 'apiKeys', key.id), { status: newStatus });
-                showToast(`Key "${key.name}" ${action} successfully!`, 3000, 'success');
-                loadKeys();
-            } catch (error) {
-                showToast(`Failed to ${action} key.`, 3500, 'error');
-            }
+            showCaptchaModal(
+                isActive ? 'Revoke API Key' : 'Activate API Key',
+                isActive ? `Are you sure you want to revoke "${key.name}"?` : `Are you sure you want to activate "${key.name}"?`,
+                async () => {
+                    const newStatus = isActive ? 'revoked' : 'active';
+                    const action = newStatus === 'active' ? 'activated' : 'revoked';
+                    await updateDoc(doc(db, 'apiKeys', key.id), { status: newStatus });
+                    showToast(`Key "${key.name}" ${action}!`, 3000, 'success');
+                    loadKeys();
+                }
+            );
         });
         actions.appendChild(toggleBtn);
         const deleteBtn = document.createElement('button');
@@ -416,15 +479,15 @@ function renderKeys(keys) {
         deleteBtn.title = 'Delete permanently';
         deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (confirm(`Delete key "${key.name}" permanently?`)) {
-                try {
+            showCaptchaModal(
+                'Delete API Key',
+                `Are you sure you want to permanently delete "${key.name}"?`,
+                async () => {
                     await deleteApiKey(key.id);
                     showToast(`Key "${key.name}" deleted permanently.`, 3000, 'success');
                     loadKeys();
-                } catch (error) {
-                    showToast('Failed to delete key.', 3500, 'error');
                 }
-            }
+            );
         });
         actions.appendChild(deleteBtn);
         card.appendChild(actions);
@@ -547,14 +610,16 @@ function renderDomains(domains) {
         toggleBtn.title = isActive ? 'Deactivate' : 'Activate';
         toggleBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            const action = isActive ? 'deactivated' : 'activated';
-            try {
-                await toggleDomainStatus(domain.id, domain.status);
-                showToast(`Domain "${domain.domain}" ${action}.`, 3000, 'success');
-                loadDomains();
-            } catch (error) {
-                showToast(`Failed to ${action} domain.`, 3500, 'error');
-            }
+            showCaptchaModal(
+                isActive ? 'Deactivate Domain' : 'Activate Domain',
+                isActive ? `Are you sure you want to deactivate "${domain.domain}"?` : `Are you sure you want to activate "${domain.domain}"?`,
+                async () => {
+                    const action = isActive ? 'deactivated' : 'activated';
+                    await toggleDomainStatus(domain.id, domain.status);
+                    showToast(`Domain "${domain.domain}" ${action}.`, 3000, 'success');
+                    loadDomains();
+                }
+            );
         });
         actions.appendChild(toggleBtn);
         const deleteBtn = document.createElement('button');
@@ -563,15 +628,15 @@ function renderDomains(domains) {
         deleteBtn.title = 'Remove domain';
         deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (confirm(`Remove domain "${domain.domain}"?`)) {
-                try {
+            showCaptchaModal(
+                'Remove Domain',
+                `Are you sure you want to remove "${domain.domain}"?`,
+                async () => {
                     await deleteDomain(domain.id);
                     showToast(`Domain "${domain.domain}" removed.`, 3000, 'success');
                     loadDomains();
-                } catch (error) {
-                    showToast('Failed to remove domain.', 3500, 'error');
                 }
-            }
+            );
         });
         actions.appendChild(deleteBtn);
         card.appendChild(actions);
@@ -593,24 +658,67 @@ if (toggleGroqBtn) {
     });
 }
 
+function resetGroqForm() {
+    saveGroqBtn.classList.add('hidden');
+    cancelGroqBtn.classList.add('hidden');
+}
+
+function showGroqSaveCancel() {
+    saveGroqBtn.classList.remove('hidden');
+    cancelGroqBtn.classList.remove('hidden');
+}
+
+let originalGroqValue = '';
+
+if (groqInput) {
+    groqInput.addEventListener('input', () => {
+        const currentVal = groqInput.value.trim();
+        const hasKey = currentVal.length > 0;
+        if (hasKey && currentVal !== originalGroqValue) {
+            showGroqSaveCancel();
+        } else {
+            resetGroqForm();
+        }
+    });
+}
+
+if (cancelGroqBtn) {
+    cancelGroqBtn.addEventListener('click', () => {
+        loadGroqKey();
+        resetGroqForm();
+    });
+}
+
 async function loadGroqKey() {
     if (!currentUser || !groqInput) return;
     try {
         const key = await getGroqApiKey(currentUser.uid);
         if (key) {
             groqInput.value = key;
+            originalGroqValue = key;
             groqStatus.textContent = '✅ Key saved';
             groqStatus.style.color = '#34d399';
             deleteGroqBtn.classList.remove('hidden');
+            resetGroqForm();
         } else {
             groqInput.value = '';
+            originalGroqValue = '';
             groqStatus.textContent = 'No key saved';
             groqStatus.style.color = '#71717a';
             deleteGroqBtn.classList.add('hidden');
+            resetGroqForm();
         }
     } catch (error) {
-        groqStatus.textContent = 'Failed to load key';
-        groqStatus.style.color = '#fb7185';
+        if (!groqInput.value.trim()) {
+            groqStatus.textContent = 'Failed to load key';
+            groqStatus.style.color = '#fb7185';
+            deleteGroqBtn.classList.add('hidden');
+            resetGroqForm();
+        } else {
+            groqStatus.textContent = '✅ Key saved';
+            groqStatus.style.color = '#34d399';
+            deleteGroqBtn.classList.remove('hidden');
+        }
     }
 }
 
@@ -621,31 +729,38 @@ if (saveGroqBtn) {
             showToast('Please enter a Groq API key.', 3000, 'warning');
             return;
         }
-        try {
-            await saveGroqApiKey(currentUser.uid, key);
-            showToast('Groq API key saved successfully!', 3500, 'success');
-            groqStatus.textContent = '✅ Key saved';
-            groqStatus.style.color = '#34d399';
-            deleteGroqBtn.classList.remove('hidden');
-        } catch (error) {
-            showToast('Failed to save key.', 3500, 'error');
-        }
+        showCaptchaModal(
+            'Save Groq API Key',
+            'Are you sure you want to save this Groq API key?',
+            async () => {
+                await saveGroqApiKey(currentUser.uid, key);
+                showToast('Groq API key saved successfully!', 3500, 'success');
+                originalGroqValue = key;
+                groqStatus.textContent = '✅ Key saved';
+                groqStatus.style.color = '#34d399';
+                deleteGroqBtn.classList.remove('hidden');
+                resetGroqForm();
+            }
+        );
     });
 }
 
 if (deleteGroqBtn) {
     deleteGroqBtn.addEventListener('click', async () => {
-        if (!confirm('Are you sure you want to delete your Groq API key?')) return;
-        try {
-            await deleteGroqApiKey(currentUser.uid);
-            groqInput.value = '';
-            groqStatus.textContent = 'No key saved';
-            groqStatus.style.color = '#71717a';
-            deleteGroqBtn.classList.add('hidden');
-            showToast('Groq API key deleted.', 3000, 'success');
-        } catch (error) {
-            showToast('Failed to delete key.', 3500, 'error');
-        }
+        showCaptchaModal(
+            'Delete Groq API Key',
+            'Are you sure you want to delete your Groq API key?',
+            async () => {
+                await deleteGroqApiKey(currentUser.uid);
+                groqInput.value = '';
+                originalGroqValue = '';
+                groqStatus.textContent = 'No key saved';
+                groqStatus.style.color = '#71717a';
+                deleteGroqBtn.classList.add('hidden');
+                resetGroqForm();
+                showToast('Groq API key deleted.', 3000, 'success');
+            }
+        );
     });
 }
 
