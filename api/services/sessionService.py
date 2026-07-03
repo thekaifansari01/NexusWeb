@@ -1,5 +1,5 @@
 import uuid
-from api.config import db
+from api.core.config import db
 from firebase_admin import firestore
 
 def create_session(user_id, session_id, device_info, ip_address, location):

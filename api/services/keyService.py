@@ -2,7 +2,7 @@ import secrets
 import requests
 from datetime import datetime
 from firebase_admin import firestore
-from api.config import db, TURNSTILE_SECRET, RATE_LIMIT_PER_DAY
+from api.core.config import db, TURNSTILE_SECRET, RATE_LIMIT_PER_DAY
 
 def verify_captcha(token):
     if not TURNSTILE_SECRET:

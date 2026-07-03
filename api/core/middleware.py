@@ -1,4 +1,4 @@
-from api.config import verify_session_token, COOKIE_NAME
+from api.core.config import verify_session_token, COOKIE_NAME
 
 def get_user_from_cookie(handler):
     cookie_header = handler.headers.get('Cookie')

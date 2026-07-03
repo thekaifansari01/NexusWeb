@@ -33,7 +33,6 @@ export async function revokeApiKey(keyId) {
     await updateDoc(doc(db, KEYS_COLLECTION, keyId), { status: "revoked" });
 }
 
-// ===== AUTHORIZED DOMAINS =====
 export async function getDomains(userId) {
     const q = query(collection(db, DOMAINS_COLLECTION), where("userId", "==", userId));
     const snapshot = await getDocs(q);
@@ -78,26 +77,39 @@ export async function toggleDomainStatus(domainId, currentStatus) {
 }
 
 export async function getGroqApiKey(userId) {
-    const docRef = doc(db, GROQ_COLLECTION, userId);
-    const snapshot = await getDoc(docRef);
-    if (snapshot.exists()) {
-        return snapshot.data().apiKey || null;
+    try {
+        const res = await fetch('/api/groq');
+        if (!res.ok) throw new Error('Failed to fetch key status');
+        const data = await res.json();
+        return data.hasKey ? 'exists' : null;
+    } catch (error) {
+        console.error('getGroqApiKey error:', error);
+        return null;
     }
-    return null;
 }
 
 export async function saveGroqApiKey(userId, apiKey) {
-    const docRef = doc(db, GROQ_COLLECTION, userId);
-    await setDoc(docRef, {
-        userId,
-        apiKey,
-        updatedAt: Timestamp.now()
-    }, { merge: true });
+    const res = await fetch('/api/groq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to save key');
+    }
+    return res.json();
 }
 
 export async function deleteGroqApiKey(userId) {
-    const docRef = doc(db, GROQ_COLLECTION, userId);
-    await deleteDoc(docRef);
+    const res = await fetch('/api/groq', {
+        method: 'DELETE'
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to delete key');
+    }
+    return res.json();
 }
 
 export async function getUsageHistory(userId, limitCount = 10) {

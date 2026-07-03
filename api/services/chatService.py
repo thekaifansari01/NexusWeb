@@ -1,7 +1,8 @@
 import requests
 from datetime import datetime
 from firebase_admin import firestore
-from api.config import db
+from api.core.config import db
+from api.core.crypto_utils import decrypt
 
 def handle_chat_request(body, request_origin):
     try:
@@ -39,10 +40,17 @@ def handle_chat_request(body, request_origin):
             return 403, {"error": "Domain is deactivated"}
 
         groq_doc = db.collection('userGroqKeys').document(user_id).get()
-        if not groq_doc.exists or not groq_doc.to_dict().get('apiKey'):
+        if not groq_doc.exists:
             return 400, {"error": "No Groq API Key configured"}
 
-        groq_api_key = groq_doc.to_dict().get('apiKey')
+        encrypted_key = groq_doc.to_dict().get('apiKey')
+        if not encrypted_key:
+            return 400, {"error": "No Groq API Key configured"}
+
+        try:
+            groq_api_key = decrypt(encrypted_key)
+        except Exception:
+            return 500, {"error": "Failed to decrypt Groq key"}
 
         headers = {
             "Authorization": f"Bearer {groq_api_key}",
@@ -52,7 +60,7 @@ def handle_chat_request(body, request_origin):
             "model": model,
             "messages": messages
         }
-        
+
         groq_res = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers)
 
         if not groq_res.ok:

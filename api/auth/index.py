@@ -2,9 +2,9 @@ import json
 import uuid
 from http.server import BaseHTTPRequestHandler
 from firebase_admin import auth
-from api.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
-from api.middleware import get_user_from_cookie
-from api.sessionService import create_session, revoke_session
+from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
+from api.core.middleware import get_user_from_cookie
+from api.services.sessionService import create_session, revoke_session
 
 class handler(BaseHTTPRequestHandler):
     def send_json(self, status_code, data):

@@ -1,8 +1,8 @@
 import json
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler
-from api.sessionService import get_sessions, revoke_session
-from api.middleware import get_user_from_cookie
+from api.services.sessionService import get_sessions, revoke_session
+from api.core.middleware import get_user_from_cookie
 
 class handler(BaseHTTPRequestHandler):
     def send_json(self, status_code, data):

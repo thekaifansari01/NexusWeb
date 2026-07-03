@@ -668,13 +668,10 @@ function showGroqSaveCancel() {
     cancelGroqBtn.classList.remove('hidden');
 }
 
-let originalGroqValue = '';
-
 if (groqInput) {
     groqInput.addEventListener('input', () => {
         const currentVal = groqInput.value.trim();
-        const hasKey = currentVal.length > 0;
-        if (hasKey && currentVal !== originalGroqValue) {
+        if (currentVal.length > 0) {
             showGroqSaveCancel();
         } else {
             resetGroqForm();
@@ -684,41 +681,34 @@ if (groqInput) {
 
 if (cancelGroqBtn) {
     cancelGroqBtn.addEventListener('click', () => {
-        loadGroqKey();
+        groqInput.value = '';
         resetGroqForm();
+        loadGroqKey();
     });
 }
 
 async function loadGroqKey() {
-    if (!currentUser || !groqInput) return;
+    if (!currentUser) return;
     try {
-        const key = await getGroqApiKey(currentUser.uid);
-        if (key) {
-            groqInput.value = key;
-            originalGroqValue = key;
+        const keyExists = await getGroqApiKey(currentUser.uid);
+        if (keyExists) {
+            groqInput.value = '';
             groqStatus.textContent = '✅ Key saved';
             groqStatus.style.color = '#34d399';
             deleteGroqBtn.classList.remove('hidden');
             resetGroqForm();
         } else {
             groqInput.value = '';
-            originalGroqValue = '';
             groqStatus.textContent = 'No key saved';
             groqStatus.style.color = '#71717a';
             deleteGroqBtn.classList.add('hidden');
             resetGroqForm();
         }
     } catch (error) {
-        if (!groqInput.value.trim()) {
-            groqStatus.textContent = 'Failed to load key';
-            groqStatus.style.color = '#fb7185';
-            deleteGroqBtn.classList.add('hidden');
-            resetGroqForm();
-        } else {
-            groqStatus.textContent = '✅ Key saved';
-            groqStatus.style.color = '#34d399';
-            deleteGroqBtn.classList.remove('hidden');
-        }
+        groqStatus.textContent = 'Failed to load key';
+        groqStatus.style.color = '#fb7185';
+        deleteGroqBtn.classList.add('hidden');
+        resetGroqForm();
     }
 }
 
@@ -735,7 +725,7 @@ if (saveGroqBtn) {
             async () => {
                 await saveGroqApiKey(currentUser.uid, key);
                 showToast('Groq API key saved successfully!', 3500, 'success');
-                originalGroqValue = key;
+                groqInput.value = '';
                 groqStatus.textContent = '✅ Key saved';
                 groqStatus.style.color = '#34d399';
                 deleteGroqBtn.classList.remove('hidden');
@@ -753,7 +743,6 @@ if (deleteGroqBtn) {
             async () => {
                 await deleteGroqApiKey(currentUser.uid);
                 groqInput.value = '';
-                originalGroqValue = '';
                 groqStatus.textContent = 'No key saved';
                 groqStatus.style.color = '#71717a';
                 deleteGroqBtn.classList.add('hidden');

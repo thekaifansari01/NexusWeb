@@ -1,8 +1,8 @@
 import json
 from http.server import BaseHTTPRequestHandler
-from api.chatService import handle_chat_request
-from api.keyService import handle_create_key
-from api.middleware import get_user_from_cookie
+from api.services.chatService import handle_chat_request
+from api.services.keyService import handle_create_key
+from api.core.middleware import get_user_from_cookie
 
 class handler(BaseHTTPRequestHandler):
     def send_json(self, status_code, data):
