@@ -60,6 +60,14 @@ function hideError() {
     errorMsg.classList.add('hidden');
 }
 
+function getSubmitButton(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+    const form = container.closest('.auth-form');
+    if (!form) return null;
+    return form.querySelector('.submit-btn');
+}
+
 function renderTurnstile(containerId) {
     const container = document.getElementById(containerId);
     if (!container || !window.turnstile) return;
@@ -68,17 +76,41 @@ function renderTurnstile(containerId) {
         turnstileWidgetId = null;
     }
     container.innerHTML = '';
+    container.classList.remove('solved');
+    const submitBtn = getSubmitButton(containerId);
+    if (submitBtn) {
+        submitBtn.classList.remove('visible');
+        submitBtn.disabled = true;
+    }
     try {
         turnstileWidgetId = turnstile.render(container, {
             sitekey: '0x4AAAAAADttl-ZBYJPZI8zP',
             callback: function(token) {
                 captchaToken = token;
+                container.classList.add('solved');
+                const btn = getSubmitButton(containerId);
+                if (btn) {
+                    btn.classList.add('visible');
+                    btn.disabled = false;
+                }
             },
             'expired-callback': function() {
                 captchaToken = null;
+                container.classList.remove('solved');
+                const btn = getSubmitButton(containerId);
+                if (btn) {
+                    btn.classList.remove('visible');
+                    btn.disabled = true;
+                }
             },
             'error-callback': function() {
                 captchaToken = null;
+                container.classList.remove('solved');
+                const btn = getSubmitButton(containerId);
+                if (btn) {
+                    btn.classList.remove('visible');
+                    btn.disabled = true;
+                }
                 if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
                 turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
             }
@@ -130,6 +162,7 @@ async function handleEmailSignIn(e) {
         return;
     }
     signInBtn.disabled = true;
+    signInBtn.classList.add('loading');
     signInBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Verifying...';
     try {
         await verifyCaptcha(captchaToken);
@@ -138,6 +171,7 @@ async function handleEmailSignIn(e) {
         window.location.href = '/dashboard';
     } catch (err) {
         signInBtn.disabled = false;
+        signInBtn.classList.remove('loading');
         signInBtn.innerHTML = '<i class="ph-bold ph-sign-in"></i> Sign In';
         let msg = 'Sign in failed. Please try again.';
         if (err.code === 'auth/user-not-found') msg = 'No account found with this email.';
@@ -176,6 +210,7 @@ async function handleEmailSignUp(e) {
         return;
     }
     signUpBtn.disabled = true;
+    signUpBtn.classList.add('loading');
     signUpBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Verifying...';
     try {
         await verifyCaptcha(captchaToken);
@@ -184,6 +219,7 @@ async function handleEmailSignUp(e) {
         window.location.href = '/dashboard';
     } catch (err) {
         signUpBtn.disabled = false;
+        signUpBtn.classList.remove('loading');
         signUpBtn.innerHTML = '<i class="ph-bold ph-user-plus"></i> Create Account';
         let msg = 'Sign up failed. Please try again.';
         if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Please sign in.';
@@ -256,7 +292,10 @@ window.handleOneTap = async (response) => {
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-        if (currentTab === 'signin') signInBtn.click();
-        else signUpBtn.click();
+        if (currentTab === 'signin') {
+            if (!signInBtn.disabled) signInBtn.click();
+        } else {
+            if (!signUpBtn.disabled) signUpBtn.click();
+        }
     }
 });
