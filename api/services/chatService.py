@@ -1,5 +1,8 @@
+# Chat service – validates Nexus key, domain, decrypts Groq key, calls Groq API
+
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
+from urllib.parse import urlparse
 from firebase_admin import firestore
 from api.core.config import db
 from api.core.crypto_utils import decrypt
@@ -16,10 +19,26 @@ def handle_chat_request(body, request_origin):
         messages = body.get('messages', [])
         model = body.get('model', 'llama3-8b-8192')
 
+        # Validate messages payload
+        if not messages or not isinstance(messages, list):
+            return 400, {"error": "Invalid or empty messages array"}
+        for msg in messages:
+            if not isinstance(msg, dict) or 'role' not in msg or 'content' not in msg:
+                return 400, {"error": "Each message must have 'role' and 'content'"}
+
         if not request_origin:
             return 400, {"error": "Missing Origin header"}
 
-        clean_origin = request_origin.replace('http://', '').replace('https://', '').replace('www.', '').split('/')[0].lower()
+        # Extract clean domain (remove scheme, www, port)
+        parsed = urlparse(request_origin)
+        netloc = parsed.netloc or parsed.path  # fallback
+        # Remove port if present
+        if ':' in netloc:
+            netloc = netloc.split(':')[0]
+        # Remove 'www.' if present
+        if netloc.startswith('www.'):
+            netloc = netloc[4:]
+        clean_origin = netloc.lower()
 
         keys_ref = db.collection('apiKeys').where('key', '==', nexus_key).limit(1).get()
         if not keys_ref:
@@ -68,6 +87,7 @@ def handle_chat_request(body, request_origin):
 
         groq_data = groq_res.json()
 
+        # Log usage
         try:
             usage = groq_data.get('usage', {})
             total_tokens = usage.get('total_tokens', 0)
@@ -84,7 +104,7 @@ def handle_chat_request(body, request_origin):
                 'timestamp': firestore.SERVER_TIMESTAMP
             })
 
-            today = datetime.utcnow().date().isoformat()
+            today = datetime.now(timezone.utc).date().isoformat()
             db.collection('userDailyUsage').document(f"{user_id}_{today}").set({
                 'userId': user_id,
                 'date': today,

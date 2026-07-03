@@ -280,7 +280,7 @@ captchaModalConfirm.addEventListener('click', async () => {
 
 observeAuthState((user) => {
     if (!user) {
-        window.location.href = 'index.html';
+        window.location.href = '/login';
         return;
     }
     currentUser = user;

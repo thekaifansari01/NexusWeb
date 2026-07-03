@@ -1,3 +1,5 @@
+# Handler for /api/chat – AI Chat requests & Nexus Key creation (requires auth for key creation)
+
 import json
 from http.server import BaseHTTPRequestHandler
 from api.services.chatService import handle_chat_request
@@ -54,4 +56,5 @@ class handler(BaseHTTPRequestHandler):
             return self.send_json(400, {"error": "Invalid JSON payload"})
         except Exception as e:
             print(f"Server Error: {str(e)}")
-            return self.send_json(500, {"error": "Internal Server Error", "real_reason": str(e)})
+            # Do NOT expose internal error details to client
+            return self.send_json(500, {"error": "Internal Server Error"})

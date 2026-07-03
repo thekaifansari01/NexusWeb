@@ -66,8 +66,8 @@
             <a href="/" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 hover:border-primary/30 hover:bg-white/5">
                 <i class="ph-bold ph-house text-lg"></i> Go Home
             </a>
-            <a href="/dashboard" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
-                <i class="ph-bold ph-layout-dashboard text-lg"></i> Go to Dashboard
+            <a href="/login" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
+                <i class="ph-bold ph-sign-in text-lg"></i> Sign In
             </a>
         </div>
 
@@ -79,21 +79,6 @@
         </div>
 
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dashboardLink = document.querySelector('a[href="/dashboard"]');
-            if (dashboardLink) {
-                dashboardLink.addEventListener('click', (e) => {
-                    const isLoggedIn = localStorage.getItem('nexus_user') || sessionStorage.getItem('nexus_user');
-                    if (!isLoggedIn) {
-                        e.preventDefault();
-                        window.location.href = '/';
-                    }
-                });
-            }
-        });
-    </script>
 
 </body>
 </html>

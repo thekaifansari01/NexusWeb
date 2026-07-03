@@ -1,3 +1,5 @@
+# Handler for /api/session – list active sessions and revoke a session
+
 import json
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler

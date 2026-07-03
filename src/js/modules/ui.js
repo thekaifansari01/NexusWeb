@@ -1,33 +1,45 @@
 export function updateUIForUser(user) {
     const signInBtn = document.getElementById('signInBtn');
+    const loginLink = document.getElementById('loginLink');
     const userArea = document.getElementById('userArea');
     const userAvatar = document.getElementById('userAvatar');
     const userEmail = document.getElementById('userEmail');
     const heroSignInBtn = document.getElementById('heroSignInBtn');
     const heroDashboardBtn = document.getElementById('heroDashboardBtn');
+    const footerSignInBtn = document.getElementById('footerSignInBtn');
+    const footerDashboardBtn = document.getElementById('footerDashboardBtn');
 
     if (signInBtn) signInBtn.classList.add('hidden');
+    if (loginLink) loginLink.classList.add('hidden');
     if (userArea) userArea.classList.remove('hidden');
     if (userAvatar) userAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
     if (userEmail) userEmail.textContent = user.email || 'user@example.com';
 
     if (heroSignInBtn) heroSignInBtn.classList.add('hidden');
     if (heroDashboardBtn) heroDashboardBtn.classList.remove('hidden');
+    if (footerSignInBtn) footerSignInBtn.classList.add('hidden');
+    if (footerDashboardBtn) footerDashboardBtn.classList.remove('hidden');
 }
 
 export function updateUIForSignedOut() {
     const signInBtn = document.getElementById('signInBtn');
+    const loginLink = document.getElementById('loginLink');
     const userArea = document.getElementById('userArea');
     const avatarDropdown = document.getElementById('avatarDropdown');
     const heroSignInBtn = document.getElementById('heroSignInBtn');
     const heroDashboardBtn = document.getElementById('heroDashboardBtn');
+    const footerSignInBtn = document.getElementById('footerSignInBtn');
+    const footerDashboardBtn = document.getElementById('footerDashboardBtn');
 
     if (signInBtn) signInBtn.classList.remove('hidden');
+    if (loginLink) loginLink.classList.remove('hidden');
     if (userArea) userArea.classList.add('hidden');
     if (avatarDropdown) avatarDropdown.classList.remove('open');
 
     if (heroSignInBtn) heroSignInBtn.classList.remove('hidden');
     if (heroDashboardBtn) heroDashboardBtn.classList.add('hidden');
+    if (footerSignInBtn) footerSignInBtn.classList.remove('hidden');
+    if (footerDashboardBtn) footerDashboardBtn.classList.add('hidden');
 }
 
 export function toggleDropdown(e) {
@@ -41,9 +53,6 @@ export function closeDropdown() {
     if (dropdown) dropdown.classList.remove('open');
 }
 
-/**
- * Center Overlay Toast – Modern, Attention-Grabbing, with Backdrop
- */
 export function showToast(message, duration = 3500, type = 'success') {
     const existing = document.getElementById('toastOverlay');
     if (existing) existing.remove();

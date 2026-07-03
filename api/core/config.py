@@ -1,7 +1,9 @@
+# Core configuration – Firebase init, JWT cookies, encryption keys
+
 import os
 import json
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -59,7 +61,7 @@ def create_session_token(uid, session_id):
     payload = {
         'uid': uid,
         'session_id': session_id,
-        'exp': datetime.utcnow() + timedelta(seconds=COOKIE_MAX_AGE)
+        'exp': datetime.now(timezone.utc) + timedelta(seconds=COOKIE_MAX_AGE)
     }
     return jwt.encode(payload, COOKIE_SECRET, algorithm=JWT_ALGORITHM)
 
