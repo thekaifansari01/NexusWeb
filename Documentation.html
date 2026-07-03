@@ -8,8 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web">
+    </script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -42,7 +44,7 @@
             margin-top: 3rem;
             margin-bottom: 1rem;
             letter-spacing: -0.01em;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             padding-bottom: 0.5rem;
             color: #ffffff;
         }
@@ -59,17 +61,28 @@
             margin-bottom: 1.25rem;
             font-size: 0.95rem;
         }
+        .doc-content ul,
+        .doc-content ol {
+            color: #a1a1aa;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+        }
+        .doc-content li {
+            margin-bottom: 0.4rem;
+        }
         .doc-content code {
-            background: rgba(255,255,255,0.06);
-            padding: 0.2rem 0.4rem;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.2rem 0.5rem;
             border-radius: 6px;
             font-family: 'Monaco', 'Menlo', monospace;
             font-size: 0.85rem;
             color: #d4d4d8;
         }
         .doc-content pre {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 1.25rem;
             overflow-x: auto;
@@ -84,17 +97,17 @@
             line-height: 1.6;
         }
         .doc-content .glass-card {
-            background: rgba(24,24,27,0.4);
+            background: rgba(24, 24, 27, 0.4);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 1.5rem;
             margin: 1.5rem 0;
             transition: all 0.3s ease;
         }
         .doc-content .glass-card:hover {
-            border-color: rgba(168,85,247,0.2);
-            background: rgba(24,24,27,0.6);
+            border-color: rgba(168, 85, 247, 0.2);
+            background: rgba(24, 24, 27, 0.6);
         }
         .doc-content table {
             width: 100%;
@@ -103,27 +116,31 @@
             font-size: 0.9rem;
         }
         .doc-content table th {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
             color: #fafafa;
             font-weight: 600;
             padding: 0.75rem 1rem;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
         .doc-content table td {
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             color: #a1a1aa;
         }
         .doc-content .badge {
             display: inline-block;
-            background: rgba(168,85,247,0.12);
+            background: rgba(168, 85, 247, 0.12);
             color: #a855f7;
             font-size: 0.7rem;
             font-weight: 600;
-            padding: 0.2rem 0.6rem;
+            padding: 0.2rem 0.7rem;
             border-radius: 20px;
             letter-spacing: 0.02em;
+        }
+        .doc-content .badge-green {
+            background: rgba(52, 211, 153, 0.12);
+            color: #34d399;
         }
         .step-item {
             display: flex;
@@ -135,22 +152,29 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(168,85,247,0.15);
+            background: rgba(168, 85, 247, 0.15);
             color: #a855f7;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             flex-shrink: 0;
             margin-top: 0.1rem;
         }
-
-        .scrollbar-custom::-webkit-scrollbar { width: 5px; }
-        .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 5px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -168,14 +192,13 @@
         }
         .sidebar-link:hover {
             color: #fafafa;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
         }
         .sidebar-link.active {
             color: #a855f7;
-            background: rgba(168,85,247,0.1);
+            background: rgba(168, 85, 247, 0.1);
             font-weight: 600;
         }
-
         .toc-sidebar {
             width: 220px;
             flex-shrink: 0;
@@ -185,12 +208,18 @@
             max-height: calc(100vh - 8rem);
             overflow-y: auto;
             padding-left: 2rem;
-            border-left: 1px solid rgba(255,255,255,0.05);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .toc-sidebar::-webkit-scrollbar { width: 3px; }
-        .toc-sidebar::-webkit-scrollbar-track { background: transparent; }
-        .toc-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
-
+        .toc-sidebar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
         .toc-link {
             display: block;
             padding: 0.25rem 0.75rem;
@@ -204,11 +233,11 @@
         }
         .toc-link:hover {
             color: #e4e4e7;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
         }
         .toc-link.active-toc {
             color: #a855f7;
-            background: rgba(168,85,247,0.06);
+            background: rgba(168, 85, 247, 0.06);
             border-left-color: #a855f7;
             font-weight: 500;
         }
@@ -219,19 +248,67 @@
             letter-spacing: 0.08em;
             color: #52525b;
             padding: 0 0.75rem 0.5rem 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             margin-bottom: 0.5rem;
         }
-
+        .feature-grid-docs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .feature-grid-docs .glass-card {
+            margin: 0;
+        }
         @media (max-width: 1024px) {
             .toc-sidebar {
                 display: none;
             }
         }
+        @media (max-width: 640px) {
+            .feature-grid-docs {
+                grid-template-columns: 1fr;
+            }
+            .doc-content h1 {
+                font-size: 1.75rem;
+            }
+            .doc-content h2 {
+                font-size: 1.25rem;
+            }
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: #71717a;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e4e4e7;
+        }
+        .version-tag {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.08);
+            color: #a855f7;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
 
+    <!-- ===== SIDEBAR ===== -->
     <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
         <div class="h-16 flex items-center px-6 border-b border-border">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -268,6 +345,7 @@
         </div>
     </aside>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
         <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
 
@@ -292,32 +370,36 @@
         <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom" id="main-scroll-area">
             <div class="max-w-6xl mx-auto flex gap-8 pb-20">
 
+                <!-- ===== DOCUMENTATION CONTENT ===== -->
                 <div class="flex-1 min-w-0 doc-content">
 
                     <section id="introduction" class="pt-2">
-                        <h1>📘 Nexus Web Documentation</h1>
+                        <h1>📘 Nexus Web Assistant <span class="version-tag">v2.2.0</span></h1>
                         <p>
-                            <strong>Nexus Web</strong> is a zero‑friction, secure AI assistant that you can embed into any website in minutes.
-                            It automatically reads your page content, understands the context, and answers user questions using Groq's powerful LLMs —
-                            all while keeping your API keys safe.
+                            <strong>Nexus Web Assistant</strong> is a lightweight, embeddable AI chat widget that turns any webpage into a conversational knowledge base. It automatically scrapes your page content, understands the context, and answers user questions using Groq's ultra‑fast LLMs — all while keeping your API keys secure through encryption and domain whitelisting.
                         </p>
-                        <div class="glass-card">
-                            <p class="mb-0 flex items-center gap-2">
-                                <i class="ph-bold ph-shield-check text-primary text-xl"></i>
-                                <span><strong>Security first:</strong> Your Groq key is never exposed to the frontend. Nexus uses a separate, domain‑restricted key for widget communication.</span>
-                            </p>
+
+                        <div class="glass-card flex items-start gap-4 border-primary/20">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+                                <i class="ph-bold ph-shield-check text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-sm font-medium text-white">Security First — Your Groq key is never exposed.</p>
+                                <p class="mb-0 text-sm text-zinc-400">You store your Groq API key in the encrypted dashboard vault. The widget uses a separate, domain‑restricted Nexus key for communication. Our proxy validates the domain, decrypts your Groq key, and forwards requests — your key never touches the browser.</p>
+                            </div>
                         </div>
                     </section>
 
+                    <!-- ===== QUICK START ===== -->
                     <section id="quick-start">
                         <h2>🚀 Quick Start</h2>
-                        <p>Embed the Nexus widget on your website in just two steps.</p>
+                        <p>Embed the Nexus widget on your website in <strong>two simple steps</strong>.</p>
 
                         <div class="step-item">
                             <span class="step-number">1</span>
                             <div class="step-content">
                                 <h3 class="!mt-0">Get your Nexus API Key</h3>
-                                <p>Sign in to the <a href="/dashboard" class="text-primary hover:underline">Nexus Dashboard</a> and create a new API key. Copy the key — you'll need it in the next step.</p>
+                                <p>Sign in to the <a href="/dashboard" class="text-primary hover:underline">Nexus Dashboard</a> with Google. In the <strong>Nexus Keys</strong> tab, create a new key and copy it. Then, in the <strong>Settings</strong> tab, store your Groq API key — it will be encrypted and never exposed.</p>
                             </div>
                         </div>
 
@@ -326,46 +408,85 @@
                             <div class="step-content">
                                 <h3 class="!mt-0">Add the script tag</h3>
                                 <p>Paste the following code into your HTML, preferably just before the closing <code>&lt;/body&gt;</code> tag.</p>
-                            <pre><code>&lt;!-- Nexus Widget --&gt;
-&lt;script&gt;
-  window.NexusConfig = {
-    apiKey: '',
-    theme: 'auto',
-    botName: 'Nexus AI',
-    greeting: '👋 Hello! How can I assist you today?',
-    model: 'meta-llama/llama-4-scout-17b-16e-instruct'
-  };
-&lt;/script&gt;
-&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@2.2.0/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
+                                <pre><code>&lt;!-- 1. Configure the widget with your Nexus API key --&gt;
+                                    &lt;script&gt;
+                                    window.NexusConfig = {
+                                    apiKey: 'YOUR_NEXUS_API_KEY',
+                                    model: 'llama3-8b-8192',
+                                    botName: 'Nexus AI',
+                                    greeting: '👋 Hello! How can I assist you today?',
+                                    theme: 'auto'
+                                    };
+                                    &lt;/script&gt;
+
+                                    &lt;!-- 2. Load the widget from CDN --&gt;
+                                    &lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@2.2.0/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
                                 <p class="text-zinc-500 text-sm mt-2 flex items-start gap-1">
                                     <i class="ph-bold ph-info mt-1"></i>
-                                    <span><strong>Note:</strong> The CDN URL is a placeholder. In production, you'll host the widget bundle yourself or use a provided CDN link.</span>
+                                    <span><strong>Note:</strong> The script loads asynchronously — it won't block your page rendering. The widget will appear as a floating chat button in the bottom‑right corner.</span>
                                 </p>
                             </div>
                         </div>
-                        <div class="glass-card flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+
+                        <div class="glass-card flex items-center gap-3 border-emerald-500/20 bg-emerald-500/5">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 flex-shrink-0">
                                 <i class="ph-bold ph-check text-lg"></i>
                             </div>
-                            <p class="mb-0 text-sm">That's it! The widget will appear as a floating button on your site, ready to answer questions about your content.</p>
+                            <p class="mb-0 text-sm">That's it! Your website now has an AI assistant that understands its content. Users can ask questions and get instant, context‑aware answers.</p>
                         </div>
                     </section>
 
+                    <!-- ===== CONFIGURATION ===== -->
                     <section id="configuration">
                         <h2>⚙️ Configuration Options</h2>
-                        <p>You can customize the widget's behavior by setting the <code>window.NexusConfig</code> object before loading the script.</p>
+                        <p>Customize the widget's behaviour by setting the <code>window.NexusConfig</code> object before the script loads. All properties are optional except <code>apiKey</code>.</p>
 
                         <table>
                             <thead>
-                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
                             </thead>
                             <tbody>
-                                <tr><td><code>apiKey</code></td><td><span class="badge">string</span></td><td><code>''</code></td><td><strong>Required.</strong> Your Nexus API key from the dashboard.</td></tr>
-                                <tr><td><code>theme</code></td><td><span class="badge">string</span></td><td><code>'auto'</code></td><td><code>'dark'</code>, <code>'light'</code>, or <code>'auto'</code> (detects system preference).</td></tr>
-                                <tr><td><code>botName</code></td><td><span class="badge">string</span></td><td><code>'Nexus AI'</code></td><td>Display name of the assistant.</td></tr>
-                                <tr><td><code>greeting</code></td><td><span class="badge">string</span></td><td><em>See default</em></td><td>Welcome message shown when the chat opens. Supports Markdown.</td></tr>
-                                <tr><td><code>model</code></td><td><span class="badge">string</span></td><td><code>'llama3-8b-8192'</code></td><td>Groq model to use (e.g., <code>'llama3-70b-8192'</code>).</td></tr>
-                                <tr><td><code>systemPrompt</code></td><td><span class="badge">string</span></td><td><em>See source</em></td><td>Override the system prompt that guides the AI.</td></tr>
+                                <tr>
+                                    <td><code>apiKey</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><code>''</code></td>
+                                    <td><strong>Required.</strong> Your Nexus API key from the dashboard.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>model</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><code>'llama3-8b-8192'</code></td>
+                                    <td>Groq model to use. Supported: <code>llama3-8b-8192</code>, <code>llama3-70b-8192</code>, <code>mixtral-8x7b-32768</code>.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>botName</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><code>'Nexus AI'</code></td>
+                                    <td>Display name of the assistant shown in the chat header.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>greeting</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><em>Default welcome</em></td>
+                                    <td>Initial bot message shown when the panel opens. Supports Markdown.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>systemPrompt</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><em>Default prompt</em></td>
+                                    <td>Override the system instructions that guide the AI's behaviour.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>theme</code></td>
+                                    <td><span class="badge">string</span></td>
+                                    <td><code>'auto'</code></td>
+                                    <td><code>'dark'</code>, <code>'light'</code>, or <code>'auto'</code> (detects system preference).</td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -374,126 +495,290 @@
                                 <i class="ph-bold ph-pencil-simple text-primary"></i> Example Configuration:
                             </p>
                             <pre class="!mt-2 !mb-0"><code>window.NexusConfig = {
-  apiKey: 'nx_abc123',
-  botName: 'DocBot',
-  greeting: '📚 Welcome to our documentation! Ask me anything.'
-};</code></pre>
+                                apiKey: 'nxs_abc123def456',
+                                model: 'llama3-70b-8192',
+                                botName: 'DocBot',
+                                greeting: '📚 Welcome to our documentation! Ask me anything.',
+                                theme: 'dark'
+                                };</code></pre>
                         </div>
                     </section>
 
+                    <!-- ===== THEMING ===== -->
                     <section id="theming">
                         <h2>🎨 Theming</h2>
-                        <p>Nexus automatically adapts to your website's theme, but you can also force a specific mode.</p>
+                        <p>Nexus automatically adapts to your website's theme, but you can also force a specific mode or let users toggle it.</p>
 
                         <h3>Auto‑detection</h3>
                         <p>By default (<code>theme: 'auto'</code>), the widget checks in this order:</p>
-                        <ul class="list-disc pl-6 text-zinc-400 space-y-1 mb-4 text-sm">
+                        <ol class="list-decimal pl-6 text-zinc-400 space-y-1 mb-4 text-sm">
                             <li>Your <code>window.NexusConfig.theme</code> override</li>
-                            <li>Saved user preference in <code>localStorage</code></li>
+                            <li>Saved user preference in <code>localStorage</code> (persists across visits)</li>
                             <li><code>dark</code>/<code>light</code> class on <code>&lt;body&gt;</code> or <code>&lt;html&gt;</code></li>
-                            <li><code>data-theme</code> attribute</li>
+                            <li><code>data-theme</code> attribute on <code>&lt;html&gt;</code></li>
                             <li>System preference via <code>prefers-color-scheme</code></li>
                             <li>Defaults to <code>dark</code></li>
-                        </ul>
+                        </ol>
 
                         <h3>Manual control</h3>
-                        <p>Set <code>theme: 'dark'</code> or <code>'light'</code> to lock the appearance. Users can also toggle the theme via the moon/sun icon in the chat header.</p>
+                        <p>Set <code>theme: 'dark'</code> or <code>'light'</code> to lock the appearance. Users can also toggle the theme via the moon/sun icon in the chat header — their preference is saved automatically.</p>
+
+                        <div class="glass-card">
+                            <p class="mb-0 text-sm flex items-center gap-2">
+                                <i class="ph-bold ph-palette text-primary"></i>
+                                <span><strong>Pro tip:</strong> The widget also respects <code>&lt;meta name="theme-color"&gt;</code> brightness to infer your site's preferred theme.</span>
+                            </p>
+                        </div>
                     </section>
 
+                    <!-- ===== FEATURES ===== -->
                     <section id="features">
                         <h2>✨ Key Features</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="feature-grid-docs">
                             <div class="glass-card !m-0">
-                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-file-text text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Page Context</h3></div>
-                                <p class="text-xs !mb-0">Nexus scrapes your page content to provide the AI with rich context, enabling accurate answers.</p>
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-file-text text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">Page Context Scraping</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Uses Readability + Turndown to extract clean Markdown from your page content — headings, paragraphs, lists, code snippets, and JSON‑LD structured data. The AI answers with full context.</p>
                             </div>
                             <div class="glass-card !m-0">
-                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-image text-xl"></i><h3 class="text-white text-base font-semibold !m-0">File Attachments</h3></div>
-                                <p class="text-xs !mb-0">Users can attach images to their messages. The AI can analyze images if the model supports vision.</p>
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-image text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">File Attachments</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Users can attach images to their messages. The AI can analyze images if the chosen model supports vision capabilities.</p>
                             </div>
                             <div class="glass-card !m-0">
-                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-arrows-counter-clockwise text-xl"></i><h3 class="text-white text-base font-semibold !m-0">SPA Support</h3></div>
-                                <p class="text-xs !mb-0">Automatically detects page navigation in single‑page apps and refreshes the context.</p>
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-arrows-counter-clockwise text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">SPA Support</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Automatically detects navigation changes in single‑page apps (pushState / popState) and refreshes the page context — no manual intervention required.</p>
                             </div>
                             <div class="glass-card !m-0">
-                                <div class="flex items-center gap-2 text-primary mb-2"><i class="ph-bold ph-highlighter text-xl"></i><h3 class="text-white text-base font-semibold !m-0">Markdown Rendering</h3></div>
-                                <p class="text-xs !mb-0">Bot responses are rendered with Markdown and code blocks are beautifully highlighted.</p>
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-highlighter text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">Markdown Rendering</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Bot responses are rendered with Markdown (via Marked) and code blocks are beautifully highlighted with Highlight.js. Tables, lists, and links work out of the box.</p>
+                            </div>
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-database text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">Smart Caching</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Scraped page content is cached in IndexedDB with a 24‑hour TTL. Repeat visitors get instant responses without re‑scraping.</p>
+                            </div>
+                            <div class="glass-card !m-0">
+                                <div class="flex items-center gap-2 text-primary mb-2">
+                                    <i class="ph-bold ph-lock-key text-xl"></i>
+                                    <h3 class="text-white text-base font-semibold !m-0">Vault‑Grade Security</h3>
+                                </div>
+                                <p class="text-xs !mb-0">Your Groq API key is encrypted with AES‑256 and stored in Firestore. The widget uses a separate Nexus key that only works with whitelisted domains.</p>
                             </div>
                         </div>
                     </section>
 
+                    <!-- ===== SECURITY MODEL ===== -->
+                    <section id="security">
+                        <h2>🔐 Security Model</h2>
+                        <p>Nexus is built with a <strong>zero‑trust</strong> approach to API key management. Here's how your keys are protected:</p>
+
+                        <div class="glass-card border-primary/20">
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 text-sm font-bold">1</div>
+                                    <div>
+                                        <p class="font-medium text-white mb-0">You store your Groq API key in the Dashboard</p>
+                                        <p class="text-sm text-zinc-400 mb-0">Your key is encrypted with AES‑256 before being saved to Firestore. Only you can view or delete it.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 text-sm font-bold">2</div>
+                                    <div>
+                                        <p class="font-medium text-white mb-0">You generate a Nexus API key for your frontend</p>
+                                        <p class="text-sm text-zinc-400 mb-0">This key is safe to embed in your HTML. It is domain‑restricted — it only works for domains you've whitelisted.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 text-sm font-bold">3</div>
+                                    <div>
+                                        <p class="font-medium text-white mb-0">The widget sends your Nexus key to our proxy</p>
+                                        <p class="text-sm text-zinc-400 mb-0">The proxy validates the domain against your whitelist, decrypts your Groq key, and forwards the request to Groq. Your Groq key is never exposed to the browser.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card border-emerald-500/20 bg-emerald-500/5">
+                            <p class="mb-0 text-sm flex items-center gap-2">
+                                <i class="ph-bold ph-shield-check text-emerald-400"></i>
+                                <span><strong>Your Groq API key is never exposed to the frontend.</strong> Only you (via the dashboard) can manage it. This protects your billing and usage from being compromised.</span>
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- ===== ADVANCED ===== -->
                     <section id="advanced">
                         <h2>🔧 Advanced Customization</h2>
+
                         <h3>Styling Overrides</h3>
-                        <p>Customize the widget's appearance by overriding CSS variables on <code>#ai-widget-root</code>:</p>
+                        <p>Customize the widget's appearance by overriding CSS variables on <code>#ai-widget-root</code>. Add these to your own stylesheet with higher specificity.</p>
                         <pre><code>#ai-widget-root {
-  --bg-panel: rgba(10, 10, 10, 0.92);
-  --text-primary: #eee;
-  --accent: #a855f7;
-  --send-bg: #a855f7;
-  --send-color: #fff;
-}</code></pre>
+                            --bg-panel: rgba(10, 10, 10, 0.92);
+                            --text-primary: #eee;
+                            --accent: #a855f7;
+                            --send-bg: #a855f7;
+                            --send-color: #fff;
+                            --user-bubble-bg: #2a2a2e;
+                            --bot-bubble-bg: #1a1a1e;
+                            --border-color: rgba(255, 255, 255, 0.06);
+                            }</code></pre>
 
                         <h3>Programmatic Control</h3>
-                        <p>The widget exposes a global API for advanced use cases:</p>
+                        <p>The widget exposes a global API for advanced use cases. Call these functions from your own JavaScript:</p>
                         <table>
-                            <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td><code>window.openNexus()</code></td><td>Opens the chat panel programmatically.</td></tr>
-                                <tr><td><code>window.closeNexus()</code></td><td>Closes the chat panel.</td></tr>
-                                <tr><td><code>window.toggleNexus()</code></td><td>Toggles the chat panel.</td></tr>
-                                <tr><td><code>window.refreshNexusContext()</code></td><td>Forces a rescrape of the page content.</td></tr>
+                                <tr>
+                                    <td><code>window.openNexus()</code></td>
+                                    <td>Opens the chat panel programmatically.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>window.closeNexus()</code></td>
+                                    <td>Closes the chat panel.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>window.toggleNexus()</code></td>
+                                    <td>Toggles the chat panel open/closed.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>window.refreshNexusContext()</code></td>
+                                    <td>Forces a re‑scrape of the page content. Useful after dynamic content updates.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </section>
 
+                    <!-- ===== API REFERENCE ===== -->
                     <section id="api-reference">
                         <h2>🔌 API Reference</h2>
-                        <p>The widget communicates with your backend proxy. The expected endpoint is <code>POST /api/chat</code> with the following payload:</p>
+                        <p>The widget communicates with your backend proxy at <code>POST /api/chat</code>. The expected payload structure is:</p>
                         <pre><code>{
-  "nexusKey": "nx_abc123",
-  "messages": [
-    { "role": "system", "content": "..." },
-    { "role": "user", "content": "Hello" }
-  ],
-  "model": "llama3-8b-8192"
-}</code></pre>
-                        <p>The proxy validates the key, checks the domain against your authorized list, and forwards the request to Groq. You can find the serverless function implementation in <code>api/chat.py</code>.</p>
+                            "nexusKey": "nxs_abc123def456",
+                            "messages": [
+                            { "role": "system", "content": "You are a helpful assistant..." },
+                            { "role": "user", "content": "What is this page about?" }
+                            ],
+                            "model": "llama3-8b-8192"
+                            }</code></pre>
+                        <p>The proxy validates the Nexus key, checks the domain against your authorized list, decrypts your stored Groq key, and forwards the request to Groq's API. The response is returned to the widget and rendered with Markdown.</p>
+
+                        <div class="glass-card">
+                            <p class="mb-0 text-sm flex items-center gap-2">
+                                <i class="ph-bold ph-code text-primary"></i>
+                                <span>You can find the serverless function implementation in <code>api/chat.py</code> in the repository.</span>
+                            </p>
+                        </div>
                     </section>
 
+                    <!-- ===== TROUBLESHOOTING ===== -->
                     <section id="troubleshooting">
                         <h2>🛠️ Troubleshooting</h2>
                         <div class="space-y-4">
                             <div class="glass-card !py-4">
-                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-x-circle text-rose-400"></i> Widget doesn't appear</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
+                                    <i class="ph-bold ph-x-circle text-rose-400"></i> Widget doesn't appear
+                                </h4>
                                 <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
-                                    <li>Check the browser console for errors.</li>
-                                    <li>Ensure <code>window.NexusConfig.apiKey</code> is set.</li>
+                                    <li>Check the browser console for errors (F12 → Console).</li>
+                                    <li>Ensure <code>window.NexusConfig.apiKey</code> is set and valid.</li>
+                                    <li>Verify the CDN script URL is correct: <code>https://cdn.jsdelivr.net/npm/nexus-web-assistant@2.2.0/dist/nexus-assistant.min.js</code></li>
                                 </ul>
                             </div>
                             <div class="glass-card !py-4">
-                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-lock text-yellow-400"></i> "Domain not authorized" error</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
+                                    <i class="ph-bold ph-lock text-yellow-400"></i> "Domain not authorized" error
+                                </h4>
                                 <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
                                     <li>Add your website's domain to the <strong>Authorized Domains</strong> list in the dashboard.</li>
-                                    <li>Ensure the domain matches exactly (without https:// or www).</li>
+                                    <li>Ensure the domain matches exactly — without <code>https://</code>, <code>http://</code>, or <code>www</code>.</li>
+                                    <li>Example: <code>example.com</code>, not <code>https://example.com</code> or <code>www.example.com</code>.</li>
                                 </ul>
                             </div>
                             <div class="glass-card !py-4">
-                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2"><i class="ph-bold ph-key text-primary"></i> "Invalid Nexus API Key"</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
+                                    <i class="ph-bold ph-key text-primary"></i> "Invalid Nexus API Key"
+                                </h4>
                                 <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
-                                    <li>Generate a new key from the dashboard and update your config.</li>
-                                    <li>Check that the key hasn't been revoked.</li>
+                                    <li>Generate a new key from the dashboard and update your <code>NexusConfig</code>.</li>
+                                    <li>Check that the key hasn't been revoked in the dashboard.</li>
+                                    <li>Ensure the key is copied correctly — it starts with <code>nxs_</code>.</li>
+                                </ul>
+                            </div>
+                            <div class="glass-card !py-4">
+                                <h4 class="text-white font-semibold flex items-center gap-2 mb-2">
+                                    <i class="ph-bold ph-chat text-primary"></i> AI responses are not page‑aware
+                                </h4>
+                                <ul class="list-disc pl-6 text-zinc-400 text-sm space-y-1 mb-0">
+                                    <li>Wait a moment — the widget scrapes the page after loading. Check the console for "Page context scraped" logs.</li>
+                                    <li>For SPAs, navigation changes trigger a re‑scrape automatically.</li>
+                                    <li>You can force a re‑scrape with <code>window.refreshNexusContext()</code>.</li>
                                 </ul>
                             </div>
                         </div>
                     </section>
 
+                    <!-- ===== VERSION HISTORY ===== -->
+                    <section id="version-history">
+                        <h2>📦 Version History</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Version</th>
+                                    <th>Date</th>
+                                    <th>Changes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>v2.2.0</code></td>
+                                    <td>July 2026</td>
+                                    <td>Improved SPA detection, enhanced Markdown rendering, CDN optimizations</td>
+                                </tr>
+                                <tr>
+                                    <td><code>v2.1.0</code></td>
+                                    <td>June 2026</td>
+                                    <td>Added file attachment support, vision model compatibility</td>
+                                </tr>
+                                <tr>
+                                    <td><code>v2.0.0</code></td>
+                                    <td>May 2026</td>
+                                    <td>Complete rewrite with IndexedDB caching, better theming, proxy security</td>
+                                </tr>
+                                <tr>
+                                    <td><code>v1.2.0</code></td>
+                                    <td>April 2026</td>
+                                    <td>Initial public release</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- ===== FOOTER ===== -->
                     <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
                         <p>&copy; 2026 Nexus Web Assistant. Built for speed, designed for security.</p>
-                        <p class="mt-1">Documentation v1.2.0</p>
+                        <p class="mt-1">Documentation v2.2.0 · <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-primary hover:underline">GitHub</a></p>
                     </footer>
                 </div>
 
+                <!-- ===== TABLE OF CONTENTS ===== -->
                 <aside class="toc-sidebar" id="tocSidebar">
                     <div class="toc-label">On this page</div>
                     <a href="#introduction" class="toc-link active-toc">Introduction</a>
@@ -501,15 +786,18 @@
                     <a href="#configuration" class="toc-link">Configuration</a>
                     <a href="#theming" class="toc-link">Theming</a>
                     <a href="#features" class="toc-link">Features</a>
+                    <a href="#security" class="toc-link">Security Model</a>
                     <a href="#advanced" class="toc-link">Advanced</a>
                     <a href="#api-reference" class="toc-link">API Reference</a>
                     <a href="#troubleshooting" class="toc-link">Troubleshooting</a>
+                    <a href="#version-history" class="toc-link">Version History</a>
                 </aside>
 
             </div>
         </main>
     </div>
 
+    <!-- ===== FIREBASE + AUTH ===== -->
     <script type="importmap">
         {
             "imports": {
@@ -533,7 +821,8 @@
                 window.location.href = 'index.html';
                 return;
             }
-            if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+            if (sidebarAvatar) sidebarAvatar.src = user.photoURL ||
+                'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
             if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
             if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
         });
@@ -544,6 +833,7 @@
             });
         }
 
+        // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.querySelector('aside');
         if (mobileMenuBtn && sidebar) {
@@ -557,6 +847,7 @@
             });
         }
 
+        // TOC scroll spy
         const mainArea = document.getElementById('main-scroll-area');
         const sections = document.querySelectorAll('.doc-content section');
         const tocLinks = document.querySelectorAll('.toc-link');
@@ -591,6 +882,25 @@
                     });
                 }
             });
+        });
+
+        // Copy code snippets
+        document.querySelectorAll('pre').forEach(pre => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
+            btn.addEventListener('click', () => {
+                const code = pre.querySelector('code');
+                if (code) {
+                    navigator.clipboard.writeText(code.textContent).then(() => {
+                        btn.innerHTML = '<i class="ph-bold ph-check"></i> Copied!';
+                        setTimeout(() => { btn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy'; },
+                            2000);
+                    });
+                }
+            });
+            pre.style.position = 'relative';
+            pre.appendChild(btn);
         });
     </script>
 </body>
