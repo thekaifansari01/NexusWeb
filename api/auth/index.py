@@ -5,6 +5,7 @@ from firebase_admin import auth
 from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
 from api.core.middleware import get_user_from_cookie
 from api.services.sessionService import create_session, revoke_session
+from api.services.keyService import verify_captcha
 
 class handler(BaseHTTPRequestHandler):
     def send_json(self, status_code, data):
@@ -28,6 +29,8 @@ class handler(BaseHTTPRequestHandler):
             self.handle_create_session()
         elif self.path == '/api/auth/logout':
             self.handle_logout()
+        elif self.path == '/api/auth/verify-captcha':
+            self.handle_verify_captcha()
         else:
             self.send_json(404, {'error': 'Not found'})
 
@@ -87,3 +90,17 @@ class handler(BaseHTTPRequestHandler):
             self.send_json(200, {'uid': uid, 'sessionId': session_id})
         except Exception as e:
             self.send_json(401, {'error': str(e)})
+
+    def handle_verify_captcha(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(content_length).decode('utf-8'))
+            token = body.get('token')
+            if not token:
+                return self.send_json(400, {'error': 'Missing token'})
+            if verify_captcha(token):
+                return self.send_json(200, {'success': True})
+            else:
+                return self.send_json(400, {'error': 'Invalid CAPTCHA'})
+        except Exception as e:
+            self.send_json(500, {'error': str(e)})
