@@ -1,10 +1,16 @@
+// ==================== auth.js ====================
 import { auth } from "../config/firebase.js";
-import { 
-  signInWithPopup, GoogleAuthProvider, GithubAuthProvider, 
-  onAuthStateChanged, signOut, getIdToken, 
-  signInWithCredential, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
+  signOut,
+  getIdToken,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile
 } from "firebase/auth";
@@ -15,7 +21,6 @@ const githubProvider = new GithubAuthProvider();
 let sessionCreated = false;
 let sessionChecked = false;
 
-// ----- Helper: Create session cookie -----
 export async function createSession(user) {
   const idToken = await getIdToken(user);
   const response = await fetch('/api/auth/session', {
@@ -38,15 +43,14 @@ async function checkSession() {
   }
 }
 
-// ----- Google Sign-In (Popup) -----
 export function signInWithGoogle() {
-  return signInWithPopup(auth, googleProvider).then(async (result) => {
-    await createSession(result.user);
-    return result;
-  });
+  return signInWithRedirect(auth, googleProvider);
 }
 
-// ----- Google One-Tap -----
+export function signInWithGithub() {
+  return signInWithRedirect(auth, githubProvider);
+}
+
 export async function signInWithGoogleOneTap(credentialResponse) {
   try {
     const credential = GoogleAuthProvider.credential(credentialResponse.credential);
@@ -59,25 +63,14 @@ export async function signInWithGoogleOneTap(credentialResponse) {
   }
 }
 
-// ----- GitHub Sign-In -----
-export function signInWithGithub() {
-  return signInWithPopup(auth, githubProvider).then(async (result) => {
-    await createSession(result.user);
-    return result;
-  });
-}
-
-// ----- Email/Password Sign-In -----
 export async function signInWithEmail(email, password) {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   await createSession(userCredential.user);
   return userCredential;
 }
 
-// ----- Email/Password Sign-Up -----
 export async function signUpWithEmail(email, password, displayName = '') {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  // Update profile with display name (optional)
   if (displayName) {
     await updateProfile(userCredential.user, { displayName });
   }
@@ -85,12 +78,23 @@ export async function signUpWithEmail(email, password, displayName = '') {
   return userCredential;
 }
 
-// ----- Forgot Password -----
 export function sendPasswordReset(email) {
   return sendPasswordResetEmail(auth, email);
 }
 
-// ----- Auth state observer -----
+export function handleRedirectResult() {
+  return getRedirectResult(auth).then(async (result) => {
+    if (result) {
+      await createSession(result.user);
+      return result.user;
+    }
+    return null;
+  }).catch((error) => {
+    console.error('Redirect result error:', error);
+    throw error;
+  });
+}
+
 export function observeAuthState(callback) {
   return onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -116,7 +120,6 @@ export function observeAuthState(callback) {
   });
 }
 
-// ----- Sign Out -----
 export async function signOutUser() {
   try {
     await fetch('/api/auth/logout', { method: 'POST' });
