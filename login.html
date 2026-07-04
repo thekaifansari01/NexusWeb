@@ -748,8 +748,7 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
         window.onload = function() {
-            const hasRedirectParams = window.location.search.includes('code=') || window.location.search.includes('state=');
-            if (window.google && !localStorage.getItem('nexus_user') && !hasRedirectParams) {
+            if (window.google && !localStorage.getItem('nexus_user')) {
                 google.accounts.id.initialize({
                     client_id: "69132729895-2fs9qcptsf53d8k4p124f0j0qjk7b8fn.apps.googleusercontent.com",
                     callback: window.handleOneTap,
