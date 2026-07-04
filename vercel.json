@@ -1,12 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/api/auth/(.*)",
-      "destination": "/api/auth/$1"
-    },
-    {
       "source": "/__/auth/(.*)",
       "destination": "https://nexuswebassistant.firebaseapp.com/__/auth/$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
       "source": "/docs",
@@ -39,10 +39,6 @@
     {
       "source": "/privacyPolicy",
       "destination": "/privacyPolicy.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
     }
   ]
 }
