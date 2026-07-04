@@ -4,8 +4,8 @@
   "description": "[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/thekaifansari01/NexusWeb/releases)\r [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com)\r [![Groq](https://img.shields.io/badge/Groq-00B4D8?style=flat&logo=groq&logoColor=white)](https://groq.com)\r [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)\r [![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)\r [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)\r [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)\r [![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com)",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss -i ./src/css/input.css -o ./src/css/styles.css --minify",
-    "watch": "tailwindcss -i ./src/css/input.css -o ./src/css/styles.css --watch",
+    "build": "tailwindcss -i ./src/css/input.css -o ./src/css/tailwind-output.css --minify",
+    "watch": "tailwindcss -i ./src/css/input.css -o ./src/css/tailwind-output.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
