@@ -1,6 +1,7 @@
 import { auth } from "../config/firebase.js";
 import { 
-  signInWithPopup, GoogleAuthProvider, GithubAuthProvider, 
+  signInWithRedirect, getRedirectResult, 
+  GoogleAuthProvider, GithubAuthProvider, 
   onAuthStateChanged, signOut, getIdToken, 
   signInWithCredential, 
   signInWithEmailAndPassword, 
@@ -38,12 +39,25 @@ async function checkSession() {
   }
 }
 
-// ----- Google Sign-In (Popup) -----
+// ----- Redirect Result Handler -----
+// Is function ko login.js mein check karenge jab user wapas redirect hoga
+export async function checkRedirectAuth() {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result && result.user) {
+      await createSession(result.user);
+      return result;
+    }
+    return null;
+  } catch (error) {
+    console.error("Redirect auth error:", error);
+    throw error;
+  }
+}
+
+// ----- Google Sign-In (Redirect) -----
 export function signInWithGoogle() {
-  return signInWithPopup(auth, googleProvider).then(async (result) => {
-    await createSession(result.user);
-    return result;
-  });
+  return signInWithRedirect(auth, googleProvider);
 }
 
 // ----- Google One-Tap -----
@@ -59,12 +73,9 @@ export async function signInWithGoogleOneTap(credentialResponse) {
   }
 }
 
-// ----- GitHub Sign-In -----
+// ----- GitHub Sign-In (Redirect) -----
 export function signInWithGithub() {
-  return signInWithPopup(auth, githubProvider).then(async (result) => {
-    await createSession(result.user);
-    return result;
-  });
+  return signInWithRedirect(auth, githubProvider);
 }
 
 // ----- Email/Password Sign-In -----

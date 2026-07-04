@@ -1,7 +1,8 @@
+// ==================== login.js ====================
 import {
     signInWithEmail, signUpWithEmail, sendPasswordReset,
     signInWithGoogle, signInWithGithub,
-    signInWithGoogleOneTap, observeAuthState
+    signInWithGoogleOneTap, observeAuthState, checkRedirectAuth
 } from "./modules/auth.js";
 import { showToast } from "./modules/ui.js";
 
@@ -27,6 +28,46 @@ let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 
+// ----- 1. Page Load Redirect Check -----
+// Jab user Google/GitHub se login karke wapas aaye, toh yahan check hoga
+async function handleRedirectResult() {
+    const originalGoogle = googleBtn.innerHTML;
+    const originalGithub = githubBtn.innerHTML;
+    
+    try {
+        // Buttons ko disabled aur loading state mein daal do jab tak check ho raha hai
+        googleBtn.disabled = true;
+        githubBtn.disabled = true;
+        googleBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
+        githubBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
+
+        const result = await checkRedirectAuth();
+        if (result) {
+            // Login successful, ab redirect kardo
+            window.location.href = '/dashboard';
+            return;
+        }
+    } catch (err) {
+        let msg = 'Social login failed. Please try again.';
+        if (err.code === 'auth/account-exists-with-different-credential') {
+            msg = 'An account with this email already exists using a different sign-in method.';
+        } else if (err.code === 'auth/network-request-failed') {
+            msg = 'Network error. Check your connection.';
+        }
+        showError(msg);
+    } finally {
+        // State wapas normal kar do agar redirect se nahi aaya hai
+        googleBtn.disabled = false;
+        githubBtn.disabled = false;
+        googleBtn.innerHTML = originalGoogle;
+        githubBtn.innerHTML = originalGithub;
+    }
+}
+
+// Call it immediately on script execution
+handleRedirectResult();
+
+// ----- 2. Tab Switching Logic -----
 function switchTab(tab) {
     currentTab = tab;
     if (tab === 'signin') {
@@ -68,6 +109,7 @@ function getSubmitButton(containerId) {
     return form.querySelector('.submit-btn');
 }
 
+// ----- 3. Turnstile (CAPTCHA) Logic -----
 function renderTurnstile(containerId) {
     const container = document.getElementById(containerId);
     if (!container || !window.turnstile) return;
@@ -148,6 +190,7 @@ async function verifyCaptcha(token) {
     return true;
 }
 
+// ----- 4. Email/Password Auth Logic -----
 async function handleEmailSignIn(e) {
     e.preventDefault();
     hideError();
@@ -236,6 +279,7 @@ async function handleEmailSignUp(e) {
 signInBtn.addEventListener('click', handleEmailSignIn);
 signUpBtn.addEventListener('click', handleEmailSignUp);
 
+// ----- 5. Forgot Password Logic -----
 forgotLink.addEventListener('click', async (e) => {
     e.preventDefault();
     hideError();
@@ -255,24 +299,31 @@ forgotLink.addEventListener('click', async (e) => {
     }
 });
 
-async function handleSocialLogin(providerFn, label) {
+// ----- 6. Social Login (Redirect) Logic -----
+async function executeSocialLogin(providerFn, buttonElement, label) {
     hideError();
+    const originalHtml = buttonElement.innerHTML;
+    buttonElement.disabled = true;
+    buttonElement.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Redirecting...`;
+    
     try {
-        await providerFn();
-        window.location.href = '/dashboard';
+        // Ye browser ko directly Google/Github par bhej dega
+        await providerFn(); 
     } catch (err) {
-        if (err.code !== 'auth/popup-closed-by-user') {
-            let msg = `${label} sign-in failed. Please try again.`;
-            if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your connection.';
-            else if (err.message) msg = err.message;
-            showError(msg);
-        }
+        // Sirf tab run hoga agar redirect initialize karne mein koi error aaya
+        buttonElement.disabled = false;
+        buttonElement.innerHTML = originalHtml;
+        let msg = `${label} sign-in failed. Please try again.`;
+        if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your connection.';
+        else if (err.message) msg = err.message;
+        showError(msg);
     }
 }
 
-googleBtn.addEventListener('click', () => handleSocialLogin(signInWithGoogle, 'Google'));
-githubBtn.addEventListener('click', () => handleSocialLogin(signInWithGithub, 'GitHub'));
+googleBtn.addEventListener('click', () => executeSocialLogin(signInWithGoogle, googleBtn, 'Google'));
+githubBtn.addEventListener('click', () => executeSocialLogin(signInWithGithub, githubBtn, 'GitHub'));
 
+// ----- 7. General Auth State Observer -----
 observeAuthState((user) => {
     if (user) {
         window.location.href = '/dashboard';
@@ -281,6 +332,7 @@ observeAuthState((user) => {
     }
 });
 
+// ----- 8. Google One-Tap Callback -----
 window.handleOneTap = async (response) => {
     try {
         await signInWithGoogleOneTap(response);
@@ -290,6 +342,7 @@ window.handleOneTap = async (response) => {
     }
 };
 
+// ----- 9. Enter Key Support -----
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (currentTab === 'signin') {
