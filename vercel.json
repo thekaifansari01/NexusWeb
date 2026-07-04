@@ -40,5 +40,7 @@
       "source": "/privacyPolicy",
       "destination": "/privacyPolicy.html"
     }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "installCommand": "npm install"
 }
