@@ -114,11 +114,11 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number" id="totalKeys">0</div>
+                            <div class="stat-number" id="totalKeys"><span class="skeleton skeleton-stat"></span></div>
                             <span class="text-xs text-zinc-500 font-medium">Total Provisioned</span>
                         </div>
                         <div class="mt-2 text-xs text-emerald-400 flex items-center gap-1">
-                            <span id="activeKeys" class="font-bold">0</span> Active <span class="text-zinc-600">|</span> <span id="revokedKeys" class="text-rose-400 font-bold">0</span> Revoked
+                            <span id="activeKeys" class="font-bold"><span class="skeleton skeleton-stat-sm"></span></span> Active <span class="text-zinc-600">|</span> <span id="revokedKeys" class="text-rose-400 font-bold"><span class="skeleton skeleton-stat-sm"></span></span> Revoked
                         </div>
                     </div>
 
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number" id="totalDomains">0/10</div>
+                            <div class="stat-number" id="totalDomains"><span class="skeleton skeleton-stat"></span></div>
                             <span class="text-xs text-zinc-500">Slots Used</span>
                         </div>
                         <div class="mt-2 text-xs text-zinc-400 flex items-center gap-1">
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number text-emerald-400 text-xl font-bold">Encrypted</div>
+                            <div class="stat-number text-emerald-400 text-xl font-bold"><span class="skeleton skeleton-stat"></span></div>
                         </div>
                         <div class="mt-2 text-xs text-zinc-500">
                             Groq AI Vault-grade storage active.
@@ -165,8 +165,7 @@
                                 Manage Keys <i class="ph ph-arrow-up-right"></i>
                             </button>
                         </div>
-                        <div id="overviewKeysContainer" class="space-y-3">
-                            </div>
+                        <div id="overviewKeysContainer" class="space-y-3"></div>
                     </div>
 
                     <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 flex flex-col justify-between">
@@ -212,7 +211,7 @@
                                 <i class="ph-bold ph-key"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="keysTotal">0</div>
+                                <div class="stat-number" id="keysTotal"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Total</div>
                             </div>
                         </div>
@@ -223,7 +222,7 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="keysActive">0</div>
+                                <div class="stat-number" id="keysActive"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Active</div>
                             </div>
                         </div>
@@ -234,13 +233,13 @@
                                 <i class="ph-bold ph-x-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="keysRevoked">0</div>
+                                <div class="stat-number" id="keysRevoked"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Revoked</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">Nexus Keys</h1>
@@ -250,7 +249,7 @@
                         <i class="ph-bold ph-plus-circle text-base"></i> New Key
                     </button>
                 </div>
-                
+
                 <div id="createKeyForm" class="glass-panel p-6 rounded-2xl mb-6 hidden slide-down border border-primary/20 bg-black/40">
                     <h3 class="text-base font-semibold text-white mb-4">Create New API Key</h3>
                     <div class="flex flex-col gap-4 max-w-xl">
@@ -282,7 +281,7 @@
                                 <i class="ph-bold ph-globe-hemisphere-west"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="domainsTotal">0/10</div>
+                                <div class="stat-number" id="domainsTotal"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Total</div>
                             </div>
                         </div>
@@ -293,7 +292,7 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="domainsActive">0</div>
+                                <div class="stat-number" id="domainsActive"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Active</div>
                             </div>
                         </div>
@@ -304,20 +303,20 @@
                                 <i class="ph-bold ph-x-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="domainsInactive">0</div>
+                                <div class="stat-number" id="domainsInactive"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Inactive</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
                         <h1 class="text-2xl font-bold text-white tracking-tight">Authorized Domains</h1>
                         <p class="text-sm text-zinc-400 mt-1">Whitelist domains to secure your API requests.</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="domain-limit-badge" id="domainLimitBadge">0 / 10 used</span>
+                        <span class="domain-limit-badge" id="domainLimitBadge"><span class="skeleton skeleton-stat-sm"></span></span>
                         <button id="addDomainBtn" class="btn-primary">
                             <i class="ph-bold ph-plus-circle text-base"></i> Add Domain
                         </button>
@@ -351,7 +350,7 @@
                     <h1 class="text-2xl font-bold text-white tracking-tight">Usage Analytics</h1>
                     <p class="text-sm text-zinc-400 mt-1">Track your API request usage and token consumption.</p>
                 </div>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="stat-card">
                         <div class="flex items-center gap-4">
@@ -359,7 +358,7 @@
                                 <i class="ph-bold ph-activity"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="totalRequests">0</div>
+                                <div class="stat-number" id="totalRequests"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Total Requests</div>
                             </div>
                         </div>
@@ -370,7 +369,7 @@
                                 <i class="ph-bold ph-chart-bar"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="totalTokens">0</div>
+                                <div class="stat-number" id="totalTokens"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Total Tokens Used</div>
                             </div>
                         </div>
@@ -381,13 +380,13 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                             <div>
-                                <div class="stat-number" id="successRate">0%</div>
+                                <div class="stat-number" id="successRate"><span class="skeleton skeleton-stat"></span></div>
                                 <div class="stat-label">Success Rate (Last 100)</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-base font-semibold text-white">Recent Requests</h3>

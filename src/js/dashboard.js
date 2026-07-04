@@ -74,6 +74,128 @@ let turnstileRetryTimeout = null;
 let pendingAction = null;
 let pendingActionData = null;
 
+// ============================================================
+// SKELETON LOADER FUNCTIONS
+// ============================================================
+
+function showSkeleton(containerId, type) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    if (type === 'keys') {
+        for (let i = 0; i < 3; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'key-card skeleton-card';
+            skeleton.style.animationDelay = `${i * 0.05}s`;
+            skeleton.innerHTML = `
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <div class="skeleton skeleton-text" style="width: 120px; height: 20px;"></div>
+                        <div class="skeleton skeleton-badge" style="width: 70px; height: 24px;"></div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-1.5">
+                        <div class="skeleton skeleton-text" style="width: 150px; height: 14px;"></div>
+                    </div>
+                    <div class="key-value-wrapper mt-2">
+                        <div class="skeleton skeleton-text" style="width: 120px; height: 20px;"></div>
+                        <div class="skeleton skeleton-icon" style="width: 32px; height: 32px; border-radius: 8px;"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
+                    <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+                    <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+                </div>
+            `;
+            container.appendChild(skeleton);
+        }
+    } else if (type === 'domains') {
+        for (let i = 0; i < 3; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'domain-card skeleton-card';
+            skeleton.style.animationDelay = `${i * 0.05}s`;
+            skeleton.innerHTML = `
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <div class="skeleton skeleton-text" style="width: 150px; height: 20px;"></div>
+                        <div class="skeleton skeleton-badge" style="width: 70px; height: 24px;"></div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-1.5">
+                        <div class="skeleton skeleton-text" style="width: 120px; height: 14px;"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
+                    <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+                    <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+                </div>
+            `;
+            container.appendChild(skeleton);
+        }
+    } else if (type === 'overview') {
+        for (let i = 0; i < 2; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
+            skeleton.style.animationDelay = `${i * 0.05}s`;
+            skeleton.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="skeleton skeleton-icon" style="width: 8px; height: 8px; border-radius: 50%;"></div>
+                    <div class="skeleton skeleton-text" style="width: 100px; height: 16px;"></div>
+                </div>
+                <div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div>
+            `;
+            container.appendChild(skeleton);
+        }
+    } else if (type === 'usage') {
+        for (let i = 0; i < 5; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
+            skeleton.style.animationDelay = `${i * 0.05}s`;
+            skeleton.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="skeleton skeleton-icon" style="width: 8px; height: 8px; border-radius: 50%;"></div>
+                    <div class="skeleton skeleton-text" style="width: 80px; height: 16px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 50px; height: 14px;"></div>
+                </div>
+            `;
+            container.appendChild(skeleton);
+        }
+    }
+}
+
+function hideSkeleton(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const skeletons = container.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text, .skeleton-badge, .skeleton-icon');
+    skeletons.forEach(el => el.remove());
+}
+
+function showStatSkeletons() {
+    const statElements = [
+        totalKeysEl, activeKeysEl, revokedKeysEl,
+        keysTotalEl, keysActiveEl, keysRevokedEl,
+        totalDomainsEl, activeDomainsEl, inactiveDomainsEl,
+        domainsTotalEl, domainsActiveEl, domainsInactiveEl,
+        totalRequestsEl, totalTokensEl, successRateEl,
+        domainLimitBadge
+    ];
+    statElements.forEach(el => {
+        if (!el) return;
+        if (el === domainLimitBadge) {
+            el.className = 'domain-limit-badge';
+            el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
+        } else {
+            el.innerHTML = '<span class="skeleton skeleton-stat"></span>';
+        }
+    });
+}
+
+// ============================================================
+// END SKELETON LOADER
+// ============================================================
+
 function switchTab(tabId, updateHistory = true) {
     const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
     if (!btn) return;
@@ -350,12 +472,20 @@ keyNameInput.addEventListener('keydown', (e) => {
 
 async function loadKeys() {
     if (!currentUser) return;
+    showStatSkeletons();
+    showSkeleton('keysContainer', 'keys');
+    showSkeleton('overviewKeysContainer', 'overview');
+    emptyState.classList.add('hidden');
     try {
         const keys = await getApiKeys(currentUser.uid);
+        hideSkeleton('keysContainer');
+        hideSkeleton('overviewKeysContainer');
         renderKeys(keys);
         renderOverviewKeys(keys);
         updateStats(keys);
     } catch (error) {
+        hideSkeleton('keysContainer');
+        hideSkeleton('overviewKeysContainer');
         showToast('Failed to load keys. Please refresh the page.', 3500, 'error');
     }
 }
@@ -374,6 +504,7 @@ function updateStats(keys) {
 
 function renderOverviewKeys(keys) {
     if (!overviewKeysContainer) return;
+    hideSkeleton('overviewKeysContainer');
     overviewKeysContainer.innerHTML = '';
     if (keys.length === 0) {
         overviewKeysContainer.innerHTML = '<p class="text-sm text-zinc-500">No keys created yet.</p>';
@@ -395,6 +526,7 @@ function renderOverviewKeys(keys) {
 }
 
 function renderKeys(keys) {
+    hideSkeleton('keysContainer');
     const items = keysContainer.querySelectorAll('.key-card');
     items.forEach(el => el.remove());
     if (keys.length === 0) {
@@ -537,11 +669,16 @@ domainInput.addEventListener('keydown', (e) => {
 
 async function loadDomains() {
     if (!currentUser) return;
+    showStatSkeletons();
+    showSkeleton('domainsContainer', 'domains');
+    domainsEmptyState.classList.add('hidden');
     try {
         const domains = await getDomains(currentUser.uid);
+        hideSkeleton('domainsContainer');
         renderDomains(domains);
         updateDomainStats(domains);
     } catch (error) {
+        hideSkeleton('domainsContainer');
         showToast('Failed to load domains.', 3500, 'error');
     }
 }
@@ -568,6 +705,7 @@ function updateDomainStats(domains) {
 }
 
 function renderDomains(domains) {
+    hideSkeleton('domainsContainer');
     const items = domainsContainer.querySelectorAll('.domain-card');
     items.forEach(el => el.remove());
     if (domains.length === 0) {
@@ -757,8 +895,11 @@ if (deleteGroqBtn) {
 
 async function loadUsage() {
     if (!currentUser) return;
+    showStatSkeletons();
+    showSkeleton('usageHistoryContainer', 'usage');
     try {
         const history = await getUsageHistory(currentUser.uid, 10);
+        hideSkeleton('usageHistoryContainer');
         if (history.length === 0) {
             usageHistoryContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No usage data available yet.</div>';
         } else {
@@ -794,6 +935,7 @@ async function loadUsage() {
             successRateEl.textContent = 'N/A';
         }
     } catch (error) {
+        hideSkeleton('usageHistoryContainer');
         console.error("Usage load error:", error);
         if (usageHistoryContainer) {
             usageHistoryContainer.innerHTML = 
