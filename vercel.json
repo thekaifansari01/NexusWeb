@@ -28,6 +28,10 @@
       "destination": "/activity.html"
     },
     {
+      "source": "/termsConditions",
+      "destination": "/termsCondition.html"
+    },
+    {
       "source": "/pricing",
       "destination": "/Pricing.html"
     },
