@@ -24,6 +24,44 @@ if (mobileMenuBtn && sidebar) {
     });
 }
 
+function showSkeleton(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5 gap-4 skeleton-card';
+        skeleton.style.animationDelay = `${i * 0.05}s`;
+        skeleton.innerHTML = `
+            <div class="flex items-start gap-4">
+                <div class="skeleton skeleton-icon" style="width: 40px; height: 40px; border-radius: 12px;"></div>
+                <div class="flex-1 min-w-0 space-y-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div class="skeleton skeleton-text" style="width: 140px; height: 18px;"></div>
+                        <div class="skeleton skeleton-badge" style="width: 80px; height: 20px;"></div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 120px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 90px; height: 14px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end flex-shrink-0">
+                <div class="skeleton skeleton-text" style="width: 100px; height: 36px; border-radius: 10px;"></div>
+            </div>
+        `;
+        container.appendChild(skeleton);
+    }
+}
+
+function hideSkeleton(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const skeletons = container.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text, .skeleton-badge, .skeleton-icon');
+    skeletons.forEach(el => el.remove());
+}
+
 observeAuthState((user) => {
     if (!user) {
         window.location.href = '/login';
@@ -44,13 +82,16 @@ if (sidebarSignOut) {
 
 async function loadSessions() {
     if (!currentUser) return;
+    showSkeleton('sessionsContainer');
     try {
         const response = await fetch('/api/session', { credentials: 'include' });
         if (!response.ok) throw new Error("Failed to fetch sessions");
         const data = await response.json();
         currentSessionId = data.currentSessionId;
+        hideSkeleton('sessionsContainer');
         renderSessions(data.sessions || []);
     } catch (error) {
+        hideSkeleton('sessionsContainer');
         console.error("Session load error:", error);
         if (sessionsContainer) {
             sessionsContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load session history.</div>';
