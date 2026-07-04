@@ -1,9 +1,146 @@
-.vercel
-src/js/config/
+# ============================================
+# NEXUS WEB ASSISTANT - .gitignore
+# ============================================
+
+# ===== Node.js =====
 node_modules/
-.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
 *.log
+
+# ===== Environment Variables =====
 .env
 .env.local
-package.json
-tailwind.config.js
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ===== Vercel =====
+.vercel/
+.vercel-output/
+vercel.log
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ===== Firebase =====
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+*.firebaserc
+google-credentials.json
+service-account.json
+*.key.json
+
+# ===== OS =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+*.tmp
+*.temp
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+.idea/
+*.iml
+
+# ===== Build Outputs =====
+dist/
+build/
+out/
+public/
+*.min.css
+*.min.js
+
+# ===== Tailwind =====
+src/css/tailwind-output.css
+src/css/*.min.css
+
+# ===== Misc =====
+*.zip
+*.tar.gz
+*.rar
+*.7z
+backup/
+tmp/
+temp/
+*.bak
+*.old
+*.orig
+
+# ===== Security =====
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
+# ===== Local Development =====
+localhost/
+local/
+dev/
+*.local.json
+*.local.js
+*.local.css
+
+# ===== Project Specific =====
+# Ignore sensitive files
+api/core/config.py
+api/core/crypto_utils.py
+!api/core/config.py.example
+!api/core/crypto_utils.py.example
+
+# Uploaded files
+uploads/
+images/
+files/
+media/
+*.upload
+
+# Session files
+sessions/
+*.session
+*.cookie
