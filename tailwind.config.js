@@ -13,6 +13,9 @@ module.exports = {
         border: '#27272a',
         primary: '#a855f7',
         primaryHover: '#9333ea'
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'sans-serif']
       }
     }
   },
