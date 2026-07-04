@@ -5,14 +5,9 @@
       "destination": "https://nexuswebassistant.firebaseapp.com/__/auth/$1"
     },
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    },
-    {
       "source": "/docs",
       "destination": "/Documentation.html"
     },
-    
     {
       "source": "/index",
       "destination": "/index.html"
