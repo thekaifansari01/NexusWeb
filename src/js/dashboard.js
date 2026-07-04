@@ -58,6 +58,7 @@ const keysRevokedEl = document.getElementById('keysRevoked');
 const domainsTotalEl = document.getElementById('domainsTotal');
 const domainsActiveEl = document.getElementById('domainsActive');
 const domainsInactiveEl = document.getElementById('domainsInactive');
+const groqVaultStatusEl = document.querySelector('#tab-overview .stat-card:nth-child(3) .stat-number');
 
 const captchaModal = document.getElementById('captchaModal');
 const captchaModalTitle = document.getElementById('captchaModalTitle');
@@ -837,18 +838,30 @@ async function loadGroqKey() {
             groqStatus.style.color = '#34d399';
             deleteGroqBtn.classList.remove('hidden');
             resetGroqForm();
+            if (groqVaultStatusEl) {
+                groqVaultStatusEl.textContent = '🔒 Encrypted';
+                groqVaultStatusEl.className = 'stat-number text-emerald-400 text-xl font-bold';
+            }
         } else {
             groqInput.value = '';
             groqStatus.textContent = 'No key saved';
             groqStatus.style.color = '#71717a';
             deleteGroqBtn.classList.add('hidden');
             resetGroqForm();
+            if (groqVaultStatusEl) {
+                groqVaultStatusEl.textContent = '⚠️ Not Configured';
+                groqVaultStatusEl.className = 'stat-number text-amber-400 text-xl font-bold';
+            }
         }
     } catch (error) {
         groqStatus.textContent = 'Failed to load key';
         groqStatus.style.color = '#fb7185';
         deleteGroqBtn.classList.add('hidden');
         resetGroqForm();
+        if (groqVaultStatusEl) {
+            groqVaultStatusEl.textContent = '❌ Error';
+            groqVaultStatusEl.className = 'stat-number text-red-400 text-xl font-bold';
+        }
     }
 }
 
@@ -870,6 +883,7 @@ if (saveGroqBtn) {
                 groqStatus.style.color = '#34d399';
                 deleteGroqBtn.classList.remove('hidden');
                 resetGroqForm();
+                loadGroqKey(); // refresh status
             }
         );
     });
@@ -888,6 +902,7 @@ if (deleteGroqBtn) {
                 deleteGroqBtn.classList.add('hidden');
                 resetGroqForm();
                 showToast('Groq API key deleted.', 3000, 'success');
+                loadGroqKey(); // refresh status
             }
         );
     });
