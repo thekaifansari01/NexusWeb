@@ -1,4 +1,3 @@
-// ==================== login.js ====================
 import {
   signInWithEmail,
   signUpWithEmail,
@@ -32,8 +31,7 @@ let currentTab = 'signin';
 let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
-let isRedirectCallback = false;
-let redirectHandled = false;
+let isHandlingRedirect = false;
 
 function switchTab(tab) {
   currentTab = tab;
@@ -297,54 +295,81 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+function redirectToDashboard() {
+  if (window.location.pathname !== '/dashboard') {
+    window.location.href = '/dashboard';
+  }
+}
+
+function cleanUrlAndRedirect() {
+  const cleanSearch = window.location.search.replace(/[?&](code|state|scope|authuser|prompt)=[^&]*/g, '');
+  const newUrl = window.location.pathname + cleanSearch;
+  window.history.replaceState({}, '', newUrl || '/login');
+  redirectToDashboard();
+}
+
+function showLoadingOverlay() {
+  const existing = document.getElementById('redirect-overlay');
+  if (existing) return existing;
+  const overlay = document.createElement('div');
+  overlay.id = 'redirect-overlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(12px); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; color: #fff;
+  `;
+  overlay.innerHTML = `
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+      <i class="ph-bold ph-circle-notch animate-spin"></i>
+    </div>
+    <p style="font-size: 1.2rem; font-weight: 500;">Verifying your identity...</p>
+  `;
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+function removeLoadingOverlay() {
+  const overlay = document.getElementById('redirect-overlay');
+  if (overlay) overlay.remove();
+}
+
 (function init() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has('code') || params.has('state')) {
-    isRedirectCallback = true;
-    const overlay = document.createElement('div');
-    overlay.id = 'redirect-overlay';
-    overlay.style.cssText = `
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(12px); z-index: 9999;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; color: #fff;
-    `;
-    overlay.innerHTML = `
-      <div style="font-size: 2.5rem; margin-bottom: 1rem;">
-        <i class="ph-bold ph-circle-notch animate-spin"></i>
-      </div>
-      <p style="font-size: 1.2rem; font-weight: 500;">Verifying your identity...</p>
-    `;
-    document.body.appendChild(overlay);
+  const hasRedirectParams = new URLSearchParams(window.location.search).has('code') ||
+                            new URLSearchParams(window.location.search).has('state');
+
+  if (hasRedirectParams) {
+    isHandlingRedirect = true;
+    showLoadingOverlay();
 
     handleRedirectResult()
       .then((user) => {
         if (user) {
-          const storedMode = localStorage.getItem('auth_mode') || 'signin';
           localStorage.removeItem('auth_mode');
-          const cleanUrl = window.location.pathname + window.location.search.replace(/[?&](code|state|scope|authuser|prompt)=[^&]*/g, '');
-          window.history.replaceState({}, '', cleanUrl || '/login');
-          window.location.href = '/dashboard';
+          cleanUrlAndRedirect();
         } else {
-          document.getElementById('redirect-overlay')?.remove();
-          isRedirectCallback = false;
+          removeLoadingOverlay();
+          isHandlingRedirect = false;
           renderTurnstile('turnstile-container');
         }
       })
       .catch((err) => {
-        document.getElementById('redirect-overlay')?.remove();
-        isRedirectCallback = false;
+        removeLoadingOverlay();
+        isHandlingRedirect = false;
         showError('Authentication failed. Please try again.');
         renderTurnstile('turnstile-container');
         console.error('Redirect error:', err);
+      })
+      .finally(() => {
+        isHandlingRedirect = false;
       });
-  } else {
-    observeAuthState((user) => {
-      if (user && !isRedirectCallback) {
-        window.location.href = '/dashboard';
-      } else if (!user && !isRedirectCallback) {
-        renderTurnstile('turnstile-container');
-      }
-    });
   }
+
+  observeAuthState((user) => {
+    if (user && !isHandlingRedirect && !hasRedirectParams) {
+      redirectToDashboard();
+    } else if (!user && !isHandlingRedirect && !hasRedirectParams) {
+      renderTurnstile('turnstile-container');
+    }
+  });
 })();
