@@ -1,3 +1,4 @@
+// dashboard.js
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { showToast } from "./modules/ui.js";
 import {
@@ -324,6 +325,7 @@ saveKeyBtn.addEventListener('click', async () => {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
                 name: name,
                 captchaToken: captchaToken

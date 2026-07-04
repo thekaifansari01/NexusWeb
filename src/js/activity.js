@@ -1,3 +1,4 @@
+// activity.js
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { showToast } from "./modules/ui.js";
 
@@ -44,7 +45,7 @@ if (sidebarSignOut) {
 async function loadSessions() {
     if (!currentUser) return;
     try {
-        const response = await fetch('/api/session');
+        const response = await fetch('/api/session', { credentials: 'include' });
         if (!response.ok) throw new Error("Failed to fetch sessions");
         const data = await response.json();
         currentSessionId = data.currentSessionId;
@@ -125,6 +126,7 @@ function renderSessions(sessions) {
                     const response = await fetch('/api/session', {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({ sessionId: session.sessionId })
                     });
                     if (!response.ok) throw new Error("Failed to revoke session");

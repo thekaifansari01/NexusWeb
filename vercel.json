@@ -12,6 +12,7 @@
       "source": "/docs",
       "destination": "/Documentation.html"
     },
+    
     {
       "source": "/index",
       "destination": "/index.html"

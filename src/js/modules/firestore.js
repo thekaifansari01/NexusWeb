@@ -1,3 +1,4 @@
+// firestore.js
 import { db } from "../config/firebase.js";
 import {
     collection, query, where, getDocs, addDoc, deleteDoc, doc,
@@ -78,7 +79,7 @@ export async function toggleDomainStatus(domainId, currentStatus) {
 
 export async function getGroqApiKey(userId) {
     try {
-        const res = await fetch('/api/groq');
+        const res = await fetch('/api/groq', { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch key status');
         const data = await res.json();
         return data.hasKey ? 'exists' : null;
@@ -92,6 +93,7 @@ export async function saveGroqApiKey(userId, apiKey) {
     const res = await fetch('/api/groq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ apiKey })
     });
     if (!res.ok) {
@@ -103,7 +105,8 @@ export async function saveGroqApiKey(userId, apiKey) {
 
 export async function deleteGroqApiKey(userId) {
     const res = await fetch('/api/groq', {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include'
     });
     if (!res.ok) {
         const err = await res.json();
