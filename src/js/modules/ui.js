@@ -95,28 +95,29 @@ export function showToast(message, duration = 3500, type = 'success') {
     overlay.style.cssText = `
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         z-index: 9999;
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: toastOverlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: toastOverlayIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         opacity: 0;
+        padding: 1rem;
     `;
 
     const toast = document.createElement('div');
     toast.style.cssText = `
         background: rgba(24, 24, 27, 0.95);
         border: 1px solid ${style.border};
-        border-radius: 24px;
-        padding: 2rem 2.5rem;
-        max-width: 480px;
-        width: 90%;
-        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 60px ${style.glow};
-        transform: scale(0.9) translateY(20px);
-        animation: toastCardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        border-radius: 20px;
+        padding: 1.5rem 1.5rem;
+        max-width: 400px;
+        width: 92%;
+        box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6), 0 0 40px ${style.glow};
+        transform: scale(0.92) translateY(16px);
+        animation: toastCardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         position: relative;
         overflow: hidden;
     `;
@@ -128,66 +129,66 @@ export function showToast(message, duration = 3500, type = 'success') {
         left: 0;
         height: 3px;
         background: ${style.color};
-        border-radius: 0 0 24px 24px;
+        border-radius: 0 0 20px 20px;
         width: 100%;
         animation: toastProgress ${duration}ms linear forwards;
     `;
 
     const iconCircle = document.createElement('div');
     iconCircle.style.cssText = `
-        width: 64px;
-        height: 64px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
         background: ${style.bg};
         border: 2px solid ${style.border};
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0.75rem;
     `;
-    iconCircle.innerHTML = `<i class="ph-bold ${style.icon}" style="color: ${style.color}; font-size: 2rem;"></i>`;
+    iconCircle.innerHTML = `<i class="ph-bold ${style.icon}" style="color: ${style.color}; font-size: 1.6rem;"></i>`;
 
     const title = document.createElement('div');
     title.style.cssText = `
         font-weight: 700;
         color: #fafafa;
-        font-size: 1.2rem;
+        font-size: 1.05rem;
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
     `;
     title.textContent = type.charAt(0).toUpperCase() + type.slice(1);
 
     const msg = document.createElement('div');
     msg.style.cssText = `
         color: #a1a1aa;
-        font-size: 0.95rem;
+        font-size: 0.88rem;
         text-align: center;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
+        line-height: 1.5;
+        margin-bottom: 1.25rem;
     `;
     msg.textContent = message;
 
     const closeBtn = document.createElement('button');
     closeBtn.style.cssText = `
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         color: #a1a1aa;
-        padding: 0.5rem 2rem;
+        padding: 0.5rem 1.5rem;
         border-radius: 12px;
         cursor: pointer;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         transition: all 0.2s ease;
         width: 100%;
         font-family: 'Plus Jakarta Sans', sans-serif;
     `;
     closeBtn.textContent = 'Got it';
     closeBtn.onmouseover = () => {
-        closeBtn.style.background = 'rgba(255, 255, 255, 0.08)';
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.1)';
         closeBtn.style.color = '#fafafa';
     };
     closeBtn.onmouseout = () => {
-        closeBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.06)';
         closeBtn.style.color = '#a1a1aa';
     };
     closeBtn.onclick = () => {
@@ -217,14 +218,14 @@ function closeToast(overlay) {
     overlay.style.opacity = '0';
     const toast = overlay.querySelector('div');
     if (toast) {
-        toast.style.transform = 'scale(0.9) translateY(20px)';
+        toast.style.transform = 'scale(0.92) translateY(16px)';
         toast.style.opacity = '0';
     }
     setTimeout(() => {
         if (overlay.parentNode) {
             overlay.remove();
         }
-    }, 400);
+    }, 350);
 }
 
 if (!document.getElementById('toastStyles')) {
@@ -237,7 +238,7 @@ if (!document.getElementById('toastStyles')) {
         }
         @keyframes toastCardIn {
             from { 
-                transform: scale(0.9) translateY(20px);
+                transform: scale(0.92) translateY(16px);
                 opacity: 0;
             }
             to { 
