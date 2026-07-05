@@ -1,6 +1,7 @@
 (function() {
     let particlesContainer;
     const MIN_WIDTH = 969;
+    const MAX_PARTICLES = 120; // Maximum allowed particles
 
     function getParticleColor() {
         const theme = document.documentElement.getAttribute('data-theme');
@@ -32,6 +33,7 @@
             return;
         }
 
+        // If already initialized, do nothing
         if (particlesContainer) return;
 
         try {
@@ -84,6 +86,7 @@
                         number: {
                             density: { enable: true, area: 800 },
                             value: 50,
+                            limit: MAX_PARTICLES, // Cap the total number of particles
                         },
                         links: {
                             color: { value: linkColor },
@@ -129,7 +132,7 @@
                                 },
                             },
                             push: {
-                                quantity: 3,
+                                quantity: 1, // Reduced from 3 to 1 to slow particle growth
                             },
                         },
                     },
@@ -137,13 +140,18 @@
                 },
             });
         } catch (error) {
-            console.error("tsParticles load error:", error);
+            console.error("tsParticles initialization error:", error);
+            particlesContainer = undefined;
         }
     }
 
     function destroyParticles() {
         if (particlesContainer) {
-            particlesContainer.destroy();
+            try {
+                particlesContainer.destroy();
+            } catch (e) {
+                console.warn("Error destroying particles:", e);
+            }
             particlesContainer = undefined;
         }
     }
@@ -163,6 +171,7 @@
         }
     }
 
+    // Watch for theme changes to reload particles with new colors
     const themeObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'data-theme') {
@@ -174,12 +183,14 @@
     const htmlElement = document.documentElement;
     themeObserver.observe(htmlElement, { attributes: true });
 
+    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', handleParticlesState);
     } else {
         handleParticlesState();
     }
 
+    // Debounced resize handler to avoid frequent re-initialization
     let resizeTimeout;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
