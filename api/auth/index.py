@@ -73,9 +73,7 @@ class handler(BaseHTTPRequestHandler):
                     'name': user_name
                 }, merge=True)
                 if user_email:
-                    def send_welcome():
-                        emailService.send_welcome_email(uid, user_email, user_name)
-                    threading.Thread(target=send_welcome).start()
+                    emailService.send_welcome_email(uid, user_email, user_name)
 
             device_info = self.headers.get('User-Agent', 'Unknown Device')
             ip_address = self.headers.get('x-forwarded-for', 'Unknown IP')

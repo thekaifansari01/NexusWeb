@@ -7,7 +7,6 @@ from api.core.config import db
 
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
 EMAIL_FROM = os.environ.get('EMAIL_FROM', 'onboarding@resend.dev')
-
 MAX_EMAILS_PER_USER_PER_DAY = 5
 
 def _can_send_email(user_id: str) -> bool:
@@ -24,19 +23,12 @@ def _log_email_sent(user_id: str):
     doc_ref = db.collection('emailLogs').document(f"{user_id}_{today}")
     doc_ref.set({'count': firestore.Increment(1)}, merge=True)
 
-def send_email(
-    user_id: str,
-    to_email: str,
-    subject: str,
-    html_body: str,
-    timeout: int = 5
-) -> bool:
+def send_email(user_id: str, to_email: str, subject: str, html_body: str, timeout: int = 10) -> bool:
     if not _can_send_email(user_id):
-        print(f"📧 [SKIP] User {user_id} has reached daily email limit.")
+        print(f"📧 [SKIP] User {user_id} daily limit.")
         return False
-
     if not RESEND_API_KEY:
-        print("📧 [ERROR] RESEND_API_KEY not set in environment.")
+        print("📧 [ERROR] RESEND_API_KEY missing.")
         return False
 
     payload = {
@@ -49,197 +41,114 @@ def send_email(
     try:
         response = requests.post(
             "https://api.resend.com/emails",
-            headers={
-                "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type": "application/json",
-            },
+            headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
             json=payload,
             timeout=timeout
         )
 
         if response.status_code == 200:
-            print(f"📧 [SUCCESS] Email sent to {to_email} (user: {user_id})")
+            print(f"📧 [SUCCESS] Email sent to {to_email}")
             _log_email_sent(user_id)
             return True
         else:
-            print(
-                f"📧 [FAIL] Resend returned {response.status_code} for user {user_id}: "
-                f"{response.text[:200]}"
-            )
+            print(f"📧 [FAIL] Resend {response.status_code}: {response.text[:200]}")
             return False
-
-    except requests.exceptions.RequestException as e:
-        print(f"📧 [EXCEPTION] Email send failed for user {user_id}: {str(e)}")
+    except Exception as e:
+        print(f"📧 [EXCEPTION] {str(e)}")
         return False
 
-# =======================================================
-#  PROFESSIONAL TEMPLATES
-# =======================================================
-
-def _get_base_style():
-    return """
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    """
-
-def _get_header():
-    return """
-    <div style="text-align: center; padding: 10px 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: inline-flex; align-items: center; gap: 10px; background: rgba(168,85,247,0.08); padding: 6px 18px 6px 12px; border-radius: 40px; border: 1px solid rgba(168,85,247,0.15);">
-            <span style="background: #a855f7; color: white; font-weight: 800; font-size: 12px; padding: 2px 10px; border-radius: 30px; letter-spacing: 0.5px;">NEXUS</span>
-            <span style="color: #d4d4d8; font-weight: 500; font-size: 12px;">Web Assistant</span>
-        </div>
-    </div>
-    """
-
-def _get_footer():
-    return """
-    <div style="text-align: center; padding-top: 30px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: center; gap: 24px; font-size: 12px; color: #52525b; margin-bottom: 10px;">
-            <a href="https://trynexusweb.vercel.app/dashboard" style="color: #a1a1aa; text-decoration: none;">Dashboard</a>
-            <a href="https://trynexusweb.vercel.app/docs" style="color: #a1a1aa; text-decoration: none;">Docs</a>
-            <a href="https://github.com/thekaifansari01/NexusWeb" style="color: #a1a1aa; text-decoration: none;">GitHub</a>
-        </div>
-        <div style="display: flex; justify-content: center; gap: 8px; font-size: 11px; color: #3f3f46;">
-            <span>© 2026 Nexus</span>
-            <span>·</span>
-            <span style="background: rgba(168,85,247,0.1); color: #a855f7; padding: 0 8px; border-radius: 12px;">Open Source</span>
-            <span>·</span>
-            <span>Built with ❤️</span>
-        </div>
-    </div>
-    """
+# ==========================================
+#  PROFESSIONAL & TRUSTWORTHY TEMPLATES
+#  (Plain, Clean, White Background)
+# ==========================================
 
 def _welcome_html(name: str) -> str:
     return f"""
     <!DOCTYPE html>
     <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Nexus</title>
-        {_get_base_style()}
-    </head>
-    <body style="font-family: 'Plus Jakarta Sans', sans-serif; max-width: 600px; margin: 0 auto; padding: 30px 20px; background: #09090b; color: #fafafa; -webkit-font-smoothing: antialiased;">
-        
-        <div style="background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 40px 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);">
-            
-            {_get_header()}
-
-            <div style="text-align: center; padding: 30px 0 20px 0;">
-                <div style="font-size: 40px; margin-bottom: 10px;">🚀</div>
-                <h1 style="font-size: 28px; font-weight: 800; margin: 0 0 6px 0; background: linear-gradient(135deg, #d8b4fe, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                    Welcome aboard, {name}!
-                </h1>
-                <p style="color: #a1a1aa; font-size: 16px; margin: 0; font-weight: 400;">Your AI-powered web assistant is ready to deploy.</p>
+    <head><meta charset="UTF-8"><title>Welcome to Nexus</title></head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f6f9fc; margin: 0; padding: 40px 20px;">
+        <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px 35px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+            <div style="text-align: center; border-bottom: 1px solid #eaeef2; padding-bottom: 20px; margin-bottom: 30px;">
+                <span style="font-size: 24px; font-weight: 800; color: #1a1a1a;">Nexus</span>
+                <span style="background: #a855f7; color: white; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">AI</span>
             </div>
-
-            <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 24px; margin: 20px 0; border-left: 3px solid #a855f7;">
-                <p style="margin: 0 0 12px 0; color: #d4d4d8; font-size: 15px; line-height: 1.6;">
-                    <strong>You're now part of the Nexus ecosystem.</strong> Here's what you can do next:
-                </p>
-                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #a1a1aa;">
-                    <div style="display: flex; align-items: center; gap: 12px;"><span style="background: #a855f7; width: 6px; height: 6px; border-radius: 50%;"></span> Add your <strong style="color: white;">Groq API key</strong> to power the AI.</div>
-                    <div style="display: flex; align-items: center; gap: 12px;"><span style="background: #a855f7; width: 6px; height: 6px; border-radius: 50%;"></span> Generate <strong style="color: white;">Nexus Keys</strong> for your websites.</div>
-                    <div style="display: flex; align-items: center; gap: 12px;"><span style="background: #a855f7; width: 6px; height: 6px; border-radius: 50%;"></span> Whitelist domains to keep your keys secure.</div>
-                </div>
+            <h1 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Welcome, {name}! 👋</h1>
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">Your AI-powered web assistant is ready. You can now embed Nexus into your websites with just one script tag.</p>
+            <div style="background: #f7fafc; border-left: 4px solid #a855f7; padding: 16px 20px; border-radius: 4px; margin-bottom: 30px;">
+                <p style="margin: 0; color: #2d3748; font-size: 14px;"><strong>Next step:</strong> Add your Groq API key in the dashboard to enable AI responses.</p>
             </div>
-
-            <div style="text-align: center; margin: 30px 0 10px 0;">
-                <a href="https://trynexusweb.vercel.app/dashboard" 
-                   style="display: inline-block; padding: 14px 40px; background: linear-gradient(145deg, #a855f7, #7c3aed); color: white; font-weight: 700; font-size: 16px; border-radius: 40px; text-decoration: none; box-shadow: 0 8px 25px rgba(168,85,247,0.3); transition: all 0.2s;">
-                    Launch Dashboard
-                </a>
+            <a href="https://trynexusweb.vercel.app/dashboard" style="display: inline-block; background: #a855f7; color: #ffffff; font-weight: 600; font-size: 15px; padding: 12px 32px; border-radius: 6px; text-decoration: none; text-align: center;">Go to Dashboard</a>
+            <div style="margin-top: 40px; border-top: 1px solid #eaeef2; padding-top: 25px; font-size: 13px; color: #718096;">
+                <p style="margin: 0;">Nexus is open source and free forever.</p>
+                <p style="margin: 5px 0 0 0;">© 2026 Nexus · <a href="https://trynexusweb.vercel.app" style="color: #a855f7; text-decoration: none;">Website</a></p>
             </div>
-
-            {_get_footer()}
-
         </div>
     </body>
     </html>
     """
 
 def _key_alert_html(key_name: str, action: str) -> str:
-    # Determine severity and icon based on action
+    # Clean status indicators
     if "deleted" in action.lower():
-        severity_color = "#fb7185"
-        icon = "🗑️"
-        border_color = "rgba(251,113,133,0.2)"
-        action_label = "DELETED"
+        color = "#e53e3e"
+        label = "DELETED"
     elif "saved" in action.lower() or "update" in action.lower():
-        severity_color = "#60a5fa"
-        icon = "🔄"
-        border_color = "rgba(96,165,250,0.2)"
-        action_label = "UPDATED"
-    else:  # created
-        severity_color = "#fbbf24"
-        icon = "🔐"
-        border_color = "rgba(251,191,36,0.2)"
-        action_label = "CREATED"
+        color = "#3182ce"
+        label = "UPDATED"
+    else:
+        color = "#d69e2e"
+        label = "CREATED"
 
     return f"""
     <!DOCTYPE html>
     <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Security Alert</title>
-        {_get_base_style()}
-    </head>
-    <body style="font-family: 'Plus Jakarta Sans', sans-serif; max-width: 600px; margin: 0 auto; padding: 30px 20px; background: #09090b; color: #fafafa; -webkit-font-smoothing: antialiased;">
-        
-        <div style="background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 40px 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);">
+    <head><meta charset="UTF-8"><title>Security Alert - Nexus</title></head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f6f9fc; margin: 0; padding: 40px 20px;">
+        <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px 35px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+            <div style="text-align: center; border-bottom: 1px solid #eaeef2; padding-bottom: 20px; margin-bottom: 30px;">
+                <span style="font-size: 24px; font-weight: 800; color: #1a1a1a;">Nexus</span>
+                <span style="background: #a855f7; color: white; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">Security</span>
+            </div>
             
-            {_get_header()}
-
-            <div style="text-align: center; padding: 20px 0;">
-                <div style="font-size: 42px; margin-bottom: 5px;">{icon}</div>
-                <h2 style="font-size: 24px; font-weight: 700; margin: 0 0 4px 0; color: {severity_color};">
-                    Security Alert
-                </h2>
-                <p style="color: #a1a1aa; font-size: 14px; margin: 0;">Action: <strong style="color: white;">{action_label}</strong></p>
-            </div>
-
-            <div style="background: rgba(0,0,0,0.4); border-radius: 16px; padding: 20px 24px; margin: 20px 0; border: 1px solid {border_color};">
-                <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
-                    <span style="color: #71717a;">Key Name</span>
-                    <span style="color: white; font-weight: 600;">{key_name}</span>
+            <h2 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">🔐 API Key {label}</h2>
+            <p style="color: #4a5568; font-size: 15px; margin: 0 0 24px 0;">An action was performed on your Nexus API key.</p>
+            
+            <div style="background: #f7fafc; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid #edf2f7;">
+                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #edf2f7;">
+                    <span style="color: #718096; font-size: 14px;">Key Name</span>
+                    <span style="color: #1a1a1a; font-weight: 600; font-size: 14px;">{key_name}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
-                    <span style="color: #71717a;">Timestamp</span>
-                    <span style="color: #d4d4d8;">{datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}</span>
+                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #edf2f7;">
+                    <span style="color: #718096; font-size: 14px;">Status</span>
+                    <span style="color: {color}; font-weight: 700; font-size: 14px;">{label}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0;">
-                    <span style="color: #71717a;">Device</span>
-                    <span style="color: #d4d4d8;">Dashboard (Web)</span>
+                <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                    <span style="color: #718096; font-size: 14px;">Timestamp</span>
+                    <span style="color: #1a1a1a; font-size: 14px;">{datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}</span>
                 </div>
             </div>
 
-            <div style="background: rgba(251, 113, 133, 0.04); border-left: 4px solid {severity_color}; padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 20px 0;">
-                <p style="margin: 0; color: #d4d4d8; font-size: 14px;">
-                    ⚠️ <strong>If you did not perform this action</strong>, please <strong>revoke the key immediately</strong> from your dashboard and reset your credentials.
-                </p>
+            <div style="background: #fff5f5; border: 1px solid #fed7d7; border-radius: 6px; padding: 14px 18px; margin-bottom: 30px;">
+                <p style="margin: 0; color: #9b2c2c; font-size: 14px;"><strong>⚠️ Not you?</strong> Revoke this key immediately from your dashboard.</p>
             </div>
 
-            <div style="text-align: center; margin: 30px 0 10px 0;">
-                <a href="https://trynexusweb.vercel.app/dashboard" 
-                   style="display: inline-block; padding: 14px 40px; background: linear-gradient(145deg, #a855f7, #7c3aed); color: white; font-weight: 700; font-size: 16px; border-radius: 40px; text-decoration: none; box-shadow: 0 8px 25px rgba(168,85,247,0.3);">
-                    Review Dashboard
-                </a>
+            <a href="https://trynexusweb.vercel.app/dashboard" style="display: inline-block; background: #a855f7; color: #ffffff; font-weight: 600; font-size: 15px; padding: 12px 32px; border-radius: 6px; text-decoration: none; text-align: center;">Review Dashboard</a>
+            <div style="margin-top: 40px; border-top: 1px solid #eaeef2; padding-top: 25px; font-size: 13px; color: #718096;">
+                <p style="margin: 0;">This is an automated security notification.</p>
+                <p style="margin: 5px 0 0 0;">© 2026 Nexus · <a href="https://trynexusweb.vercel.app" style="color: #a855f7; text-decoration: none;">Website</a></p>
             </div>
-
-            {_get_footer()}
-
         </div>
     </body>
     </html>
     """
 
-# =======================================================
+# ==========================================
 #  PUBLIC WRAPPERS
-# =======================================================
+# ==========================================
 
 def send_welcome_email(user_id: str, to_email: str, user_name: str = "User"):
-    send_email(user_id, to_email, "🚀 Welcome to Nexus – Let's get started!", _welcome_html(user_name))
+    send_email(user_id, to_email, "Welcome to Nexus – Let's get started", _welcome_html(user_name))
 
 def send_key_alert_email(user_id: str, to_email: str, key_name: str, action: str = "created"):
-    send_email(user_id, to_email, f"🔐 Security Alert: API Key {action.capitalize()} – {key_name}", _key_alert_html(key_name, action))
+    send_email(user_id, to_email, f"Security Alert: API Key {action.capitalize()}", _key_alert_html(key_name, action))

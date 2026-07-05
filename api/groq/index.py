@@ -62,9 +62,7 @@ class handler(BaseHTTPRequestHandler):
             if user_doc.exists:
                 user_email = user_doc.to_dict().get('email')
                 if user_email:
-                    def send_groq_save():
-                        emailService.send_key_alert_email(uid, user_email, "Groq API Key", "saved/updated")
-                    threading.Thread(target=send_groq_save).start()
+                    emailService.send_key_alert_email(uid, user_email, "Groq API Key", "saved/updated")
 
             self.send_json(200, {'success': True}, origin)
         except Exception as e:
@@ -80,9 +78,7 @@ class handler(BaseHTTPRequestHandler):
             if user_doc.exists:
                 user_email = user_doc.to_dict().get('email')
                 if user_email:
-                    def send_groq_delete():
-                        emailService.send_key_alert_email(uid, user_email, "Groq API Key", "deleted")
-                    threading.Thread(target=send_groq_delete).start()
+                    emailService.send_key_alert_email(uid, user_email, "Groq API Key", "deleted")
 
             self.send_json(200, {'success': True}, origin)
         except Exception as e:

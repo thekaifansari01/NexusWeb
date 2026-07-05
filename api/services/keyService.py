@@ -76,9 +76,7 @@ def handle_create_key(user_id, body):
         if user_doc.exists:
             user_email = user_doc.to_dict().get('email')
             if user_email:
-                def send_alert():
-                    emailService.send_key_alert_email(user_id, user_email, key_name, "created")
-                threading.Thread(target=send_alert).start()
+                emailService.send_key_alert_email(user_id, user_email, key_name, "created")
 
         return 200, {"success": True, "key": key, "id": doc_ref.id}
 
