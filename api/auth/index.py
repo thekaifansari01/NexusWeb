@@ -8,7 +8,7 @@ from api.core.config import db, create_session_token, set_cookie_headers, clear_
 from api.core.middleware import get_user_from_cookie
 from api.services.sessionService import create_session, revoke_session
 from api.services.keyService import verify_captcha
-from api.services import email_service
+from api.services import emailService
 
 class handler(BaseHTTPRequestHandler):
     def set_cors_headers(self, origin=None):
@@ -74,7 +74,7 @@ class handler(BaseHTTPRequestHandler):
                 }, merge=True)
                 if user_email:
                     def send_welcome():
-                        email_service.send_welcome_email(uid, user_email, user_name)
+                        emailService.send_welcome_email(uid, user_email, user_name)
                     threading.Thread(target=send_welcome).start()
 
             device_info = self.headers.get('User-Agent', 'Unknown Device')

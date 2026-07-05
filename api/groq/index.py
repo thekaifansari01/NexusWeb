@@ -6,7 +6,7 @@ from firebase_admin import firestore
 from api.core.crypto_utils import encrypt
 from api.core.middleware import get_user_from_cookie
 from api.core.config import db
-from api.services import email_service
+from api.services import emailService
 
 class handler(BaseHTTPRequestHandler):
     def set_cors_headers(self, origin=None):
@@ -63,7 +63,7 @@ class handler(BaseHTTPRequestHandler):
                 user_email = user_doc.to_dict().get('email')
                 if user_email:
                     def send_groq_save():
-                        email_service.send_key_alert_email(uid, user_email, "Groq API Key", "saved/updated")
+                        emailService.send_key_alert_email(uid, user_email, "Groq API Key", "saved/updated")
                     threading.Thread(target=send_groq_save).start()
 
             self.send_json(200, {'success': True}, origin)
@@ -81,7 +81,7 @@ class handler(BaseHTTPRequestHandler):
                 user_email = user_doc.to_dict().get('email')
                 if user_email:
                     def send_groq_delete():
-                        email_service.send_key_alert_email(uid, user_email, "Groq API Key", "deleted")
+                        emailService.send_key_alert_email(uid, user_email, "Groq API Key", "deleted")
                     threading.Thread(target=send_groq_delete).start()
 
             self.send_json(200, {'success': True}, origin)
