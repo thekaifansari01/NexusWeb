@@ -6,7 +6,7 @@ import requests
 from datetime import datetime, timezone
 from firebase_admin import firestore
 from api.core.config import db, TURNSTILE_SECRET, RATE_LIMIT_PER_DAY
-from api.services import email_service
+from api.services import emailService
 
 def verify_captcha(token):
     if not TURNSTILE_SECRET:
@@ -77,7 +77,7 @@ def handle_create_key(user_id, body):
             user_email = user_doc.to_dict().get('email')
             if user_email:
                 def send_alert():
-                    email_service.send_key_alert_email(user_id, user_email, key_name, "created")
+                    emailService.send_key_alert_email(user_id, user_email, key_name, "created")
                 threading.Thread(target=send_alert).start()
 
         return 200, {"success": True, "key": key, "id": doc_ref.id}
