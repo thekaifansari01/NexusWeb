@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,15 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web">
     </script>
-    </script>
     <link rel="stylesheet" href="src/css/tailwind-output.css">
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="stylesheet" href="src/css/styles.css" />
+
+    <!-- tsParticles v2 CDN (compatible with particles.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js">
+    </script>
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased">
-    
-    <div class="ambient-glow"></div>
 
+    <!-- ===== PARTICLES CONTAINER ===== -->
+    <div id="tsparticles" class="fixed inset-0 z-0 pointer-events-auto" style="will-change: transform;"></div>
+
+    <!-- Ambient glow behind particles -->
+    <div class="ambient-glow" style="z-index: -1;"></div>
+
+    <!-- ===== NAVBAR ===== -->
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -56,6 +64,7 @@
         </nav>
     </div>
 
+    <!-- ===== HERO ===== -->
     <main class="max-w-5xl mx-auto px-6 pt-40 pb-20 relative z-10 flex flex-col items-center text-center">
         <a href="/docs" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-zinc-300 text-xs font-medium mb-8 hover:text-white transition-colors border border-primary/20 bg-primary/5">
             <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
@@ -80,6 +89,7 @@
         </div>
     </main>
 
+    <!-- ===== WHY NEXUS ===== -->
     <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-white mb-4">Why choose Nexus?</h2>
@@ -110,6 +120,7 @@
         </div>
     </section>
 
+    <!-- ===== STEPS ===== -->
     <section class="max-w-5xl mx-auto px-6 py-20 relative z-10 border-t border-white/5 mt-10">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold text-white mb-4">From zero to AI in minutes</h2>
@@ -134,6 +145,7 @@
         </div>
     </section>
 
+    <!-- ===== GROQ ===== -->
     <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
         <div class="glass-panel p-10 rounded-3xl border border-primary/20 bg-gradient-to-br from-black/60 to-primary/5 flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
             <div class="flex-1">
@@ -156,6 +168,7 @@
         </div>
     </section>
 
+    <!-- ===== CTA ===== -->
     <section class="max-w-3xl mx-auto px-6 py-24 relative z-10 text-center">
         <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Ready to transform your website?</h2>
         <p class="text-zinc-400 mb-10 text-lg">Join today. It's completely free, open-source, and takes less than 2 minutes to set up.</p>
@@ -169,7 +182,8 @@
         </div>
     </section>
 
-   <footer class="border-t border-white/5 mt-12 py-8 bg-black/40">
+    <!-- ===== FOOTER ===== -->
+    <footer class="border-t border-white/5 mt-12 py-8 bg-black/40 relative z-10">
         <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <div class="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
@@ -185,12 +199,13 @@
             </div>
         </div>
         <div class="text-center text-zinc-500 text-xs mt-4">
-            Built for speed, designed for security · 
-            <a href="/privacyPolicy" class="text-primary hover:underline">Privacy Policy</a> · 
+            Built for speed, designed for security ·
+            <a href="/privacyPolicy" class="text-primary hover:underline">Privacy Policy</a> ·
             <a href="/termsConditions" class="text-primary hover:underline">Terms of Service</a>
         </div>
     </footer>
 
+    <!-- ===== FIREBASE IMPORTS ===== -->
     <script type="importmap">
         {
             "imports": {
@@ -201,6 +216,12 @@
             }
         }
     </script>
+
+    <!-- ===== APP ===== -->
     <script type="module" src="src/js/app.js"></script>
+
+    <!-- ===== PARTICLES ===== -->
+    <script src="src/js/particles.js"></script>
+
 </body>
 </html>
