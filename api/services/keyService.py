@@ -1,10 +1,12 @@
 # Key service – creates Nexus keys with CAPTCHA verification and daily rate limiting
 
 import secrets
+import threading
 import requests
 from datetime import datetime, timezone
 from firebase_admin import firestore
 from api.core.config import db, TURNSTILE_SECRET, RATE_LIMIT_PER_DAY
+from api.services import email_service
 
 def verify_captcha(token):
     if not TURNSTILE_SECRET:
@@ -65,11 +67,18 @@ def handle_create_key(user_id, body):
         if not hasattr(doc_ref, 'id'):
             return 500, {"error": "Internal error: failed to get document reference"}
 
-        # ✅ Rate limit increment after successful key creation
         try:
             update_rate_limit(user_id)
         except Exception as e:
             print(f"Rate limit update failed: {e}")
+
+        user_doc = db.collection('users').document(user_id).get()
+        if user_doc.exists:
+            user_email = user_doc.to_dict().get('email')
+            if user_email:
+                def send_alert():
+                    email_service.send_key_alert_email(user_id, user_email, key_name, "created")
+                threading.Thread(target=send_alert).start()
 
         return 200, {"success": True, "key": key, "id": doc_ref.id}
 

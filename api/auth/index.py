@@ -1,12 +1,14 @@
 # api/auth/index.py
 import json
 import uuid
+import threading
 from http.server import BaseHTTPRequestHandler
 from firebase_admin import auth
 from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
 from api.core.middleware import get_user_from_cookie
 from api.services.sessionService import create_session, revoke_session
 from api.services.keyService import verify_captcha
+from api.services import email_service
 
 class handler(BaseHTTPRequestHandler):
     def set_cors_headers(self, origin=None):
@@ -59,6 +61,21 @@ class handler(BaseHTTPRequestHandler):
 
             decoded = auth.verify_id_token(id_token)
             uid = decoded['uid']
+            user_email = decoded.get('email')
+            user_name = decoded.get('name', 'User')
+
+            user_ref = db.collection('users').document(uid)
+            user_doc = user_ref.get()
+            if not user_doc.exists or not user_doc.to_dict().get('welcomeSent'):
+                user_ref.set({
+                    'welcomeSent': True,
+                    'email': user_email,
+                    'name': user_name
+                }, merge=True)
+                if user_email:
+                    def send_welcome():
+                        email_service.send_welcome_email(uid, user_email, user_name)
+                    threading.Thread(target=send_welcome).start()
 
             device_info = self.headers.get('User-Agent', 'Unknown Device')
             ip_address = self.headers.get('x-forwarded-for', 'Unknown IP')

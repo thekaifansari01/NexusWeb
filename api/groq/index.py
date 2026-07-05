@@ -1,10 +1,12 @@
 # api/groq/index.py
 import json
+import threading
 from http.server import BaseHTTPRequestHandler
 from firebase_admin import firestore
 from api.core.crypto_utils import encrypt
 from api.core.middleware import get_user_from_cookie
 from api.core.config import db
+from api.services import email_service
 
 class handler(BaseHTTPRequestHandler):
     def set_cors_headers(self, origin=None):
@@ -55,6 +57,15 @@ class handler(BaseHTTPRequestHandler):
                 'apiKey': encrypted,
                 'updatedAt': firestore.SERVER_TIMESTAMP
             }, merge=True)
+
+            user_doc = db.collection('users').document(uid).get()
+            if user_doc.exists:
+                user_email = user_doc.to_dict().get('email')
+                if user_email:
+                    def send_groq_save():
+                        email_service.send_key_alert_email(uid, user_email, "Groq API Key", "saved/updated")
+                    threading.Thread(target=send_groq_save).start()
+
             self.send_json(200, {'success': True}, origin)
         except Exception as e:
             self.send_json(500, {'error': str(e)}, origin)
@@ -64,6 +75,15 @@ class handler(BaseHTTPRequestHandler):
         try:
             uid, _ = get_user_from_cookie(self)
             db.collection('userGroqKeys').document(uid).delete()
+
+            user_doc = db.collection('users').document(uid).get()
+            if user_doc.exists:
+                user_email = user_doc.to_dict().get('email')
+                if user_email:
+                    def send_groq_delete():
+                        email_service.send_key_alert_email(uid, user_email, "Groq API Key", "deleted")
+                    threading.Thread(target=send_groq_delete).start()
+
             self.send_json(200, {'success': True}, origin)
         except Exception as e:
             self.send_json(500, {'error': str(e)}, origin)
