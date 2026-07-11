@@ -1,4 +1,3 @@
-// dashboard.js
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { showToast } from "./modules/ui.js";
 import {
@@ -9,6 +8,13 @@ import {
 } from "./modules/firestore.js";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "./config/firebase.js";
+import {
+    getAuth, reauthenticateWithCredential, updatePassword,
+    EmailAuthProvider, reauthenticateWithPopup,
+    GoogleAuthProvider, GithubAuthProvider, getIdToken
+} from "firebase/auth";
+
+const auth = getAuth();
 
 const sidebarAvatar = document.getElementById('sidebarAvatar');
 const sidebarName = document.getElementById('sidebarName');
@@ -67,6 +73,28 @@ const captchaModalContainer = document.getElementById('captchaModalContainer');
 const captchaModalConfirm = document.getElementById('captchaModalConfirm');
 const captchaModalCancel = document.getElementById('captchaModalCancel');
 
+const settingsAvatar = document.getElementById('settingsAvatar');
+const settingsName = document.getElementById('settingsName');
+const settingsEmail = document.getElementById('settingsEmail');
+const passwordChangeSection = document.getElementById('passwordChangeSection');
+const socialAuthInfo = document.getElementById('socialAuthInfo');
+const socialProvider = document.getElementById('socialProvider');
+const currentPassword = document.getElementById('currentPassword');
+const newPassword = document.getElementById('newPassword');
+const confirmPassword = document.getElementById('confirmPassword');
+const updatePasswordBtn = document.getElementById('updatePasswordBtn');
+
+const deleteAccountModal = document.getElementById('deleteAccountModal');
+const deletePassword = document.getElementById('deletePassword');
+const deleteSocialReauth = document.getElementById('deleteSocialReauth');
+const deleteSocialProvider = document.getElementById('deleteSocialProvider');
+const deleteSocialProviderName = document.getElementById('deleteSocialProviderName');
+const deleteReauthSocialBtn = document.getElementById('deleteReauthSocialBtn');
+const deleteTurnstileContainer = document.getElementById('deleteTurnstileContainer');
+const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+
 let currentUser = null;
 const MAX_DOMAINS = 10;
 let captchaToken = null;
@@ -75,9 +103,10 @@ let turnstileRetryTimeout = null;
 let pendingAction = null;
 let pendingActionData = null;
 
-// ============================================================
-// SKELETON LOADER FUNCTIONS
-// ============================================================
+let deleteReauthToken = null;
+let deleteCaptchaToken = null;
+let deleteTurnstileWidgetId = null;
+let isSocialUser = false;
 
 function showSkeleton(containerId, type) {
     const container = document.getElementById(containerId);
@@ -192,10 +221,6 @@ function showStatSkeletons() {
         }
     });
 }
-
-// ============================================================
-// END SKELETON LOADER
-// ============================================================
 
 function switchTab(tabId, updateHistory = true) {
     const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
@@ -402,6 +427,56 @@ captchaModalConfirm.addEventListener('click', async () => {
     }
 });
 
+function renderDeleteTurnstile() {
+    const container = deleteTurnstileContainer;
+    if (!container || !window.turnstile) return;
+    if (deleteTurnstileWidgetId) {
+        try { turnstile.remove(deleteTurnstileWidgetId); } catch (_) {}
+        deleteTurnstileWidgetId = null;
+    }
+    container.innerHTML = '';
+    try {
+        deleteTurnstileWidgetId = turnstile.render(container, {
+            sitekey: '0x4AAAAAADttl-ZBYJPZI8zP',
+            callback: function(token) {
+                deleteCaptchaToken = token;
+                updateDeleteConfirmBtn();
+            },
+            'expired-callback': function() {
+                deleteCaptchaToken = null;
+                updateDeleteConfirmBtn();
+            },
+            'error-callback': function() {
+                deleteCaptchaToken = null;
+                updateDeleteConfirmBtn();
+                if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+                turnstileRetryTimeout = setTimeout(renderDeleteTurnstile, 2000);
+            }
+        });
+    } catch (e) {
+        if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+        turnstileRetryTimeout = setTimeout(renderDeleteTurnstile, 2000);
+    }
+}
+
+function resetDeleteTurnstile() {
+    try {
+        if (deleteTurnstileWidgetId && window.turnstile) {
+            turnstile.remove(deleteTurnstileWidgetId);
+            deleteTurnstileWidgetId = null;
+        }
+    } catch (_) {}
+    deleteCaptchaToken = null;
+    if (turnstileRetryTimeout) {
+        clearTimeout(turnstileRetryTimeout);
+        turnstileRetryTimeout = null;
+    }
+}
+
+function updateDeleteConfirmBtn() {
+    deleteConfirmBtn.disabled = !deleteCaptchaToken;
+}
+
 observeAuthState((user) => {
     if (!user) {
         window.location.href = '/login';
@@ -414,11 +489,47 @@ observeAuthState((user) => {
     if (welcomeMessageEl) {
         welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
     }
+    if (settingsAvatar) settingsAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=80';
+    if (settingsName) settingsName.textContent = user.displayName || user.email.split('@')[0] || 'User';
+    if (settingsEmail) settingsEmail.textContent = user.email || 'user@example.com';
+
+    const providerData = user.providerData || [];
+    const isPassword = providerData.some(p => p.providerId === 'password');
+    const socialProviderData = providerData.find(p => p.providerId !== 'password');
+    isSocialUser = !isPassword && !!socialProviderData;
+
+    if (isPassword) {
+        if (passwordChangeSection) passwordChangeSection.classList.remove('hidden');
+        if (socialAuthInfo) socialAuthInfo.classList.add('hidden');
+        if (deletePassword && deletePassword.parentElement) {
+            deletePassword.parentElement.classList.remove('hidden');
+        }
+        if (deleteSocialReauth) deleteSocialReauth.classList.add('hidden');
+    } else {
+        if (passwordChangeSection) passwordChangeSection.classList.add('hidden');
+        if (socialAuthInfo) socialAuthInfo.classList.remove('hidden');
+        if (socialProviderData) {
+            const provName = socialProviderData.providerId === 'google.com' ? 'Google' : 'GitHub';
+            if (socialProvider) socialProvider.textContent = provName;
+            if (deleteSocialProvider) deleteSocialProvider.textContent = provName;
+            if (deleteSocialProviderName) deleteSocialProviderName.textContent = provName;
+        }
+        if (deletePassword && deletePassword.parentElement) {
+            deletePassword.parentElement.classList.add('hidden');
+        }
+        if (deleteSocialReauth) deleteSocialReauth.classList.remove('hidden');
+    }
+
     handleURLState();
     loadKeys();
     loadDomains();
     loadGroqKey();
     loadUsage();
+
+    if (deleteAccountModal) {
+        deleteAccountModal.classList.add('hidden');
+        deleteAccountModal.style.display = 'none';
+    }
 });
 
 if (sidebarSignOut) {
@@ -883,7 +994,7 @@ if (saveGroqBtn) {
                 groqStatus.style.color = '#34d399';
                 deleteGroqBtn.classList.remove('hidden');
                 resetGroqForm();
-                loadGroqKey(); // refresh status
+                loadGroqKey();
             }
         );
     });
@@ -902,7 +1013,7 @@ if (deleteGroqBtn) {
                 deleteGroqBtn.classList.add('hidden');
                 resetGroqForm();
                 showToast('Groq API key deleted.', 3000, 'success');
-                loadGroqKey(); // refresh status
+                loadGroqKey();
             }
         );
     });
@@ -953,8 +1064,101 @@ async function loadUsage() {
         hideSkeleton('usageHistoryContainer');
         console.error("Usage load error:", error);
         if (usageHistoryContainer) {
-            usageHistoryContainer.innerHTML = 
+            usageHistoryContainer.innerHTML =
                 '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
         }
     }
 }
+
+updatePasswordBtn.addEventListener('click', async () => {
+    const currPass = currentPassword.value.trim();
+    const newPass = newPassword.value.trim();
+    const confirmPass = confirmPassword.value.trim();
+    if (!currPass || !newPass || !confirmPass) {
+        showToast('Please fill all password fields.', 3000, 'warning');
+        return;
+    }
+    if (newPass.length < 6) {
+        showToast('New password must be at least 6 characters.', 3000, 'warning');
+        return;
+    }
+    if (newPass !== confirmPass) {
+        showToast('Passwords do not match.', 3000, 'warning');
+        return;
+    }
+    const user = auth.currentUser;
+    if (!user) return;
+    const credential = EmailAuthProvider.credential(user.email, currPass);
+    try {
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, newPass);
+        showToast('Password updated successfully!', 3500, 'success');
+        currentPassword.value = '';
+        newPassword.value = '';
+        confirmPassword.value = '';
+    } catch (error) {
+        let msg = 'Password update failed.';
+        if (error.code === 'auth/wrong-password') msg = 'Current password is incorrect.';
+        else if (error.code === 'auth/too-many-requests') msg = 'Too many attempts. Try again later.';
+        else if (error.message) msg = error.message;
+        showToast(msg, 3500, 'error');
+    }
+});
+
+deleteAccountBtn.addEventListener('click', () => {
+    if (deleteAccountModal) {
+        deleteAccountModal.classList.remove('hidden');
+        deleteAccountModal.style.display = 'flex';
+    }
+    deleteReauthToken = 'dummy';
+    if (deleteConfirmBtn) deleteConfirmBtn.disabled = true;
+    if (deletePassword && deletePassword.parentElement) {
+        deletePassword.parentElement.classList.add('hidden');
+    }
+    if (deleteSocialReauth) deleteSocialReauth.classList.add('hidden');
+    renderDeleteTurnstile();
+});
+
+deleteCancelBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (deleteAccountModal) {
+        deleteAccountModal.classList.add('hidden');
+        deleteAccountModal.style.display = 'none';
+    }
+    resetDeleteTurnstile();
+    deleteReauthToken = null;
+    if (deleteConfirmBtn) deleteConfirmBtn.disabled = true;
+});
+
+deleteConfirmBtn.addEventListener('click', async () => {
+    if (!deleteCaptchaToken) {
+        showToast('Please complete the CAPTCHA.', 3000, 'warning');
+        return;
+    }
+    deleteConfirmBtn.disabled = true;
+    deleteConfirmBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Deleting...';
+    try {
+        const response = await fetch('/api/user', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+                captchaToken: deleteCaptchaToken
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || 'Deletion failed.');
+        }
+        showToast('Account deleted successfully.', 4000, 'success');
+        deleteAccountModal.classList.add('hidden');
+        resetDeleteTurnstile();
+        await signOutUser();
+        window.location.href = '/';
+    } catch (error) {
+        showToast(error.message || 'Failed to delete account.', 3500, 'error');
+        deleteConfirmBtn.disabled = false;
+        deleteConfirmBtn.innerHTML = 'Confirm Delete';
+    }
+});

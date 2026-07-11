@@ -57,11 +57,6 @@ def send_email(user_id: str, to_email: str, subject: str, html_body: str, timeou
         print(f"📧 [EXCEPTION] {str(e)}")
         return False
 
-# ==========================================
-#  PROFESSIONAL & TRUSTWORTHY TEMPLATES
-#  (Plain, Clean, White Background)
-# ==========================================
-
 def _welcome_html(name: str) -> str:
     return f"""
     <!DOCTYPE html>
@@ -89,7 +84,6 @@ def _welcome_html(name: str) -> str:
     """
 
 def _key_alert_html(key_name: str, action: str) -> str:
-    # Clean status indicators
     if "deleted" in action.lower():
         color = "#e53e3e"
         label = "DELETED"
@@ -110,10 +104,8 @@ def _key_alert_html(key_name: str, action: str) -> str:
                 <span style="font-size: 24px; font-weight: 800; color: #1a1a1a;">Nexus</span>
                 <span style="background: #a855f7; color: white; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">Security</span>
             </div>
-            
             <h2 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">🔐 API Key {label}</h2>
             <p style="color: #4a5568; font-size: 15px; margin: 0 0 24px 0;">An action was performed on your Nexus API key.</p>
-            
             <div style="background: #f7fafc; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid #edf2f7;">
                 <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #edf2f7;">
                     <span style="color: #718096; font-size: 14px;">Key Name</span>
@@ -128,11 +120,9 @@ def _key_alert_html(key_name: str, action: str) -> str:
                     <span style="color: #1a1a1a; font-size: 14px;">{datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}</span>
                 </div>
             </div>
-
             <div style="background: #fff5f5; border: 1px solid #fed7d7; border-radius: 6px; padding: 14px 18px; margin-bottom: 30px;">
                 <p style="margin: 0; color: #9b2c2c; font-size: 14px;"><strong>⚠️ Not you?</strong> Revoke this key immediately from your dashboard.</p>
             </div>
-
             <a href="https://trynexusweb.vercel.app/dashboard" style="display: inline-block; background: #a855f7; color: #ffffff; font-weight: 600; font-size: 15px; padding: 12px 32px; border-radius: 6px; text-decoration: none; text-align: center;">Review Dashboard</a>
             <div style="margin-top: 40px; border-top: 1px solid #eaeef2; padding-top: 25px; font-size: 13px; color: #718096;">
                 <p style="margin: 0;">This is an automated security notification.</p>
@@ -143,12 +133,35 @@ def _key_alert_html(key_name: str, action: str) -> str:
     </html>
     """
 
-# ==========================================
-#  PUBLIC WRAPPERS
-# ==========================================
+def _account_deletion_html() -> str:
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"><title>Account Deleted - Nexus</title></head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f6f9fc; margin: 0; padding: 40px 20px;">
+        <div style="max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px 35px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+            <div style="text-align: center; border-bottom: 1px solid #eaeef2; padding-bottom: 20px; margin-bottom: 30px;">
+                <span style="font-size: 24px; font-weight: 800; color: #1a1a1a;">Nexus</span>
+                <span style="background: #a855f7; color: white; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-left: 8px;">AI</span>
+            </div>
+            <h1 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Account Deleted</h1>
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">Your Nexus account has been successfully deleted. All your data, API keys, domains, and usage logs have been permanently removed.</p>
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">If you did not request this, please contact us immediately.</p>
+            <a href="https://trynexusweb.vercel.app" style="display: inline-block; background: #a855f7; color: #ffffff; font-weight: 600; font-size: 15px; padding: 12px 32px; border-radius: 6px; text-decoration: none; text-align: center;">Visit Nexus Home</a>
+            <div style="margin-top: 40px; border-top: 1px solid #eaeef2; padding-top: 25px; font-size: 13px; color: #718096;">
+                <p style="margin: 0;">This is an automated confirmation email.</p>
+                <p style="margin: 5px 0 0 0;">© 2026 Nexus · <a href="https://trynexusweb.vercel.app" style="color: #a855f7; text-decoration: none;">Website</a></p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
 
 def send_welcome_email(user_id: str, to_email: str, user_name: str = "User"):
     send_email(user_id, to_email, "Welcome to Nexus – Let's get started", _welcome_html(user_name))
 
 def send_key_alert_email(user_id: str, to_email: str, key_name: str, action: str = "created"):
     send_email(user_id, to_email, f"Security Alert: API Key {action.capitalize()}", _key_alert_html(key_name, action))
+
+def send_account_deletion_email(user_id: str, to_email: str):
+    send_email(user_id, to_email, "Your Nexus account has been deleted", _account_deletion_html())

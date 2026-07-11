@@ -400,30 +400,84 @@
             <section id="tab-settings" class="tab-content hidden fade-in-up">
                 <div class="mb-8">
                     <h1 class="text-2xl font-bold text-white tracking-tight">Settings</h1>
-                    <p class="text-sm text-zinc-400 mt-1">Manage external provider keys and account preferences.</p>
+                    <p class="text-sm text-zinc-400 mt-1">Manage your profile, security, and API integrations.</p>
                 </div>
-                <div class="split-layout">
-                    <div class="split-info">
-                        <h3 class="text-base font-semibold text-white mb-1">Groq Configuration</h3>
-                        <p class="text-sm text-zinc-400 leading-relaxed">
-                            Connect your Groq API key to power the AI models. This key is encrypted securely in our vault and never exposed to the frontend.
-                        </p>
-                    </div>
-                    <div class="split-content glass-panel p-6 rounded-2xl">
-                        <label for="groqApiInput" class="form-label">Groq API Key</label>
-                        <div class="relative max-w-lg mb-3">
-                            <input type="password" id="groqApiInput" placeholder="gsk_..." class="form-input pr-10 font-mono text-sm" />
-                            <button id="toggleGroqVisibility" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
-                                <i class="ph-bold ph-eye"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-3 flex-wrap">
-                            <button id="saveGroqBtn" class="btn-primary py-2 px-4 text-sm hidden">Save Changes</button>
-                            <button id="cancelGroqBtn" class="btn-secondary py-2 px-4 text-sm hidden">Cancel</button>
-                            <button id="deleteGroqBtn" class="btn-secondary hidden py-2 px-4 text-sm !border-red-500/30 !text-red-400 hover:!bg-red-500/10">Delete Key</button>
-                            <span id="groqKeyStatus" class="text-xs font-medium ml-2 text-zinc-500">No key saved</span>
+
+                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
+                    <h3 class="text-lg font-bold text-white mb-4">Profile Information</h3>
+                    <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                        <img id="settingsAvatar" src="" alt="avatar" class="w-20 h-20 rounded-full border-2 border-primary/30 object-cover" />
+                        <div class="flex-1 space-y-1">
+                            <div class="text-sm text-zinc-400">Full Name</div>
+                            <div id="settingsName" class="text-lg font-semibold text-white">User</div>
+                            <div class="text-sm text-zinc-400 mt-2">Email Address</div>
+                            <div id="settingsEmail" class="text-md text-white">user@example.com</div>
                         </div>
                     </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
+                    <h3 class="text-lg font-bold text-white mb-4">Security & Authentication</h3>
+                    <div id="passwordChangeSection">
+                        <p class="text-sm text-zinc-400 mb-3">Change your password</p>
+                        <div class="space-y-3 max-w-md">
+                            <div>
+                                <label for="currentPassword" class="form-label">Current Password</label>
+                                <input type="password" id="currentPassword" class="form-input" placeholder="••••••••" />
+                            </div>
+                            <div>
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" id="newPassword" class="form-input" placeholder="Min 6 characters" />
+                            </div>
+                            <div>
+                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••" />
+                            </div>
+                            <button id="updatePasswordBtn" class="btn-primary py-2 px-4 text-sm">Update Password</button>
+                        </div>
+                    </div>
+                    <div id="socialAuthInfo" class="hidden">
+                        <p class="text-sm text-zinc-400">You are signed in with <span id="socialProvider" class="text-primary font-semibold">Google</span>. You don't have a password set. Manage your account through your provider.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
+                    <h3 class="text-lg font-bold text-white mb-4">Groq Configuration</h3>
+                    <div class="split-layout">
+                        <div class="split-info">
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Connect your Groq API key to power the AI models. This key is encrypted securely in our vault and never exposed to the frontend.
+                            </p>
+                        </div>
+                        <div class="split-content">
+                            <label for="groqApiInput" class="form-label">Groq API Key</label>
+                            <div class="relative max-w-lg mb-3">
+                                <input type="password" id="groqApiInput" placeholder="gsk_..." class="form-input pr-10 font-mono text-sm" />
+                                <button id="toggleGroqVisibility" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
+                                    <i class="ph-bold ph-eye"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <button id="saveGroqBtn" class="btn-primary py-2 px-4 text-sm hidden">Save Changes</button>
+                                <button id="cancelGroqBtn" class="btn-secondary py-2 px-4 text-sm hidden">Cancel</button>
+                                <button id="deleteGroqBtn" class="btn-secondary hidden py-2 px-4 text-sm !border-red-500/30 !text-red-400 hover:!bg-red-500/10">Delete Key</button>
+                                <span id="groqKeyStatus" class="text-xs font-medium ml-2 text-zinc-500">No key saved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border-2 border-red-500/30 bg-red-500/5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="ph-bold ph-warning text-red-400 text-xl"></i>
+                        <h3 class="text-lg font-bold text-white">Danger Zone</h3>
+                    </div>
+                    <p class="text-sm text-zinc-400 mb-4">
+                        Once you delete your account, there is no going back. All your data, API keys, domains, and usage history will be permanently removed.
+                    </p>
+                    <button id="deleteAccountBtn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all flex items-center gap-2">
+                        <i class="ph-bold ph-trash"></i> Delete Account
+                    </button>
                 </div>
             </section>
 
@@ -435,6 +489,23 @@
                     <div class="flex gap-3">
                         <button id="captchaModalConfirm" class="btn-primary flex-1 hidden">Confirm</button>
                         <button id="captchaModalCancel" class="btn-secondary flex-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deleteAccountModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[9999] hidden">
+                <div class="glass-panel p-8 rounded-2xl border border-red-500/30 bg-black/90 max-w-md w-full mx-4" style="pointer-events: auto;">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="ph-bold ph-warning text-red-400 text-2xl"></i>
+                        <h3 class="text-xl font-bold text-white">Delete Account</h3>
+                    </div>
+                    <p class="text-sm text-zinc-300 mb-6">
+                        This action is <strong>permanent</strong> and cannot be undone. All your data, API keys, domains, and usage logs will be erased.
+                    </p>
+                    <div id="deleteTurnstileContainer" class="flex justify-center mb-6"></div>
+                    <div class="flex gap-3">
+                        <button id="deleteConfirmBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all flex-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Confirm Delete</button>
+                        <button id="deleteCancelBtn" class="btn-secondary flex-1">Cancel</button>
                     </div>
                 </div>
             </div>

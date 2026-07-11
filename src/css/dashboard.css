@@ -317,10 +317,12 @@
 }
 .form-label {
   display: block;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: #a1a1aa;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .scrollbar-custom::-webkit-scrollbar {
@@ -438,6 +440,345 @@
     flex: 1;
   }
 }
+
+/* ===== SETTINGS TAB - PROFESSIONAL SAAS STYLING ===== */
+#tab-settings .glass-panel {
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: visible;
+}
+#tab-settings .glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(24, 24, 27, 0.5);
+}
+#tab-settings .glass-panel h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fafafa;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#tab-settings .glass-panel h3 i {
+  font-size: 1.25rem;
+  color: #a855f7;
+}
+
+/* Profile Section */
+#tab-settings .glass-panel:first-of-type {
+  background: rgba(24, 24, 27, 0.3);
+  border: 1px solid rgba(168, 85, 247, 0.06);
+}
+#tab-settings .glass-panel:first-of-type:hover {
+  border-color: rgba(168, 85, 247, 0.15);
+}
+#settingsAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(168, 85, 247, 0.2);
+  flex-shrink: 0;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+#settingsAvatar:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: scale(1.02);
+}
+
+#settingsName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fafafa;
+  letter-spacing: -0.01em;
+}
+#settingsEmail {
+  font-size: 0.95rem;
+  color: #d4d4d8;
+  font-weight: 400;
+}
+#tab-settings .glass-panel:first-of-type .text-sm.text-zinc-400 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #71717a;
+}
+
+/* Security Section */
+#passwordChangeSection .form-input {
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+#passwordChangeSection .form-input:focus {
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+}
+#passwordChangeSection .btn-primary {
+  margin-top: 0.25rem;
+  padding: 0.6rem 1.8rem;
+  font-size: 0.8rem;
+}
+#passwordChangeSection .btn-primary i {
+  font-size: 1rem;
+}
+
+#socialAuthInfo {
+  padding: 0.5rem 0;
+}
+#socialAuthInfo .text-primary {
+  font-weight: 600;
+  color: #a855f7;
+}
+#socialAuthInfo .text-zinc-400 {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Groq Configuration - Improved Split Layout */
+#tab-settings .glass-panel .split-layout {
+  gap: 2rem;
+}
+#tab-settings .glass-panel .split-info p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #a1a1aa;
+}
+#tab-settings .glass-panel .split-content {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+#tab-settings .glass-panel .split-content .relative {
+  max-width: 100%;
+}
+#tab-settings .glass-panel .split-content .form-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #71717a;
+}
+#groqApiInput {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.06);
+  padding-right: 2.8rem;
+}
+#groqApiInput:focus {
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+}
+#toggleGroqVisibility {
+  right: 0.8rem;
+}
+#toggleGroqVisibility i {
+  font-size: 1.1rem;
+}
+#groqKeyStatus {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Danger Zone - Enhanced */
+#tab-settings .glass-panel.bg-red-500\/5 {
+  background: rgba(239, 68, 68, 0.04);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+#tab-settings .glass-panel.bg-red-500\/5:hover {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+#tab-settings .glass-panel.bg-red-500\/5 h3 {
+  color: #fafafa;
+}
+#tab-settings .glass-panel.bg-red-500\/5 h3 i {
+  color: #f87171;
+}
+#tab-settings .glass-panel.bg-red-500\/5 .text-zinc-400 {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #a1a1aa;
+}
+#deleteAccountBtn {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.8rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+#deleteAccountBtn i {
+  font-size: 1.1rem;
+}
+#deleteAccountBtn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+#deleteAccountBtn:active {
+  transform: scale(0.96);
+}
+
+/* ===== DELETE ACCOUNT MODAL - Professional ===== */
+#deleteAccountModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+#deleteAccountModal.show {
+  display: flex !important;
+}
+
+#deleteAccountModal .glass-panel {
+  background: rgba(24, 24, 27, 0.98);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6);
+  animation: modalSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: auto !important;
+}
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+#deleteAccountModal .glass-panel .flex.items-center.gap-3 {
+  margin-bottom: 1rem;
+}
+#deleteAccountModal .glass-panel .text-red-400 {
+  color: #f87171;
+}
+#deleteAccountModal .glass-panel h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fafafa;
+}
+#deleteAccountModal .glass-panel .text-sm.text-zinc-300 {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #d4d4d8;
+  margin-bottom: 1.5rem;
+}
+
+#deleteAccountModal .form-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a1a1aa;
+}
+#deleteAccountModal .form-input {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+}
+#deleteAccountModal .form-input:focus {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
+}
+#deleteAccountModal .form-input::placeholder {
+  color: #52525b;
+}
+
+#deleteTurnstileContainer {
+  min-height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem 0 0.75rem 0;
+}
+
+#deleteConfirmBtn {
+  background: #ef4444;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9rem;
+}
+#deleteConfirmBtn:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+#deleteConfirmBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+#deleteConfirmBtn i {
+  font-size: 1.1rem;
+}
+
+#deleteCancelBtn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
+  padding: 0.65rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9rem;
+}
+#deleteCancelBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e4e4e7;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+#deleteReauthSocialBtn {
+  margin-top: 0.5rem;
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+#deleteReauthSocialBtn:hover {
+  background: rgba(168, 85, 247, 0.25);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+/* ===== RESPONSIVE TWEAKS ===== */
 @media (max-width: 640px) {
   .stat-card {
     padding: 1.25rem;
@@ -453,104 +794,123 @@
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
   }
+  #settingsAvatar {
+    width: 64px;
+    height: 64px;
+  }
+  #settingsName {
+    font-size: 1.1rem;
+  }
+  #settingsEmail {
+    font-size: 0.9rem;
+  }
+  #tab-settings .glass-panel .split-content {
+    padding: 1rem;
+  }
+  #tab-settings .glass-panel h3 {
+    font-size: 1rem;
+  }
+  #deleteAccountModal .glass-panel {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  #deleteAccountModal .flex.gap-3 {
+    flex-direction: column;
+  }
+  #deleteAccountModal .flex.gap-3 button {
+    width: 100%;
+  }
+  #deleteAccountModal .glass-panel h3 {
+    font-size: 1.1rem;
+  }
+  #passwordChangeSection .form-input {
+    max-width: 100%;
+  }
 }
+@media (max-width: 480px) {
+  #tab-settings .glass-panel .split-layout {
+    gap: 1rem;
+  }
+  #tab-settings .glass-panel {
+    padding: 1.25rem;
+  }
+  #deleteAccountModal .glass-panel {
+    padding: 1.25rem;
+  }
+}
+
 /* ===== SKELETON LOADER ===== */
 .skeleton {
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: 6px;
-    display: inline-block;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
+  display: inline-block;
 }
-
 .skeleton-text {
-    height: 16px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
+  height: 16px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
-
 .skeleton-badge {
-    height: 24px;
-    border-radius: 30px;
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
+  height: 24px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
-
 .skeleton-icon {
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: 10px;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 10px;
 }
-
 .skeleton-stat {
-    display: inline-block;
-    width: 60px;
-    height: 32px;
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: 6px;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
 }
-
 .skeleton-stat-sm {
-    display: inline-block;
-    width: 30px;
-    height: 16px;
-    background: linear-gradient(90deg, 
-        rgba(30, 30, 35, 0.6) 25%, 
-        rgba(50, 50, 58, 0.8) 50%, 
-        rgba(30, 30, 35, 0.6) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-    border-radius: 4px;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+  background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 4px;
 }
-
 .skeleton-card {
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
-
 @keyframes shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@media (max-width: 640px) {
+  .skeleton-stat {
+    width: 40px;
+    height: 28px;
+  }
+  .skeleton-text {
+    height: 14px;
+  }
 }
 
-/* Mobile responsive skeleton */
-@media (max-width: 640px) {
-    .skeleton-stat {
-        width: 40px;
-        height: 28px;
-    }
-    .skeleton-text {
-        height: 14px;
-    }
+#deleteAccountModal .glass-panel {
+  pointer-events: auto !important;
+}
+#deleteAccountModal button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
