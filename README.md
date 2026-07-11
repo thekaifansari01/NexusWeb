@@ -1,6 +1,6 @@
 # Nexus – Secure AI Assistant Integration
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/thekaifansari01/NexusWeb/releases)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/thekaifansari01/NexusWeb/releases)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![Groq](https://img.shields.io/badge/Groq-00B4D8?style=flat&logo=groq&logoColor=white)](https://groq.com)
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
@@ -23,7 +23,7 @@
 
 | Feature | Description |
 |---------|-------------|
-| 🔑 **Vault‑Grade Security** | Groq API keys are stored encrypted (with planned hardening) and kept separate from the public‑facing Nexus Keys. |
+| 🔑 **Vault‑Grade Security** | Groq API keys are stored encrypted and kept separate from the public‑facing Nexus Keys. |
 | 🌐 **Domain Whitelisting** | Each Nexus Key is restricted to a list of authorized domains (up to 10) – preventing misuse even if the key leaks. |
 | 🧩 **Zero‑Friction Integration** | Drop a single `<script>` tag into your HTML. The widget automatically scrapes your page content, adapts to your theme, and provides instant context‑aware answers. |
 | 👤 **User Management** | Google OAuth (Firebase) with session cookies (HttpOnly, Secure, SameSite=Strict) – no passwords to manage. |
@@ -31,10 +31,16 @@
 | ⚡ **Real‑time Stats** | Track active/revoked keys, domain usage, and request logs – all updated live. |
 | 🔄 **Full Lifecycle Management** | Create, copy, revoke, activate, or permanently delete keys; toggle domains on/off. |
 | 🛡️ **CORS & Origin Enforcement** | Backend verifies `Origin`/`Referer` headers against your whitelist before processing any AI request. |
-| 🚦 **Rate Limiting** | Prevents abuse when generating new Nexus Keys (5 per day per user). |
+| 🚦 **Rate Limiting** | Prevents abuse when generating new Nexus Keys (5 per day per user) and when deleting accounts (2 per day). |
 | 🤖 **Multi‑Model Support** | Choose from `llama3-8b-8192` (default), `llama3-70b-8192`, or `mixtral-8x7b-32768` directly from the widget configuration. |
 | 🖼️ **File Attachments** | Users can attach images; the widget can forward them to the AI (if the model supports vision). |
 | 🌙 **Theme Auto‑Detection** | The widget automatically matches your site’s dark/light theme (with manual override). |
+| 👤 **Profile Management** | View and manage your account information directly from the Settings tab. |
+| 🔐 **Password Change** | Email/Password users can update their password securely with re‑authentication. |
+| 🗑️ **Account Deletion** | Permanently delete your account and all associated data (keys, domains, usage logs, sessions) with CAPTCHA verification and rate limiting. |
+| 🖥️ **Smart Session Management** | View active sessions with parsed device info (OS, Browser, Device Type), last active time, IP, and location. |
+| 🔓 **Log Out All Others** | One‑click button to revoke all sessions except your current device. |
+| 🔄 **Live Refresh** | Refresh session list without reloading the page. |
 
 ---
 
@@ -60,7 +66,12 @@
 │  │  │ (session    │  │ (AI proxy,  │  │ (list/revoke      │  │   │
 │  │  │ creation)   │  │ key mgmt)   │  │  sessions)        │  │   │
 │  │  └─────────────┘  └──────┬──────┘  └───────────────────┘  │   │
-│  └───────────────────────────┼──────────────────────────────────┘   │
+│  │  ┌─────────────┐  ┌──────┴──────┐  ┌───────────────────┐  │   │
+│  │  │ user.py     │  │ groq.py     │  │ userService.py    │  │   │
+│  │  │ (account    │  │ (key vault) │  │ (data deletion)   │  │   │
+│  │  │ deletion)   │  └─────────────┘  └───────────────────┘  │   │
+│  │  └─────────────┘                                          │   │
+│  └─────────────────────────────────────────────────────────────┘   │
 └───────────────────────────────┼─────────────────────────────────────┘
                                 │
                                 ▼
@@ -101,7 +112,7 @@
 - **Phosphor Icons** – clean, scalable icons.
 - **Firebase v9** – client‑side auth (`auth`, `firestore`).
 - **Google Identity Services** – One‑Tap sign‑in.
-- **Cloudflare Turnstile** – CAPTCHA for key generation.
+- **Cloudflare Turnstile** – CAPTCHA for key generation and account deletion.
 
 ### Backend
 - **Python 3.9+** – using `http.server` for serverless functions on Vercel.
@@ -109,12 +120,15 @@
 - **PyJWT** – session token creation/verification.
 - **Requests** – Groq API and Turnstile verification.
 - **UUID** – session ID generation.
+- **Cryptography** – Fernet symmetric encryption for Groq API keys.
+- **User‑Agent Parsing** – Custom parser for device/browser/OS identification in session logs.
 
 ### Infrastructure
 - **Vercel** – hosting and serverless functions.
 - **Firebase** – authentication and NoSQL database.
 - **Groq** – AI inference provider.
 - **Cloudflare Turnstile** – bot mitigation.
+- **Resend** – transactional email service for notifications.
 
 ---
 
@@ -126,6 +140,7 @@
 - Firebase project with **Authentication (Google)** and **Firestore** enabled.
 - Groq API key (obtain from [Groq Console](https://console.groq.com)).
 - Vercel account (for deployment) – optional for local testing.
+- Resend API key (for email notifications – optional).
 
 ---
 
@@ -181,29 +196,40 @@ Set up basic security rules to protect user data:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can only read/write their own API keys
-    match /apiKeys/{document} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-    }
-    // Authorized domains – same user ownership
-    match /authorizedDomains/{document} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-    }
-    // Groq keys – user‑scoped
-    match /userGroqKeys/{userId} {
+    match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    // Usage logs – user can read own logs
-    match /usageLogs/{document} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    match /apiKeys/{keyId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
-    // Daily usage aggregates – similar
-    match /userDailyUsage/{document} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    match /authorizedDomains/{domainId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
-    // Active sessions – user can read/update own sessions
-    match /active_sessions/{document} {
-      allow read, update: if request.auth != null && request.auth.uid == resource.data.userId;
+    match /userGroqKeys/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+    match /usageLogs/{logId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+    match /userDailyUsage/{dailyId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+    match /active_sessions/{sessionId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+    }
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
@@ -228,6 +254,13 @@ COOKIE_SECRET=your-super-secret-cookie-key
 
 # Cloudflare Turnstile
 TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+
+# Encryption key for Groq API keys (Fernet symmetric key)
+ENCRYPTION_KEY=your-fernet-encryption-key
+
+# Email service (Resend)
+RESEND_API_KEY=your-resend-api-key
+EMAIL_FROM=onboarding@resend.dev
 ```
 
 ---
@@ -299,8 +332,8 @@ All endpoints are relative to your deployed domain (e.g., `https://your-domain.v
 | `/api/auth/session` | `POST` | Creates a session from a Firebase ID token. Returns a secure, HttpOnly cookie. |
 | `/api/auth/logout` | `POST` | Revokes the current session and clears the cookie. |
 | `/api/auth/me` | `GET` | Returns the current user’s UID and session ID (requires valid cookie). |
-| `/api/session` | `GET` | Lists all active sessions for the authenticated user. |
-| `/api/session` | `DELETE` | Revokes a specific session (body: `{ "sessionId": "..." }`). |
+| `/api/session` | `GET` | Lists all active sessions with parsed device info (OS, Browser, Type), last active time, IP, and location. |
+| `/api/session` | `DELETE` | Revokes a specific session (body: `{ "sessionId": "..." }`) or all other sessions (body: `{ "revokeAll": true }`). |
 
 ### AI Proxy & Key Management
 
@@ -325,6 +358,28 @@ All endpoints are relative to your deployed domain (e.g., `https://your-domain.v
 
 Returns the raw Groq API response (success 200) or an error object.
 
+### Account Management
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/user` | `DELETE` | Permanently deletes the authenticated user's account, including all data (API keys, domains, usage logs, sessions, Firebase Auth user) after CAPTCHA verification. Rate limited to 2 deletions per day. |
+
+#### Account Deletion Request Example
+
+```json
+{
+  "captchaToken": "turnstile_token_here"
+}
+```
+
+### Groq Key Vault
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/groq` | `GET` | Checks if the authenticated user has a saved Groq API key. |
+| `/api/groq` | `POST` | Saves an encrypted Groq API key for the authenticated user. |
+| `/api/groq` | `DELETE` | Deletes the user's stored Groq API key. |
+
 ---
 
 ## 🔒 Security Model
@@ -332,7 +387,7 @@ Returns the raw Groq API response (success 200) or an error object.
 Nexus employs multiple layers of security to protect your data and infrastructure:
 
 1. **Separation of Keys**  
-   - **Groq API Key** – stored in Firestore (encryption planned) and never exposed to the client.  
+   - **Groq API Key** – stored encrypted in Firestore and never exposed to the client.  
    - **Nexus Key** – used by the widget; can be revoked independently without affecting your Groq key.
 
 2. **Domain Whitelisting**  
@@ -347,17 +402,24 @@ Nexus employs multiple layers of security to protect your data and infrastructur
    - Session tokens are signed with a server‑side secret (`COOKIE_SECRET`) – no session data is stored in the database.
 
 5. **Rate Limiting**  
-   - Users can generate at most 5 Nexus Keys per day (prevents abuse).  
-   - (Planned) Rate limiting on the `/api/chat` endpoint.
+   - Users can generate at most 5 Nexus Keys per day.  
+   - Users can request account deletion at most 2 times per day.
 
 6. **CAPTCHA Protection**  
-   - Cloudflare Turnstile ensures that key creation requests come from real users, not bots.
+   - Cloudflare Turnstile ensures that key creation and account deletion requests come from real users, not bots.
 
 7. **Firestore Security Rules**  
    - Ensure that users can only access documents they own.
 
 8. **CORS**  
    - Proper CORS headers are set for all API responses.
+
+9. **Encryption**  
+   - Groq API keys are encrypted using Fernet (symmetric encryption) before storage.
+
+10. **Re‑authentication for Critical Actions**  
+    - Password change requires current password verification.  
+    - Account deletion requires CAPTCHA verification.
 
 ---
 
@@ -372,6 +434,7 @@ NexusWeb/
 ├── documentation.html             # Full documentation
 ├── pricing.html                   # Pricing (free) page
 ├── privacyPolicy.html             # Privacy policy
+├── termsConditions.html           # Terms of Service
 ├── 404.html                       # Custom 404
 ├── assets/                        # Static assets (favicon, images)
 ├── src/
@@ -389,14 +452,26 @@ NexusWeb/
 │   └── config/
 │       └── firebase.js            # Firebase client configuration
 ├── api/                           # Python serverless functions
-│   ├── auth.py                    # Session creation/logout/me
-│   ├── chat.py                    # AI proxy + key creation
-│   ├── chatService.py             # Core AI logic, domain check, logging
-│   ├── config.py                  # Firebase init, JWT helper, cookie utils
-│   ├── keyService.py              # Key creation, CAPTCHA, rate limiting
-│   ├── middleware.py              # Cookie parsing & verification
-│   ├── session.py                 # GET/DELETE /api/session
-│   └── sessionService.py          # Session listing/revocation logic
+│   ├── auth/
+│   │   └── index.py               # Session creation/logout/me
+│   ├── chat/
+│   │   └── index.py               # AI proxy + key creation
+│   ├── groq/
+│   │   └── index.py               # Groq key vault (GET/POST/DELETE)
+│   ├── session/
+│   │   └── index.py               # GET/DELETE /api/session
+│   ├── user/
+│   │   └── index.py               # DELETE /api/user (account deletion)
+│   ├── core/
+│   │   ├── config.py              # Firebase init, JWT helper, cookie utils
+│   │   ├── crypto_utils.py        # Encryption/decryption utilities
+│   │   └── middleware.py          # Cookie parsing & verification
+│   └── services/
+│       ├── chatService.py         # Core AI logic, domain check, logging
+│       ├── emailService.py        # Email notifications (Resend)
+│       ├── keyService.py          # Key creation, CAPTCHA, rate limiting
+│       ├── sessionService.py      # Session listing/revocation/parsing
+│       └── userService.py         # User data deletion logic
 └── README.md                      # This file
 ```
 
@@ -435,6 +510,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 - [Tailwind CSS](https://tailwindcss.com) – for making styling a joy.
 - [Phosphor Icons](https://phosphoricons.com) – for the beautiful icon set.
 - [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) – for bot protection.
+- [Resend](https://resend.com) – for transactional email delivery.
 
 ---
 

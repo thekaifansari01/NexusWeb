@@ -1,4 +1,3 @@
-// activity.js
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { showToast } from "./modules/ui.js";
 
@@ -9,9 +8,12 @@ const sidebarSignOut = document.getElementById('sidebarSignOut');
 const sessionsContainer = document.getElementById('sessionsContainer');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const sidebar = document.querySelector('aside');
+const refreshBtn = document.getElementById('refreshBtn');
+const logoutAllBtn = document.getElementById('logoutAllBtn');
 
 let currentUser = null;
 let currentSessionId = null;
+let isRefreshing = false;
 
 if (mobileMenuBtn && sidebar) {
     mobileMenuBtn.addEventListener('click', () => {
@@ -62,6 +64,35 @@ function hideSkeleton(containerId) {
     skeletons.forEach(el => el.remove());
 }
 
+function getRelativeTime(timestamp) {
+    if (!timestamp) return 'Unknown';
+    const now = Date.now();
+    const then = new Date(timestamp).getTime();
+    const diffMs = now - then;
+    if (diffMs < 0) return 'Future';
+    const diffSec = Math.floor(diffMs / 1000);
+    if (diffSec < 60) return 'Active now';
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin} min${diffMin > 1 ? 's' : ''} ago`;
+    const diffHour = Math.floor(diffMin / 60);
+    if (diffHour < 24) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+    const diffDay = Math.floor(diffHour / 24);
+    if (diffDay < 7) return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+    return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function getDeviceIcon(type) {
+    if (type === 'mobile') return '<i class="ph-bold ph-device-mobile"></i>';
+    if (type === 'tablet') return '<i class="ph-bold ph-device-tablet"></i>';
+    return '<i class="ph-bold ph-desktop"></i>';
+}
+
+function getDeviceClass(type) {
+    if (type === 'mobile') return 'mobile';
+    if (type === 'tablet') return 'tablet';
+    return 'desktop';
+}
+
 observeAuthState((user) => {
     if (!user) {
         window.location.href = '/login';
@@ -80,8 +111,52 @@ if (sidebarSignOut) {
     });
 }
 
+if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+        if (!isRefreshing) {
+            loadSessions();
+        }
+    });
+}
+
+if (logoutAllBtn) {
+    logoutAllBtn.addEventListener('click', async () => {
+        if (!currentUser) return;
+        const confirmMsg = 'This will sign you out from all other devices. Continue?';
+        if (!confirm(confirmMsg)) return;
+        logoutAllBtn.disabled = true;
+        logoutAllBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Revoking...';
+        try {
+            const response = await fetch('/api/session', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ revokeAll: true })
+            });
+            if (!response.ok) throw new Error('Failed to revoke sessions');
+            if (typeof showToast === 'function') {
+                showToast('All other sessions revoked.', 3000, 'success');
+            }
+            loadSessions();
+        } catch (error) {
+            console.error('Logout all error:', error);
+            if (typeof showToast === 'function') {
+                showToast('Failed to revoke sessions.', 3500, 'error');
+            }
+        } finally {
+            logoutAllBtn.disabled = false;
+            logoutAllBtn.innerHTML = '<i class="ph-bold ph-sign-out text-base"></i> Sign Out All Others';
+        }
+    });
+}
+
 async function loadSessions() {
     if (!currentUser) return;
+    isRefreshing = true;
+    if (refreshBtn) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i>';
+    }
     showSkeleton('sessionsContainer');
     try {
         const response = await fetch('/api/session', { credentials: 'include' });
@@ -95,6 +170,12 @@ async function loadSessions() {
         console.error("Session load error:", error);
         if (sessionsContainer) {
             sessionsContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load session history.</div>';
+        }
+    } finally {
+        isRefreshing = false;
+        if (refreshBtn) {
+            refreshBtn.disabled = false;
+            refreshBtn.innerHTML = '<i class="ph-bold ph-arrows-clockwise text-base"></i> Refresh';
         }
     }
 }
@@ -111,22 +192,27 @@ function renderSessions(sessions) {
         card.className = 'flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5 gap-4 transition-colors hover:bg-black/60 fade-in-up';
         card.style.animationDelay = `${index * 0.04}s`;
         const isCurrent = session.sessionId === currentSessionId;
+        const deviceType = session.deviceType || 'desktop';
+        const deviceOS = session.deviceOS || 'Unknown';
+        const deviceBrowser = session.deviceBrowser || 'Unknown';
+        const displayName = `${deviceBrowser} on ${deviceOS}`;
+        const lastActive = session.lastActive || session.createdAt;
+        const relativeTime = getRelativeTime(lastActive);
+        const isActiveNow = relativeTime === 'Active now';
+
         const leftSection = document.createElement('div');
         leftSection.className = 'flex items-start gap-4';
+
         const iconBox = document.createElement('div');
-        iconBox.className = 'w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400 mt-0.5 border border-white/5';
-        const deviceInfo = session.deviceInfo || 'Unknown Device';
-        if (deviceInfo.toLowerCase().includes('windows') || deviceInfo.toLowerCase().includes('mac')) {
-            iconBox.innerHTML = '<i class="ph-bold ph-desktop text-xl"></i>';
-        } else {
-            iconBox.innerHTML = '<i class="ph-bold ph-device-mobile text-xl"></i>';
-        }
+        iconBox.className = `device-icon ${getDeviceClass(deviceType)}`;
+        iconBox.innerHTML = getDeviceIcon(deviceType);
+
         const infoBox = document.createElement('div');
         const titleRow = document.createElement('div');
         titleRow.className = 'flex items-center gap-2 flex-wrap mb-1';
         const nameSpan = document.createElement('span');
         nameSpan.className = 'text-sm font-semibold text-white';
-        nameSpan.textContent = deviceInfo;
+        nameSpan.textContent = displayName;
         titleRow.appendChild(nameSpan);
         if (isCurrent) {
             const badge = document.createElement('span');
@@ -135,20 +221,21 @@ function renderSessions(sessions) {
             titleRow.appendChild(badge);
         }
         infoBox.appendChild(titleRow);
-        const loginDate = session.createdAt
-            ? new Date(session.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            : 'Recently';
+
         const metaRow = document.createElement('div');
         metaRow.className = 'flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-zinc-400';
         metaRow.innerHTML = `
             <span class="flex items-center gap-1"><i class="ph-fill ph-map-pin text-zinc-500"></i> ${session.location || 'Unknown Location'}</span>
-            <span class="flex items-center gap-1"><i class="ph-fill ph-clock text-zinc-500"></i> ${loginDate}</span>
+            <span class="flex items-center gap-1"><i class="ph-fill ph-clock text-zinc-500"></i> ${session.createdAt ? new Date(session.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently'}</span>
+            <span class="relative-time ${isActiveNow ? 'active' : ''}">${isActiveNow ? '🟢 Active now' : relativeTime}</span>
             <span class="font-mono text-[11px] bg-zinc-900 px-1.5 py-0.5 rounded border border-white/10 text-zinc-300">${session.ipAddress || 'Unknown IP'}</span>
         `;
         infoBox.appendChild(metaRow);
+
         leftSection.appendChild(iconBox);
         leftSection.appendChild(infoBox);
         card.appendChild(leftSection);
+
         const rightSection = document.createElement('div');
         rightSection.className = 'flex items-center justify-end flex-shrink-0';
         const actionBtn = document.createElement('button');
@@ -161,31 +248,28 @@ function renderSessions(sessions) {
         actionBtn.addEventListener('click', async () => {
             const confirmMsg = isCurrent
                 ? 'Are you sure you want to log out of this session?'
-                : `Revoke session on ${deviceInfo}? This device will be forcefully logged out.`;
-            if (confirm(confirmMsg)) {
-                try {
-                    const response = await fetch('/api/session', {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify({ sessionId: session.sessionId })
-                    });
-                    if (!response.ok) throw new Error("Failed to revoke session");
-                    if (typeof showToast === 'function') {
-                        showToast(isCurrent ? 'Logging out...' : 'Session revoked successfully.', 3000, 'success');
-                    }
-                    if (isCurrent) {
-                        await signOutUser();
-                    } else {
-                        loadSessions();
-                    }
-                } catch (error) {
-                    console.error("Revoke error:", error);
-                    if (typeof showToast === 'function') {
-                        showToast('Failed to revoke session.', 3500, 'error');
-                    } else {
-                        alert('Failed to revoke session.');
-                    }
+                : `Revoke session on ${displayName}? This device will be forcefully logged out.`;
+            if (!confirm(confirmMsg)) return;
+            try {
+                const response = await fetch('/api/session', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ sessionId: session.sessionId })
+                });
+                if (!response.ok) throw new Error("Failed to revoke session");
+                if (typeof showToast === 'function') {
+                    showToast(isCurrent ? 'Logging out...' : 'Session revoked successfully.', 3000, 'success');
+                }
+                if (isCurrent) {
+                    await signOutUser();
+                } else {
+                    loadSessions();
+                }
+            } catch (error) {
+                console.error("Revoke error:", error);
+                if (typeof showToast === 'function') {
+                    showToast('Failed to revoke session.', 3500, 'error');
                 }
             }
         });
