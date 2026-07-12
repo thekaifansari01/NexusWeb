@@ -1,4 +1,3 @@
-// ==================== login.js ====================
 import {
     signInWithEmail, signUpWithEmail, sendPasswordReset,
     signInWithGoogle, signInWithGithub,
@@ -22,28 +21,207 @@ const forgotLink = document.getElementById('forgotLink');
 const errorMsg = document.getElementById('errorMsg');
 const googleBtn = document.getElementById('googleBtn');
 const githubBtn = document.getElementById('githubBtn');
+const pageLoader = document.getElementById('pageLoader');
+const typewriterText = document.getElementById('typewriter-text');
+const signInEmailError = document.getElementById('signInEmailError');
+const signInPasswordError = document.getElementById('signInPasswordError');
+const signUpNameError = document.getElementById('signUpNameError');
+const signUpEmailError = document.getElementById('signUpEmailError');
+const signUpPasswordError = document.getElementById('signUpPasswordError');
+const signUpConfirmError = document.getElementById('signUpConfirmError');
+const strengthSeg1 = document.getElementById('strSeg1');
+const strengthSeg2 = document.getElementById('strSeg2');
+const strengthSeg3 = document.getElementById('strSeg3');
+const strengthText = document.getElementById('strengthText');
+const passwordStrength = document.getElementById('passwordStrength');
 
 let currentTab = 'signin';
 let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
+let typewriterInterval = null;
+let typewriterIndex = 0;
+let isTypewriterDone = false;
 
-// ----- 1. Page Load Redirect Check -----
-// Jab user Google/GitHub se login karke wapas aaye, toh yahan check hoga
+function showPageLoader() {
+    if (pageLoader) pageLoader.classList.remove('hidden');
+}
+
+function hidePageLoader() {
+    if (pageLoader) pageLoader.classList.add('hidden');
+}
+
+function startTypewriter() {
+    const text = 'AI that understands your content.';
+    if (!typewriterText) return;
+    typewriterText.textContent = '';
+    typewriterIndex = 0;
+    isTypewriterDone = false;
+    if (typewriterInterval) clearInterval(typewriterInterval);
+    typewriterInterval = setInterval(() => {
+        if (typewriterIndex < text.length) {
+            typewriterText.textContent += text.charAt(typewriterIndex);
+            typewriterIndex++;
+        } else {
+            isTypewriterDone = true;
+            clearInterval(typewriterInterval);
+            typewriterInterval = null;
+        }
+    }, 35);
+}
+
+function autoFocusField() {
+    setTimeout(() => {
+        if (currentTab === 'signin') {
+            if (signInEmail) signInEmail.focus();
+        } else {
+            if (signUpName) signUpName.focus();
+        }
+    }, 200);
+}
+
+function showFieldError(errorEl, message) {
+    if (!errorEl) return;
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
+    errorEl.classList.add('visible');
+    const input = errorEl.closest('.form-group')?.querySelector('.form-input');
+    if (input) input.classList.add('error');
+}
+
+function hideFieldError(errorEl) {
+    if (!errorEl) return;
+    errorEl.textContent = '';
+    errorEl.classList.add('hidden');
+    errorEl.classList.remove('visible');
+    const input = errorEl.closest('.form-group')?.querySelector('.form-input');
+    if (input) input.classList.remove('error');
+}
+
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateField(input) {
+    const id = input.id;
+    let errorEl = null;
+    let isValid = true;
+    let message = '';
+
+    if (id === 'signInEmail' || id === 'signUpEmail') {
+        errorEl = id === 'signInEmail' ? signInEmailError : signUpEmailError;
+        const val = input.value.trim();
+        if (!val) {
+            isValid = false;
+            message = 'Email is required';
+        } else if (!validateEmail(val)) {
+            isValid = false;
+            message = 'Please enter a valid email';
+        }
+        if (isValid) hideFieldError(errorEl);
+        else showFieldError(errorEl, message);
+    }
+
+    if (id === 'signInPassword') {
+        errorEl = signInPasswordError;
+        const val = input.value;
+        if (!val) {
+            isValid = false;
+            message = 'Password is required';
+        }
+        if (isValid) hideFieldError(errorEl);
+        else showFieldError(errorEl, message);
+    }
+
+    if (id === 'signUpName') {
+        errorEl = signUpNameError;
+        const val = input.value.trim();
+        if (!val) {
+            isValid = false;
+            message = 'Name is required';
+        }
+        if (isValid) hideFieldError(errorEl);
+        else showFieldError(errorEl, message);
+    }
+
+    if (id === 'signUpPassword') {
+        errorEl = signUpPasswordError;
+        const val = input.value;
+        if (!val) {
+            isValid = false;
+            message = 'Password is required';
+        } else if (val.length < 6) {
+            isValid = false;
+            message = 'Minimum 6 characters';
+        }
+        if (isValid) hideFieldError(errorEl);
+        else showFieldError(errorEl, message);
+        updatePasswordStrength(val);
+    }
+
+    if (id === 'signUpConfirm') {
+        errorEl = signUpConfirmError;
+        const password = signUpPassword?.value || '';
+        const val = input.value;
+        if (!val) {
+            isValid = false;
+            message = 'Please confirm your password';
+        } else if (val !== password) {
+            isValid = false;
+            message = 'Passwords do not match';
+        }
+        if (isValid) hideFieldError(errorEl);
+        else showFieldError(errorEl, message);
+    }
+
+    return isValid;
+}
+
+function updatePasswordStrength(password) {
+    if (!passwordStrength) return;
+    if (!password || password.length === 0) {
+        passwordStrength.classList.remove('visible');
+        return;
+    }
+    passwordStrength.classList.add('visible');
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 10) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    let level = 'weak';
+    let label = 'Weak';
+    let color = 'weak';
+    if (score >= 5) { level = 'strong'; label = 'Strong'; color = 'strong'; }
+    else if (score >= 3) { level = 'medium'; label = 'Medium'; color = 'medium'; }
+    else { level = 'weak'; label = 'Weak'; color = 'weak'; }
+    const segs = [strengthSeg1, strengthSeg2, strengthSeg3];
+    segs.forEach((seg, i) => {
+        if (!seg) return;
+        seg.className = 'segment';
+        if (level === 'strong' || (level === 'medium' && i < 2) || (level === 'weak' && i < 1)) {
+            seg.classList.add(color);
+        }
+    });
+    if (strengthText) {
+        strengthText.textContent = label;
+        strengthText.className = 'strength-text ' + color;
+    }
+}
+
 async function handleRedirectResult() {
     const originalGoogle = googleBtn.innerHTML;
     const originalGithub = githubBtn.innerHTML;
-    
+    showPageLoader();
     try {
-        // Buttons ko disabled aur loading state mein daal do jab tak check ho raha hai
         googleBtn.disabled = true;
         githubBtn.disabled = true;
         googleBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
         githubBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
-
         const result = await checkRedirectAuth();
         if (result) {
-            // Login successful, ab redirect kardo
             window.location.href = '/dashboard';
             return;
         }
@@ -56,18 +234,16 @@ async function handleRedirectResult() {
         }
         showError(msg);
     } finally {
-        // State wapas normal kar do agar redirect se nahi aaya hai
         googleBtn.disabled = false;
         githubBtn.disabled = false;
         googleBtn.innerHTML = originalGoogle;
         githubBtn.innerHTML = originalGithub;
+        hidePageLoader();
     }
 }
 
-// Call it immediately on script execution
 handleRedirectResult();
 
-// ----- 2. Tab Switching Logic -----
 function switchTab(tab) {
     currentTab = tab;
     if (tab === 'signin') {
@@ -78,6 +254,7 @@ function switchTab(tab) {
         errorMsg.classList.add('hidden');
         resetTurnstile();
         renderTurnstile('turnstile-container');
+        autoFocusField();
     } else {
         signUpTab.classList.add('active');
         signInTab.classList.remove('active');
@@ -86,6 +263,7 @@ function switchTab(tab) {
         errorMsg.classList.add('hidden');
         resetTurnstile();
         renderTurnstile('turnstile-container-signup');
+        autoFocusField();
     }
 }
 
@@ -95,10 +273,12 @@ signUpTab.addEventListener('click', () => switchTab('signup'));
 function showError(msg) {
     errorMsg.textContent = msg;
     errorMsg.classList.remove('hidden');
+    errorMsg.classList.add('visible');
 }
 
 function hideError() {
     errorMsg.classList.add('hidden');
+    errorMsg.classList.remove('visible');
 }
 
 function getSubmitButton(containerId) {
@@ -109,7 +289,6 @@ function getSubmitButton(containerId) {
     return form.querySelector('.submit-btn');
 }
 
-// ----- 3. Turnstile (CAPTCHA) Logic -----
 function renderTurnstile(containerId) {
     const container = document.getElementById(containerId);
     if (!container || !window.turnstile) return;
@@ -118,7 +297,7 @@ function renderTurnstile(containerId) {
         turnstileWidgetId = null;
     }
     container.innerHTML = '';
-    container.classList.remove('solved');
+    container.classList.remove('solved', 'show');
     const submitBtn = getSubmitButton(containerId);
     if (submitBtn) {
         submitBtn.classList.remove('visible');
@@ -157,6 +336,7 @@ function renderTurnstile(containerId) {
                 turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
             }
         });
+        setTimeout(() => container.classList.add('show'), 50);
     } catch (e) {
         if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
         turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
@@ -190,16 +370,28 @@ async function verifyCaptcha(token) {
     return true;
 }
 
-// ----- 4. Email/Password Auth Logic -----
 async function handleEmailSignIn(e) {
     e.preventDefault();
     hideError();
     const email = signInEmail.value.trim();
     const password = signInPassword.value.trim();
-    if (!email || !password) {
-        showError('Please fill in all fields.');
-        return;
+    let hasError = false;
+    if (!email) {
+        showFieldError(signInEmailError, 'Email is required');
+        hasError = true;
+    } else if (!validateEmail(email)) {
+        showFieldError(signInEmailError, 'Please enter a valid email');
+        hasError = true;
+    } else {
+        hideFieldError(signInEmailError);
     }
+    if (!password) {
+        showFieldError(signInPasswordError, 'Password is required');
+        hasError = true;
+    } else {
+        hideFieldError(signInPasswordError);
+    }
+    if (hasError) return;
     if (!captchaToken) {
         showError('Please complete the CAPTCHA.');
         return;
@@ -211,10 +403,14 @@ async function handleEmailSignIn(e) {
         await verifyCaptcha(captchaToken);
         signInBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Signing in...';
         await signInWithEmail(email, password);
-        window.location.href = '/dashboard';
+        signInBtn.classList.add('success');
+        signInBtn.innerHTML = '<i class="ph-bold ph-check-circle"></i> Signed In';
+        setTimeout(() => {
+            window.location.href = '/dashboard';
+        }, 500);
     } catch (err) {
         signInBtn.disabled = false;
-        signInBtn.classList.remove('loading');
+        signInBtn.classList.remove('loading', 'success');
         signInBtn.innerHTML = '<i class="ph-bold ph-sign-in"></i> Sign In';
         let msg = 'Sign in failed. Please try again.';
         if (err.code === 'auth/user-not-found') msg = 'No account found with this email.';
@@ -234,20 +430,43 @@ async function handleEmailSignUp(e) {
     hideError();
     const name = signUpName.value.trim();
     const email = signUpEmail.value.trim();
-    const password = signUpPassword.value.trim();
-    const confirm = signUpConfirm.value.trim();
-    if (!email || !password || !confirm) {
-        showError('Please fill in all fields.');
-        return;
+    const password = signUpPassword.value;
+    const confirm = signUpConfirm.value;
+    let hasError = false;
+    if (!name) {
+        showFieldError(signUpNameError, 'Name is required');
+        hasError = true;
+    } else {
+        hideFieldError(signUpNameError);
     }
-    if (password.length < 6) {
-        showError('Password must be at least 6 characters.');
-        return;
+    if (!email) {
+        showFieldError(signUpEmailError, 'Email is required');
+        hasError = true;
+    } else if (!validateEmail(email)) {
+        showFieldError(signUpEmailError, 'Please enter a valid email');
+        hasError = true;
+    } else {
+        hideFieldError(signUpEmailError);
     }
-    if (password !== confirm) {
-        showError('Passwords do not match.');
-        return;
+    if (!password) {
+        showFieldError(signUpPasswordError, 'Password is required');
+        hasError = true;
+    } else if (password.length < 6) {
+        showFieldError(signUpPasswordError, 'Minimum 6 characters');
+        hasError = true;
+    } else {
+        hideFieldError(signUpPasswordError);
     }
+    if (!confirm) {
+        showFieldError(signUpConfirmError, 'Please confirm your password');
+        hasError = true;
+    } else if (confirm !== password) {
+        showFieldError(signUpConfirmError, 'Passwords do not match');
+        hasError = true;
+    } else {
+        hideFieldError(signUpConfirmError);
+    }
+    if (hasError) return;
     if (!captchaToken) {
         showError('Please complete the CAPTCHA.');
         return;
@@ -259,10 +478,14 @@ async function handleEmailSignUp(e) {
         await verifyCaptcha(captchaToken);
         signUpBtn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Creating account...';
         await signUpWithEmail(email, password, name);
-        window.location.href = '/dashboard';
+        signUpBtn.classList.add('success');
+        signUpBtn.innerHTML = '<i class="ph-bold ph-check-circle"></i> Account Created';
+        setTimeout(() => {
+            window.location.href = '/dashboard';
+        }, 500);
     } catch (err) {
         signUpBtn.disabled = false;
-        signUpBtn.classList.remove('loading');
+        signUpBtn.classList.remove('loading', 'success');
         signUpBtn.innerHTML = '<i class="ph-bold ph-user-plus"></i> Create Account';
         let msg = 'Sign up failed. Please try again.';
         if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Please sign in.';
@@ -279,18 +502,23 @@ async function handleEmailSignUp(e) {
 signInBtn.addEventListener('click', handleEmailSignIn);
 signUpBtn.addEventListener('click', handleEmailSignUp);
 
-// ----- 5. Forgot Password Logic -----
 forgotLink.addEventListener('click', async (e) => {
     e.preventDefault();
     hideError();
     const email = signInEmail.value.trim();
     if (!email) {
-        showError('Please enter your email address first.');
+        showFieldError(signInEmailError, 'Please enter your email address first');
+        signInEmail.classList.add('error');
+        setTimeout(() => {
+            signInEmail.classList.remove('error');
+        }, 2000);
         return;
     }
     try {
         await sendPasswordReset(email);
         showToast('Password reset email sent! Check your inbox.', 4000, 'success');
+        forgotLink.classList.add('highlight');
+        setTimeout(() => forgotLink.classList.remove('highlight'), 2000);
     } catch (err) {
         let msg = 'Failed to send reset email.';
         if (err.code === 'auth/user-not-found') msg = 'No account found with this email.';
@@ -299,18 +527,14 @@ forgotLink.addEventListener('click', async (e) => {
     }
 });
 
-// ----- 6. Social Login (Redirect) Logic -----
 async function executeSocialLogin(providerFn, buttonElement, label) {
     hideError();
     const originalHtml = buttonElement.innerHTML;
     buttonElement.disabled = true;
     buttonElement.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Redirecting...`;
-    
     try {
-        // Ye browser ko directly Google/Github par bhej dega
-        await providerFn(); 
+        await providerFn();
     } catch (err) {
-        // Sirf tab run hoga agar redirect initialize karne mein koi error aaya
         buttonElement.disabled = false;
         buttonElement.innerHTML = originalHtml;
         let msg = `${label} sign-in failed. Please try again.`;
@@ -323,16 +547,40 @@ async function executeSocialLogin(providerFn, buttonElement, label) {
 googleBtn.addEventListener('click', () => executeSocialLogin(signInWithGoogle, googleBtn, 'Google'));
 githubBtn.addEventListener('click', () => executeSocialLogin(signInWithGithub, githubBtn, 'GitHub'));
 
-// ----- 7. General Auth State Observer -----
+const inputFields = [signInEmail, signInPassword, signUpName, signUpEmail, signUpPassword, signUpConfirm];
+inputFields.forEach(input => {
+    if (!input) return;
+    input.addEventListener('input', () => {
+        validateField(input);
+        if (input.id === 'signUpPassword' || input.id === 'signUpConfirm') {
+            if (signUpPassword && signUpConfirm) {
+                const pass = signUpPassword.value;
+                const confirm = signUpConfirm.value;
+                if (confirm && pass !== confirm) {
+                    showFieldError(signUpConfirmError, 'Passwords do not match');
+                } else if (confirm) {
+                    hideFieldError(signUpConfirmError);
+                }
+            }
+        }
+        if (errorMsg.classList.contains('visible')) {
+            hideError();
+        }
+    });
+    input.addEventListener('blur', () => validateField(input));
+});
+
 observeAuthState((user) => {
     if (user) {
         window.location.href = '/dashboard';
     } else {
         renderTurnstile('turnstile-container');
+        startTypewriter();
+        autoFocusField();
+        hidePageLoader();
     }
 });
 
-// ----- 8. Google One-Tap Callback -----
 window.handleOneTap = async (response) => {
     try {
         await signInWithGoogleOneTap(response);
@@ -342,13 +590,12 @@ window.handleOneTap = async (response) => {
     }
 };
 
-// ----- 9. Enter Key Support -----
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (currentTab === 'signin') {
-            if (!signInBtn.disabled) signInBtn.click();
+            if (!signInBtn.disabled && signInBtn.classList.contains('visible')) signInBtn.click();
         } else {
-            if (!signUpBtn.disabled) signUpBtn.click();
+            if (!signUpBtn.disabled && signUpBtn.classList.contains('visible')) signUpBtn.click();
         }
     }
 });
