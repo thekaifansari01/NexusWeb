@@ -56,7 +56,6 @@ const toggleGroqBtn = document.getElementById('toggleGroqVisibility');
 const totalRequestsEl = document.getElementById('totalRequests');
 const totalTokensEl = document.getElementById('totalTokens');
 const successRateEl = document.getElementById('successRate');
-const usageHistoryContainer = document.getElementById('usageHistoryContainer');
 const welcomeMessageEl = document.getElementById('welcomeMessage');
 const keysTotalEl = document.getElementById('keysTotal');
 const keysActiveEl = document.getElementById('keysActive');
@@ -120,7 +119,6 @@ let modelChart = null;
 let currentRange = 30;
 let allLogs = [];
 let filteredLogs = [];
-
 let currentUser = null;
 const MAX_DOMAINS = 10;
 let captchaToken = null;
@@ -128,23 +126,21 @@ let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
 let pendingAction = null;
 let pendingActionData = null;
-
 let deleteReauthToken = null;
 let deleteCaptchaToken = null;
 let deleteTurnstileWidgetId = null;
 let isSocialUser = false;
-
-// --- Table state ---
 let currentPage = 1;
 const PAGE_SIZE = 10;
 let sortField = 'timestamp';
 let sortOrder = 'desc';
-let activeFilter = null; // { type: 'model'|'domain'|'status', value: string }
+let activeFilter = null;
 
 function showSkeleton(containerId, type) {
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = '';
+    
     if (type === 'keys') {
         for (let i = 0; i < 3; i++) {
             const skeleton = document.createElement('div');
@@ -207,37 +203,29 @@ function showSkeleton(containerId, type) {
             `;
             container.appendChild(skeleton);
         }
-    } else if (type === 'usage') {
-        for (let i = 0; i < 5; i++) {
-            const skeleton = document.createElement('div');
-            skeleton.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
-            skeleton.style.animationDelay = `${i * 0.05}s`;
-            skeleton.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <div class="skeleton skeleton-icon" style="width: 8px; height: 8px; border-radius: 50%;"></div>
-                    <div class="skeleton skeleton-text" style="width: 80px; height: 16px;"></div>
-                    <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div>
-                    <div class="skeleton skeleton-text" style="width: 50px; height: 14px;"></div>
-                </div>
-            `;
-            container.appendChild(skeleton);
-        }
     } else if (type === 'tableRows') {
         for (let i = 0; i < 5; i++) {
-            const tr = document.createElement('tr');
-            tr.className = 'skeleton-card';
-            tr.style.animationDelay = `${i * 0.04}s`;
-            tr.innerHTML = `
-                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div></td>
-                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div></td>
-                <td class="py-2 px-3 text-right"><div class="skeleton skeleton-text" style="width: 40px; height: 14px; margin-left: auto;"></div></td>
-                <td class="py-2 px-3"><div class="skeleton skeleton-badge" style="width: 50px; height: 20px;"></div></td>
-                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div></td>
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-4 mb-3 rounded-xl bg-black/20 border border-white/5 skeleton-card';
+            row.style.animationDelay = `${i * 0.04}s`;
+            row.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="skeleton skeleton-icon" style="width: 40px; height: 40px;"></div>
+                    <div class="flex flex-col gap-1.5">
+                        <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 140px; height: 10px;"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="skeleton skeleton-badge hidden md:block" style="width: 80px; height: 14px;"></div>
+                    <div class="skeleton skeleton-badge" style="width: 60px; height: 24px;"></div>
+                    <div class="flex flex-col items-end gap-1">
+                        <div class="skeleton skeleton-text" style="width: 50px; height: 16px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 30px; height: 10px;"></div>
+                    </div>
+                </div>
             `;
-            container.appendChild(tr);
+            container.appendChild(row);
         }
     }
 }
@@ -270,58 +258,50 @@ function showStatSkeletons() {
 }
 
 function showUsageSkeletons() {
-    const statElements = [
-        statTotalRequests, statTotalTokens, statAvgResponse, statSuccessRate,
-        statRequestsTrend, statTokensTrend
-    ];
+    const statElements = [statTotalRequests, statTotalTokens, statAvgResponse, statSuccessRate];
     statElements.forEach(el => {
-        if (!el) return;
-        if (el === statRequestsTrend || el === statTokensTrend) {
-            el.textContent = '—';
-            el.className = 'text-xs mt-0.5 text-zinc-500';
-        } else {
-            el.textContent = '0';
-            el.className = 'stat-number text-2xl mt-1';
+        if (el) el.innerHTML = '<div class="skeleton skeleton-stat w-16 h-8"></div>';
+    });
+
+    if (statRequestsTrend) statRequestsTrend.innerHTML = '<div class="skeleton skeleton-text w-20 mt-1"></div>';
+    if (statTokensTrend) statTokensTrend.innerHTML = '<div class="skeleton skeleton-text w-20 mt-1"></div>';
+
+    const charts = [requestChartCanvas, tokenChartCanvas, modelChartCanvas];
+    charts.forEach(canvas => {
+        if (canvas && canvas.parentElement) {
+            canvas.style.display = 'none';
+            let placeholder = canvas.parentElement.querySelector('.chart-skeleton');
+            if (!placeholder) {
+                placeholder = document.createElement('div');
+                placeholder.className = 'chart-skeleton w-full h-full skeleton rounded-xl';
+                canvas.parentElement.appendChild(placeholder);
+            }
         }
     });
-    if (requestChartCanvas) {
-        requestChartCanvas.style.opacity = '0.3';
-        requestChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
-        requestChartCanvas.style.backgroundSize = '200% 100%';
-        requestChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
+
+    if (topDomainsContainer) {
+        topDomainsContainer.innerHTML = '';
+        for(let i=0; i<3; i++) {
+            topDomainsContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="skeleton skeleton-text w-24"></div><div class="skeleton skeleton-text w-8"></div></div>`;
+        }
     }
-    if (tokenChartCanvas) {
-        tokenChartCanvas.style.opacity = '0.3';
-        tokenChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
-        tokenChartCanvas.style.backgroundSize = '200% 100%';
-        tokenChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
+    if (busiestHoursContainer) {
+        busiestHoursContainer.innerHTML = '';
+        for(let i=0; i<3; i++) {
+            busiestHoursContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="skeleton skeleton-text w-16"></div><div class="skeleton skeleton-text w-10"></div></div>`;
+        }
     }
-    if (modelChartCanvas) {
-        modelChartCanvas.style.opacity = '0.3';
-        modelChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
-        modelChartCanvas.style.backgroundSize = '200% 100%';
-        modelChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
-    }
-    if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
-    if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
 }
 
 function hideUsageSkeletons() {
-    if (requestChartCanvas) {
-        requestChartCanvas.style.opacity = '1';
-        requestChartCanvas.style.background = 'transparent';
-        requestChartCanvas.style.animation = 'none';
-    }
-    if (tokenChartCanvas) {
-        tokenChartCanvas.style.opacity = '1';
-        tokenChartCanvas.style.background = 'transparent';
-        tokenChartCanvas.style.animation = 'none';
-    }
-    if (modelChartCanvas) {
-        modelChartCanvas.style.opacity = '1';
-        modelChartCanvas.style.background = 'transparent';
-        modelChartCanvas.style.animation = 'none';
-    }
+    const charts = [requestChartCanvas, tokenChartCanvas, modelChartCanvas];
+    charts.forEach(canvas => {
+        if (canvas && canvas.parentElement) {
+            canvas.style.display = 'block';
+            const placeholder = canvas.parentElement.querySelector('.chart-skeleton');
+            if (placeholder) placeholder.remove();
+        }
+    });
 }
 
 function switchTab(tabId, updateHistory = true) {
@@ -333,10 +313,12 @@ function switchTab(tabId, updateHistory = true) {
     const activeTab = document.getElementById(`tab-${tabId}`);
     if (activeTab) activeTab.classList.remove('hidden');
     breadcrumbCurrent.textContent = btn.textContent.trim();
+    
     if (window.innerWidth < 768 && sidebar) {
         sidebar.classList.add('hidden');
         sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
     }
+    
     if (updateHistory) {
         const url = new URL(window.location);
         url.searchParams.set('tab', tabId);
@@ -353,6 +335,7 @@ function openCreateKeyModal(updateHistory = true) {
     keyNameInput.value = '';
     keyNameInput.focus();
     setTimeout(renderTurnstile, 200);
+    
     if (updateHistory) {
         const url = new URL(window.location);
         url.searchParams.set('action', 'create-key');
@@ -377,6 +360,7 @@ function openAddDomainModal(updateHistory = true) {
     addDomainForm.classList.add('slide-down');
     domainInput.value = '';
     domainInput.focus();
+    
     if (updateHistory) {
         const url = new URL(window.location);
         url.searchParams.set('action', 'add-domain');
@@ -398,11 +382,13 @@ function handleURLState() {
     const tab = url.searchParams.get('tab') || 'overview';
     const action = url.searchParams.get('action');
     switchTab(tab, false);
+    
     if (tab === 'api-keys' && action === 'create-key') {
         openCreateKeyModal(false);
     } else {
         closeCreateKeyModal(false);
     }
+    
     if (tab === 'domains' && action === 'add-domain') {
         openAddDomainModal(false);
     } else {
@@ -585,6 +571,7 @@ observeAuthState((user) => {
         return;
     }
     currentUser = user;
+    
     if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
     if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
     if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
@@ -635,8 +622,14 @@ observeAuthState((user) => {
 });
 
 function renderStats(totals, daily) {
-    if (statTotalRequests) statTotalRequests.textContent = totals.totalRequests || 0;
-    if (statTotalTokens) statTotalTokens.textContent = (totals.totalTokens || 0).toLocaleString();
+    if (statTotalRequests) {
+        statTotalRequests.className = 'stat-number text-2xl mt-1';
+        statTotalRequests.textContent = totals.totalRequests || 0;
+    }
+    if (statTotalTokens) {
+        statTotalTokens.className = 'stat-number text-2xl mt-1';
+        statTotalTokens.textContent = (totals.totalTokens || 0).toLocaleString();
+    }
     if (daily && daily.length > 0) {
         const last = daily[daily.length - 1];
         const prev = daily.length > 1 ? daily[daily.length - 2] : { requests: 0, tokens: 0 };
@@ -654,8 +647,14 @@ function renderStats(totals, daily) {
         if (statRequestsTrend) { statRequestsTrend.textContent = '—'; statRequestsTrend.className = 'text-xs mt-0.5 text-zinc-500'; }
         if (statTokensTrend) { statTokensTrend.textContent = '—'; statTokensTrend.className = 'text-xs mt-0.5 text-zinc-500'; }
     }
-    if (statAvgResponse) statAvgResponse.textContent = '—';
-    if (statSuccessRate) statSuccessRate.textContent = '—';
+    if (statAvgResponse) {
+        statAvgResponse.className = 'stat-number text-2xl mt-1';
+        statAvgResponse.textContent = '—';
+    }
+    if (statSuccessRate) {
+        statSuccessRate.className = 'stat-number text-2xl mt-1';
+        statSuccessRate.textContent = '—';
+    }
 }
 
 function renderCharts(daily) {
@@ -667,8 +666,10 @@ function renderCharts(daily) {
     const tokenData = daily.map(d => d.tokens);
     const ctx1 = requestChartCanvas?.getContext('2d');
     const ctx2 = tokenChartCanvas?.getContext('2d');
+    
     if (requestChart) { requestChart.destroy(); requestChart = null; }
     if (tokenChart) { tokenChart.destroy(); tokenChart = null; }
+    
     if (ctx1) {
         requestChart = new Chart(ctx1, {
             type: 'bar',
@@ -694,6 +695,7 @@ function renderCharts(daily) {
             }
         });
     }
+    
     if (ctx2) {
         tokenChart = new Chart(ctx2, {
             type: 'line',
@@ -726,6 +728,7 @@ function renderCharts(daily) {
 function renderBreakdowns(models, domains, hours) {
     const ctx3 = modelChartCanvas?.getContext('2d');
     if (modelChart) { modelChart.destroy(); modelChart = null; }
+    
     if (ctx3 && models && models.length > 0) {
         const colors = ['#a855f7', '#34d399', '#fbbf24', '#60a5fa', '#f472b6'];
         modelChart = new Chart(ctx3, {
@@ -758,6 +761,7 @@ function renderBreakdowns(models, domains, hours) {
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
     }
+    
     if (topDomainsContainer) {
         topDomainsContainer.innerHTML = '';
         if (domains && domains.length > 0) {
@@ -772,6 +776,7 @@ function renderBreakdowns(models, domains, hours) {
             topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No domains</div>';
         }
     }
+    
     if (busiestHoursContainer) {
         busiestHoursContainer.innerHTML = '';
         if (hours && hours.length > 0) {
@@ -789,11 +794,17 @@ function renderBreakdowns(models, domains, hours) {
     }
 }
 
-// --- Table rendering with sorting, filtering, pagination ---
 function renderTable(logs) {
     if (!logsTableBody) return;
+    
     if (!logs || logs.length === 0) {
-        logsTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>';
+        logsTableBody.innerHTML = `
+            <div class="empty-state">
+                <div class="icon-wrap"><i class="ph-bold ph-list-magnifying-glass"></i></div>
+                <h4>No Activity Found</h4>
+                <p>We couldn't find any recent usage logs for your keys.</p>
+            </div>
+        `;
         loadMoreBtn.classList.add('hidden');
         if (logCount) logCount.textContent = '0 entries';
         return;
@@ -801,7 +812,6 @@ function renderTable(logs) {
 
     let data = [...logs];
 
-    // Apply filter
     if (activeFilter) {
         const { type, value } = activeFilter;
         data = data.filter(log => {
@@ -812,7 +822,6 @@ function renderTable(logs) {
         });
     }
 
-    // Apply sort
     data.sort((a, b) => {
         let aVal = a[sortField] || '';
         let bVal = b[sortField] || '';
@@ -837,29 +846,47 @@ function renderTable(logs) {
     const pageData = data.slice(start, end);
     const hasMore = end < totalFiltered;
 
-    // Render rows
     logsTableBody.innerHTML = '';
-    pageData.forEach(log => {
-        const tr = document.createElement('tr');
-        const date = log.timestamp ? new Date(log.timestamp).toLocaleString() : '—';
+    
+    pageData.forEach((log, index) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-4 mb-3 rounded-xl bg-black/20 border border-white/5 hover:bg-white/5 hover:border-white/10 transition-all fade-in-up cursor-default';
+        row.style.animationDelay = `${index * 0.03}s`;
+
+        const date = log.timestamp ? new Date(log.timestamp).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
         const status = log.status || 'success';
         const statusClass = status === 'success' ? 'active' : 'revoked';
-        tr.innerHTML = `
-            <td class="py-2 px-3 text-zinc-400 text-xs">${date}</td>
-            <td class="py-2 px-3 text-zinc-300 text-xs">${log.model || 'unknown'}</td>
-            <td class="py-2 px-3 text-zinc-400 text-xs text-right">${log.totalTokens || 0}</td>
-            <td class="py-2 px-3"><span class="status-badge ${statusClass} text-[10px]">${status}</span></td>
-            <td class="py-2 px-3 text-zinc-400 text-xs font-mono">${log.domain || '—'}</td>
+        const modelIcon = log.model && log.model.toLowerCase().includes('llama') ? 'ph-brain' : 'ph-cpu';
+
+        row.innerHTML = `
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <i class="ph-bold ${modelIcon} text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold text-white tracking-wide">${log.model || 'Unknown Model'}</span>
+                    <span class="text-xs text-zinc-500 font-mono mt-0.5">${log.domain || 'Direct API'}</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex flex-col items-end hidden md:flex">
+                    <span class="text-[11px] font-medium text-zinc-500 uppercase tracking-widest mb-0.5">Timestamp</span>
+                    <span class="text-xs text-zinc-400 font-medium">${date}</span>
+                </div>
+                <span class="status-badge ${statusClass} px-2.5 py-1 text-[10px]"><span class="dot"></span>${status}</span>
+                <div class="flex flex-col items-end min-w-[70px]">
+                    <span class="text-[11px] font-medium text-zinc-500 uppercase tracking-widest mb-0.5">Tokens</span>
+                    <span class="text-sm font-mono font-bold text-emerald-400">+${log.totalTokens || 0}</span>
+                </div>
+            </div>
         `;
-        logsTableBody.appendChild(tr);
+        logsTableBody.appendChild(row);
     });
 
-    // Update log count
     if (logCount) {
         logCount.textContent = `${pageData.length} of ${totalFiltered} entries`;
     }
 
-    // Show/hide load more button
     if (hasMore) {
         loadMoreBtn.classList.remove('hidden');
     } else {
@@ -867,10 +894,9 @@ function renderTable(logs) {
     }
 }
 
-// --- Event listeners for table sorting ---
-document.querySelectorAll('#tab-usage table thead th[data-sort]').forEach(th => {
-    th.addEventListener('click', () => {
-        const field = th.dataset.sort;
+document.querySelectorAll('[data-sort]').forEach(el => {
+    el.addEventListener('click', () => {
+        const field = el.dataset.sort;
         if (sortField === field) {
             sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
         } else {
@@ -879,18 +905,17 @@ document.querySelectorAll('#tab-usage table thead th[data-sort]').forEach(th => 
         }
         currentPage = 1;
         renderTable(filteredLogs);
-        // Update sort icons
-        document.querySelectorAll('#tab-usage table thead th[data-sort] i').forEach(icon => {
+        
+        document.querySelectorAll('[data-sort] i').forEach(icon => {
             icon.className = 'ph ph-caret-up-down ml-0.5';
         });
-        const icon = th.querySelector('i');
+        const icon = el.querySelector('i');
         if (icon) {
             icon.className = sortOrder === 'asc' ? 'ph ph-caret-up ml-0.5' : 'ph ph-caret-down ml-0.5';
         }
     });
 });
 
-// --- Filter chips ---
 filterChips.forEach(chip => {
     chip.addEventListener('click', () => {
         const filter = chip.dataset.filter;
@@ -899,23 +924,15 @@ filterChips.forEach(chip => {
             filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
             chip.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
         } else {
-            // Toggle chip active state
             const isActive = chip.classList.contains('active');
             filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
             if (!isActive) {
                 chip.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
-                // For simplicity, we just set filter based on chip text; we could use data attributes
-                // We'll implement a simple toggle: if chip is clicked again, it deactivates (resets)
-                // We'll just toggle the filter type.
-                // For a more refined approach, we can prompt for value, but we'll use chip text as value.
                 const value = chip.textContent.trim().toLowerCase();
-                // We need to determine type: if chip is in "Models" group, etc. We'll rely on data-filter attribute.
-                // We'll use data-filter-type to know which column.
                 const type = chip.dataset.filterType || 'model';
                 activeFilter = { type, value };
             } else {
                 activeFilter = null;
-                // Also reset "All" chip to active
                 document.querySelector('.filter-chip[data-filter="all"]')?.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
             }
         }
@@ -924,7 +941,6 @@ filterChips.forEach(chip => {
     });
 });
 
-// --- Load More ---
 if (loadMoreBtn) {
     loadMoreBtn.addEventListener('click', () => {
         currentPage++;
@@ -1421,24 +1437,25 @@ if (deleteGroqBtn) {
 
 async function loadUsage(range = currentRange) {
     if (!currentUser) return;
-    // Reset table state
     currentPage = 1;
     activeFilter = null;
+    
     filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
     document.querySelector('.filter-chip[data-filter="all"]')?.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
+    
     sortField = 'timestamp';
     sortOrder = 'desc';
-    document.querySelectorAll('#tab-usage table thead th[data-sort] i').forEach(icon => {
+    
+    document.querySelectorAll('[data-sort] i').forEach(icon => {
         icon.className = 'ph ph-caret-up-down ml-0.5';
     });
-    const firstTh = document.querySelector('#tab-usage table thead th[data-sort="timestamp"]');
+    const firstTh = document.querySelector('[data-sort="timestamp"]');
     if (firstTh) {
         const icon = firstTh.querySelector('i');
         if (icon) icon.className = 'ph ph-caret-down ml-0.5';
     }
 
     showStatSkeletons();
-    showSkeleton('usageHistoryContainer', 'usage');
     showUsageSkeletons();
     showSkeleton('logsTableBody', 'tableRows');
     loadMoreBtn.classList.add('hidden');
@@ -1447,19 +1464,19 @@ async function loadUsage(range = currentRange) {
         const response = await fetch(`/api/stats?range=${range}`, { credentials: 'include' });
         if (!response.ok) throw new Error('Failed to fetch stats');
         const data = await response.json();
+        
         allLogs = data.recentLogs || [];
         filteredLogs = allLogs;
+        
         hideUsageSkeletons();
         hideSkeleton('logsTableBody');
         renderStats(data.totals, data.daily);
         renderCharts(data.daily);
         renderBreakdowns(data.modelBreakdown, data.domainBreakdown, data.hourlyDistribution);
         renderTable(filteredLogs);
+        
         if (logCount) logCount.textContent = `${filteredLogs.length} entries`;
-        if (usageHistoryContainer) {
-            hideSkeleton('usageHistoryContainer');
-            usageHistoryContainer.innerHTML = '';
-        }
+        
         if (topDomainsContainer) {
             const items = topDomainsContainer.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text');
             items.forEach(el => el.remove());
@@ -1472,13 +1489,9 @@ async function loadUsage(range = currentRange) {
         console.error('Usage load error:', error);
         hideUsageSkeletons();
         hideSkeleton('logsTableBody');
-        if (usageHistoryContainer) {
-            hideSkeleton('usageHistoryContainer');
-            usageHistoryContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
-        }
         if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
         if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
-        logsTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-red-400 py-6 text-sm">Failed to load logs.</td></tr>';
+        logsTableBody.innerHTML = '<div class="text-center text-red-400 py-6 text-sm">Failed to load logs.</div>';
     }
 }
 

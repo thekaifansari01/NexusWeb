@@ -372,8 +372,8 @@
                                 <i class="ph-bold ph-activity"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statTotalRequests">0</div>
-                        <div class="text-xs text-zinc-500 mt-0.5" id="statRequestsTrend">—</div>
+                        <div class="stat-number text-2xl mt-1" id="statTotalRequests"><span class="skeleton skeleton-stat"></span></div>
+                        <div class="text-xs text-zinc-500 mt-0.5" id="statRequestsTrend"><span class="skeleton skeleton-text w-16"></span></div>
                     </div>
                     <div class="stat-card !p-4">
                         <div class="flex items-center justify-between">
@@ -382,8 +382,8 @@
                                 <i class="ph-bold ph-chart-bar"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statTotalTokens">0</div>
-                        <div class="text-xs text-zinc-500 mt-0.5" id="statTokensTrend">—</div>
+                        <div class="stat-number text-2xl mt-1" id="statTotalTokens"><span class="skeleton skeleton-stat"></span></div>
+                        <div class="text-xs text-zinc-500 mt-0.5" id="statTokensTrend"><span class="skeleton skeleton-text w-16"></span></div>
                     </div>
                     <div class="stat-card !p-4">
                         <div class="flex items-center justify-between">
@@ -392,7 +392,7 @@
                                 <i class="ph-bold ph-clock"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statAvgResponse">—</div>
+                        <div class="stat-number text-2xl mt-1" id="statAvgResponse"><span class="skeleton skeleton-stat"></span></div>
                         <div class="text-xs text-zinc-500 mt-0.5">Last 100 requests</div>
                     </div>
                     <div class="stat-card !p-4">
@@ -402,7 +402,7 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statSuccessRate">—</div>
+                        <div class="stat-number text-2xl mt-1" id="statSuccessRate"><span class="skeleton skeleton-stat"></span></div>
                         <div class="text-xs text-zinc-500 mt-0.5">Last 100 requests</div>
                     </div>
                 </div>
@@ -413,7 +413,7 @@
                             <h3 class="text-sm font-semibold text-white">Request Volume</h3>
                             <span class="text-xs text-zinc-500">Daily requests</span>
                         </div>
-                        <div class="h-56">
+                        <div class="h-56 relative">
                             <canvas id="requestChart"></canvas>
                         </div>
                     </div>
@@ -422,7 +422,7 @@
                             <h3 class="text-sm font-semibold text-white">Token Usage</h3>
                             <span class="text-xs text-zinc-500">Daily tokens</span>
                         </div>
-                        <div class="h-56">
+                        <div class="h-56 relative">
                             <canvas id="tokenChart"></canvas>
                         </div>
                     </div>
@@ -434,7 +434,7 @@
                             <i class="ph-bold ph-cpu text-primary"></i>
                             <h4 class="text-sm font-semibold text-white">Model Distribution</h4>
                         </div>
-                        <div class="h-48">
+                        <div class="h-48 relative">
                             <canvas id="modelChart"></canvas>
                         </div>
                     </div>
@@ -459,46 +459,49 @@
                 </div>
 
                 <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                        <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                            <i class="ph-bold ph-list-checks text-primary"></i> Recent Activity
-                        </h3>
-                        <div class="flex items-center gap-3 flex-wrap">
-                            <div class="flex items-center gap-1.5 text-xs text-zinc-400" id="filterChips">
-                                <span class="filter-chip active px-2 py-1 rounded-md bg-primary/20 text-primary border border-primary/30 cursor-pointer hover:bg-primary/30 transition" data-filter="all">All</span>
-                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="model">Models</span>
-                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="domain">Domains</span>
-                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="status">Status</span>
+                    <div class="flex flex-col mb-4">
+                        <div class="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wider text-zinc-400">
+                                <i class="ph-bold ph-list-checks text-primary"></i> Recent Activity
+                            </h3>
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
+                                    <input id="logSearchInput" type="text" placeholder="Search logs..." class="form-input !py-1.5 !pl-8 !pr-3 !text-xs !w-48 !bg-black/30 !border-white/5 !rounded-lg" />
+                                </div>
+                                <span id="logCount" class="text-xs text-zinc-500 whitespace-nowrap bg-black/40 px-2 py-1 rounded-md border border-white/5">0 entries</span>
                             </div>
-                            <div class="relative">
-                                <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
-                                <input id="logSearchInput" type="text" placeholder="Search logs..." class="form-input !py-1.5 !pl-8 !pr-3 !text-xs !w-48 !bg-black/30 !border-white/5 !rounded-lg" />
-                            </div>
-                            <span id="logCount" class="text-xs text-zinc-500 whitespace-nowrap">0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-xs text-zinc-400 overflow-x-auto pb-2 scrollbar-custom" id="filterChips">
+                            <span class="filter-chip active px-2.5 py-1.5 rounded-md bg-primary/20 text-primary border border-primary/30 cursor-pointer hover:bg-primary/30 transition font-medium" data-filter="all">All Logs</span>
+                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="model">Models</span>
+                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="domain">Domains</span>
+                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="status">Status</span>
                         </div>
                     </div>
-                    <div class="relative">
-                        <div class="table-wrapper max-h-[400px] overflow-y-auto scrollbar-custom relative rounded-lg border border-white/5">
-                            <table class="w-full text-sm">
-                                <thead class="sticky top-0 z-10 bg-black/90 backdrop-blur-sm">
-                                    <tr class="border-b border-white/5 text-left text-xs text-zinc-500 uppercase tracking-wider">
-                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="timestamp">Timestamp <i class="ph ph-caret-up-down ml-0.5"></i></th>
-                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="model">Model <i class="ph ph-caret-up-down ml-0.5"></i></th>
-                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors text-right" data-sort="tokens">Tokens <i class="ph ph-caret-up-down ml-0.5"></i></th>
-                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="status">Status <i class="ph ph-caret-up-down ml-0.5"></i></th>
-                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="domain">Domain <i class="ph ph-caret-up-down ml-0.5"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="logsTableBody">
-                                    <tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>
-                                </tbody>
-                            </table>
+                    
+                    <div class="flex items-center justify-between px-4 pb-2 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-widest">
+                        <div class="flex gap-4">
+                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="model">Service <i class="ph ph-caret-up-down ml-0.5"></i></span>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+                        <div class="flex gap-6 items-center">
+                            <span class="hidden md:block cursor-pointer hover:text-white transition-colors" data-sort="timestamp">Time <i class="ph ph-caret-down ml-0.5"></i></span>
+                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="status">State <i class="ph ph-caret-up-down ml-0.5"></i></span>
+                            <span class="cursor-pointer hover:text-white transition-colors text-right w-16" data-sort="tokens">Usage <i class="ph ph-caret-up-down ml-0.5"></i></span>
+                        </div>
                     </div>
-                    <div class="flex justify-center mt-4">
-                        <button id="loadMoreBtn" class="btn-ghost text-xs px-4 py-1.5 rounded-lg border border-white/5 hover:border-white/15 transition-all hidden">
-                            <i class="ph-bold ph-plus-circle mr-1"></i> Load More
+
+                    <div id="logsTableBody" class="space-y-3">
+                        <div class="empty-state">
+                            <div class="icon-wrap"><i class="ph-bold ph-list-magnifying-glass"></i></div>
+                            <h4>No Activity Found</h4>
+                            <p>We couldn't find any recent usage logs for your keys.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center mt-6 pt-4 border-t border-white/5">
+                        <button id="loadMoreBtn" class="btn-secondary text-xs px-5 py-2 rounded-xl hidden">
+                            Load More Records
                         </button>
                     </div>
                 </div>
