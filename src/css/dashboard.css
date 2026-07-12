@@ -220,6 +220,20 @@
   background: rgba(52, 211, 153, 0.12);
   color: #34d399;
 }
+
+.btn-ghost {
+  background: transparent;
+  color: #a1a1aa;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e4e4e7;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
 .btn-primary {
   background: linear-gradient(145deg, #a855f7, #7c3aed);
   color: #fff;
@@ -391,6 +405,7 @@
   background: rgba(168, 85, 247, 0.08);
   font-weight: 600;
 }
+
 .tab-btn {
   background: transparent;
   border: none;
@@ -441,7 +456,6 @@
   }
 }
 
-/* ===== SETTINGS TAB - PROFESSIONAL SAAS STYLING ===== */
 #tab-settings .glass-panel {
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -465,8 +479,6 @@
   font-size: 1.25rem;
   color: #a855f7;
 }
-
-/* Profile Section */
 #tab-settings .glass-panel:first-of-type {
   background: rgba(24, 24, 27, 0.3);
   border: 1px solid rgba(168, 85, 247, 0.06);
@@ -487,7 +499,6 @@
   border-color: rgba(168, 85, 247, 0.5);
   transform: scale(1.02);
 }
-
 #settingsName {
   font-size: 1.25rem;
   font-weight: 700;
@@ -506,8 +517,6 @@
   letter-spacing: 0.06em;
   color: #71717a;
 }
-
-/* Security Section */
 #passwordChangeSection .form-input {
   max-width: 400px;
   background: rgba(0, 0, 0, 0.4);
@@ -525,7 +534,6 @@
 #passwordChangeSection .btn-primary i {
   font-size: 1rem;
 }
-
 #socialAuthInfo {
   padding: 0.5rem 0;
 }
@@ -537,8 +545,6 @@
   font-size: 0.9rem;
   line-height: 1.6;
 }
-
-/* Groq Configuration - Improved Split Layout */
 #tab-settings .glass-panel .split-layout {
   gap: 2rem;
 }
@@ -587,8 +593,6 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.04);
 }
-
-/* Danger Zone - Enhanced */
 #tab-settings .glass-panel.bg-red-500\/5 {
   background: rgba(239, 68, 68, 0.04);
   border: 1px solid rgba(239, 68, 68, 0.15);
@@ -631,8 +635,6 @@
 #deleteAccountBtn:active {
   transform: scale(0.96);
 }
-
-/* ===== DELETE ACCOUNT MODAL - Professional ===== */
 #deleteAccountModal {
   position: fixed;
   inset: 0;
@@ -648,7 +650,6 @@
 #deleteAccountModal.show {
   display: flex !important;
 }
-
 #deleteAccountModal .glass-panel {
   background: rgba(24, 24, 27, 0.98);
   border: 1px solid rgba(239, 68, 68, 0.25);
@@ -670,7 +671,6 @@
     transform: scale(1) translateY(0);
   }
 }
-
 #deleteAccountModal .glass-panel .flex.items-center.gap-3 {
   margin-bottom: 1rem;
 }
@@ -688,7 +688,6 @@
   color: #d4d4d8;
   margin-bottom: 1.5rem;
 }
-
 #deleteAccountModal .form-label {
   font-size: 0.7rem;
   font-weight: 600;
@@ -709,7 +708,6 @@
 #deleteAccountModal .form-input::placeholder {
   color: #52525b;
 }
-
 #deleteTurnstileContainer {
   min-height: 70px;
   display: flex;
@@ -717,7 +715,6 @@
   align-items: center;
   margin: 0.5rem 0 0.75rem 0;
 }
-
 #deleteConfirmBtn {
   background: #ef4444;
   color: #fff;
@@ -743,7 +740,6 @@
 #deleteConfirmBtn i {
   font-size: 1.1rem;
 }
-
 #deleteCancelBtn {
   background: rgba(255, 255, 255, 0.06);
   color: #a1a1aa;
@@ -760,7 +756,6 @@
   color: #e4e4e7;
   border-color: rgba(255, 255, 255, 0.15);
 }
-
 #deleteReauthSocialBtn {
   margin-top: 0.5rem;
   background: rgba(168, 85, 247, 0.15);
@@ -778,7 +773,96 @@
   border-color: rgba(168, 85, 247, 0.35);
 }
 
-/* ===== RESPONSIVE TWEAKS ===== */
+#tab-usage .stat-card {
+  padding: 1rem 1.25rem;
+}
+#tab-usage .stat-card .stat-number {
+  font-size: 1.5rem;
+}
+#rangeToggle .range-btn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  color: #71717a;
+  cursor: pointer;
+}
+#rangeToggle .range-btn:hover {
+  color: #e4e4e7;
+}
+#rangeToggle .range-btn.active {
+  color: #fafafa;
+  background: rgba(168, 85, 247, 0.2);
+}
+#tab-usage canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+#tab-usage table {
+  border-collapse: collapse;
+}
+#tab-usage table th {
+  font-weight: 600;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #71717a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+#tab-usage table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 0.8rem;
+  color: #d4d4d8;
+}
+#tab-usage table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+#tab-usage table .status-badge {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.6rem;
+}
+#logSearchInput {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.75rem 0.4rem 2rem;
+  font-size: 0.75rem;
+  color: #fafafa;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 12rem;
+}
+#logSearchInput:focus {
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+}
+#logSearchInput::placeholder {
+  color: #52525b;
+}
+#topDomainsContainer .domain-item,
+#busiestHoursContainer .hour-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 0.8rem;
+}
+#topDomainsContainer .domain-item:last-child,
+#busiestHoursContainer .hour-item:last-child {
+  border-bottom: none;
+}
+#topDomainsContainer .domain-item .count,
+#busiestHoursContainer .hour-item .count {
+  color: #71717a;
+  font-weight: 500;
+}
+
 @media (max-width: 640px) {
   .stat-card {
     padding: 1.25rem;
@@ -826,6 +910,12 @@
   #passwordChangeSection .form-input {
     max-width: 100%;
   }
+  #tab-usage .stat-card .stat-number {
+    font-size: 1.2rem;
+  }
+  #logSearchInput {
+    width: 8rem;
+  }
 }
 @media (max-width: 480px) {
   #tab-settings .glass-panel .split-layout {
@@ -838,8 +928,6 @@
     padding: 1.25rem;
   }
 }
-
-/* ===== SKELETON LOADER ===== */
 .skeleton {
   background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
   background-size: 200% 100%;
@@ -906,7 +994,6 @@
     height: 14px;
   }
 }
-
 #deleteAccountModal .glass-panel {
   pointer-events: auto !important;
 }

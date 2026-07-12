@@ -95,6 +95,30 @@ const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
 const deleteCancelBtn = document.getElementById('deleteCancelBtn');
 const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 
+const statTotalRequests = document.getElementById('statTotalRequests');
+const statTotalTokens = document.getElementById('statTotalTokens');
+const statAvgResponse = document.getElementById('statAvgResponse');
+const statSuccessRate = document.getElementById('statSuccessRate');
+const statRequestsTrend = document.getElementById('statRequestsTrend');
+const statTokensTrend = document.getElementById('statTokensTrend');
+const requestChartCanvas = document.getElementById('requestChart');
+const tokenChartCanvas = document.getElementById('tokenChart');
+const modelChartCanvas = document.getElementById('modelChart');
+const topDomainsContainer = document.getElementById('topDomainsContainer');
+const busiestHoursContainer = document.getElementById('busiestHoursContainer');
+const logsTableBody = document.getElementById('logsTableBody');
+const logSearchInput = document.getElementById('logSearchInput');
+const logCount = document.getElementById('logCount');
+const rangeBtns = document.querySelectorAll('.range-btn');
+const exportBtn = document.getElementById('exportBtn');
+
+let requestChart = null;
+let tokenChart = null;
+let modelChart = null;
+let currentRange = 30;
+let allLogs = [];
+let filteredLogs = [];
+
 let currentUser = null;
 const MAX_DOMAINS = 10;
 let captchaToken = null;
@@ -531,6 +555,184 @@ observeAuthState((user) => {
         deleteAccountModal.style.display = 'none';
     }
 });
+
+function renderStats(totals, daily) {
+    if (statTotalRequests) statTotalRequests.textContent = totals.totalRequests || 0;
+    if (statTotalTokens) statTotalTokens.textContent = (totals.totalTokens || 0).toLocaleString();
+    if (daily && daily.length > 0) {
+        const last = daily[daily.length - 1];
+        const prev = daily.length > 1 ? daily[daily.length - 2] : { requests: 0, tokens: 0 };
+        const reqDiff = last.requests - prev.requests;
+        const tokDiff = last.tokens - prev.tokens;
+        if (statRequestsTrend) {
+            statRequestsTrend.textContent = reqDiff >= 0 ? `↑ +${reqDiff} from yesterday` : `↓ ${reqDiff} from yesterday`;
+            statRequestsTrend.className = `text-xs mt-0.5 ${reqDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+        }
+        if (statTokensTrend) {
+            statTokensTrend.textContent = tokDiff >= 0 ? `↑ +${tokDiff} from yesterday` : `↓ ${tokDiff} from yesterday`;
+            statTokensTrend.className = `text-xs mt-0.5 ${tokDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+        }
+    } else {
+        if (statRequestsTrend) { statRequestsTrend.textContent = '—'; statRequestsTrend.className = 'text-xs mt-0.5 text-zinc-500'; }
+        if (statTokensTrend) { statTokensTrend.textContent = '—'; statTokensTrend.className = 'text-xs mt-0.5 text-zinc-500'; }
+    }
+    if (statAvgResponse) statAvgResponse.textContent = '—';
+    if (statSuccessRate) statSuccessRate.textContent = '—';
+}
+
+function renderCharts(daily) {
+    const labels = daily.map(d => {
+        const date = new Date(d.date);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+    const requestData = daily.map(d => d.requests);
+    const tokenData = daily.map(d => d.tokens);
+    const ctx1 = requestChartCanvas?.getContext('2d');
+    const ctx2 = tokenChartCanvas?.getContext('2d');
+    if (requestChart) { requestChart.destroy(); requestChart = null; }
+    if (tokenChart) { tokenChart.destroy(); tokenChart = null; }
+    if (ctx1) {
+        requestChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Requests',
+                    data: requestData,
+                    backgroundColor: 'rgba(168, 85, 247, 0.4)',
+                    borderColor: '#a855f7',
+                    borderWidth: 1.5,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#71717a' } },
+                    x: { grid: { display: false }, ticks: { color: '#71717a', maxRotation: 45 } }
+                }
+            }
+        });
+    }
+    if (ctx2) {
+        tokenChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Tokens',
+                    data: tokenData,
+                    borderColor: '#fbbf24',
+                    backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#fbbf24',
+                    pointRadius: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#71717a' } },
+                    x: { grid: { display: false }, ticks: { color: '#71717a', maxRotation: 45 } }
+                }
+            }
+        });
+    }
+}
+
+function renderBreakdowns(models, domains, hours) {
+    const ctx3 = modelChartCanvas?.getContext('2d');
+    if (modelChart) { modelChart.destroy(); modelChart = null; }
+    if (ctx3 && models && models.length > 0) {
+        const colors = ['#a855f7', '#34d399', '#fbbf24', '#60a5fa', '#f472b6'];
+        modelChart = new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+                labels: models.map(m => m.name),
+                datasets: [{
+                    data: models.map(m => m.count),
+                    backgroundColor: colors.slice(0, models.length),
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#a1a1aa', font: { size: 9 }, boxWidth: 10, padding: 6 } }
+                },
+                cutout: '60%'
+            }
+        });
+    } else if (ctx3) {
+        modelChart = new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+                labels: ['No Data'],
+                datasets: [{ data: [1], backgroundColor: ['#2a2a2e'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+    }
+    if (topDomainsContainer) {
+        topDomainsContainer.innerHTML = '';
+        if (domains && domains.length > 0) {
+            const sorted = domains.sort((a, b) => b.count - a.count).slice(0, 5);
+            sorted.forEach(d => {
+                const div = document.createElement('div');
+                div.className = 'domain-item';
+                div.innerHTML = `<span>${d.name}</span><span class="count">${d.count}</span>`;
+                topDomainsContainer.appendChild(div);
+            });
+        } else {
+            topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No domains</div>';
+        }
+    }
+    if (busiestHoursContainer) {
+        busiestHoursContainer.innerHTML = '';
+        if (hours && hours.length > 0) {
+            const sorted = hours.sort((a, b) => b.count - a.count).slice(0, 5);
+            sorted.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'hour-item';
+                const hourLabel = `${String(h.hour).padStart(2, '0')}:00`;
+                div.innerHTML = `<span>${hourLabel}</span><span class="count">${h.count}</span>`;
+                busiestHoursContainer.appendChild(div);
+            });
+        } else {
+            busiestHoursContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No data</div>';
+        }
+    }
+}
+
+function renderTable(logs) {
+    if (!logsTableBody) return;
+    if (!logs || logs.length === 0) {
+        logsTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>';
+        return;
+    }
+    logsTableBody.innerHTML = '';
+    logs.slice(0, 50).forEach(log => {
+        const tr = document.createElement('tr');
+        const date = log.timestamp ? new Date(log.timestamp).toLocaleString() : '—';
+        const status = log.status || 'success';
+        const statusClass = status === 'success' ? 'active' : 'revoked';
+        tr.innerHTML = `
+            <td class="py-2 px-3 text-zinc-400 text-xs">${date}</td>
+            <td class="py-2 px-3 text-zinc-300 text-xs">${log.model || 'unknown'}</td>
+            <td class="py-2 px-3 text-zinc-400 text-xs">${log.totalTokens || 0}</td>
+            <td class="py-2 px-3"><span class="status-badge ${statusClass} text-[10px]">${status}</span></td>
+            <td class="py-2 px-3 text-zinc-400 text-xs font-mono">${log.domain || '—'}</td>
+        `;
+        logsTableBody.appendChild(tr);
+    });
+}
 
 if (sidebarSignOut) {
     sidebarSignOut.addEventListener('click', async () => {
@@ -1019,54 +1221,43 @@ if (deleteGroqBtn) {
     });
 }
 
-async function loadUsage() {
+async function loadUsage(range = currentRange) {
     if (!currentUser) return;
     showStatSkeletons();
     showSkeleton('usageHistoryContainer', 'usage');
+    if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
+    if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
     try {
-        const history = await getUsageHistory(currentUser.uid, 10);
-        hideSkeleton('usageHistoryContainer');
-        if (history.length === 0) {
-            usageHistoryContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">No usage data available yet.</div>';
-        } else {
+        const response = await fetch(`/api/stats?range=${range}`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        const data = await response.json();
+        allLogs = data.recentLogs || [];
+        filteredLogs = allLogs;
+        renderStats(data.totals, data.daily);
+        renderCharts(data.daily);
+        renderBreakdowns(data.modelBreakdown, data.domainBreakdown, data.hourlyDistribution);
+        renderTable(filteredLogs);
+        if (logCount) logCount.textContent = `${filteredLogs.length} entries`;
+        if (usageHistoryContainer) {
+            hideSkeleton('usageHistoryContainer');
             usageHistoryContainer.innerHTML = '';
-            history.forEach((log, index) => {
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5 fade-in-up';
-                div.style.animationDelay = `${index * 0.04}s`;
-                const date = log.timestamp?.toDate?.() || new Date();
-                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full ${log.status === 'success' ? 'bg-emerald-400' : 'bg-red-400'}"></div>
-                        <span class="text-sm text-zinc-300 font-medium">${log.model || 'Unknown'}</span>
-                        <span class="text-xs text-zinc-500 font-mono">${dateStr}</span>
-                    </div>
-                    <div class="flex items-center gap-4 text-xs text-zinc-400">
-                        <span>${log.totalTokens || 0} tokens</span>
-                        <span class="font-bold ${log.status === 'success' ? 'text-emerald-400' : 'text-red-400'}">${log.status}</span>
-                    </div>
-                `;
-                usageHistoryContainer.appendChild(div);
-            });
         }
-        const stats = await getDailyUsageStats(currentUser.uid);
-        if (totalRequestsEl) totalRequestsEl.textContent = stats.totalRequests || 0;
-        if (totalTokensEl) totalTokensEl.textContent = stats.totalTokens || 0;
-        if (history.length > 0 && successRateEl) {
-            const successCount = history.filter(h => h.status === 'success').length;
-            const rate = Math.round((successCount / history.length) * 100);
-            successRateEl.textContent = rate + '%';
-        } else if (successRateEl) {
-            successRateEl.textContent = 'N/A';
+        if (topDomainsContainer) {
+            const items = topDomainsContainer.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text');
+            items.forEach(el => el.remove());
+        }
+        if (busiestHoursContainer) {
+            const items = busiestHoursContainer.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text');
+            items.forEach(el => el.remove());
         }
     } catch (error) {
-        hideSkeleton('usageHistoryContainer');
-        console.error("Usage load error:", error);
+        console.error('Usage load error:', error);
         if (usageHistoryContainer) {
-            usageHistoryContainer.innerHTML =
-                '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
+            hideSkeleton('usageHistoryContainer');
+            usageHistoryContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
         }
+        if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
+        if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
     }
 }
 
@@ -1162,3 +1353,51 @@ deleteConfirmBtn.addEventListener('click', async () => {
         deleteConfirmBtn.innerHTML = 'Confirm Delete';
     }
 });
+
+rangeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        rangeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentRange = parseInt(btn.dataset.range);
+        loadUsage(currentRange);
+    });
+});
+
+if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+        if (!allLogs || allLogs.length === 0) {
+            showToast('No data to export.', 3000, 'warning');
+            return;
+        }
+        let csv = 'Timestamp,Model,Tokens,Status,Domain\n';
+        allLogs.forEach(log => {
+            const date = log.timestamp ? new Date(log.timestamp).toISOString() : '';
+            csv += `${date},${log.model || ''},${log.totalTokens || 0},${log.status || ''},${log.domain || ''}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nexus_usage_${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Export started.', 2000, 'success');
+    });
+}
+
+if (logSearchInput) {
+    logSearchInput.addEventListener('input', () => {
+        const query = logSearchInput.value.toLowerCase().trim();
+        if (!query) {
+            filteredLogs = allLogs;
+        } else {
+            filteredLogs = allLogs.filter(log =>
+                (log.model || '').toLowerCase().includes(query) ||
+                (log.domain || '').toLowerCase().includes(query) ||
+                (log.status || '').toLowerCase().includes(query)
+            );
+        }
+        renderTable(filteredLogs);
+        if (logCount) logCount.textContent = `${filteredLogs.length} entries`;
+    });
+}

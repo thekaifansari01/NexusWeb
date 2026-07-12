@@ -1,5 +1,3 @@
-# Chat service – validates Nexus key, domain, decrypts Groq key, calls Groq API
-
 import requests
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -19,7 +17,6 @@ def handle_chat_request(body, request_origin):
         messages = body.get('messages', [])
         model = body.get('model', 'llama3-8b-8192')
 
-        # Validate messages payload
         if not messages or not isinstance(messages, list):
             return 400, {"error": "Invalid or empty messages array"}
         for msg in messages:
@@ -29,13 +26,10 @@ def handle_chat_request(body, request_origin):
         if not request_origin:
             return 400, {"error": "Missing Origin header"}
 
-        # Extract clean domain (remove scheme, www, port)
         parsed = urlparse(request_origin)
-        netloc = parsed.netloc or parsed.path  # fallback
-        # Remove port if present
+        netloc = parsed.netloc or parsed.path
         if ':' in netloc:
             netloc = netloc.split(':')[0]
-        # Remove 'www.' if present
         if netloc.startswith('www.'):
             netloc = netloc[4:]
         clean_origin = netloc.lower()
@@ -87,7 +81,6 @@ def handle_chat_request(body, request_origin):
 
         groq_data = groq_res.json()
 
-        # Log usage
         try:
             usage = groq_data.get('usage', {})
             total_tokens = usage.get('total_tokens', 0)
@@ -101,6 +94,7 @@ def handle_chat_request(body, request_origin):
                 'completionTokens': usage.get('completion_tokens', 0),
                 'totalTokens': total_tokens,
                 'status': 'success',
+                'domain': clean_origin,
                 'timestamp': firestore.SERVER_TIMESTAMP
             })
 
