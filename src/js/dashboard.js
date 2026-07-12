@@ -246,6 +246,62 @@ function showStatSkeletons() {
     });
 }
 
+function showUsageSkeletons() {
+    const statElements = [
+        statTotalRequests, statTotalTokens, statAvgResponse, statSuccessRate,
+        statRequestsTrend, statTokensTrend
+    ];
+    statElements.forEach(el => {
+        if (!el) return;
+        if (el === statRequestsTrend || el === statTokensTrend) {
+            el.textContent = '—';
+            el.className = 'text-xs mt-0.5 text-zinc-500';
+        } else {
+            el.textContent = '0';
+            el.className = 'stat-number text-2xl mt-1';
+        }
+    });
+    // Show skeleton on chart canvases
+    if (requestChartCanvas) {
+        requestChartCanvas.style.opacity = '0.3';
+        requestChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
+        requestChartCanvas.style.backgroundSize = '200% 100%';
+        requestChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
+    }
+    if (tokenChartCanvas) {
+        tokenChartCanvas.style.opacity = '0.3';
+        tokenChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
+        tokenChartCanvas.style.backgroundSize = '200% 100%';
+        tokenChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
+    }
+    if (modelChartCanvas) {
+        modelChartCanvas.style.opacity = '0.3';
+        modelChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
+        modelChartCanvas.style.backgroundSize = '200% 100%';
+        modelChartCanvas.style.animation = 'shimmer 1.8s ease-in-out infinite';
+    }
+    if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
+    if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
+}
+
+function hideUsageSkeletons() {
+    if (requestChartCanvas) {
+        requestChartCanvas.style.opacity = '1';
+        requestChartCanvas.style.background = 'transparent';
+        requestChartCanvas.style.animation = 'none';
+    }
+    if (tokenChartCanvas) {
+        tokenChartCanvas.style.opacity = '1';
+        tokenChartCanvas.style.background = 'transparent';
+        tokenChartCanvas.style.animation = 'none';
+    }
+    if (modelChartCanvas) {
+        modelChartCanvas.style.opacity = '1';
+        modelChartCanvas.style.background = 'transparent';
+        modelChartCanvas.style.animation = 'none';
+    }
+}
+
 function switchTab(tabId, updateHistory = true) {
     const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
     if (!btn) return;
@@ -1225,14 +1281,14 @@ async function loadUsage(range = currentRange) {
     if (!currentUser) return;
     showStatSkeletons();
     showSkeleton('usageHistoryContainer', 'usage');
-    if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
-    if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-zinc-500 text-center py-4">Loading...</div>';
+    showUsageSkeletons();
     try {
         const response = await fetch(`/api/stats?range=${range}`, { credentials: 'include' });
         if (!response.ok) throw new Error('Failed to fetch stats');
         const data = await response.json();
         allLogs = data.recentLogs || [];
         filteredLogs = allLogs;
+        hideUsageSkeletons();
         renderStats(data.totals, data.daily);
         renderCharts(data.daily);
         renderBreakdowns(data.modelBreakdown, data.domainBreakdown, data.hourlyDistribution);
@@ -1252,6 +1308,7 @@ async function loadUsage(range = currentRange) {
         }
     } catch (error) {
         console.error('Usage load error:', error);
+        hideUsageSkeletons();
         if (usageHistoryContainer) {
             hideSkeleton('usageHistoryContainer');
             usageHistoryContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
