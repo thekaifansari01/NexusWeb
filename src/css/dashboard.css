@@ -28,6 +28,7 @@
   flex-direction: column;
   justify-content: center;
 }
+
 .stat-card::before {
   content: '';
   position: absolute;
@@ -43,15 +44,18 @@
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
 .stat-card:hover::before {
   opacity: 1;
 }
+
 .stat-card:hover {
   border-color: rgba(168, 85, 247, 0.25);
   background: rgba(24, 24, 27, 0.8);
   transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(168, 85, 247, 0.05);
 }
+
 .stat-card .stat-icon {
   width: 52px;
   height: 52px;
@@ -63,9 +67,11 @@
   transition: transform 0.35s ease, background 0.3s ease;
   flex-shrink: 0;
 }
+
 .stat-card:hover .stat-icon {
   transform: scale(1.08) rotate(-2deg);
 }
+
 .stat-card .stat-number {
   font-size: 2rem;
   font-weight: 800;
@@ -73,6 +79,7 @@
   letter-spacing: -0.03em;
   line-height: 1.2;
 }
+
 .stat-card .stat-label {
   font-size: 0.7rem;
   font-weight: 600;
@@ -92,6 +99,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .key-card::before,
 .domain-card::before {
   content: '';
@@ -108,10 +116,12 @@
   opacity: 0;
   transition: opacity 0.4s ease;
 }
+
 .key-card:hover::before,
 .domain-card:hover::before {
   opacity: 1;
 }
+
 .key-card:hover,
 .domain-card:hover {
   border-color: rgba(168, 85, 247, 0.18);
@@ -119,12 +129,14 @@
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
 }
+
 .key-name,
 .domain-name {
   font-weight: 600;
   color: #fafafa;
   font-size: 1.05rem;
 }
+
 .key-value {
   font-family: 'Monaco', 'Menlo', monospace;
   background: rgba(0, 0, 0, 0.4);
@@ -134,6 +146,7 @@
   color: #d4d4d8;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .key-value-wrapper {
   display: flex;
   align-items: center;
@@ -152,25 +165,30 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
 .status-badge .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   display: inline-block;
 }
+
 .status-badge.active {
   background: rgba(52, 211, 153, 0.15);
   color: #34d399;
 }
+
 .status-badge.active .dot {
   background: #34d399;
   box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
 }
+
 .status-badge.revoked,
 .status-badge.inactive {
   background: rgba(251, 113, 133, 0.12);
   color: #fb7185;
 }
+
 .status-badge.revoked .dot,
 .status-badge.inactive .dot {
   background: #fb7185;
@@ -189,11 +207,13 @@
   color: #a855f7;
   border: 1px solid rgba(168, 85, 247, 0.12);
 }
+
 .domain-limit-badge.warning {
   background: rgba(251, 191, 36, 0.08);
   color: #fbbf24;
   border-color: rgba(251, 191, 36, 0.15);
 }
+
 .domain-limit-badge.danger {
   background: rgba(251, 113, 133, 0.08);
   color: #fb7185;
@@ -210,14 +230,17 @@
   transition: all 0.2s ease;
   font-size: 1.1rem;
 }
+
 .btn-icon:hover {
   background: rgba(168, 85, 247, 0.12);
   color: #e4e4e7;
 }
+
 .btn-icon.danger:hover {
   background: rgba(239, 68, 68, 0.15);
   color: #f87171;
 }
+
 .btn-icon.success:hover {
   background: rgba(52, 211, 153, 0.12);
   color: #34d399;
@@ -230,6 +253,7 @@
   transition: all 0.25s ease;
   cursor: pointer;
 }
+
 .btn-ghost:hover {
   background: rgba(255, 255, 255, 0.06);
   color: #e4e4e7;
@@ -251,13 +275,16 @@
   gap: 10px;
   box-shadow: 0 4px 16px rgba(168, 85, 247, 0.25);
 }
+
 .btn-primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(168, 85, 247, 0.4);
 }
+
 .btn-primary:active {
   transform: scale(0.96);
 }
+
 .btn-secondary {
   background: rgba(255, 255, 255, 0.06);
   color: #a1a1aa;
@@ -269,6 +296,7 @@
   cursor: pointer;
   transition: all 0.25s ease;
 }
+
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #e4e4e7;
@@ -282,6 +310,7 @@
   border: 1.5px dashed rgba(255, 255, 255, 0.06);
   border-radius: 20px;
 }
+
 .empty-state .icon-wrap {
   width: 72px;
   height: 72px;
@@ -296,15 +325,18 @@
   color: #a855f7;
   transition: transform 0.3s ease;
 }
+
 .empty-state:hover .icon-wrap {
   transform: scale(1.08);
 }
+
 .empty-state h4 {
   color: #e4e4e7;
   font-weight: 600;
   font-size: 1.05rem;
   margin-bottom: 0.4rem;
 }
+
 .empty-state p {
   color: #71717a;
   font-size: 0.9rem;
@@ -323,14 +355,17 @@
   width: 100%;
   outline: none;
 }
+
 .form-input:focus {
   border-color: rgba(168, 85, 247, 0.4);
   box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08);
   background: rgba(0, 0, 0, 0.5);
 }
+
 .form-input::placeholder {
   color: #52525b;
 }
+
 .form-label {
   display: block;
   font-size: 0.75rem;
@@ -344,13 +379,16 @@
 .scrollbar-custom::-webkit-scrollbar {
   width: 5px;
 }
+
 .scrollbar-custom::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .scrollbar-custom::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
 }
+
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.18);
 }
@@ -359,6 +397,7 @@
   animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   opacity: 0;
 }
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -369,9 +408,11 @@
     transform: translateY(0);
   }
 }
+
 .slide-down {
   animation: slideDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -395,13 +436,16 @@
   transition: all 0.2s ease;
   text-align: left;
 }
+
 .sidebar-link i {
   font-size: 1.25rem;
 }
+
 .sidebar-link:hover {
   color: #fafafa;
   background: rgba(255, 255, 255, 0.04);
 }
+
 .sidebar-link.active {
   color: #a855f7;
   background: rgba(168, 85, 247, 0.08);
@@ -419,15 +463,18 @@
   font-weight: 500;
   position: relative;
 }
+
 .tab-btn:hover {
   color: #e4e4e7;
   background: rgba(255, 255, 255, 0.03);
 }
+
 .tab-btn.active {
   color: #a855f7;
   background: rgba(168, 85, 247, 0.06);
   font-weight: 600;
 }
+
 .tab-btn.active::after {
   content: '';
   position: absolute;
@@ -444,6 +491,7 @@
   flex-direction: column;
   gap: 2.5rem;
 }
+
 @media (min-width: 1024px) {
   .split-layout {
     flex-direction: row;
@@ -464,10 +512,12 @@
   position: relative;
   overflow: visible;
 }
+
 #tab-settings .glass-panel:hover {
   border-color: rgba(255, 255, 255, 0.1);
   background: rgba(24, 24, 27, 0.5);
 }
+
 #tab-settings .glass-panel h3 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -477,17 +527,21 @@
   align-items: center;
   gap: 10px;
 }
+
 #tab-settings .glass-panel h3 i {
   font-size: 1.25rem;
   color: #a855f7;
 }
+
 #tab-settings .glass-panel:first-of-type {
   background: rgba(24, 24, 27, 0.3);
   border: 1px solid rgba(168, 85, 247, 0.06);
 }
+
 #tab-settings .glass-panel:first-of-type:hover {
   border-color: rgba(168, 85, 247, 0.15);
 }
+
 #settingsAvatar {
   width: 80px;
   height: 80px;
@@ -497,21 +551,25 @@
   flex-shrink: 0;
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
+
 #settingsAvatar:hover {
   border-color: rgba(168, 85, 247, 0.5);
   transform: scale(1.02);
 }
+
 #settingsName {
   font-size: 1.25rem;
   font-weight: 700;
   color: #fafafa;
   letter-spacing: -0.01em;
 }
+
 #settingsEmail {
   font-size: 0.95rem;
   color: #d4d4d8;
   font-weight: 400;
 }
+
 #tab-settings .glass-panel:first-of-type .text-sm.text-zinc-400 {
   font-size: 0.7rem;
   font-weight: 600;
@@ -519,51 +577,63 @@
   letter-spacing: 0.06em;
   color: #71717a;
 }
+
 #passwordChangeSection .form-input {
   max-width: 400px;
   background: rgba(0, 0, 0, 0.4);
   border-color: rgba(255, 255, 255, 0.06);
 }
+
 #passwordChangeSection .form-input:focus {
   border-color: rgba(168, 85, 247, 0.3);
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
 }
+
 #passwordChangeSection .btn-primary {
   margin-top: 0.25rem;
   padding: 0.6rem 1.8rem;
   font-size: 0.8rem;
 }
+
 #passwordChangeSection .btn-primary i {
   font-size: 1rem;
 }
+
 #socialAuthInfo {
   padding: 0.5rem 0;
 }
+
 #socialAuthInfo .text-primary {
   font-weight: 600;
   color: #a855f7;
 }
+
 #socialAuthInfo .text-zinc-400 {
   font-size: 0.9rem;
   line-height: 1.6;
 }
+
 #tab-settings .glass-panel .split-layout {
   gap: 2rem;
 }
+
 #tab-settings .glass-panel .split-info p {
   font-size: 0.9rem;
   line-height: 1.7;
   color: #a1a1aa;
 }
+
 #tab-settings .glass-panel .split-content {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 14px;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
+
 #tab-settings .glass-panel .split-content .relative {
   max-width: 100%;
 }
+
 #tab-settings .glass-panel .split-content .form-label {
   font-size: 0.7rem;
   font-weight: 600;
@@ -571,6 +641,7 @@
   letter-spacing: 0.06em;
   color: #71717a;
 }
+
 #groqApiInput {
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 0.8rem;
@@ -578,16 +649,20 @@
   border-color: rgba(255, 255, 255, 0.06);
   padding-right: 2.8rem;
 }
+
 #groqApiInput:focus {
   border-color: rgba(168, 85, 247, 0.3);
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
 }
+
 #toggleGroqVisibility {
   right: 0.8rem;
 }
+
 #toggleGroqVisibility i {
   font-size: 1.1rem;
 }
+
 #groqKeyStatus {
   font-size: 0.75rem;
   font-weight: 500;
@@ -595,26 +670,32 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.04);
 }
+
 #tab-settings .glass-panel.bg-red-500\/5 {
   background: rgba(239, 68, 68, 0.04);
   border: 1px solid rgba(239, 68, 68, 0.15);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
+
 #tab-settings .glass-panel.bg-red-500\/5:hover {
   background: rgba(239, 68, 68, 0.06);
   border-color: rgba(239, 68, 68, 0.25);
 }
+
 #tab-settings .glass-panel.bg-red-500\/5 h3 {
   color: #fafafa;
 }
+
 #tab-settings .glass-panel.bg-red-500\/5 h3 i {
   color: #f87171;
 }
+
 #tab-settings .glass-panel.bg-red-500\/5 .text-zinc-400 {
   font-size: 0.85rem;
   line-height: 1.6;
   color: #a1a1aa;
 }
+
 #deleteAccountBtn {
   background: #ef4444;
   color: #fff;
@@ -626,17 +707,21 @@
   transition: all 0.3s ease;
   cursor: pointer;
 }
+
 #deleteAccountBtn i {
   font-size: 1.1rem;
 }
+
 #deleteAccountBtn:hover {
   background: #dc2626;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
 }
+
 #deleteAccountBtn:active {
   transform: scale(0.96);
 }
+
 #deleteAccountModal {
   position: fixed;
   inset: 0;
@@ -649,9 +734,11 @@
   z-index: 9999;
   padding: 1rem;
 }
+
 #deleteAccountModal.show {
   display: flex !important;
 }
+
 #deleteAccountModal .glass-panel {
   background: rgba(24, 24, 27, 0.98);
   border: 1px solid rgba(239, 68, 68, 0.25);
@@ -663,6 +750,7 @@
   animation: modalSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   pointer-events: auto !important;
 }
+
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -673,23 +761,28 @@
     transform: scale(1) translateY(0);
   }
 }
+
 #deleteAccountModal .glass-panel .flex.items-center.gap-3 {
   margin-bottom: 1rem;
 }
+
 #deleteAccountModal .glass-panel .text-red-400 {
   color: #f87171;
 }
+
 #deleteAccountModal .glass-panel h3 {
   font-size: 1.25rem;
   font-weight: 700;
   color: #fafafa;
 }
+
 #deleteAccountModal .glass-panel .text-sm.text-zinc-300 {
   font-size: 0.9rem;
   line-height: 1.6;
   color: #d4d4d8;
   margin-bottom: 1.5rem;
 }
+
 #deleteAccountModal .form-label {
   font-size: 0.7rem;
   font-weight: 600;
@@ -697,19 +790,23 @@
   letter-spacing: 0.06em;
   color: #a1a1aa;
 }
+
 #deleteAccountModal .form-input {
   background: rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 0.7rem 1rem;
 }
+
 #deleteAccountModal .form-input:focus {
   border-color: rgba(239, 68, 68, 0.4);
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
 }
+
 #deleteAccountModal .form-input::placeholder {
   color: #52525b;
 }
+
 #deleteTurnstileContainer {
   min-height: 70px;
   display: flex;
@@ -717,6 +814,7 @@
   align-items: center;
   margin: 0.5rem 0 0.75rem 0;
 }
+
 #deleteConfirmBtn {
   background: #ef4444;
   color: #fff;
@@ -729,19 +827,23 @@
   flex: 1;
   font-size: 0.9rem;
 }
+
 #deleteConfirmBtn:hover:not(:disabled) {
   background: #dc2626;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
 }
+
 #deleteConfirmBtn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none;
 }
+
 #deleteConfirmBtn i {
   font-size: 1.1rem;
 }
+
 #deleteCancelBtn {
   background: rgba(255, 255, 255, 0.06);
   color: #a1a1aa;
@@ -753,11 +855,13 @@
   flex: 1;
   font-size: 0.9rem;
 }
+
 #deleteCancelBtn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #e4e4e7;
   border-color: rgba(255, 255, 255, 0.15);
 }
+
 #deleteReauthSocialBtn {
   margin-top: 0.5rem;
   background: rgba(168, 85, 247, 0.15);
@@ -770,6 +874,7 @@
   transition: all 0.25s ease;
   cursor: pointer;
 }
+
 #deleteReauthSocialBtn:hover {
   background: rgba(168, 85, 247, 0.25);
   border-color: rgba(168, 85, 247, 0.35);
@@ -782,41 +887,49 @@
   background: rgba(24, 24, 27, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
+
 #tab-usage .stat-card:hover {
   border-color: rgba(168, 85, 247, 0.15);
   background: rgba(24, 24, 27, 0.75);
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
+
 #tab-usage .stat-card .stat-number {
   font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
+
 #tab-usage .stat-card .text-xs.font-medium.text-zinc-400 {
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: #71717a;
 }
+
 #tab-usage .stat-card .w-8.h-8.rounded-lg {
   border-radius: 10px;
   width: 36px;
   height: 36px;
   transition: all 0.3s ease;
 }
+
 #tab-usage .stat-card:hover .w-8.h-8.rounded-lg {
   transform: scale(1.05);
 }
+
 #tab-usage .stat-card .text-xs.text-zinc-500.mt-0.5 {
   font-size: 0.65rem;
   font-weight: 500;
   color: #71717a;
 }
+
 #tab-usage .stat-card .text-xs.text-zinc-500.mt-0.5.text-emerald-400 {
   color: #34d399;
 }
+
 #tab-usage .stat-card .text-xs.text-zinc-500.mt-0.5.text-red-400 {
   color: #f87171;
 }
@@ -833,38 +946,47 @@
   cursor: pointer;
   position: relative;
 }
+
 #rangeToggle .range-btn:hover {
   color: #e4e4e7;
   background: rgba(255, 255, 255, 0.04);
 }
+
 #rangeToggle .range-btn.active {
   color: #fafafa;
   background: rgba(168, 85, 247, 0.2);
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
 }
+
 #tab-usage canvas {
   width: 100% !important;
   height: 100% !important;
 }
+
 #tab-usage .glass-panel.bg-black\/20 {
   background: rgba(24, 24, 27, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.04);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
+
 #tab-usage .glass-panel.bg-black\/20:hover {
   border-color: rgba(255, 255, 255, 0.08);
   background: rgba(24, 24, 27, 0.45);
 }
+
 #tab-usage .glass-panel.bg-black\/20 .h-56 {
   height: 200px;
 }
+
 #tab-usage .glass-panel.bg-black\/20 .h-48 {
   height: 180px;
 }
+
 #tab-usage .glass-panel.bg-black\/20 .text-sm.font-semibold.text-white {
   font-size: 0.8rem;
   font-weight: 600;
 }
+
 #tab-usage .glass-panel.bg-black\/20 .text-xs.text-zinc-500 {
   font-size: 0.6rem;
   color: #71717a;
@@ -877,17 +999,21 @@
   border-radius: 12px;
   scroll-behavior: smooth;
 }
+
 #tab-usage .table-wrapper::-webkit-scrollbar {
   width: 5px;
 }
+
 #tab-usage .table-wrapper::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.02);
   border-radius: 10px;
 }
+
 #tab-usage .table-wrapper::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
 }
+
 #tab-usage .table-wrapper::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.18);
 }
@@ -896,11 +1022,13 @@
   border-collapse: collapse;
   width: 100%;
 }
+
 #tab-usage table thead {
   position: sticky;
   top: 0;
   z-index: 10;
 }
+
 #tab-usage table thead th {
   background: rgba(9, 9, 11, 0.92);
   -webkit-backdrop-filter: blur(8px);
@@ -914,11 +1042,13 @@
   padding: 0.65rem 0.75rem;
   text-align: left;
 }
+
 #tab-usage table tbody tr {
   transition: all 0.2s ease;
   animation: fadeInRow 0.3s ease forwards;
   opacity: 0;
 }
+
 @keyframes fadeInRow {
   from {
     opacity: 0;
@@ -929,12 +1059,15 @@
     transform: translateY(0);
   }
 }
+
 #tab-usage table tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.015);
 }
+
 #tab-usage table tbody tr:hover {
   background: rgba(255, 255, 255, 0.04);
 }
+
 #tab-usage table td {
   padding: 0.6rem 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
@@ -942,6 +1075,7 @@
   color: #d4d4d8;
   white-space: nowrap;
 }
+
 #tab-usage table .status-badge {
   font-size: 0.55rem;
   padding: 0.1rem 0.6rem;
@@ -951,15 +1085,18 @@
   background: rgba(52, 211, 153, 0.12);
   color: #34d399;
 }
+
 #tab-usage table .status-badge.failed {
   background: rgba(251, 113, 133, 0.12);
   color: #fb7185;
 }
+
 #tab-usage table .token-cell {
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 0.65rem;
   color: #a1a1aa;
 }
+
 #tab-usage table .domain-cell {
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 0.6rem;
@@ -968,10 +1105,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 #tab-usage table .model-cell {
   font-weight: 500;
   color: #e4e4e7;
 }
+
 #tab-usage table .timestamp-cell {
   font-size: 0.65rem;
   color: #71717a;
@@ -988,10 +1127,12 @@
   transition: all 0.25s ease;
   width: 12rem;
 }
+
 #logSearchInput:focus {
   border-color: rgba(168, 85, 247, 0.3);
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.06);
 }
+
 #logSearchInput::placeholder {
   color: #52525b;
 }
@@ -1005,20 +1146,24 @@
   font-size: 0.75rem;
   transition: all 0.2s ease;
 }
+
 #topDomainsContainer .domain-item:hover,
 #busiestHoursContainer .hour-item:hover {
   background: rgba(255, 255, 255, 0.02);
   padding-left: 0.25rem;
 }
+
 #topDomainsContainer .domain-item:last-child,
 #busiestHoursContainer .hour-item:last-child {
   border-bottom: none;
 }
+
 #topDomainsContainer .domain-item .count,
 #busiestHoursContainer .hour-item .count {
   color: #71717a;
   font-weight: 500;
 }
+
 #topDomainsContainer .domain-item span:first-child,
 #busiestHoursContainer .hour-item span:first-child {
   color: #d4d4d8;
@@ -1033,6 +1178,7 @@
 #tab-usage .flex.items-center.gap-2.mb-3 i {
   font-size: 1.1rem;
 }
+
 #tab-usage .flex.items-center.gap-2.mb-3 h4 {
   font-size: 0.75rem;
   font-weight: 600;
@@ -1049,6 +1195,7 @@
   height: 28px;
   display: inline-block;
 }
+
 #tab-usage canvas.skeleton-chart {
   animation: shimmer 1.8s ease-in-out infinite;
 }
@@ -1124,6 +1271,7 @@
     max-height: 300px;
   }
 }
+
 @media (max-width: 480px) {
   #tab-settings .glass-panel .split-layout {
     gap: 1rem;
@@ -1151,6 +1299,7 @@
   border-radius: 6px;
   display: inline-block;
 }
+
 .skeleton-text {
   height: 16px;
   border-radius: 4px;
@@ -1158,6 +1307,7 @@
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
 }
+
 .skeleton-badge {
   height: 24px;
   border-radius: 30px;
@@ -1165,12 +1315,14 @@
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
 }
+
 .skeleton-icon {
   background: linear-gradient(90deg, rgba(30, 30, 35, 0.6) 25%, rgba(50, 50, 58, 0.8) 50%, rgba(30, 30, 35, 0.6) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
   border-radius: 10px;
 }
+
 .skeleton-stat {
   display: inline-block;
   width: 60px;
@@ -1180,6 +1332,7 @@
   animation: shimmer 1.8s ease-in-out infinite;
   border-radius: 6px;
 }
+
 .skeleton-stat-sm {
   display: inline-block;
   width: 30px;
@@ -1189,10 +1342,12 @@
   animation: shimmer 1.8s ease-in-out infinite;
   border-radius: 4px;
 }
+
 .skeleton-card {
   position: relative;
   overflow: hidden;
 }
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -1201,6 +1356,7 @@
     background-position: 200% 0;
   }
 }
+
 @media (max-width: 640px) {
   .skeleton-stat {
     width: 40px;
@@ -1210,9 +1366,11 @@
     height: 14px;
   }
 }
+
 #deleteAccountModal .glass-panel {
   pointer-events: auto !important;
 }
+
 #deleteAccountModal button {
   pointer-events: auto !important;
   cursor: pointer !important;

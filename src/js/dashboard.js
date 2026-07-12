@@ -111,6 +111,8 @@ const logSearchInput = document.getElementById('logSearchInput');
 const logCount = document.getElementById('logCount');
 const rangeBtns = document.querySelectorAll('.range-btn');
 const exportBtn = document.getElementById('exportBtn');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const filterChips = document.querySelectorAll('.filter-chip');
 
 let requestChart = null;
 let tokenChart = null;
@@ -131,6 +133,13 @@ let deleteReauthToken = null;
 let deleteCaptchaToken = null;
 let deleteTurnstileWidgetId = null;
 let isSocialUser = false;
+
+// --- Table state ---
+let currentPage = 1;
+const PAGE_SIZE = 10;
+let sortField = 'timestamp';
+let sortOrder = 'desc';
+let activeFilter = null; // { type: 'model'|'domain'|'status', value: string }
 
 function showSkeleton(containerId, type) {
     const container = document.getElementById(containerId);
@@ -216,6 +225,20 @@ function showSkeleton(containerId, type) {
             `;
             container.appendChild(skeleton);
         }
+    } else if (type === 'tableRows') {
+        for (let i = 0; i < 5; i++) {
+            const tr = document.createElement('tr');
+            tr.className = 'skeleton-card';
+            tr.style.animationDelay = `${i * 0.04}s`;
+            tr.innerHTML = `
+                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div></td>
+                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div></td>
+                <td class="py-2 px-3 text-right"><div class="skeleton skeleton-text" style="width: 40px; height: 14px; margin-left: auto;"></div></td>
+                <td class="py-2 px-3"><div class="skeleton skeleton-badge" style="width: 50px; height: 20px;"></div></td>
+                <td class="py-2 px-3"><div class="skeleton skeleton-text" style="width: 80px; height: 14px;"></div></td>
+            `;
+            container.appendChild(tr);
+        }
     }
 }
 
@@ -261,7 +284,6 @@ function showUsageSkeletons() {
             el.className = 'stat-number text-2xl mt-1';
         }
     });
-    // Show skeleton on chart canvases
     if (requestChartCanvas) {
         requestChartCanvas.style.opacity = '0.3';
         requestChartCanvas.style.background = 'linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%)';
@@ -767,14 +789,57 @@ function renderBreakdowns(models, domains, hours) {
     }
 }
 
+// --- Table rendering with sorting, filtering, pagination ---
 function renderTable(logs) {
     if (!logsTableBody) return;
     if (!logs || logs.length === 0) {
         logsTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>';
+        loadMoreBtn.classList.add('hidden');
+        if (logCount) logCount.textContent = '0 entries';
         return;
     }
+
+    let data = [...logs];
+
+    // Apply filter
+    if (activeFilter) {
+        const { type, value } = activeFilter;
+        data = data.filter(log => {
+            if (type === 'model') return (log.model || '').toLowerCase() === value.toLowerCase();
+            if (type === 'domain') return (log.domain || '').toLowerCase() === value.toLowerCase();
+            if (type === 'status') return (log.status || '').toLowerCase() === value.toLowerCase();
+            return true;
+        });
+    }
+
+    // Apply sort
+    data.sort((a, b) => {
+        let aVal = a[sortField] || '';
+        let bVal = b[sortField] || '';
+        if (sortField === 'tokens') {
+            aVal = Number(aVal) || 0;
+            bVal = Number(bVal) || 0;
+        } else if (sortField === 'timestamp') {
+            aVal = new Date(aVal).getTime() || 0;
+            bVal = new Date(bVal).getTime() || 0;
+        } else {
+            aVal = String(aVal).toLowerCase();
+            bVal = String(bVal).toLowerCase();
+        }
+        if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+        if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    const totalFiltered = data.length;
+    const start = 0;
+    const end = currentPage * PAGE_SIZE;
+    const pageData = data.slice(start, end);
+    const hasMore = end < totalFiltered;
+
+    // Render rows
     logsTableBody.innerHTML = '';
-    logs.slice(0, 50).forEach(log => {
+    pageData.forEach(log => {
         const tr = document.createElement('tr');
         const date = log.timestamp ? new Date(log.timestamp).toLocaleString() : '—';
         const status = log.status || 'success';
@@ -782,11 +847,88 @@ function renderTable(logs) {
         tr.innerHTML = `
             <td class="py-2 px-3 text-zinc-400 text-xs">${date}</td>
             <td class="py-2 px-3 text-zinc-300 text-xs">${log.model || 'unknown'}</td>
-            <td class="py-2 px-3 text-zinc-400 text-xs">${log.totalTokens || 0}</td>
+            <td class="py-2 px-3 text-zinc-400 text-xs text-right">${log.totalTokens || 0}</td>
             <td class="py-2 px-3"><span class="status-badge ${statusClass} text-[10px]">${status}</span></td>
             <td class="py-2 px-3 text-zinc-400 text-xs font-mono">${log.domain || '—'}</td>
         `;
         logsTableBody.appendChild(tr);
+    });
+
+    // Update log count
+    if (logCount) {
+        logCount.textContent = `${pageData.length} of ${totalFiltered} entries`;
+    }
+
+    // Show/hide load more button
+    if (hasMore) {
+        loadMoreBtn.classList.remove('hidden');
+    } else {
+        loadMoreBtn.classList.add('hidden');
+    }
+}
+
+// --- Event listeners for table sorting ---
+document.querySelectorAll('#tab-usage table thead th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+        const field = th.dataset.sort;
+        if (sortField === field) {
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortField = field;
+            sortOrder = 'desc';
+        }
+        currentPage = 1;
+        renderTable(filteredLogs);
+        // Update sort icons
+        document.querySelectorAll('#tab-usage table thead th[data-sort] i').forEach(icon => {
+            icon.className = 'ph ph-caret-up-down ml-0.5';
+        });
+        const icon = th.querySelector('i');
+        if (icon) {
+            icon.className = sortOrder === 'asc' ? 'ph ph-caret-up ml-0.5' : 'ph ph-caret-down ml-0.5';
+        }
+    });
+});
+
+// --- Filter chips ---
+filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+        const filter = chip.dataset.filter;
+        if (filter === 'all') {
+            activeFilter = null;
+            filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
+            chip.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
+        } else {
+            // Toggle chip active state
+            const isActive = chip.classList.contains('active');
+            filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
+            if (!isActive) {
+                chip.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
+                // For simplicity, we just set filter based on chip text; we could use data attributes
+                // We'll implement a simple toggle: if chip is clicked again, it deactivates (resets)
+                // We'll just toggle the filter type.
+                // For a more refined approach, we can prompt for value, but we'll use chip text as value.
+                const value = chip.textContent.trim().toLowerCase();
+                // We need to determine type: if chip is in "Models" group, etc. We'll rely on data-filter attribute.
+                // We'll use data-filter-type to know which column.
+                const type = chip.dataset.filterType || 'model';
+                activeFilter = { type, value };
+            } else {
+                activeFilter = null;
+                // Also reset "All" chip to active
+                document.querySelector('.filter-chip[data-filter="all"]')?.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
+            }
+        }
+        currentPage = 1;
+        renderTable(filteredLogs);
+    });
+});
+
+// --- Load More ---
+if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+        currentPage++;
+        renderTable(filteredLogs);
     });
 }
 
@@ -1279,9 +1421,28 @@ if (deleteGroqBtn) {
 
 async function loadUsage(range = currentRange) {
     if (!currentUser) return;
+    // Reset table state
+    currentPage = 1;
+    activeFilter = null;
+    filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
+    document.querySelector('.filter-chip[data-filter="all"]')?.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
+    sortField = 'timestamp';
+    sortOrder = 'desc';
+    document.querySelectorAll('#tab-usage table thead th[data-sort] i').forEach(icon => {
+        icon.className = 'ph ph-caret-up-down ml-0.5';
+    });
+    const firstTh = document.querySelector('#tab-usage table thead th[data-sort="timestamp"]');
+    if (firstTh) {
+        const icon = firstTh.querySelector('i');
+        if (icon) icon.className = 'ph ph-caret-down ml-0.5';
+    }
+
     showStatSkeletons();
     showSkeleton('usageHistoryContainer', 'usage');
     showUsageSkeletons();
+    showSkeleton('logsTableBody', 'tableRows');
+    loadMoreBtn.classList.add('hidden');
+
     try {
         const response = await fetch(`/api/stats?range=${range}`, { credentials: 'include' });
         if (!response.ok) throw new Error('Failed to fetch stats');
@@ -1289,6 +1450,7 @@ async function loadUsage(range = currentRange) {
         allLogs = data.recentLogs || [];
         filteredLogs = allLogs;
         hideUsageSkeletons();
+        hideSkeleton('logsTableBody');
         renderStats(data.totals, data.daily);
         renderCharts(data.daily);
         renderBreakdowns(data.modelBreakdown, data.domainBreakdown, data.hourlyDistribution);
@@ -1309,12 +1471,14 @@ async function loadUsage(range = currentRange) {
     } catch (error) {
         console.error('Usage load error:', error);
         hideUsageSkeletons();
+        hideSkeleton('logsTableBody');
         if (usageHistoryContainer) {
             hideSkeleton('usageHistoryContainer');
             usageHistoryContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load usage data.</div>';
         }
         if (topDomainsContainer) topDomainsContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
         if (busiestHoursContainer) busiestHoursContainer.innerHTML = '<div class="text-sm text-red-400 text-center py-4">Failed to load.</div>';
+        logsTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-red-400 py-6 text-sm">Failed to load logs.</td></tr>';
     }
 }
 
@@ -1454,6 +1618,7 @@ if (logSearchInput) {
                 (log.status || '').toLowerCase().includes(query)
             );
         }
+        currentPage = 1;
         renderTable(filteredLogs);
         if (logCount) logCount.textContent = `${filteredLogs.length} entries`;
     });

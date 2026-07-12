@@ -463,29 +463,43 @@
                         <h3 class="text-sm font-semibold text-white flex items-center gap-2">
                             <i class="ph-bold ph-list-checks text-primary"></i> Recent Activity
                         </h3>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <div class="flex items-center gap-1.5 text-xs text-zinc-400" id="filterChips">
+                                <span class="filter-chip active px-2 py-1 rounded-md bg-primary/20 text-primary border border-primary/30 cursor-pointer hover:bg-primary/30 transition" data-filter="all">All</span>
+                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="model">Models</span>
+                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="domain">Domains</span>
+                                <span class="filter-chip px-2 py-1 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition" data-filter="status">Status</span>
+                            </div>
                             <div class="relative">
                                 <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
                                 <input id="logSearchInput" type="text" placeholder="Search logs..." class="form-input !py-1.5 !pl-8 !pr-3 !text-xs !w-48 !bg-black/30 !border-white/5 !rounded-lg" />
                             </div>
-                            <span id="logCount" class="text-xs text-zinc-500">0 entries</span>
+                            <span id="logCount" class="text-xs text-zinc-500 whitespace-nowrap">0 entries</span>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="border-b border-white/5 text-left text-xs text-zinc-500 uppercase tracking-wider">
-                                    <th class="py-2 px-3 font-medium">Timestamp</th>
-                                    <th class="py-2 px-3 font-medium">Model</th>
-                                    <th class="py-2 px-3 font-medium">Tokens</th>
-                                    <th class="py-2 px-3 font-medium">Status</th>
-                                    <th class="py-2 px-3 font-medium">Domain</th>
-                                </tr>
-                            </thead>
-                            <tbody id="logsTableBody">
-                                <tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="relative">
+                        <div class="table-wrapper max-h-[400px] overflow-y-auto scrollbar-custom relative rounded-lg border border-white/5">
+                            <table class="w-full text-sm">
+                                <thead class="sticky top-0 z-10 bg-black/90 backdrop-blur-sm">
+                                    <tr class="border-b border-white/5 text-left text-xs text-zinc-500 uppercase tracking-wider">
+                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="timestamp">Timestamp <i class="ph ph-caret-up-down ml-0.5"></i></th>
+                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="model">Model <i class="ph ph-caret-up-down ml-0.5"></i></th>
+                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors text-right" data-sort="tokens">Tokens <i class="ph ph-caret-up-down ml-0.5"></i></th>
+                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="status">Status <i class="ph ph-caret-up-down ml-0.5"></i></th>
+                                        <th class="py-2 px-3 font-medium cursor-pointer hover:text-white transition-colors" data-sort="domain">Domain <i class="ph ph-caret-up-down ml-0.5"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logsTableBody">
+                                    <tr><td colspan="5" class="text-center text-zinc-500 py-6 text-sm">No usage data available yet.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button id="loadMoreBtn" class="btn-ghost text-xs px-4 py-1.5 rounded-lg border border-white/5 hover:border-white/15 transition-all hidden">
+                            <i class="ph-bold ph-plus-circle mr-1"></i> Load More
+                        </button>
                     </div>
                 </div>
             </section>
