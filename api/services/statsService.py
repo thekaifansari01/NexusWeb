@@ -1,17 +1,19 @@
-# api/services/statsService.py
 from datetime import datetime, timedelta, timezone
+from firebase_admin import firestore
 from api.core.config import db
 
 def get_stats(user_id, days):
     daily = _get_daily_usage(user_id, days)
     breakdowns = _get_breakdowns(user_id, days)
     totals = _calculate_totals(daily)
+    recent_logs = _get_recent_logs(user_id, days)
     return {
         'daily': daily,
         'totals': totals,
         'modelBreakdown': breakdowns['models'],
         'domainBreakdown': breakdowns['domains'],
-        'hourlyDistribution': breakdowns['hours']
+        'hourlyDistribution': breakdowns['hours'],
+        'recentLogs': recent_logs
     }
 
 def _get_daily_usage(user_id, days):
@@ -63,6 +65,28 @@ def _get_breakdowns(user_id, days):
         'domains': [{'name': k, 'count': v} for k, v in domains.items()],
         'hours': [{'hour': k, 'count': v} for k, v in hours.items()]
     }
+
+def _get_recent_logs(user_id, days, limit=50):
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    try:
+        docs = db.collection('usageLogs') \
+                 .where('userId', '==', user_id) \
+                 .where('timestamp', '>=', cutoff) \
+                 .order_by('timestamp', direction=firestore.Query.DESCENDING) \
+                 .limit(limit) \
+                 .stream()
+    except Exception as e:
+        print(f"Recent logs query error: {e}")
+        return []
+    logs = []
+    for doc in docs:
+        data = doc.to_dict()
+        data['id'] = doc.id
+        if 'timestamp' in data and data['timestamp']:
+            if hasattr(data['timestamp'], 'isoformat'):
+                data['timestamp'] = data['timestamp'].isoformat()
+        logs.append(data)
+    return logs
 
 def _calculate_totals(daily):
     total_requests = sum(d['requests'] for d in daily)
