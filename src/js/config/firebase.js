@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAEptheO-640PV6s7lbDZ_4pxkRoCXe_VE",
-    authDomain: "trynexusweb.vercel.app",
-    projectId: "nexuswebassistant",
-    storageBucket: "nexuswebassistant.firebasestorage.app",
-    messagingSenderId: "69132729895",
-    appId: "1:69132729895:web:1fc74209c95486e241d802",
-    measurementId: "G-WEPDV083FB"
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
 };
 
 const app = initializeApp(firebaseConfig);
