@@ -1,7 +1,6 @@
 // src/js/modules/plan.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
-import { showToast } from "./ui.js";
 import { showStatSkeletons } from "./dashboard-utils.js";
 
 export let planInfo = {

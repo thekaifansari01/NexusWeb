@@ -8,11 +8,13 @@ import { loadUsage } from "./usage.js";
 import { loadPlanInfo } from "./plan.js";
 import { updateUserUI } from "./dashboard-utils.js";
 import { handleURLState } from "./tabs.js";
+import { initEvents } from "./events.js";  
 
 export function initDashboard(user) {
   state.currentUser = user;
   updateUserUI(user);
   handleURLState();
+  initEvents();            
   loadKeys();
   loadDomains();
   loadGroqKey();

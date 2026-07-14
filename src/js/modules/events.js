@@ -11,8 +11,6 @@ import { loadGroqKey, handleGroqInput, cancelGroqEdit, toggleGroqVisibility, sav
 import { loadUsage, filterLogs, applyFilter, loadMoreLogs, sortLogs, exportLogs } from "./usage.js";
 import { updateUserPassword, openDeleteAccountModal, closeDeleteAccountModal, confirmDeleteAccount } from "./settings.js";
 import { addDomain } from "./firestore.js";
-import { updateDoc, doc } from "firebase/firestore";
-import { db } from "../config/firebase.js";
 
 export function initEvents() {
   dom.tabBtns.forEach(btn => {
