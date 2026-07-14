@@ -53,6 +53,7 @@ def handle_chat_request(body, request_origin):
         if domain_data.get('status') != 'active':
             return 403, {"error": "Domain is deactivated"}
 
+        # ----- Monthly Usage Limit Check (Transaction) -----
         user_doc = db.collection('users').document(user_id).get()
         if not user_doc.exists:
             return 400, {"error": "User not found"}
@@ -84,6 +85,7 @@ def handle_chat_request(body, request_origin):
         success, new_count = check_and_increment()
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
+        # ----- End of limit check -----
 
         groq_doc = db.collection('userGroqKeys').document(user_id).get()
         if not groq_doc.exists:
