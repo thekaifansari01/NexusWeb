@@ -1,5 +1,6 @@
 # api/services/chatService.py
 import requests
+import time
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from firebase_admin import firestore
@@ -63,26 +64,33 @@ def handle_chat_request(body, request_origin):
         month_key = datetime.now(timezone.utc).strftime("%Y-%m")
         usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
 
-        @firestore.transactional
-        def check_and_increment(transaction):
-            doc = transaction.get(usage_ref)
-            if doc.exists:
-                current_count = doc.to_dict().get('count', 0)
-            else:
-                current_count = 0
-            if current_count >= monthly_limit:
-                return False, current_count
-            transaction.set(usage_ref, {
-                'userId': user_id,
-                'month': month_key,
-                'count': current_count + 1,
-                'limit': monthly_limit,
-                'lastUpdated': firestore.SERVER_TIMESTAMP
-            }, merge=True)
-            return True, current_count + 1
+        def check_and_increment():
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    transaction = db.transaction()
+                    doc = transaction.get(usage_ref)
+                    if doc.exists:
+                        current_count = doc.to_dict().get('count', 0)
+                    else:
+                        current_count = 0
+                    if current_count >= monthly_limit:
+                        return False, current_count
+                    transaction.set(usage_ref, {
+                        'userId': user_id,
+                        'month': month_key,
+                        'count': current_count + 1,
+                        'limit': monthly_limit,
+                        'lastUpdated': firestore.SERVER_TIMESTAMP
+                    }, merge=True)
+                    return True, current_count + 1
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    time.sleep(0.1 * (attempt + 1))
+            return False, 0
 
-        transaction = db.transaction()
-        success, new_count = check_and_increment(transaction)
+        success, new_count = check_and_increment()
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
 
