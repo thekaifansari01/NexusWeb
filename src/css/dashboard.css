@@ -1101,13 +1101,12 @@
   color: #fafafa;
 }
 
-/* ===== MOBILE RESPONSIVE ADDITIONS ===== */
 @media (max-width: 640px) {
   .stat-card {
-    padding: 1rem 1.25rem;
+    padding: 1.25rem;
   }
   .stat-card .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
   .key-card,
   .domain-card {
@@ -1115,10 +1114,7 @@
   }
   .tab-btn {
     padding: 0.4rem 0.8rem;
-    font-size: 0.75rem;
-  }
-  .tab-btn i {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
   #settingsAvatar {
     width: 64px;
@@ -1128,7 +1124,7 @@
     font-size: 1.1rem;
   }
   #settingsEmail {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   #tab-settings .glass-panel .split-content {
     padding: 1rem;
@@ -1152,23 +1148,17 @@
   #passwordChangeSection .form-input {
     max-width: 100%;
   }
-
-  /* Usage page mobile tweaks */
   #tab-usage .stat-card .stat-number {
     font-size: 1.3rem;
   }
-  #tab-usage .stat-card {
-    padding: 0.75rem 1rem;
-  }
   #logSearchInput {
     width: 8rem;
-    font-size: 0.65rem;
   }
   #tab-usage .glass-panel.bg-black\/20 .h-56 {
-    height: 150px;
+    height: 160px;
   }
   #tab-usage .glass-panel.bg-black\/20 .h-48 {
-    height: 130px;
+    height: 140px;
   }
   #rangeToggle .range-btn {
     font-size: 0.6rem;
@@ -1177,85 +1167,6 @@
   #tab-usage .table-wrapper {
     max-height: 300px;
   }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 {
-    padding: 0.75rem 1rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .flex.items-center.gap-4 {
-    gap: 0.5rem;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .w-10.h-10 {
-    width: 32px;
-    height: 32px;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .text-sm.font-bold {
-    font-size: 0.8rem;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .text-xs.text-zinc-500 {
-    font-size: 0.6rem;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .gap-6 {
-    gap: 0.75rem;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .min-w-\[70px\] {
-    min-width: 50px;
-  }
-  #tab-usage .flex.items-center.justify-between.p-4.mb-3 .text-sm.font-mono {
-    font-size: 0.7rem;
-  }
-
-  .welcome-banner {
-    padding: 1.25rem;
-  }
-  .welcome-banner h1 {
-    font-size: 1.5rem;
-  }
-  .welcome-banner .flex.items-center.gap-3.flex-shrink-0 {
-    flex-wrap: wrap;
-  }
-  .welcome-banner .btn-primary,
-  .welcome-banner .btn-secondary {
-    padding: 0.4rem 1rem;
-    font-size: 0.7rem;
-  }
-  .empty-state {
-    padding: 2.5rem 1.5rem;
-  }
-  .empty-state .icon-wrap {
-    width: 56px;
-    height: 56px;
-    font-size: 1.5rem;
-  }
-  .empty-state h4 {
-    font-size: 0.95rem;
-  }
-  .empty-state p {
-    font-size: 0.8rem;
-  }
-  .form-input {
-    font-size: 0.85rem;
-    padding: 0.6rem 1rem;
-  }
-  .btn-primary,
-  .btn-secondary {
-    padding: 0.5rem 1.2rem;
-    font-size: 0.75rem;
-  }
-  #captchaModal .glass-panel {
-    padding: 1.5rem;
-  }
-  #captchaModal .glass-panel h3 {
-    font-size: 1rem;
-  }
-  #captchaModal .glass-panel p {
-    font-size: 0.85rem;
-  }
-  #captchaModal .glass-panel .btn-primary,
-  #captchaModal .glass-panel .btn-secondary {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1263,44 +1174,13 @@
     gap: 1rem;
   }
   #tab-settings .glass-panel {
-    padding: 1rem;
+    padding: 1.25rem;
   }
   #deleteAccountModal .glass-panel {
-    padding: 1rem;
+    padding: 1.25rem;
   }
   #tab-usage .table-wrapper {
     max-height: 250px;
-  }
-  #tab-usage .glass-panel.bg-black\/20 .h-56 {
-    height: 120px;
-  }
-  #tab-usage .glass-panel.bg-black\/20 .h-48 {
-    height: 100px;
-  }
-  #tab-usage .stat-card .stat-number {
-    font-size: 1.1rem;
-  }
-  .stat-card .stat-number {
-    font-size: 1.3rem;
-  }
-  .key-card,
-  .domain-card {
-    padding: 0.75rem 1rem;
-  }
-  .key-name,
-  .domain-name {
-    font-size: 0.9rem;
-  }
-  .key-value {
-    font-size: 0.6rem;
-    padding: 0.15rem 0.5rem;
-  }
-  #rangeToggle .range-btn {
-    font-size: 0.55rem;
-    padding: 0.2rem 0.5rem;
-  }
-  #logSearchInput {
-    width: 6rem;
   }
 }
 
