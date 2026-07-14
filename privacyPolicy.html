@@ -1,3 +1,4 @@
+<!-- privacyPolicy.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -95,12 +96,10 @@
         }
     </style>
 </head>
-
-<body class="bg-background text-zinc-300 font-sans antialiased"></body>
+<body class="bg-background text-zinc-300 font-sans antialiased">
 
     <div class="ambient-glow"></div>
 
-    <!-- ===== NAVBAR ===== -->
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -139,10 +138,8 @@
         </nav>
     </div>
 
-    <!-- ===== MAIN CONTENT ===== -->
     <main class="max-w-4xl mx-auto px-6 pt-32 pb-20 relative z-10">
 
-        <!-- Header -->
         <div class="text-center mb-12">
             <div class="flex items-center justify-center gap-3 mb-4">
                 <span class="badge-pill">🔒 Privacy First</span>
@@ -156,7 +153,6 @@
             </p>
         </div>
 
-        <!-- Quick Summary -->
         <div class="glass-card border-primary/20 mb-10" style="border-color: rgba(168,85,247,0.15);">
             <div class="flex items-start gap-4">
                 <div class="section-icon !w-12 !h-12 !rounded-full bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
@@ -165,16 +161,15 @@
                 <div>
                     <h2 class="text-lg font-bold text-white mb-1">TL;DR — In Plain English</h2>
                     <p class="text-sm text-zinc-400 leading-relaxed">
-                        We use a <strong>session cookie</strong> only to keep you logged in. 
-                        We collect <strong>minimal data</strong> to run the service — your email, name, and usage stats. 
-                        We <strong>never sell</strong> your data to anyone. 
+                        We use a <strong>session cookie</strong> only to keep you logged in.
+                        We collect <strong>minimal data</strong> to run the service — your email, name, usage stats, and monthly request counts.
+                        We <strong>never sell</strong> your data to anyone.
                         You can <strong>delete everything</strong> anytime.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- ===== SECTION 1: Data We Collect ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -214,6 +209,11 @@
                                 <td>To monitor performance and improve the service</td>
                             </tr>
                             <tr>
+                                <td><span class="text-white font-medium">Monthly Usage</span></td>
+                                <td>Request count per month (for limit enforcement)</td>
+                                <td>To enforce free‑tier limits and manage upgrades</td>
+                            </tr>
+                            <tr>
                                 <td><span class="text-white font-medium">Cookies</span></td>
                                 <td>Session cookie (HttpOnly, Secure, SameSite=Strict)</td>
                                 <td>To authenticate you across requests</td>
@@ -231,7 +231,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 2: Why We Collect ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -270,12 +269,18 @@
                             </div>
                             <p class="text-xs text-zinc-400">Your API keys are stored encrypted so you can securely integrate AI into your websites.</p>
                         </div>
+                        <div class="p-4 rounded-xl bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-amber-400 mb-1">
+                                <i class="ph-bold ph-gauge"></i>
+                                <span class="text-sm font-semibold text-white">Usage Limits Enforcement</span>
+                            </div>
+                            <p class="text-xs text-zinc-400">Monthly request counts ensure fair usage of the free tier and enable future upgrades.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== SECTION 3: Data Storage & Security ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -327,7 +332,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 4: Third-Party Services ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -350,7 +354,7 @@
                             <tr>
                                 <td><span class="text-white font-medium">Firebase</span></td>
                                 <td>Authentication, Database, Hosting</td>
-                                <td>Email, Name, Profile Photo, UID, Session Data</td>
+                                <td>Email, Name, Profile Photo, UID, Session Data, Monthly Usage</td>
                                 <td><a href="https://firebase.google.com/support/privacy" target="_blank" class="text-primary hover:underline text-xs">View →</a></td>
                             </tr>
                             <tr>
@@ -384,7 +388,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 5: Your Rights ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -424,7 +427,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 6: Cookie Policy ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -470,7 +472,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 7: Data Retention ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -494,6 +495,10 @@
                             <span class="text-zinc-400">30 days (for debugging & improvement)</span>
                         </div>
                         <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
+                            <span class="text-zinc-300">Monthly usage counters</span>
+                            <span class="text-zinc-400">Reset each month; historical data retained for billing/limit enforcement</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
                             <span class="text-zinc-300">Session history (active sessions)</span>
                             <span class="text-zinc-400">Deleted when you log out or revoke the session</span>
                         </div>
@@ -502,7 +507,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 8: Children's Privacy ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -511,14 +515,13 @@
                 <div class="flex-1">
                     <h2 class="text-xl font-bold text-white mb-1">8. Children's Privacy</h2>
                     <p class="text-sm text-zinc-400 leading-relaxed">
-                        Nexus is not intended for children under 13. We do not knowingly collect personal information from children. 
+                        Nexus is not intended for children under 13. We do not knowingly collect personal information from children.
                         If you are a parent and believe your child has provided us with personal data, please contact us and we will delete it.
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- ===== SECTION 9: Changes ===== -->
         <section class="glass-card mb-8">
             <div class="flex items-start gap-4">
                 <div class="section-icon">
@@ -527,7 +530,7 @@
                 <div class="flex-1">
                     <h2 class="text-xl font-bold text-white mb-1">9. Changes to This Policy</h2>
                     <p class="text-sm text-zinc-400 leading-relaxed">
-                        We may update this policy occasionally. The latest version will always be posted here with the effective date at the top. 
+                        We may update this policy occasionally. The latest version will always be posted here with the effective date at the top.
                         Significant changes will be notified through the Dashboard or via email.
                     </p>
                     <p class="text-xs text-zinc-500 mt-2">
@@ -538,7 +541,6 @@
             </div>
         </section>
 
-        <!-- ===== SECTION 10: Contact ===== -->
         <section class="glass-card border-primary/20" style="border-color: rgba(168,85,247,0.15);">
             <div class="flex items-start gap-4">
                 <div class="section-icon !border-primary/30">
@@ -571,7 +573,6 @@
             </div>
         </section>
 
-        <!-- ===== FOOTER ===== -->
         <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
             <div class="flex flex-wrap justify-center gap-6 mb-4">
                 <a href="/" class="hover:text-white transition-colors">Home</a>
@@ -586,7 +587,6 @@
 
     </main>
 
-    <!-- ===== FIREBASE + AUTH (same as index.html) ===== -->
     <script type="importmap">
         {
             "imports": {
@@ -598,5 +598,6 @@
         }
     </script>
     <script type="module" src="src/js/app.js"></script>
+
 </body>
 </html>
