@@ -1,8 +1,9 @@
+# api/services/chatService.py
 import requests
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from firebase_admin import firestore
-from api.core.config import db
+from api.core.config import db, PLAN_LIMITS
 from api.core.crypto_utils import decrypt
 
 def handle_chat_request(body, request_origin):
@@ -51,6 +52,39 @@ def handle_chat_request(body, request_origin):
         domain_data = domains_ref[0].to_dict()
         if domain_data.get('status') != 'active':
             return 403, {"error": "Domain is deactivated"}
+
+        user_doc = db.collection('users').document(user_id).get()
+        if not user_doc.exists:
+            return 400, {"error": "User not found"}
+        user_data = user_doc.to_dict()
+        plan = user_data.get('plan', 'free')
+        monthly_limit = PLAN_LIMITS.get(plan, 1000)
+
+        month_key = datetime.now(timezone.utc).strftime("%Y-%m")
+        usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
+
+        @firestore.transactional
+        def check_and_increment(transaction):
+            doc = transaction.get(usage_ref)
+            if doc.exists:
+                current_count = doc.to_dict().get('count', 0)
+            else:
+                current_count = 0
+            if current_count >= monthly_limit:
+                return False, current_count
+            transaction.set(usage_ref, {
+                'userId': user_id,
+                'month': month_key,
+                'count': current_count + 1,
+                'limit': monthly_limit,
+                'lastUpdated': firestore.SERVER_TIMESTAMP
+            }, merge=True)
+            return True, current_count + 1
+
+        transaction = db.transaction()
+        success, new_count = check_and_increment(transaction)
+        if not success:
+            return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
 
         groq_doc = db.collection('userGroqKeys').document(user_id).get()
         if not groq_doc.exists:

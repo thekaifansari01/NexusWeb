@@ -1,3 +1,4 @@
+
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install",
@@ -10,6 +11,10 @@
     {
       "source": "/api/auth/(.*)",
       "destination": "/api/auth"
+    },
+    {
+      "source": "/api/user/plan",
+      "destination": "/api/user/plan"
     },
     {
       "source": "/docs",
@@ -46,6 +51,10 @@
     {
       "source": "/privacyPolicy",
       "destination": "/privacyPolicy.html"
+    },
+    {
+      "source": "/billing",
+      "destination": "/billing.html"
     }
   ]
 }

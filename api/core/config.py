@@ -1,5 +1,4 @@
-# Core configuration – Firebase init, JWT cookies, encryption keys
-
+# api/core/config.py
 import os
 import json
 import jwt
@@ -56,6 +55,10 @@ if not COOKIE_SECRET:
 COOKIE_NAME = 'nexus_session'
 COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 JWT_ALGORITHM = 'HS256'
+
+PLAN_LIMITS = {
+    "free": 1000,
+}
 
 def create_session_token(uid, session_id):
     payload = {

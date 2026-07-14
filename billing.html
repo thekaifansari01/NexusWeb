@@ -1,0 +1,161 @@
+<!-- billing.html -->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billing · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <link rel="stylesheet" href="src/css/dashboard.css" />
+</head>
+<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
+        <div class="h-16 flex items-center px-6 border-b border-border">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
+            </a>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
+            </a>
+            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
+            </a>
+            <a href="/billing" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-credit-card text-lg"></i> Billing
+            </a>
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-book-open text-lg"></i> Documentation
+            </a>
+        </nav>
+        <div class="p-4 border-t border-border">
+            <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
+                <div class="flex-1 min-w-0">
+                    <div id="sidebarName" class="text-sm font-semibold text-white truncate">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate">user@example.com</div>
+                </div>
+            </div>
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-red-400 transition-colors py-2">
+                <i class="ph-bold ph-sign-out"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 h-screen relative">
+        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
+        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                    <i class="ph-bold ph-list text-2xl"></i>
+                </button>
+                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <span id="breadcrumbRoot">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs"></i>
+                    <span id="breadcrumbCurrent" class="text-white">Billing</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 hidden md:flex">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph-bold ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
+            <div class="max-w-5xl mx-auto pb-20">
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">Billing &amp; Usage</h1>
+                    <p class="text-sm text-zinc-400">Manage your subscription and monitor your API usage.</p>
+                </div>
+
+                <!-- Plan Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <span id="planBadge" class="text-xs font-bold uppercase bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30">Free</span>
+                                <span class="text-xs text-zinc-500">Billing cycle: <span id="billingCycle">Monthly</span></span>
+                            </div>
+                            <h2 id="planName" class="text-2xl font-bold text-white">Free Tier</h2>
+                            <p id="planPrice" class="text-sm text-zinc-400">$0 / month</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span id="nextResetLabel" class="text-xs text-zinc-500">Resets on <span id="nextResetDate">—</span></span>
+                            <button id="upgradeBtn" class="btn-primary py-2 px-5 text-sm" disabled>
+                                <i class="ph-bold ph-arrow-up-right"></i> Upgrade (Coming Soon)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400 mb-3">Monthly Usage</h3>
+                    <div class="flex items-baseline gap-2 mb-1">
+                        <span id="usageNumber" class="text-3xl font-extrabold text-white">0</span>
+                        <span class="text-sm text-zinc-400">/ <span id="usageLimit">1000</span> requests</span>
+                    </div>
+                    <div class="w-full h-2 bg-white/10 rounded-full mt-2 overflow-hidden">
+                        <div id="usageProgressBar" class="h-full bg-primary rounded-full transition-all duration-700" style="width: 0%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-zinc-500 mt-1.5">
+                        <span id="usagePercentage">0% used</span>
+                        <span id="remainingText"><span id="remainingCount">1000</span> remaining</span>
+                    </div>
+                    <div id="usageWarning" class="mt-3 hidden text-sm text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-center gap-2">
+                        <i class="ph-bold ph-warning text-lg"></i>
+                        <span>You're approaching your monthly limit. Upgrade to continue uninterrupted.</span>
+                    </div>
+                </div>
+
+                <!-- Feature List -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400 mb-3">Included in Free Plan</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> 1,000 requests / month</li>
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Domain whitelisting (up to 10)</li>
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Encrypted Groq key vault</li>
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> All models (Llama 3, Mixtral, etc.)</li>
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Community support</li>
+                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Open source (MIT)</li>
+                    </ul>
+                </div>
+
+                <!-- Placeholder for future upgrades -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 border-dashed border-primary/20">
+                    <div class="text-center py-4">
+                        <i class="ph-bold ph-rocket text-4xl text-primary/40 mb-3 block"></i>
+                        <h4 class="text-lg font-semibold text-white">More plans coming soon</h4>
+                        <p class="text-sm text-zinc-400 max-w-md mx-auto">We're working on Pro and Enterprise plans with higher limits and priority support.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/billing.js"></script>
+</body>
+</html>

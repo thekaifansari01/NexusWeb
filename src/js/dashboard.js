@@ -63,7 +63,15 @@ const keysRevokedEl = document.getElementById('keysRevoked');
 const domainsTotalEl = document.getElementById('domainsTotal');
 const domainsActiveEl = document.getElementById('domainsActive');
 const domainsInactiveEl = document.getElementById('domainsInactive');
-const groqVaultStatusEl = document.querySelector('#tab-overview .stat-card:nth-child(3) .stat-number');
+
+const planBadge = document.getElementById('planBadge');
+const usageNumber = document.getElementById('usageNumber');
+const usageLimit = document.getElementById('usageLimit');
+const usageProgressBar = document.getElementById('usageProgressBar');
+const usagePercentText = document.getElementById('usagePercentText');
+const usageRemaining = document.getElementById('usageRemaining');
+const usageWarning = document.getElementById('usageWarning');
+const groqVaultStatus = document.getElementById('groqVaultStatus');
 
 const captchaModal = document.getElementById('captchaModal');
 const captchaModalTitle = document.getElementById('captchaModalTitle');
@@ -135,6 +143,15 @@ const PAGE_SIZE = 10;
 let sortField = 'timestamp';
 let sortOrder = 'desc';
 let activeFilter = null;
+
+let planInfo = {
+    plan: 'free',
+    planLabel: 'Free',
+    monthlyUsage: 0,
+    monthlyLimit: 1000,
+    percentage: 0,
+    remaining: 1000
+};
 
 function showSkeleton(containerId, type) {
     const container = document.getElementById(containerId);
@@ -244,13 +261,18 @@ function showStatSkeletons() {
         totalDomainsEl, activeDomainsEl, inactiveDomainsEl,
         domainsTotalEl, domainsActiveEl, domainsInactiveEl,
         totalRequestsEl, totalTokensEl, successRateEl,
-        domainLimitBadge
+        domainLimitBadge,
+        usageNumber, usageLimit, usagePercentText, usageRemaining
     ];
     statElements.forEach(el => {
         if (!el) return;
         if (el === domainLimitBadge) {
             el.className = 'domain-limit-badge';
             el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
+        } else if (el === usageNumber || el === usageLimit) {
+            el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
+        } else if (el === usagePercentText || el === usageRemaining) {
+            el.innerHTML = '<span class="skeleton skeleton-text w-16"></span>';
         } else {
             el.innerHTML = '<span class="skeleton skeleton-stat"></span>';
         }
@@ -565,6 +587,57 @@ function updateDeleteConfirmBtn() {
     deleteConfirmBtn.disabled = !deleteCaptchaToken;
 }
 
+function renderPlanInfo() {
+    const { planLabel, monthlyUsage, monthlyLimit, percentage, remaining } = planInfo;
+    
+    planBadge.textContent = planLabel;
+    usageNumber.textContent = monthlyUsage;
+    usageLimit.textContent = monthlyLimit;
+    
+    const pct = Math.min(percentage, 100);
+    usageProgressBar.style.width = pct + '%';
+    usagePercentText.textContent = pct + '% used';
+    usageRemaining.textContent = Math.max(0, remaining);
+    
+    if (pct >= 90) {
+        usageProgressBar.classList.add('bg-red-500');
+        usageProgressBar.classList.remove('bg-primary');
+    } else {
+        usageProgressBar.classList.remove('bg-red-500');
+        usageProgressBar.classList.add('bg-primary');
+    }
+    
+    if (pct >= 80) {
+        usageWarning.classList.remove('hidden');
+        if (pct >= 100) {
+            usageWarning.innerHTML = `<i class="ph-bold ph-warning text-xs"></i> Limit reached. Upgrade to continue.`;
+        } else {
+            usageWarning.innerHTML = `<i class="ph-bold ph-warning text-xs"></i> Approaching monthly limit`;
+        }
+    } else {
+        usageWarning.classList.add('hidden');
+    }
+}
+
+async function loadPlanInfo() {
+    if (!currentUser) return;
+    try {
+        const response = await fetch('/api/user/plan', { credentials: 'include' });
+        if (!response.ok) throw new Error('Failed to fetch plan info');
+        const data = await response.json();
+        planInfo = data;
+        renderPlanInfo();
+    } catch (error) {
+        console.error('Plan info load error:', error);
+        planBadge.textContent = 'Free';
+        usageNumber.textContent = '—';
+        usageLimit.textContent = '1000';
+        usageProgressBar.style.width = '0%';
+        usagePercentText.textContent = '0% used';
+        usageRemaining.textContent = '1000';
+    }
+}
+
 observeAuthState((user) => {
     if (!user) {
         window.location.href = '/login';
@@ -614,6 +687,7 @@ observeAuthState((user) => {
     loadDomains();
     loadGroqKey();
     loadUsage();
+    loadPlanInfo();
 
     if (deleteAccountModal) {
         deleteAccountModal.classList.add('hidden');
@@ -1365,9 +1439,9 @@ async function loadGroqKey() {
             groqStatus.style.color = '#34d399';
             deleteGroqBtn.classList.remove('hidden');
             resetGroqForm();
-            if (groqVaultStatusEl) {
-                groqVaultStatusEl.textContent = '🔒 Encrypted';
-                groqVaultStatusEl.className = 'stat-number text-emerald-400 text-xl font-bold';
+            if (groqVaultStatus) {
+                groqVaultStatus.textContent = '🔒 Encrypted';
+                groqVaultStatus.className = 'stat-number text-emerald-400 text-xl font-bold';
             }
         } else {
             groqInput.value = '';
@@ -1375,9 +1449,9 @@ async function loadGroqKey() {
             groqStatus.style.color = '#71717a';
             deleteGroqBtn.classList.add('hidden');
             resetGroqForm();
-            if (groqVaultStatusEl) {
-                groqVaultStatusEl.textContent = '⚠️ Not Configured';
-                groqVaultStatusEl.className = 'stat-number text-amber-400 text-xl font-bold';
+            if (groqVaultStatus) {
+                groqVaultStatus.textContent = '⚠️ Not Configured';
+                groqVaultStatus.className = 'stat-number text-amber-400 text-xl font-bold';
             }
         }
     } catch (error) {
@@ -1385,9 +1459,9 @@ async function loadGroqKey() {
         groqStatus.style.color = '#fb7185';
         deleteGroqBtn.classList.add('hidden');
         resetGroqForm();
-        if (groqVaultStatusEl) {
-            groqVaultStatusEl.textContent = '❌ Error';
-            groqVaultStatusEl.className = 'stat-number text-red-400 text-xl font-bold';
+        if (groqVaultStatus) {
+            groqVaultStatus.textContent = '❌ Error';
+            groqVaultStatus.className = 'stat-number text-red-400 text-xl font-bold';
         }
     }
 }

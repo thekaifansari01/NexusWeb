@@ -1,3 +1,4 @@
+<!-- Dashboard.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -32,6 +33,9 @@
             </a>
             <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
+            </a>
+            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                <i class="ph-bold ph-credit-card text-lg"></i> Billing
             </a>
             <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
@@ -106,10 +110,11 @@
                     <div class="absolute -right-10 -top-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <!-- Card 1: Nexus Keys -->
                     <div class="stat-card">
                         <div class="flex items-center justify-between mb-3">
-                            <span class="stat-label text-zinc-400">Nexus Guard & Keys</span>
+                            <span class="stat-label text-zinc-400">Nexus Guard &amp; Keys</span>
                             <div class="w-8 h-8 rounded-xl bg-primary/10 text-primary border border-primary/10 flex items-center justify-center">
                                 <i class="ph-bold ph-key"></i>
                             </div>
@@ -123,6 +128,7 @@
                         </div>
                     </div>
 
+                    <!-- Card 2: Domains -->
                     <div class="stat-card">
                         <div class="flex items-center justify-between mb-3">
                             <span class="stat-label text-zinc-400">Origin Whitelisting</span>
@@ -139,6 +145,30 @@
                         </div>
                     </div>
 
+                    <!-- Card 3: Monthly Usage -->
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="stat-label text-zinc-400">Monthly Usage</span>
+                            <span id="planBadge" class="text-[10px] font-bold uppercase bg-primary/20 text-primary px-2 py-0.5 rounded-full border border-primary/30">Free</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xl font-bold text-white" id="usageNumber">0</span>
+                            <span class="text-xs text-zinc-500">/ <span id="usageLimit">1000</span></span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/10 rounded-full mt-2 overflow-hidden">
+                            <div id="usageProgressBar" class="h-full bg-primary rounded-full transition-all duration-500" style="width: 0%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-zinc-500 mt-1.5">
+                            <span id="usagePercentText">0% used</span>
+                            <span id="usageRemainingText"><span id="usageRemaining">1000</span> remaining</span>
+                        </div>
+                        <div id="usageWarning" class="mt-2 hidden text-[10px] text-amber-400 flex items-center gap-1">
+                            <i class="ph-bold ph-warning text-xs"></i>
+                            <span>Approaching limit</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Provider Core Gateway -->
                     <div class="stat-card">
                         <div class="flex items-center justify-between mb-3">
                             <span class="stat-label text-zinc-400">Provider Core Gateway</span>
@@ -147,7 +177,7 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number text-emerald-400 text-xl font-bold"><span class="skeleton skeleton-stat"></span></div>
+                            <div id="groqVaultStatus" class="stat-number text-emerald-400 text-xl font-bold">🔒 Encrypted</div>
                         </div>
                         <div class="mt-2 text-xs text-zinc-500">
                             Groq AI Vault-grade storage active.

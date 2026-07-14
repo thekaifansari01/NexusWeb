@@ -1,10 +1,9 @@
 # api/auth/index.py
 import json
 import uuid
-import threading
 from http.server import BaseHTTPRequestHandler
-from firebase_admin import auth
-from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
+from firebase_admin import auth, firestore
+from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME, PLAN_LIMITS
 from api.core.middleware import get_user_from_cookie
 from api.services.sessionService import create_session, revoke_session
 from api.services.keyService import verify_captcha
@@ -70,7 +69,9 @@ class handler(BaseHTTPRequestHandler):
                 user_ref.set({
                     'welcomeSent': True,
                     'email': user_email,
-                    'name': user_name
+                    'name': user_name,
+                    'plan': 'free',
+                    'createdAt': firestore.SERVER_TIMESTAMP
                 }, merge=True)
                 if user_email:
                     emailService.send_welcome_email(uid, user_email, user_name)
