@@ -1,0 +1,128 @@
+# api/auth/index.py
+import json
+import uuid
+import threading
+from http.server import BaseHTTPRequestHandler
+from firebase_admin import auth
+from api.core.config import db, create_session_token, set_cookie_headers, clear_cookie_headers, COOKIE_NAME
+from api.core.middleware import get_user_from_cookie
+from api.services.sessionService import create_session, revoke_session
+from api.services.keyService import verify_captcha
+from api.services import emailService
+
+class handler(BaseHTTPRequestHandler):
+    def set_cors_headers(self, origin=None):
+        if origin:
+            self.send_header('Access-Control-Allow-Origin', origin)
+        else:
+            self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Credentials', 'true')
+        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+
+    def send_json(self, status_code, data, origin=None):
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'application/json')
+        self.set_cors_headers(origin)
+        self.end_headers()
+        self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def do_OPTIONS(self):
+        origin = self.headers.get('Origin')
+        self.send_response(200)
+        self.set_cors_headers(origin)
+        self.end_headers()
+
+    def do_POST(self):
+        origin = self.headers.get('Origin')
+        if self.path == '/api/auth/session':
+            self.handle_create_session(origin)
+        elif self.path == '/api/auth/logout':
+            self.handle_logout(origin)
+        elif self.path == '/api/auth/verify-captcha':
+            self.handle_verify_captcha(origin)
+        else:
+            self.send_json(404, {'error': 'Not found'}, origin)
+
+    def do_GET(self):
+        origin = self.headers.get('Origin')
+        if self.path == '/api/auth/me':
+            self.handle_me(origin)
+        else:
+            self.send_json(404, {'error': 'Not found'}, origin)
+
+    def handle_create_session(self, origin):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(content_length).decode('utf-8'))
+            id_token = body.get('idToken')
+            if not id_token:
+                return self.send_json(400, {'error': 'Missing idToken'}, origin)
+
+            decoded = auth.verify_id_token(id_token)
+            uid = decoded['uid']
+            user_email = decoded.get('email')
+            user_name = decoded.get('name', 'User')
+
+            user_ref = db.collection('users').document(uid)
+            user_doc = user_ref.get()
+            if not user_doc.exists or not user_doc.to_dict().get('welcomeSent'):
+                user_ref.set({
+                    'welcomeSent': True,
+                    'email': user_email,
+                    'name': user_name
+                }, merge=True)
+                if user_email:
+                    emailService.send_welcome_email(uid, user_email, user_name)
+
+            device_info = self.headers.get('User-Agent', 'Unknown Device')
+            ip_address = self.headers.get('x-forwarded-for', 'Unknown IP')
+            location = self.headers.get('x-vercel-ip-city', 'Unknown Location')
+
+            session_id = str(uuid.uuid4())
+            create_session(uid, session_id, device_info, ip_address, location)
+
+            token = create_session_token(uid, session_id)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.set_cors_headers(origin)
+            set_cookie_headers(self, token)
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True, 'uid': uid}).encode('utf-8'))
+
+        except Exception as e:
+            self.send_json(500, {'error': str(e)}, origin)
+
+    def handle_logout(self, origin):
+        try:
+            uid, session_id = get_user_from_cookie(self)
+            revoke_session(session_id, uid)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.set_cors_headers(origin)
+            clear_cookie_headers(self)
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+        except Exception as e:
+            self.send_json(401, {'error': str(e)}, origin)
+
+    def handle_me(self, origin):
+        try:
+            uid, session_id = get_user_from_cookie(self)
+            self.send_json(200, {'uid': uid, 'sessionId': session_id}, origin)
+        except Exception as e:
+            self.send_json(401, {'error': str(e)}, origin)
+
+    def handle_verify_captcha(self, origin):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(content_length).decode('utf-8'))
+            token = body.get('token')
+            if not token:
+                return self.send_json(400, {'error': 'Missing token'}, origin)
+            if verify_captcha(token):
+                return self.send_json(200, {'success': True}, origin)
+            else:
+                return self.send_json(400, {'error': 'Invalid CAPTCHA'}, origin)
+        except Exception as e:
+            self.send_json(500, {'error': str(e)}, origin)

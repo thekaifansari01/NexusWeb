@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <style>
+        .glass-card {
+            background: rgba(24,24,27,0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(168,85,247,0.2);
+            background: rgba(24,24,27,0.6);
+        }
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(168,85,247,0.1);
+            border: 1px solid rgba(168,85,247,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #a855f7;
+            flex-shrink: 0;
+        }
+        .badge-pill {
+            display: inline-block;
+            background: rgba(168,85,247,0.12);
+            color: #a855f7;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            letter-spacing: 0.02em;
+            border: 1px solid rgba(168,85,247,0.1);
+        }
+        .effective-date {
+            display: inline-block;
+            background: rgba(52,211,153,0.1);
+            color: #34d399;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(52,211,153,0.15);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-weight: 600;
+            color: #fafafa;
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #a1a1aa;
+        }
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+        .contact-link {
+            color: #a855f7;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .contact-link:hover {
+            color: #d8b4fe;
+            text-decoration: underline;
+        }
+        .highlight-box {
+            background: rgba(168,85,247,0.04);
+            border-left: 3px solid #a855f7;
+            padding: 1rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-zinc-300 font-sans antialiased"></body>
+
+    <div class="ambient-glow"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight">Nexus</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
+                <a href="/pricing" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
+                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+            <div class="relative" id="auth-container">
+                <button id="signInBtn" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="ph-bold ph-sign-in"></i> Sign In
+                </button>
+                <div id="userArea" class="hidden relative">
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
+                        <img id="userAvatar" src="" alt="avatar" />
+                    </div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <a href="/dashboard" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
+                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
+                        </a>
+                        <button id="signOutBtn">
+                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="max-w-4xl mx-auto px-6 pt-32 pb-20 relative z-10">
+
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <span class="badge-pill">🔒 Privacy First</span>
+                <span class="effective-date">📅 Effective: July 2, 2026</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1] text-white">
+                Privacy <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">Policy</span>
+            </h1>
+            <p class="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
+                Your privacy matters to us. Here's exactly what data we collect, why we collect it, and how we protect it.
+            </p>
+        </div>
+
+        <!-- Quick Summary -->
+        <div class="glass-card border-primary/20 mb-10" style="border-color: rgba(168,85,247,0.15);">
+            <div class="flex items-start gap-4">
+                <div class="section-icon !w-12 !h-12 !rounded-full bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                    <i class="ph-bold ph-shield-check text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-white mb-1">TL;DR — In Plain English</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        We use a <strong>session cookie</strong> only to keep you logged in. 
+                        We collect <strong>minimal data</strong> to run the service — your email, name, and usage stats. 
+                        We <strong>never sell</strong> your data to anyone. 
+                        You can <strong>delete everything</strong> anytime.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 1: Data We Collect ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-database"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">1. What Data We Collect</h2>
+                    <p class="text-sm text-zinc-400 mb-4">We collect only what's necessary to provide you with a secure, functional AI assistant.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data Type</th>
+                                <th>What We Collect</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="text-white font-medium">Account Info</span></td>
+                                <td>Email, Name, Profile Picture (from Google)</td>
+                                <td>To identify you and personalize your experience</td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Session Data</span></td>
+                                <td>Device info, IP address, location (city), login time</td>
+                                <td>To keep you logged in and show your active sessions</td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">API Keys</span></td>
+                                <td>Nexus API keys, Groq API key (encrypted)</td>
+                                <td>To power the AI assistant and secure your credentials</td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Usage Analytics</span></td>
+                                <td>Number of requests, tokens used, models called</td>
+                                <td>To monitor performance and improve the service</td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Cookies</span></td>
+                                <td>Session cookie (HttpOnly, Secure, SameSite=Strict)</td>
+                                <td>To authenticate you across requests</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box mt-4">
+                        <p class="text-sm text-zinc-300">
+                            <i class="ph-bold ph-check-circle text-emerald-400 mr-1.5"></i>
+                            <strong>We DO NOT collect:</strong> Browsing history, search queries, messages you send to the AI, or any content from your website.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 2: Why We Collect ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-question"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">2. Why We Collect This Data</h2>
+                    <p class="text-sm text-zinc-400 mb-4">Every piece of data serves a clear purpose — no hidden agendas.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <i class="ph-bold ph-lock-key"></i>
+                                <span class="text-sm font-semibold text-white">Authentication</span>
+                            </div>
+                            <p class="text-xs text-zinc-400">Your email and session cookie keep your account secure and accessible only to you.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <i class="ph-bold ph-chart-line"></i>
+                                <span class="text-sm font-semibold text-white">Service Improvement</span>
+                            </div>
+                            <p class="text-xs text-zinc-400">Usage stats help us understand how the AI is performing and where to improve.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <i class="ph-bold ph-shield-check"></i>
+                                <span class="text-sm font-semibold text-white">Security</span>
+                            </div>
+                            <p class="text-xs text-zinc-400">IP and device info help us detect unusual activity and keep your account safe.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-primary mb-1">
+                                <i class="ph-bold ph-key"></i>
+                                <span class="text-sm font-semibold text-white">API Management</span>
+                            </div>
+                            <p class="text-xs text-zinc-400">Your API keys are stored encrypted so you can securely integrate AI into your websites.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 3: Data Storage & Security ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-shield"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">3. How We Protect Your Data</h2>
+                    <p class="text-sm text-zinc-400 mb-4">Security is baked into everything we do.</p>
+
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3 p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-sm text-white font-medium">Encryption</span>
+                                <p class="text-xs text-zinc-400">Your Groq API key is encrypted in Firestore. Session cookies are signed and secure.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-sm text-white font-medium">HttpOnly Cookies</span>
+                                <p class="text-xs text-zinc-400">Your session cookie is invisible to JavaScript — preventing XSS attacks.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-sm text-white font-medium">Secure & SameSite</span>
+                                <p class="text-xs text-zinc-400">Cookies are only sent over HTTPS and only for same-site requests — blocking CSRF attacks.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-sm text-white font-medium">Limited Access</span>
+                                <p class="text-xs text-zinc-400">Only core team members have access to production systems. Third parties never see your data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 4: Third-Party Services ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-plug"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">4. Third-Party Services We Use</h2>
+                    <p class="text-sm text-zinc-400 mb-4">We rely on trusted partners to run the service. Each one is committed to data privacy.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Purpose</th>
+                                <th>Data Shared</th>
+                                <th>Privacy Policy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="text-white font-medium">Firebase</span></td>
+                                <td>Authentication, Database, Hosting</td>
+                                <td>Email, Name, Profile Photo, UID, Session Data</td>
+                                <td><a href="https://firebase.google.com/support/privacy" target="_blank" class="text-primary hover:underline text-xs">View →</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Groq</span></td>
+                                <td>AI Model Inference</td>
+                                <td>Your messages (only when you use the AI)</td>
+                                <td><a href="https://groq.com/privacy-policy/" target="_blank" class="text-primary hover:underline text-xs">View →</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Vercel</span></td>
+                                <td>Deployment & Serverless Functions</td>
+                                <td>IP address, Request logs (anonymous)</td>
+                                <td><a href="https://vercel.com/legal/privacy-policy" target="_blank" class="text-primary hover:underline text-xs">View →</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-white font-medium">Cloudflare Turnstile</span></td>
+                                <td>Bot Protection (CAPTCHA)</td>
+                                <td>No personal data — only verification tokens</td>
+                                <td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" class="text-primary hover:underline text-xs">View →</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box mt-4">
+                        <p class="text-sm text-zinc-300">
+                            <i class="ph-bold ph-info text-primary mr-1.5"></i>
+                            <strong>Important:</strong> Your Groq key is stored encrypted in Firestore and never shared with anyone — including us.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 5: Your Rights ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-hand"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">5. Your Privacy Rights</h2>
+                    <p class="text-sm text-zinc-400 mb-4">Under GDPR, CCPA, and similar laws, you have full control over your data.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                                <i class="ph-bold ph-eye"></i> Right to Access
+                            </div>
+                            <p class="text-xs text-zinc-400 mt-1">You can see all your data in the <a href="/dashboard" class="text-primary hover:underline">Dashboard</a> at any time.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                                <i class="ph-bold ph-pencil"></i> Right to Rectify
+                            </div>
+                            <p class="text-xs text-zinc-400 mt-1">Update your profile info anytime through Google or the Dashboard.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                                <i class="ph-bold ph-trash"></i> Right to Delete
+                            </div>
+                            <p class="text-xs text-zinc-400 mt-1">Delete your Groq key, API keys, and revoke all sessions from the Dashboard.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/30 border border-white/5">
+                            <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                                <i class="ph-bold ph-export"></i> Right to Portability
+                            </div>
+                            <p class="text-xs text-zinc-400 mt-1">Request a copy of your data by emailing us (see contact below).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 6: Cookie Policy ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-cookie"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">6. Cookie Policy</h2>
+                    <p class="text-sm text-zinc-400 mb-4">We use minimal cookies — just what's needed to keep you logged in.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cookie</th>
+                                <th>Purpose</th>
+                                <th>Duration</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="text-xs bg-black/30 px-2 py-0.5 rounded text-zinc-300">nexus_session</code></td>
+                                <td>Keeps you logged in</td>
+                                <td>7 days (renewed on each request)</td>
+                                <td><span class="badge-pill !bg-emerald-500/10 !text-emerald-400">Strictly Necessary</span></td>
+                            </tr>
+                            <tr>
+                                <td><code class="text-xs bg-black/30 px-2 py-0.5 rounded text-zinc-300">__Secure-next-auth</code></td>
+                                <td>Vercel session management</td>
+                                <td>Session</td>
+                                <td><span class="badge-pill !bg-emerald-500/10 !text-emerald-400">Strictly Necessary</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box mt-4">
+                        <p class="text-sm text-zinc-300">
+                            <i class="ph-bold ph-check-circle text-emerald-400 mr-1.5"></i>
+                            <strong>No tracking cookies.</strong> We do not use Google Analytics, Facebook Pixel, or any marketing cookies.
+                            You are not being tracked.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 7: Data Retention ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-clock"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">7. How Long We Keep Your Data</h2>
+                    <p class="text-sm text-zinc-400 mb-4">We keep data only as long as needed to provide the service.</p>
+
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
+                            <span class="text-zinc-300">Session cookie</span>
+                            <span class="text-zinc-400">7 days (automatically renewed)</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
+                            <span class="text-zinc-300">Account & API keys</span>
+                            <span class="text-zinc-400">Until you delete your account or revoke the key</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
+                            <span class="text-zinc-300">Usage logs (anonymized)</span>
+                            <span class="text-zinc-400">30 days (for debugging & improvement)</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 rounded-lg bg-black/30 border border-white/5">
+                            <span class="text-zinc-300">Session history (active sessions)</span>
+                            <span class="text-zinc-400">Deleted when you log out or revoke the session</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 8: Children's Privacy ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-child"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">8. Children's Privacy</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Nexus is not intended for children under 13. We do not knowingly collect personal information from children. 
+                        If you are a parent and believe your child has provided us with personal data, please contact us and we will delete it.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 9: Changes ===== -->
+        <section class="glass-card mb-8">
+            <div class="flex items-start gap-4">
+                <div class="section-icon">
+                    <i class="ph-bold ph-arrows-vertical"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">9. Changes to This Policy</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        We may update this policy occasionally. The latest version will always be posted here with the effective date at the top. 
+                        Significant changes will be notified through the Dashboard or via email.
+                    </p>
+                    <p class="text-xs text-zinc-500 mt-2">
+                        <i class="ph-bold ph-calendar-blank mr-1"></i>
+                        Last updated: July 2, 2026
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION 10: Contact ===== -->
+        <section class="glass-card border-primary/20" style="border-color: rgba(168,85,247,0.15);">
+            <div class="flex items-start gap-4">
+                <div class="section-icon !border-primary/30">
+                    <i class="ph-bold ph-envelope"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1">10. Contact Us</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed mb-3">
+                        Have questions about privacy? Concerns about your data? We're here to help.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="ph-bold ph-envelope text-primary"></i>
+                            <a href="mailto:kaif.ansari.global@gmail.com" class="contact-link font-medium">kaif.ansari.global@gmail.com</a>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="ph-bold ph-github-logo text-primary"></i>
+                            <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="contact-link font-medium">GitHub Issue</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded-lg bg-black/30 border border-white/5">
+                        <p class="text-xs text-zinc-500">
+                            <i class="ph-bold ph-clock text-primary mr-1"></i>
+                            We respond to privacy-related inquiries within 48 hours.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
+            <div class="flex flex-wrap justify-center gap-6 mb-4">
+                <a href="/" class="hover:text-white transition-colors">Home</a>
+                <a href="/docs" class="hover:text-white transition-colors">Docs</a>
+                <a href="/pricing" class="hover:text-white transition-colors">Pricing</a>
+                <a href="/privacy" class="text-primary hover:text-primaryHover transition-colors">Privacy Policy</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+            </div>
+            <p>&copy; 2026 Nexus Web Assistant — Built for speed, designed for privacy.</p>
+            <p class="mt-1">Made with ❤️ by <a href="https://github.com/thekaifansari01" target="_blank" class="text-primary hover:underline">Kaif Ansari</a></p>
+        </footer>
+
+    </main>
+
+    <!-- ===== FIREBASE + AUTH (same as index.html) ===== -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>

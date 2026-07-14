@@ -1,0 +1,51 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/__/auth/(.*)",
+      "destination": "https://nexuswebassistant.firebaseapp.com/__/auth/$1"
+    },
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth"
+    },
+    {
+      "source": "/docs",
+      "destination": "/Documentation.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/activity",
+      "destination": "/activity.html"
+    },
+    {
+      "source": "/termsConditions",
+      "destination": "/termsCondition.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/Pricing.html"
+    },
+    {
+      "source": "/demo",
+      "destination": "/Demo.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/Dashboard.html"
+    },
+    {
+      "source": "/privacyPolicy",
+      "destination": "/privacyPolicy.html"
+    }
+  ]
+}

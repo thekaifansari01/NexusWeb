@@ -1,0 +1,27 @@
+// modules/dashboard-state.js
+export const state = {
+  currentUser: null,
+  currentRange: 30,
+  allLogs: [],
+  filteredLogs: [],
+  currentPage: 1,
+  PAGE_SIZE: 10,
+  sortField: 'timestamp',
+  sortOrder: 'desc',
+  activeFilter: null,
+  MAX_DOMAINS: 10,
+  captchaToken: null,
+  turnstileWidgetId: null,
+  turnstileRetryTimeout: null,
+  pendingAction: null,
+  pendingActionData: null,
+  deleteReauthToken: null,
+  deleteCaptchaToken: null,
+  deleteTurnstileWidgetId: null,
+  isSocialUser: false,
+  requestChart: null,
+  tokenChart: null,
+  modelChart: null,
+  sessionCreated: false,
+  sessionChecked: false
+};

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <style>
+        .pricing-badge {
+            display: inline-block;
+            background: rgba(52,211,153,0.12);
+            color: #34d399;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            letter-spacing: 0.02em;
+            border: 1px solid rgba(52,211,153,0.15);
+        }
+        .glass-card {
+            background: rgba(24,24,27,0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(168,85,247,0.2);
+            background: rgba(24,24,27,0.6);
+        }
+        .feature-check {
+            color: #34d399;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-weight: 600;
+            color: #fafafa;
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #a1a1aa;
+        }
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(168,85,247,0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168,85,247,0.35);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            color: #a1a1aa;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.06);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fafafa;
+        }
+    </style>
+</head>
+<body class="bg-background text-zinc-300 font-sans antialiased">
+    <div class="ambient-glow"></div>
+
+    <!-- ===== TOP NAVBAR (identical to index.html) ===== -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
+            <a href="/" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight">Nexus</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
+                <a href="/pricing" class="text-sm font-medium text-white transition-colors">Pricing</a>
+                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                    <i class="ph ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+            <div class="relative" id="auth-container">
+                <button id="signInBtn" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="ph-bold ph-sign-in"></i> Sign In
+                </button>
+                <div id="userArea" class="hidden relative">
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
+                        <img id="userAvatar" src="" alt="avatar" />
+                    </div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <a href="/dashboard" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
+                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
+                        </a>
+                        <button id="signOutBtn">
+                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="max-w-4xl mx-auto px-6 pt-32 pb-20 relative z-10">
+
+        <div class="text-center mb-12">
+            <span class="pricing-badge">🎯 Open Source &amp; Free</span>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-4 leading-[1.1] text-white">
+                Nexus is <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">Open Source &amp; Free</span>
+            </h1>
+            <p class="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
+                A full‑stack AI assistant built for learning and portfolio.  
+                No hidden fees, no credit card required – just pure open‑source goodness.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="/demo" class="btn-primary">
+                    <i class="ph-bold ph-rocket"></i> Try the Demo
+                </a>
+                <a href="/dashboard" class="btn-secondary">
+                    <i class="ph-bold ph-arrow-right"></i> Get Started
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 mb-16">
+            <div class="glass-card border-primary/20 relative overflow-hidden" style="border-color: rgba(168,85,247,0.25);">
+                <div class="absolute top-0 right-0 bg-primary/10 px-4 py-1 rounded-bl-xl text-xs font-semibold text-primary">Open Source</div>
+                <div class="text-center py-6">
+                    <div class="text-5xl font-extrabold text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">$0</div>
+                    <p class="text-zinc-400 text-sm mt-1">forever – no strings attached</p>
+                    <ul class="mt-8 space-y-4 text-left max-w-md mx-auto">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                            <span><strong class="text-white">Unlimited</strong> API requests</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                            <span><strong class="text-white">All models</strong> (Llama 3, Mixtral, and more)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                            <span><strong class="text-white">Up to 10</strong> authorized domains</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                            <span><strong class="text-white">Vault‑grade</strong> encryption for your Groq key</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
+                            <span><strong class="text-white">Open source</strong> (MIT) – you can self‑host too</span>
+                        </li>
+                    </ul>
+                    <div class="mt-10 flex justify-center">
+                        <a href="/dashboard" class="btn-primary">
+                            <i class="ph-bold ph-user-plus"></i> Start for Free
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="glass-card mb-12">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-white">
+                <i class="ph-bold ph-list-checks text-primary"></i> All Features Included – Free Forever
+            </h2>
+            <div class="overflow-x-auto mt-6">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>AI Chat Widget</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Page Context Scraping (Readability + Turndown)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Markdown Rendering + Syntax Highlighting</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>File Attachments (images, PDFs, text)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Domain Whitelisting (up to 10 domains)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Groq API Key Vault (encrypted)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Dashboard to manage keys &amp; domains</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>SPA Navigation Detection</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Dark / Light Theme Auto‑detection</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Open Source (MIT license)</td><td><span class="feature-check">✓ Free</span></td></tr>
+                        <tr><td>Portfolio / Showcase Project</td><td><span class="feature-check">✓ Free</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-zinc-500 mt-5 flex items-center gap-1">
+                <i class="ph-bold ph-info text-primary"></i> This is a <strong>portfolio project</strong> – completely free and open source. No paid plans, ever.
+            </p>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-white">
+                <i class="ph-bold ph-question text-primary"></i> Frequently Asked Questions
+            </h2>
+            <div class="mt-6 space-y-6">
+                <div>
+                    <h4 class="font-semibold text-white mb-1">Is Nexus really free?</h4>
+                    <p class="text-sm text-zinc-400">Yes! Nexus is a portfolio project – it's 100% free and always will be. No hidden charges, no upsells.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-1">Are there any usage limits?</h4>
+                    <p class="text-sm text-zinc-400">No – you can send as many requests as you like. The only limit is what your Groq account allows (free tier has rate limits, but that's on Groq's side).</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-1">Do I need to provide a credit card?</h4>
+                    <p class="text-sm text-zinc-400">Not at all. Just sign in with Google and you're good to go.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-1">What about my Groq API key – is it safe?</h4>
+                    <p class="text-sm text-zinc-400">Absolutely. Your Groq key is encrypted and stored securely in Firestore. It never leaves our backend, and we use a separate Nexus key for the frontend widget.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-1">Can I use it on multiple websites?</h4>
+                    <p class="text-sm text-zinc-400">Yes – you can authorise up to 10 domains per account. Each domain can have its own widget instance.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-1">Is this a commercial product?</h4>
+                    <p class="text-sm text-zinc-400">No – this is an open‑source portfolio project built to demonstrate full‑stack development skills. Feel free to fork, learn, and contribute!</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="border-t border-white/5 mt-16 pt-8 text-center text-zinc-500 text-xs font-medium">
+            <p>&copy; 2026 Nexus Web Assistant – open source &amp; free for everyone.</p>
+            <p class="mt-1">Built with ❤️ by <a href="https://github.com/thekaifansari01" target="_blank" class="text-primary hover:underline">Kaif Ansari</a> · Portfolio Project</p>
+        </footer>
+
+    </main>
+
+    <!-- ===== FIREBASE + AUTH (same as index.html) ===== -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/app.js"></script>
+
+</body>
+</html>
