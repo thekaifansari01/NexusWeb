@@ -1,4 +1,4 @@
-// modules/dashboard-dom.js
+// src/js/modules/dashboard-dom.js
 export const dom = {
   sidebarAvatar: document.getElementById('sidebarAvatar'),
   sidebarName: document.getElementById('sidebarName'),
@@ -47,7 +47,14 @@ export const dom = {
   domainsTotalEl: document.getElementById('domainsTotal'),
   domainsActiveEl: document.getElementById('domainsActive'),
   domainsInactiveEl: document.getElementById('domainsInactive'),
-  groqVaultStatusEl: document.querySelector('#tab-overview .stat-card:nth-child(3) .stat-number'),
+  planBadge: document.getElementById('planBadge'),
+  usageNumber: document.getElementById('usageNumber'),
+  usageLimit: document.getElementById('usageLimit'),
+  usageProgressBar: document.getElementById('usageProgressBar'),
+  usagePercentText: document.getElementById('usagePercentText'),
+  usageRemaining: document.getElementById('usageRemaining'),
+  usageWarning: document.getElementById('usageWarning'),
+  groqVaultStatus: document.getElementById('groqVaultStatus'),
   captchaModal: document.getElementById('captchaModal'),
   captchaModalTitle: document.getElementById('captchaModalTitle'),
   captchaModalDesc: document.getElementById('captchaModalDesc'),

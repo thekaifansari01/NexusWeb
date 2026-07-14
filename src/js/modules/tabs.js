@@ -1,4 +1,4 @@
-// modules/tabs.js
+// src/js/modules/tabs.js
 import { dom } from "./dashboard-dom.js";
 import { openCreateKeyModal, closeCreateKeyModal } from "./api-keys.js";
 import { openAddDomainModal, closeAddDomainModal } from "./domains.js";

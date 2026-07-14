@@ -1,4 +1,4 @@
-// modules/dashboard-utils.js
+// src/js/modules/dashboard-utils.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
 import { showToast } from "./ui.js";
@@ -110,13 +110,18 @@ export function showStatSkeletons() {
     dom.totalDomainsEl, dom.activeDomainsEl, dom.inactiveDomainsEl,
     dom.domainsTotalEl, dom.domainsActiveEl, dom.domainsInactiveEl,
     dom.totalRequestsEl, dom.totalTokensEl, dom.successRateEl,
-    dom.domainLimitBadge
+    dom.domainLimitBadge,
+    dom.usageNumber, dom.usageLimit, dom.usagePercentText, dom.usageRemaining
   ];
   statElements.forEach(el => {
     if (!el) return;
     if (el === dom.domainLimitBadge) {
       el.className = 'domain-limit-badge';
       el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
+    } else if (el === dom.usageNumber || el === dom.usageLimit) {
+      el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
+    } else if (el === dom.usagePercentText || el === dom.usageRemaining) {
+      el.innerHTML = '<span class="skeleton skeleton-text w-16"></span>';
     } else {
       el.innerHTML = '<span class="skeleton skeleton-stat"></span>';
     }
@@ -305,12 +310,10 @@ export function updateUserUI(user) {
   if (dom.settingsAvatar) dom.settingsAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=80';
   if (dom.settingsName) dom.settingsName.textContent = user.displayName || user.email.split('@')[0] || 'User';
   if (dom.settingsEmail) dom.settingsEmail.textContent = user.email || 'user@example.com';
-
   const providerData = user.providerData || [];
   const isPassword = providerData.some(p => p.providerId === 'password');
   const socialProviderData = providerData.find(p => p.providerId !== 'password');
   state.isSocialUser = !isPassword && !!socialProviderData;
-
   if (isPassword) {
     if (dom.passwordChangeSection) dom.passwordChangeSection.classList.remove('hidden');
     if (dom.socialAuthInfo) dom.socialAuthInfo.classList.add('hidden');

@@ -1,9 +1,9 @@
-// modules/events.js
+// src/js/modules/events.js
 import { dom } from "./dashboard-dom.js";
 import { state } from "./dashboard-state.js";
 import { switchTab, toggleMobileSidebar, handleURLState } from "./tabs.js";
 import { signOutUser } from "./auth.js";
-import { closeCaptchaModal, renderTurnstile, resetTurnstile, renderDeleteTurnstile, resetDeleteTurnstile } from "./dashboard-utils.js";
+import { closeCaptchaModal } from "./dashboard-utils.js";
 import { showToast } from "./ui.js";
 import { loadKeys, openCreateKeyModal, closeCreateKeyModal } from "./api-keys.js";
 import { loadDomains, openAddDomainModal, closeAddDomainModal } from "./domains.js";

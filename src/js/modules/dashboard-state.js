@@ -1,4 +1,4 @@
-// modules/dashboard-state.js
+// src/js/modules/dashboard-state.js
 export const state = {
   currentUser: null,
   currentRange: 30,

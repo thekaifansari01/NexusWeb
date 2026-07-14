@@ -1,11 +1,11 @@
-// modules/api-keys.js
+// src/js/modules/api-keys.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
 import { showToast } from "./ui.js";
 import { getApiKeys, deleteApiKey } from "./firestore.js";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase.js";
-import { showSkeleton, hideSkeleton, showStatSkeletons, showCaptchaModal, closeCaptchaModal, resetTurnstile } from "./dashboard-utils.js";
+import { showSkeleton, hideSkeleton, showStatSkeletons, showCaptchaModal, resetTurnstile, renderTurnstile } from "./dashboard-utils.js";
 
 export async function loadKeys() {
   if (!state.currentUser) return;
