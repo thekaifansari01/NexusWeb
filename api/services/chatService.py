@@ -1,5 +1,6 @@
 # api/services/chatService.py
 import requests
+import time
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from firebase_admin import firestore
@@ -53,7 +54,7 @@ def handle_chat_request(body, request_origin):
         if domain_data.get('status') != 'active':
             return 403, {"error": "Domain is deactivated"}
 
-        # ----- Monthly Usage Limit Check (Transaction) -----
+        # ----- Monthly Usage Limit Check (Manual Transaction with Retry) -----
         user_doc = db.collection('users').document(user_id).get()
         if not user_doc.exists:
             return 400, {"error": "User not found"}
@@ -64,23 +65,31 @@ def handle_chat_request(body, request_origin):
         month_key = datetime.now(timezone.utc).strftime("%Y-%m")
         usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
 
-        @firestore.transactional
-        def check_and_increment(transaction):
-            doc = transaction.get(usage_ref)
-            if doc.exists:
-                current_count = doc.to_dict().get('count', 0)
-            else:
-                current_count = 0
-            if current_count >= monthly_limit:
-                return False, current_count
-            transaction.set(usage_ref, {
-                'userId': user_id,
-                'month': month_key,
-                'count': current_count + 1,
-                'limit': monthly_limit,
-                'lastUpdated': firestore.SERVER_TIMESTAMP
-            }, merge=True)
-            return True, current_count + 1
+        def check_and_increment():
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    transaction = db.transaction()
+                    doc = transaction.get(usage_ref)
+                    if doc.exists:
+                        current_count = doc.to_dict().get('count', 0)
+                    else:
+                        current_count = 0
+                    if current_count >= monthly_limit:
+                        return False, current_count
+                    transaction.set(usage_ref, {
+                        'userId': user_id,
+                        'month': month_key,
+                        'count': current_count + 1,
+                        'limit': monthly_limit,
+                        'lastUpdated': firestore.SERVER_TIMESTAMP
+                    }, merge=True)
+                    return True, current_count + 1
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    time.sleep(0.1 * (attempt + 1))
+            return False, 0
 
         success, new_count = check_and_increment()
         if not success:
