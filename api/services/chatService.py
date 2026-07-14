@@ -63,6 +63,7 @@ def handle_chat_request(body, request_origin):
         month_key = datetime.now(timezone.utc).strftime("%Y-%m")
         usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
 
+        @firestore.transactional
         def check_and_increment(transaction):
             doc = transaction.get(usage_ref)
             if doc.exists:
@@ -80,7 +81,8 @@ def handle_chat_request(body, request_origin):
             }, merge=True)
             return True, current_count + 1
 
-        success, new_count = db.run_transaction(check_and_increment)
+        transaction = db.transaction()
+        success, new_count = check_and_increment(transaction)
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
 
