@@ -36,7 +36,7 @@ def handle_chat_request(body, request_origin):
         clean_origin = netloc.lower()
 
         keys_ref = db.collection('apiKeys').where('key', '==', nexus_key).limit(1).get()
-        if keys_ref.empty:
+        if not keys_ref:
             return 401, {"error": "Invalid Nexus API Key"}
 
         key_data = keys_ref[0].to_dict()
@@ -46,7 +46,7 @@ def handle_chat_request(body, request_origin):
         user_id = key_data.get('userId')
 
         domains_ref = db.collection('authorizedDomains').where('userId', '==', user_id).where('domain', '==', clean_origin).limit(1).get()
-        if domains_ref.empty:
+        if not domains_ref:
             return 403, {"error": f"Domain '{clean_origin}' not authorized"}
 
         domain_data = domains_ref[0].to_dict()
