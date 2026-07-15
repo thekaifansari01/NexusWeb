@@ -1,4 +1,3 @@
-<!-- Dashboard.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -16,219 +15,221 @@
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="src/css/dashboard.css" />
 </head>
-<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
-    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
-        <div class="h-16 flex items-center px-6 border-b border-border">
-            <a href="/" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
+                <span class="text-lg font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
             </a>
         </div>
-        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
-            <a href="/dashboard" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+        <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scrollbar-custom">
+            <a href="/dashboard" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
                 <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
             </a>
-            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-credit-card text-lg"></i> Billing
             </a>
-            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
             </a>
         </nav>
-        <div class="p-4 border-t border-border">
-            <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
-                <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
+        <div class="p-4 border-t border-white/5 bg-black/20">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
-                    <div id="sidebarName" class="text-sm font-semibold text-white truncate">User</div>
-                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate">user@example.com</div>
+                    <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
                 </div>
             </div>
-            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-red-400 transition-colors py-2">
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
                 <i class="ph-bold ph-sign-out"></i> Sign Out
             </button>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
-        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
-        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10">
+        <div class="ambient-glow fixed top-[-10%] left-[30%] w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 to-transparent z-[-1] pointer-events-none blur-3xl opacity-50"></div>
+        <header class="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 flex-shrink-0 shadow-sm">
             <div class="flex items-center gap-4">
-                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
                     <i class="ph-bold ph-list text-2xl"></i>
                 </button>
-                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                    <span id="breadcrumbRoot">Nexus</span>
-                    <i class="ph-bold ph-caret-right text-xs"></i>
-                    <span id="breadcrumbCurrent" class="text-white">Overview</span>
+                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
+                    <span id="breadcrumbRoot" class="hover:text-zinc-300 transition-colors cursor-pointer">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs text-zinc-600"></i>
+                    <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">Overview</span>
                 </div>
+            </div>
+            <div class="flex items-center gap-4 hidden md:flex">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5">
+                    <i class="ph-bold ph-github-logo text-lg"></i> GitHub
+                </a>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
-            <div class="flex items-center gap-1 mb-8 border-b border-border pb-2 overflow-x-auto">
-                <button class="tab-btn active px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="overview">
-                    <i class="ph-bold ph-squares-four mr-1.5"></i> Overview
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom">
+            
+            <div class="flex items-center gap-2 mb-8 border-b border-white/5 pb-3 overflow-x-auto scrollbar-custom">
+                <button class="tab-btn active px-5 py-2.5 text-sm font-bold rounded-xl transition-all whitespace-nowrap bg-primary/20 text-primary border border-primary/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]" data-tab="overview">
+                    <i class="ph-bold ph-squares-four text-lg mr-1.5 align-middle"></i> Overview
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="api-keys">
-                    <i class="ph-bold ph-key mr-1.5"></i> Nexus Keys
+                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="api-keys">
+                    <i class="ph-bold ph-key text-lg mr-1.5 align-middle"></i> Nexus Keys
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="domains">
-                    <i class="ph-bold ph-globe-hemisphere-west mr-1.5"></i> Domains
+                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="domains">
+                    <i class="ph-bold ph-globe-hemisphere-west text-lg mr-1.5 align-middle"></i> Domains
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="usage">
-                    <i class="ph-bold ph-chart-pie-slice mr-1.5"></i> Usage
+                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="usage">
+                    <i class="ph-bold ph-chart-pie-slice text-lg mr-1.5 align-middle"></i> Usage
                 </button>
-                <button class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap" data-tab="settings">
-                    <i class="ph-bold ph-gear mr-1.5"></i> Settings
+                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="settings">
+                    <i class="ph-bold ph-gear text-lg mr-1.5 align-middle"></i> Settings
                 </button>
             </div>
 
             <section id="tab-overview" class="tab-content active fade-in-up">
-                <div class="welcome-banner p-6 md:p-8 rounded-3xl border border-primary/20 mb-8 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="p-8 rounded-3xl border border-primary/20 mb-8 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-br from-zinc-900/60 to-black shadow-2xl">
                     <div class="relative z-10">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs font-bold tracking-widest uppercase bg-primary/20 text-primary px-2.5 py-1 rounded-full border border-primary/30">Developer Account</span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span class="text-xs text-emerald-400 font-medium">All Systems Operational</span>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] font-black tracking-widest uppercase bg-primary/20 text-primary px-3 py-1.5 rounded-full border border-primary/30 shadow-[0_0_10px_rgba(168,85,247,0.2)]">Developer Account</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+                            <span class="text-xs text-emerald-400 font-bold tracking-wide">All Systems Operational</span>
                         </div>
-                        <h1 id="welcomeMessage" class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Welcome back, User!</h1>
+                        <h1 id="welcomeMessage" class="text-3xl md:text-4xl font-black text-white tracking-tight">Welcome back!</h1>
                     </div>
                     <div class="flex items-center gap-3 relative z-10 flex-shrink-0">
-                        <button class="btn-secondary py-2 px-4 text-xs flex items-center gap-2" onclick="document.querySelector('[data-tab=settings]').click()">
-                            <i class="ph-bold ph-sliders"></i> Configure Vault
+                        <button class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-md flex items-center gap-2" onclick="document.querySelector('[data-tab=settings]').click()">
+                            <i class="ph-bold ph-sliders text-lg"></i> Configure Vault
                         </button>
-                        <button class="btn-primary py-2 px-4 text-xs flex items-center gap-2" onclick="document.querySelector('[data-tab=api-keys]').click()">
-                            <i class="ph-bold ph-plus-circle"></i> Create New Key
+                        <button class="bg-primary hover:bg-primaryHover text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-2" onclick="document.querySelector('[data-tab=api-keys]').click()">
+                            <i class="ph-bold ph-plus-circle text-lg"></i> Create New Key
                         </button>
                     </div>
-                    <div class="absolute -right-10 -top-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <!-- Card 1: Nexus Keys -->
-                    <div class="stat-card">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="stat-label text-zinc-400">Nexus Guard &amp; Keys</span>
-                            <div class="w-8 h-8 rounded-xl bg-primary/10 text-primary border border-primary/10 flex items-center justify-center">
-                                <i class="ph-bold ph-key"></i>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-primary/30 transition-all shadow-lg hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Nexus Keys</span>
+                            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-key text-xl"></i>
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number" id="totalKeys"><span class="skeleton skeleton-stat"></span></div>
-                            <span class="text-xs text-zinc-500 font-medium">Total Provisioned</span>
+                            <div id="totalKeys" class="text-3xl font-black text-white tracking-tight"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <span class="text-xs text-zinc-500 font-semibold">Provisioned</span>
                         </div>
-                        <div class="mt-2 text-xs text-emerald-400 flex items-center gap-1">
-                            <span id="activeKeys" class="font-bold"><span class="skeleton skeleton-stat-sm"></span></span> Active <span class="text-zinc-600">|</span> <span id="revokedKeys" class="text-rose-400 font-bold"><span class="skeleton skeleton-stat-sm"></span></span> Revoked
+                        <div class="mt-3 text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
+                            <span id="activeKeys" class="font-bold"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Active <span class="text-zinc-600 mx-0.5">|</span> <span id="revokedKeys" class="text-rose-400 font-bold"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Revoked
                         </div>
                     </div>
 
-                    <!-- Card 2: Domains -->
-                    <div class="stat-card">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="stat-label text-zinc-400">Origin Whitelisting</span>
-                            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/10 flex items-center justify-center">
-                                <i class="ph-bold ph-globe-hemisphere-west"></i>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-emerald-500/30 transition-all shadow-lg hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Origin Whitelist</span>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-globe-hemisphere-west text-xl"></i>
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div class="stat-number" id="totalDomains"><span class="skeleton skeleton-stat"></span></div>
-                            <span class="text-xs text-zinc-500">Slots Used</span>
+                            <div id="totalDomains" class="text-3xl font-black text-white tracking-tight"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <span class="text-xs text-zinc-500 font-semibold">Slots Used</span>
                         </div>
-                        <div class="mt-2 text-xs text-zinc-400 flex items-center gap-1">
-                            Origin CORS constraints are active and enforced.
+                        <div class="mt-3 text-xs text-zinc-400 font-medium">
+                            CORS constraints enforced.
                         </div>
                     </div>
 
-                    <!-- Card 3: Monthly Usage -->
-                    <div class="stat-card">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="stat-label text-zinc-400">Monthly Usage</span>
-                            <span id="planBadge" class="text-[10px] font-bold uppercase bg-primary/20 text-primary px-2 py-0.5 rounded-full border border-primary/30">Free</span>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-blue-500/30 transition-all shadow-lg hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Monthly Usage</span>
+                            <span id="planBadge" class="text-[10px] font-black uppercase bg-primary/20 text-primary px-2.5 py-1 rounded-full border border-primary/30">Free</span>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xl font-bold text-white" id="usageNumber">0</span>
-                            <span class="text-xs text-zinc-500">/ <span id="usageLimit">1000</span></span>
+                            <span class="text-3xl font-black text-white tracking-tight" id="usageNumber"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></span>
+                            <span class="text-xs text-zinc-500 font-semibold">/ <span id="usageLimit"><div class="w-10 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span></span>
                         </div>
-                        <div class="w-full h-1.5 bg-white/10 rounded-full mt-2 overflow-hidden">
-                            <div id="usageProgressBar" class="h-full bg-primary rounded-full transition-all duration-500" style="width: 0%;"></div>
+                        <div class="w-full h-2 bg-black/50 rounded-full mt-3 overflow-hidden border border-white/5">
+                            <div id="usageProgressBar" class="h-full bg-gradient-to-r from-purple-500 to-primary rounded-full transition-all duration-1000 ease-out relative w-0"></div>
                         </div>
-                        <div class="flex justify-between text-[10px] text-zinc-500 mt-1.5">
-                            <span id="usagePercentText">0% used</span>
-                            <span id="usageRemainingText"><span id="usageRemaining">1000</span> remaining</span>
+                        <div class="flex justify-between text-[10px] font-bold text-zinc-500 mt-2">
+                            <span id="usagePercentText"><div class="w-12 h-3 bg-white/10 rounded animate-pulse"></div></span>
+                            <span id="usageRemainingText"><span id="usageRemaining"><div class="w-8 h-3 bg-white/10 rounded animate-pulse inline-block"></div></span> rem</span>
                         </div>
-                        <div id="usageWarning" class="mt-2 hidden text-[10px] text-amber-400 flex items-center gap-1">
-                            <i class="ph-bold ph-warning text-xs"></i>
+                        <div id="usageWarning" class="mt-3 hidden text-[11px] font-bold text-amber-400 flex items-center gap-1.5 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20">
+                            <i class="ph-bold ph-warning text-sm"></i>
                             <span>Approaching limit</span>
                         </div>
                     </div>
 
-                    <!-- Card 4: Provider Core Gateway -->
-                    <div class="stat-card">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="stat-label text-zinc-400">Provider Core Gateway</span>
-                            <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/10 flex items-center justify-center">
-                                <i class="ph-bold ph-shield-check"></i>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-purple-500/30 transition-all shadow-lg hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Groq Gateway</span>
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-shield-check text-xl"></i>
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div id="groqVaultStatus" class="stat-number text-emerald-400 text-xl font-bold">🔒 Encrypted</div>
+                            <div id="groqVaultStatus" class="text-2xl font-black text-emerald-400 tracking-tight flex items-center gap-2"><i class="ph-fill ph-lock-key"></i> Encrypted</div>
                         </div>
-                        <div class="mt-2 text-xs text-zinc-500">
-                            Groq AI Vault-grade storage active.
+                        <div class="mt-3 text-xs text-zinc-400 font-medium">
+                            Vault-grade storage active.
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                    <div class="lg:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-lg">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
                             <div>
-                                <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400">Active Gateways Snapshot</h3>
-                                <p class="text-xs text-zinc-500">Quick view of your top operational API keys.</p>
+                                <h3 class="text-base font-bold text-white tracking-wide">Active Gateways Snapshot</h3>
+                                <p class="text-sm text-zinc-500 mt-1">Quick view of your operational API keys.</p>
                             </div>
-                            <button class="text-xs font-semibold text-primary hover:text-primaryHover transition-colors flex items-center gap-1" onclick="document.querySelector('[data-tab=api-keys]').click()">
-                                Manage Keys <i class="ph ph-arrow-up-right"></i>
+                            <button class="text-sm font-bold text-primary hover:text-white transition-colors flex items-center gap-1.5 bg-primary/10 hover:bg-primary/20 px-4 py-2 rounded-xl" onclick="document.querySelector('[data-tab=api-keys]').click()">
+                                Manage Keys <i class="ph-bold ph-arrow-up-right"></i>
                             </button>
                         </div>
-                        <div id="overviewKeysContainer" class="space-y-3"></div>
+                        <div id="overviewKeysContainer" class="space-y-4"></div>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 flex flex-col justify-between">
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-lg flex flex-col justify-between">
                         <div>
-                            <div class="mb-4 pb-2 border-b border-white/5">
-                                <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400">Platform Guard Status</h3>
-                                <p class="text-xs text-zinc-500">Real-time gateway parameter analysis.</p>
+                            <div class="mb-6 pb-4 border-b border-white/5">
+                                <h3 class="text-base font-bold text-white tracking-wide">Platform Guard Status</h3>
+                                <p class="text-sm text-zinc-500 mt-1">Real-time gateway parameter analysis.</p>
                             </div>
-                            <div class="space-y-4">
-                                <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-white/5">
-                                    <div class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
-                                        <i class="ph-bold ph-fingerprint"></i>
+                            <div class="space-y-5">
+                                <div class="flex items-start gap-4 p-4 rounded-2xl bg-black/40 border border-white/5 shadow-inner">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
+                                        <i class="ph-bold ph-fingerprint text-xl"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold text-white">Dynamic CORS Verification</div>
-                                        <div class="text-[11px] text-zinc-500 mt-0.5">Requests without matching whitelists are automatically dropped at edge.</div>
+                                        <div class="text-sm font-bold text-white">Dynamic CORS</div>
+                                        <div class="text-xs text-zinc-500 mt-1 leading-relaxed">Requests without matching whitelists are dropped at edge.</div>
                                     </div>
                                 </div>
-                                <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-white/5">
-                                    <div class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 text-xs">
-                                        <i class="ph-bold ph-lock-keyhole"></i>
+                                <div class="flex items-start gap-4 p-4 rounded-2xl bg-black/40 border border-white/5 shadow-inner">
+                                    <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(168,85,247,0.15)]">
+                                        <i class="ph-bold ph-lock-keyhole text-xl"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold text-white">Asymmetric Encryption</div>
-                                        <div class="text-[11px] text-zinc-500 mt-0.5">Your upstream provider Groq keys are masked with client-side block ciphers.</div>
+                                        <div class="text-sm font-bold text-white">Asymmetric Cipher</div>
+                                        <div class="text-xs text-zinc-500 mt-1 leading-relaxed">Upstream Groq keys masked with deep block ciphers.</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
-                            <span>Engine Build: v1.4.2</span>
-                            <button class="text-primary font-medium hover:underline" onclick="document.querySelector('[data-tab=usage]').click()">View Metrics</button>
+                        <div class="mt-8 pt-5 border-t border-white/5 flex items-center justify-between text-xs font-bold text-zinc-500">
+                            <span class="tracking-widest uppercase">Engine: v1.4.2</span>
+                            <button class="text-primary hover:text-white transition-colors uppercase tracking-wider" onclick="document.querySelector('[data-tab=usage]').click()">Metrics <i class="ph-bold ph-arrow-right align-middle"></i></button>
                         </div>
                     </div>
                 </div>
@@ -236,301 +237,299 @@
 
             <section id="tab-api-keys" class="tab-content hidden fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
-                                <i class="ph-bold ph-key"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="keysTotal"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Total</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-key"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="keysTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Total Keys</div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
-                                <i class="ph-bold ph-check-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="keysActive"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Active</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-check-circle"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="keysActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Active Keys</div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-rose-500/10 text-rose-400 border border-rose-500/10">
-                                <i class="ph-bold ph-x-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="keysRevoked"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Revoked</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-x-circle"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="keysRevoked"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Revoked Keys</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
-                        <h1 class="text-2xl font-bold text-white tracking-tight">Nexus Keys</h1>
-                        <p class="text-sm text-zinc-400 mt-1">Manage API keys used in your frontend applications.</p>
+                        <h1 class="text-3xl font-black text-white tracking-tight">Nexus Keys</h1>
+                        <p class="text-sm text-zinc-400 mt-1 font-medium">Manage API keys used in your frontend applications.</p>
                     </div>
-                    <button id="createKeyBtn" class="btn-primary">
-                        <i class="ph-bold ph-plus-circle text-base"></i> New Key
+                    <button id="createKeyBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-2">
+                        <i class="ph-bold ph-plus-circle text-lg"></i> New Key
                     </button>
                 </div>
 
-                <div id="createKeyForm" class="glass-panel p-6 rounded-2xl mb-6 hidden slide-down border border-primary/20 bg-black/40">
-                    <h3 class="text-base font-semibold text-white mb-4">Create New API Key</h3>
-                    <div class="flex flex-col gap-4 max-w-xl">
+                <div id="createKeyForm" class="glass-panel p-8 rounded-3xl mb-8 hidden border border-primary/30 bg-black/40 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-primary"></div>
+                    <h3 class="text-xl font-bold text-white mb-6">Create New API Key</h3>
+                    <div class="flex flex-col gap-5 max-w-2xl">
                         <div>
-                            <label for="keyNameInput" class="form-label">Key Name</label>
-                            <input type="text" id="keyNameInput" placeholder="e.g. Production Website" class="form-input" />
+                            <label for="keyNameInput" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Key Name</label>
+                            <input type="text" id="keyNameInput" placeholder="e.g. Production Website" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
                         </div>
-                        <div id="turnstile-container"></div>
-                        <div class="flex gap-3 pt-2">
-                            <button id="saveKeyBtn" class="btn-primary hidden">Create Key</button>
-                            <button id="cancelKeyBtn" class="btn-secondary">Cancel</button>
+                        <div id="turnstile-container" class="mt-2"></div>
+                        <div class="flex gap-4 mt-2">
+                            <button id="saveKeyBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hidden">Create Key</button>
+                            <button id="cancelKeyBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all">Cancel</button>
                         </div>
                     </div>
                 </div>
                 <div id="keysContainer" class="space-y-4">
-                    <div class="empty-state" id="emptyState">
-                        <div class="icon-wrap"><i class="ph-bold ph-key"></i></div>
-                        <h4>No API keys yet</h4>
-                        <p>Create your first API key to start integrating Nexus.</p>
+                    <div class="empty-state bg-zinc-900/20 border border-dashed border-white/10 rounded-3xl p-16 text-center" id="emptyState">
+                        <div class="w-20 h-20 bg-primary/5 border border-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 text-primary text-3xl shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+                            <i class="ph-bold ph-key"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2">No API keys yet</h4>
+                        <p class="text-zinc-400 text-sm">Create your first API key to start integrating Nexus.</p>
                     </div>
                 </div>
             </section>
 
             <section id="tab-domains" class="tab-content hidden fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-primary/10 text-primary border border-primary/10">
-                                <i class="ph-bold ph-globe-hemisphere-west"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="domainsTotal"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Total</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-globe-hemisphere-west"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="domainsTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Total Domains</div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
-                                <i class="ph-bold ph-check-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="domainsActive"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Active</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-check-circle"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="domainsActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Active</div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="flex items-center gap-4">
-                            <div class="stat-icon bg-rose-500/10 text-rose-400 border border-rose-500/10">
-                                <i class="ph-bold ph-x-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stat-number" id="domainsInactive"><span class="skeleton skeleton-stat"></span></div>
-                                <div class="stat-label">Inactive</div>
-                            </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-x-circle"></i>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-white" id="domainsInactive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Inactive</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
-                        <h1 class="text-2xl font-bold text-white tracking-tight">Authorized Domains</h1>
-                        <p class="text-sm text-zinc-400 mt-1">Whitelist domains to secure your API requests.</p>
+                        <h1 class="text-3xl font-black text-white tracking-tight">Authorized Domains</h1>
+                        <p class="text-sm text-zinc-400 mt-1 font-medium">Whitelist origins to secure your API requests.</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <span class="domain-limit-badge" id="domainLimitBadge"><span class="skeleton skeleton-stat-sm"></span></span>
-                        <button id="addDomainBtn" class="btn-primary">
-                            <i class="ph-bold ph-plus-circle text-base"></i> Add Domain
+                    <div class="flex items-center gap-4">
+                        <span id="domainLimitBadge" class="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full text-xs font-bold shadow-sm"><div class="w-16 h-4 bg-primary/20 rounded animate-pulse inline-block"></div></span>
+                        <button id="addDomainBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-2">
+                            <i class="ph-bold ph-plus-circle text-lg"></i> Add Domain
                         </button>
                     </div>
                 </div>
-                <div id="addDomainForm" class="glass-panel p-6 rounded-2xl mb-6 hidden slide-down border border-primary/20 bg-black/40">
-                    <h3 class="text-base font-semibold text-white mb-4">Add Authorized Domain</h3>
-                    <div class="flex flex-col gap-4 max-w-xl">
+
+                <div id="addDomainForm" class="glass-panel p-8 rounded-3xl mb-8 hidden border border-primary/30 bg-black/40 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+                    <h3 class="text-xl font-bold text-white mb-6">Add Authorized Domain</h3>
+                    <div class="flex flex-col gap-5 max-w-2xl">
                         <div>
-                            <label for="domainInput" class="form-label">Domain Name</label>
-                            <input type="text" id="domainInput" placeholder="e.g. example.com" class="form-input" />
-                            <p class="text-xs text-zinc-500 mt-1.5">Enter domain without http://, https://, or www.</p>
+                            <label for="domainInput" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Domain Name</label>
+                            <input type="text" id="domainInput" placeholder="e.g. example.com" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                            <p class="text-xs text-zinc-500 mt-2 font-medium"><i class="ph-fill ph-info"></i> Enter domain without http://, https://, or www.</p>
                         </div>
-                        <div class="flex gap-3 pt-2">
-                            <button id="saveDomainBtn" class="btn-primary">Add Domain</button>
-                            <button id="cancelDomainBtn" class="btn-secondary">Cancel</button>
+                        <div class="flex gap-4 mt-2">
+                            <button id="saveDomainBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg">Add Domain</button>
+                            <button id="cancelDomainBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all">Cancel</button>
                         </div>
                     </div>
                 </div>
+
                 <div id="domainsContainer" class="space-y-4">
-                    <div class="empty-state" id="domainsEmptyState">
-                        <div class="icon-wrap"><i class="ph-bold ph-globe"></i></div>
-                        <h4>No domains added</h4>
-                        <p>Add authorized domains to restrict API key usage.</p>
+                    <div class="empty-state bg-zinc-900/20 border border-dashed border-white/10 rounded-3xl p-16 text-center" id="domainsEmptyState">
+                        <div class="w-20 h-20 bg-emerald-500/5 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-400 text-3xl shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                            <i class="ph-bold ph-globe"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2">No domains added</h4>
+                        <p class="text-zinc-400 text-sm">Add authorized domains to restrict API key usage.</p>
                     </div>
                 </div>
             </section>
 
             <section id="tab-usage" class="tab-content hidden fade-in-up">
-                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div class="flex flex-wrap items-center justify-between gap-6 mb-8">
                     <div>
-                        <h1 class="text-2xl font-bold text-white tracking-tight">Usage Analytics</h1>
-                        <p class="text-sm text-zinc-400 mt-0.5">Monitor your API requests and token consumption over time.</p>
+                        <h1 class="text-3xl font-black text-white tracking-tight">Usage Analytics</h1>
+                        <p class="text-sm text-zinc-400 mt-1 font-medium">Monitor your API requests and token consumption over time.</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex items-center gap-1 bg-black/30 rounded-lg p-1 border border-white/5" id="rangeToggle">
-                            <button class="range-btn px-3 py-1.5 text-xs font-medium rounded-md transition-all text-zinc-400 hover:text-white" data-range="7">7D</button>
-                            <button class="range-btn px-3 py-1.5 text-xs font-medium rounded-md transition-all text-white bg-primary/20" data-range="30">30D</button>
-                            <button class="range-btn px-3 py-1.5 text-xs font-medium rounded-md transition-all text-zinc-400 hover:text-white" data-range="90">90D</button>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1 bg-black/40 rounded-xl p-1.5 border border-white/5 shadow-inner" id="rangeToggle">
+                            <button class="range-btn px-4 py-2 text-xs font-bold rounded-lg transition-all text-zinc-400 hover:text-white" data-range="7">7D</button>
+                            <button class="range-btn active px-4 py-2 text-xs font-bold rounded-lg transition-all text-white bg-primary/20 shadow-[0_0_10px_rgba(168,85,247,0.2)]" data-range="30">30D</button>
+                            <button class="range-btn px-4 py-2 text-xs font-bold rounded-lg transition-all text-zinc-400 hover:text-white" data-range="90">90D</button>
                         </div>
-                        <button id="exportBtn" class="btn-ghost text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 hover:border-white/15 transition-all">
-                            <i class="ph-bold ph-download-simple"></i> Export
+                        <button id="exportBtn" class="bg-white/5 hover:bg-white/10 text-white text-xs font-bold flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 transition-all shadow-md">
+                            <i class="ph-bold ph-download-simple text-base"></i> Export
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="stat-card !p-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Total Requests</span>
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-blue-500/30 transition-all shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Total Requests</span>
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl">
                                 <i class="ph-bold ph-activity"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statTotalRequests"><span class="skeleton skeleton-stat"></span></div>
-                        <div class="text-xs text-zinc-500 mt-0.5" id="statRequestsTrend"><span class="skeleton skeleton-text w-16"></span></div>
+                        <div class="text-3xl font-black text-white mb-2" id="statTotalRequests"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold" id="statRequestsTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
                     </div>
-                    <div class="stat-card !p-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Total Tokens</span>
-                            <div class="w-8 h-8 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-yellow-500/30 transition-all shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Total Tokens</span>
+                            <div class="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-xl">
                                 <i class="ph-bold ph-chart-bar"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statTotalTokens"><span class="skeleton skeleton-stat"></span></div>
-                        <div class="text-xs text-zinc-500 mt-0.5" id="statTokensTrend"><span class="skeleton skeleton-text w-16"></span></div>
+                        <div class="text-3xl font-black text-white mb-2" id="statTotalTokens"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold" id="statTokensTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
                     </div>
-                    <div class="stat-card !p-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Avg Response</span>
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-emerald-500/30 transition-all shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Avg Response</span>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
                                 <i class="ph-bold ph-clock"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statAvgResponse"><span class="skeleton skeleton-stat"></span></div>
-                        <div class="text-xs text-zinc-500 mt-0.5">Last 100 requests</div>
+                        <div class="text-3xl font-black text-white mb-2" id="statAvgResponse"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold">Last 100 requests</div>
                     </div>
-                    <div class="stat-card !p-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Success Rate</span>
-                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-purple-500/30 transition-all shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Success Rate</span>
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                         </div>
-                        <div class="stat-number text-2xl mt-1" id="statSuccessRate"><span class="skeleton skeleton-stat"></span></div>
-                        <div class="text-xs text-zinc-500 mt-0.5">Last 100 requests</div>
+                        <div class="text-3xl font-black text-white mb-2" id="statSuccessRate"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold">Last 100 requests</div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <div class="lg:col-span-2 glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-sm font-semibold text-white">Request Volume</h3>
-                            <span class="text-xs text-zinc-500">Daily requests</span>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-lg">
+                        <div class="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+                            <h3 class="text-base font-bold text-white tracking-wide">Request Volume</h3>
+                            <span class="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Daily requests</span>
                         </div>
-                        <div class="h-56 relative">
+                        <div class="h-64 relative">
                             <canvas id="requestChart"></canvas>
                         </div>
                     </div>
-                    <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-sm font-semibold text-white">Token Usage</h3>
-                            <span class="text-xs text-zinc-500">Daily tokens</span>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-lg">
+                        <div class="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+                            <h3 class="text-base font-bold text-white tracking-wide">Token Usage</h3>
+                            <span class="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Daily tokens</span>
                         </div>
-                        <div class="h-56 relative">
+                        <div class="h-64 relative">
                             <canvas id="tokenChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center gap-2 mb-3">
-                            <i class="ph-bold ph-cpu text-primary"></i>
-                            <h4 class="text-sm font-semibold text-white">Model Distribution</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-md">
+                        <div class="flex items-center gap-3 mb-6 pb-3 border-b border-white/5">
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><i class="ph-bold ph-cpu text-lg"></i></div>
+                            <h4 class="text-sm font-bold text-white">Model Distribution</h4>
                         </div>
                         <div class="h-48 relative">
                             <canvas id="modelChart"></canvas>
                         </div>
                     </div>
-                    <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center gap-2 mb-3">
-                            <i class="ph-bold ph-globe text-primary"></i>
-                            <h4 class="text-sm font-semibold text-white">Top Domains</h4>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-md">
+                        <div class="flex items-center gap-3 mb-6 pb-3 border-b border-white/5">
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><i class="ph-bold ph-globe text-lg"></i></div>
+                            <h4 class="text-sm font-bold text-white">Top Domains</h4>
                         </div>
-                        <div id="topDomainsContainer" class="space-y-2">
-                            <div class="text-sm text-zinc-500 text-center py-4">No data yet</div>
+                        <div id="topDomainsContainer" class="space-y-3">
+                            <div class="text-sm text-zinc-500 text-center py-8 font-medium">No data yet</div>
                         </div>
                     </div>
-                    <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                        <div class="flex items-center gap-2 mb-3">
-                            <i class="ph-bold ph-clock-counter-clockwise text-primary"></i>
-                            <h4 class="text-sm font-semibold text-white">Busiest Hours</h4>
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-md">
+                        <div class="flex items-center gap-3 mb-6 pb-3 border-b border-white/5">
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><i class="ph-bold ph-clock-counter-clockwise text-lg"></i></div>
+                            <h4 class="text-sm font-bold text-white">Busiest Hours</h4>
                         </div>
-                        <div id="busiestHoursContainer" class="space-y-2">
-                            <div class="text-sm text-zinc-500 text-center py-4">No data yet</div>
+                        <div id="busiestHoursContainer" class="space-y-3">
+                            <div class="text-sm text-zinc-500 text-center py-8 font-medium">No data yet</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/20">
-                    <div class="flex flex-col mb-4">
-                        <div class="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
-                            <h3 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wider text-zinc-400">
-                                <i class="ph-bold ph-list-checks text-primary"></i> Recent Activity
+                <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/30 shadow-xl">
+                    <div class="flex flex-col mb-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between pb-5 border-b border-white/5 mb-5 gap-4">
+                            <h3 class="text-lg font-black text-white flex items-center gap-3 tracking-tight">
+                                <i class="ph-bold ph-list-checks text-primary text-xl"></i> Recent Activity Logs
                             </h3>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-4">
                                 <div class="relative">
-                                    <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
-                                    <input id="logSearchInput" type="text" placeholder="Search logs..." class="form-input !py-1.5 !pl-8 !pr-3 !text-xs !w-48 !bg-black/30 !border-white/5 !rounded-lg" />
+                                    <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i>
+                                    <input id="logSearchInput" type="text" placeholder="Search logs..." class="w-64 bg-black/50 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all outline-none" />
                                 </div>
-                                <span id="logCount" class="text-xs text-zinc-500 whitespace-nowrap bg-black/40 px-2 py-1 rounded-md border border-white/5">0 entries</span>
+                                <span id="logCount" class="text-xs font-bold text-zinc-400 uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">0 entries</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1.5 text-xs text-zinc-400 overflow-x-auto pb-2 scrollbar-custom" id="filterChips">
-                            <span class="filter-chip active px-2.5 py-1.5 rounded-md bg-primary/20 text-primary border border-primary/30 cursor-pointer hover:bg-primary/30 transition font-medium" data-filter="all">All Logs</span>
-                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="model">Models</span>
-                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="domain">Domains</span>
-                            <span class="filter-chip px-2.5 py-1.5 rounded-md bg-black/30 border border-white/5 cursor-pointer hover:bg-white/5 transition font-medium" data-filter="status">Status</span>
+                        <div class="flex items-center gap-2 text-xs font-bold text-zinc-400 overflow-x-auto pb-3 scrollbar-custom" id="filterChips">
+                            <span class="px-4 py-2 rounded-xl bg-primary/20 text-primary border border-primary/30 cursor-pointer shadow-sm transition-all" data-filter="all">All Logs</span>
+                            <span class="px-4 py-2 rounded-xl bg-black/40 border border-white/10 cursor-pointer hover:bg-white/5 transition-all" data-filter="model">Models</span>
+                            <span class="px-4 py-2 rounded-xl bg-black/40 border border-white/10 cursor-pointer hover:bg-white/5 transition-all" data-filter="domain">Domains</span>
+                            <span class="px-4 py-2 rounded-xl bg-black/40 border border-white/10 cursor-pointer hover:bg-white/5 transition-all" data-filter="status">Status</span>
                         </div>
                     </div>
                     
-                    <div class="flex items-center justify-between px-4 pb-2 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-widest">
+                    <div class="flex items-center justify-between px-6 pb-4 mb-4 text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-white/5">
                         <div class="flex gap-4">
-                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="model">Service <i class="ph ph-caret-up-down ml-0.5"></i></span>
+                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="model">Service <i class="ph-bold ph-caret-up-down ml-1"></i></span>
                         </div>
-                        <div class="flex gap-6 items-center">
-                            <span class="hidden md:block cursor-pointer hover:text-white transition-colors" data-sort="timestamp">Time <i class="ph ph-caret-down ml-0.5"></i></span>
-                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="status">State <i class="ph ph-caret-up-down ml-0.5"></i></span>
-                            <span class="cursor-pointer hover:text-white transition-colors text-right w-16" data-sort="tokens">Usage <i class="ph ph-caret-up-down ml-0.5"></i></span>
+                        <div class="flex gap-8 items-center">
+                            <span class="hidden md:block cursor-pointer hover:text-white transition-colors" data-sort="timestamp">Time <i class="ph-bold ph-caret-down ml-1"></i></span>
+                            <span class="cursor-pointer hover:text-white transition-colors" data-sort="status">State <i class="ph-bold ph-caret-up-down ml-1"></i></span>
+                            <span class="cursor-pointer hover:text-white transition-colors text-right w-20" data-sort="tokens">Tokens <i class="ph-bold ph-caret-up-down ml-1"></i></span>
                         </div>
                     </div>
 
-                    <div id="logsTableBody" class="space-y-3">
-                        <div class="empty-state">
-                            <div class="icon-wrap"><i class="ph-bold ph-list-magnifying-glass"></i></div>
-                            <h4>No Activity Found</h4>
-                            <p>We couldn't find any recent usage logs for your keys.</p>
+                    <div id="logsTableBody" class="space-y-4">
+                        <div class="empty-state bg-black/20 border border-dashed border-white/10 rounded-2xl p-12 text-center">
+                            <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-4 text-zinc-500 text-2xl">
+                                <i class="ph-bold ph-list-magnifying-glass"></i>
+                            </div>
+                            <h4 class="text-white font-bold text-lg mb-1">No Activity Found</h4>
+                            <p class="text-zinc-500 text-sm">We couldn't find any recent usage logs for your keys.</p>
                         </div>
                     </div>
                     
-                    <div class="flex justify-center mt-6 pt-4 border-t border-white/5">
-                        <button id="loadMoreBtn" class="btn-secondary text-xs px-5 py-2 rounded-xl hidden">
+                    <div class="flex justify-center mt-8">
+                        <button id="loadMoreBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md hidden">
                             Load More Records
                         </button>
                     </div>
@@ -539,113 +538,122 @@
 
             <section id="tab-settings" class="tab-content hidden fade-in-up">
                 <div class="mb-8">
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Settings</h1>
-                    <p class="text-sm text-zinc-400 mt-1">Manage your profile, security, and API integrations.</p>
+                    <h1 class="text-3xl font-black text-white tracking-tight">Vault Settings</h1>
+                    <p class="text-sm text-zinc-400 mt-1 font-medium">Manage your profile, security, and API integrations.</p>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
-                    <h3 class="text-lg font-bold text-white mb-4">Profile Information</h3>
-                    <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
-                        <img id="settingsAvatar" src="" alt="avatar" class="w-20 h-20 rounded-full border-2 border-primary/30 object-cover" />
-                        <div class="flex-1 space-y-1">
-                            <div class="text-sm text-zinc-400">Full Name</div>
-                            <div id="settingsName" class="text-lg font-semibold text-white">User</div>
-                            <div class="text-sm text-zinc-400 mt-2">Email Address</div>
-                            <div id="settingsEmail" class="text-md text-white">user@example.com</div>
+                <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
+                    <h3 class="text-xl font-bold text-white mb-6">Profile Information</h3>
+                    <div class="flex flex-col md:flex-row items-start md:items-center gap-8">
+                        <img id="settingsAvatar" src="" alt="avatar" class="w-24 h-24 rounded-full border-[3px] border-primary/30 object-cover shadow-[0_0_20px_rgba(168,85,247,0.2)]" />
+                        <div class="flex-1 space-y-2">
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Full Name</div>
+                            <div id="settingsName" class="text-xl font-black text-white tracking-wide">User</div>
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-4">Email Address</div>
+                            <div id="settingsEmail" class="text-base text-zinc-300 font-medium">user@example.com</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
-                    <h3 class="text-lg font-bold text-white mb-4">Security & Authentication</h3>
+                <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
+                    <h3 class="text-xl font-bold text-white mb-6">Security & Authentication</h3>
                     <div id="passwordChangeSection">
-                        <p class="text-sm text-zinc-400 mb-3">Change your password</p>
-                        <div class="space-y-3 max-w-md">
+                        <p class="text-sm text-zinc-400 mb-5 font-medium">Change your account password</p>
+                        <div class="space-y-4 max-w-lg">
                             <div>
-                                <label for="currentPassword" class="form-label">Current Password</label>
-                                <input type="password" id="currentPassword" class="form-input" placeholder="••••••••" />
+                                <label for="currentPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Current Password</label>
+                                <input type="password" id="currentPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" />
                             </div>
                             <div>
-                                <label for="newPassword" class="form-label">New Password</label>
-                                <input type="password" id="newPassword" class="form-input" placeholder="Min 6 characters" />
+                                <label for="newPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">New Password</label>
+                                <input type="password" id="newPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Min 6 characters" />
                             </div>
                             <div>
-                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••" />
+                                <label for="confirmPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" />
                             </div>
-                            <button id="updatePasswordBtn" class="btn-primary py-2 px-4 text-sm">Update Password</button>
+                            <button id="updatePasswordBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_4px_15px_rgba(168,85,247,0.3)] mt-2">Update Password</button>
                         </div>
                     </div>
-                    <div id="socialAuthInfo" class="hidden">
-                        <p class="text-sm text-zinc-400">You are signed in with <span id="socialProvider" class="text-primary font-semibold">Google</span>. You don't have a password set. Manage your account through your provider.</p>
+                    <div id="socialAuthInfo" class="hidden bg-primary/5 border border-primary/20 p-5 rounded-2xl mt-4">
+                        <p class="text-sm text-zinc-300 font-medium m-0 flex items-start gap-3">
+                            <i class="ph-fill ph-google-logo text-primary text-xl mt-0.5"></i>
+                            <span>You are signed in with <span id="socialProvider" class="text-primary font-bold">Google</span>. Password management is handled by your provider.</span>
+                        </p>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl mb-6 border border-white/5">
-                    <h3 class="text-lg font-bold text-white mb-4">Groq Configuration</h3>
-                    <div class="split-layout">
-                        <div class="split-info">
-                            <p class="text-sm text-zinc-400 leading-relaxed">
-                                Connect your Groq API key to power the AI models. This key is encrypted securely in our vault and never exposed to the frontend.
+                <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
+                    <h3 class="text-xl font-bold text-white mb-6">Groq Configuration</h3>
+                    <div class="flex flex-col lg:flex-row gap-10 items-start">
+                        <div class="flex-1 lg:max-w-sm">
+                            <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                                Connect your Groq API key to power the AI models. This key is encrypted securely in our vault (AES-256) and is <strong>never</strong> exposed to the frontend browser.
                             </p>
                         </div>
-                        <div class="split-content">
-                            <label for="groqApiInput" class="form-label">Groq API Key</label>
-                            <div class="relative max-w-lg mb-3">
-                                <input type="password" id="groqApiInput" placeholder="gsk_..." class="form-input pr-10 font-mono text-sm" />
-                                <button id="toggleGroqVisibility" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
-                                    <i class="ph-bold ph-eye"></i>
+                        <div class="flex-[2] w-full bg-black/30 border border-white/5 rounded-2xl p-6 shadow-inner">
+                            <label for="groqApiInput" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Groq API Key</label>
+                            <div class="relative max-w-xl mb-5">
+                                <input type="password" id="groqApiInput" placeholder="gsk_..." class="w-full bg-black/60 border border-white/10 rounded-xl pl-4 pr-12 py-3 text-white font-mono text-sm focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                                <button id="toggleGroqVisibility" type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
+                                    <i class="ph-bold ph-eye text-lg"></i>
                                 </button>
                             </div>
-                            <div class="flex items-center gap-3 flex-wrap">
-                                <button id="saveGroqBtn" class="btn-primary py-2 px-4 text-sm hidden">Save Changes</button>
-                                <button id="cancelGroqBtn" class="btn-secondary py-2 px-4 text-sm hidden">Cancel</button>
-                                <button id="deleteGroqBtn" class="btn-secondary hidden py-2 px-4 text-sm !border-red-500/30 !text-red-400 hover:!bg-red-500/10">Delete Key</button>
-                                <span id="groqKeyStatus" class="text-xs font-medium ml-2 text-zinc-500">No key saved</span>
+                            <div class="flex items-center gap-4 flex-wrap">
+                                <button id="saveGroqBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hidden">Save Changes</button>
+                                <button id="cancelGroqBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hidden">Cancel</button>
+                                <button id="deleteGroqBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hidden shadow-[0_0_15px_rgba(239,68,68,0.15)]">Delete Key</button>
+                                <span id="groqKeyStatus" class="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">No key saved</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl border-2 border-red-500/30 bg-red-500/5">
-                    <div class="flex items-center gap-3 mb-2">
-                        <i class="ph-bold ph-warning text-red-400 text-xl"></i>
-                        <h3 class="text-lg font-bold text-white">Danger Zone</h3>
+                <div class="glass-panel p-8 rounded-3xl border-2 border-red-500/30 bg-red-500/10 shadow-[0_0_30px_rgba(239,68,68,0.1)] relative overflow-hidden">
+                    <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-red-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="ph-bold ph-warning-octagon text-red-500 text-3xl drop-shadow-[0_0_10px_rgba(239,68,68,0.6)]"></i>
+                            <h3 class="text-xl font-black text-white tracking-tight">Danger Zone</h3>
+                        </div>
+                        <p class="text-sm text-zinc-300 mb-6 font-medium max-w-2xl leading-relaxed">
+                            Once you delete your account, there is no going back. All your data, API keys, whitelisted domains, and usage history will be permanently and irreversibly wiped from our servers.
+                        </p>
+                        <button id="deleteAccountBtn" class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-xl text-sm font-black tracking-wide transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                            <i class="ph-bold ph-trash text-lg"></i> DELETE ACCOUNT
+                        </button>
                     </div>
-                    <p class="text-sm text-zinc-400 mb-4">
-                        Once you delete your account, there is no going back. All your data, API keys, domains, and usage history will be permanently removed.
-                    </p>
-                    <button id="deleteAccountBtn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all flex items-center gap-2">
-                        <i class="ph-bold ph-trash"></i> Delete Account
-                    </button>
                 </div>
             </section>
 
-            <div id="captchaModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-                <div class="glass-panel p-8 rounded-2xl border border-primary/20 bg-black/80 max-w-md w-full mx-4">
-                    <h3 id="captchaModalTitle" class="text-lg font-semibold text-white mb-2">Verify Action</h3>
-                    <p id="captchaModalDesc" class="text-sm text-zinc-400 mb-6">Please complete the CAPTCHA to proceed.</p>
-                    <div id="captchaModalContainer" class="flex justify-center mb-6"></div>
-                    <div class="flex gap-3">
-                        <button id="captchaModalConfirm" class="btn-primary flex-1 hidden">Confirm</button>
-                        <button id="captchaModalCancel" class="btn-secondary flex-1">Cancel</button>
+            <div id="captchaModal" class="fixed inset-0 bg-black/70 backdrop-blur-xl flex items-center justify-center z-50 hidden transition-opacity">
+                <div class="bg-zinc-950/90 border border-white/10 rounded-3xl p-10 max-w-md w-full mx-4 shadow-[0_0_50px_rgba(0,0,0,0.6)]">
+                    <h3 id="captchaModalTitle" class="text-xl font-bold text-white mb-2">Security Verification</h3>
+                    <p id="captchaModalDesc" class="text-sm text-zinc-400 mb-8 font-medium">Please complete the check below to proceed with this action.</p>
+                    <div id="captchaModalContainer" class="flex justify-center mb-8 bg-black/40 p-4 rounded-xl border border-white/5"></div>
+                    <div class="flex gap-4">
+                        <button id="captchaModalConfirm" class="flex-1 bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-lg hidden">Confirm</button>
+                        <button id="captchaModalCancel" class="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-3 rounded-xl text-sm font-bold transition-all">Cancel</button>
                     </div>
                 </div>
             </div>
 
-            <div id="deleteAccountModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[9999] hidden">
-                <div class="glass-panel p-8 rounded-2xl border border-red-500/30 bg-black/90 max-w-md w-full mx-4" style="pointer-events: auto;">
+            <div id="deleteAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center z-[9999] hidden transition-opacity">
+                <div class="bg-zinc-950 border border-red-500/30 rounded-3xl p-10 max-w-md w-full mx-4 shadow-[0_0_50px_rgba(239,68,68,0.3)] relative overflow-hidden" style="pointer-events: auto;">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-400"></div>
                     <div class="flex items-center gap-3 mb-4">
-                        <i class="ph-bold ph-warning text-red-400 text-2xl"></i>
-                        <h3 class="text-xl font-bold text-white">Delete Account</h3>
+                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
+                            <i class="ph-bold ph-warning text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white tracking-tight">Delete Account?</h3>
                     </div>
-                    <p class="text-sm text-zinc-300 mb-6">
-                        This action is <strong>permanent</strong> and cannot be undone. All your data, API keys, domains, and usage logs will be erased.
+                    <p class="text-sm text-zinc-300 mb-8 font-medium leading-relaxed">
+                        This action is <strong>permanent</strong> and cannot be undone. All your data, keys, and logs will be immediately erased.
                     </p>
-                    <div id="deleteTurnstileContainer" class="flex justify-center mb-6"></div>
-                    <div class="flex gap-3">
-                        <button id="deleteConfirmBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all flex-1 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Confirm Delete</button>
-                        <button id="deleteCancelBtn" class="btn-secondary flex-1">Cancel</button>
+                    <div id="deleteTurnstileContainer" class="flex justify-center mb-8 bg-black/50 p-4 rounded-xl border border-white/5"></div>
+                    <div class="flex gap-4">
+                        <button id="deleteConfirmBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(239,68,68,0.4)]" disabled>Delete Forever</button>
+                        <button id="deleteCancelBtn" class="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-3 rounded-xl font-bold transition-all">Keep Account</button>
                     </div>
                 </div>
             </div>
