@@ -93,7 +93,7 @@ def handle_chat_request(body, request_origin):
                         }, merge=True)
                         return True, current_count + 1
 
-                    success, new_count = db.transaction(transaction_callback)
+                    success, new_count = transaction_callback(db.transaction())
                     return success, new_count
 
                 except Exception as e:
