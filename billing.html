@@ -1,4 +1,3 @@
-<!-- billing.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -10,136 +9,196 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="src/css/tailwind-output.css">
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="src/css/dashboard.css" />
 </head>
-<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
-    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
-        <div class="h-16 flex items-center px-6 border-b border-border">
-            <a href="/" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
+                <span class="text-lg font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
             </a>
         </div>
-        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
-            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+        <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
             </a>
-            <a href="/billing" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/billing" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
                 <i class="ph-bold ph-credit-card text-lg"></i> Billing
             </a>
-            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
             </a>
         </nav>
-        <div class="p-4 border-t border-border">
-            <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
-                <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
+        <div class="p-4 border-t border-white/5 bg-black/20">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
-                    <div id="sidebarName" class="text-sm font-semibold text-white truncate">User</div>
-                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate">user@example.com</div>
+                    <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
                 </div>
             </div>
-            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-red-400 transition-colors py-2">
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
                 <i class="ph-bold ph-sign-out"></i> Sign Out
             </button>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
-        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
-        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10">
+        <div class="ambient-glow fixed top-[-10%] left-[30%] w-[800px] h-[600px] bg-radial-gradient from-primary/10 to-transparent z-[-1] pointer-events-none blur-3xl opacity-50"></div>
+        
+        <header class="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 sticky top-0 shadow-sm">
             <div class="flex items-center gap-4">
-                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
                     <i class="ph-bold ph-list text-2xl"></i>
                 </button>
-                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                    <span id="breadcrumbRoot">Nexus</span>
-                    <i class="ph-bold ph-caret-right text-xs"></i>
-                    <span id="breadcrumbCurrent" class="text-white">Billing</span>
+                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
+                    <span id="breadcrumbRoot" class="hover:text-zinc-300 transition-colors cursor-pointer">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs text-zinc-600"></i>
+                    <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">Billing</span>
                 </div>
             </div>
             <div class="flex items-center gap-4 hidden md:flex">
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5">
                     <i class="ph-bold ph-github-logo text-lg"></i> GitHub
                 </a>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
-            <div class="max-w-5xl mx-auto pb-20">
-                <div class="mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">Billing &amp; Usage</h1>
-                    <p class="text-sm text-zinc-400">Manage your subscription and monitor your API usage.</p>
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom">
+            <div class="max-w-6xl mx-auto pb-20">
+                <div class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white mb-2">Billing &amp; Usage</h1>
+                    <p class="text-base text-zinc-400 font-medium">Manage your workspace subscription and monitor inference usage.</p>
                 </div>
 
-                <!-- Plan Card -->
-                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <div class="flex items-center gap-3 mb-1">
-                                <span id="planBadge" class="text-xs font-bold uppercase bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30">Free</span>
-                                <span class="text-xs text-zinc-500">Billing cycle: <span id="billingCycle">Monthly</span></span>
+                <div id="billingSkeleton" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/30 flex flex-col justify-between shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between gap-6">
+                            <div class="space-y-4">
+                                <div class="h-6 w-24 bg-white/10 rounded-full animate-pulse"></div>
+                                <div class="h-10 w-48 bg-white/10 rounded-lg animate-pulse"></div>
+                                <div class="h-5 w-32 bg-white/5 rounded animate-pulse"></div>
                             </div>
-                            <h2 id="planName" class="text-2xl font-bold text-white">Free Tier</h2>
-                            <p id="planPrice" class="text-sm text-zinc-400">$0 / month</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span id="nextResetLabel" class="text-xs text-zinc-500">Resets on <span id="nextResetDate">—</span></span>
-                            <button id="upgradeBtn" class="btn-primary py-2 px-5 text-sm" disabled>
-                                <i class="ph-bold ph-arrow-up-right"></i> Upgrade (Coming Soon)
-                            </button>
+                            <div class="flex flex-col items-start md:items-end gap-4">
+                                <div class="h-5 w-40 bg-white/5 rounded animate-pulse"></div>
+                                <div class="h-10 w-40 bg-white/10 rounded-full animate-pulse"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Usage Card -->
-                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
-                    <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400 mb-3">Monthly Usage</h3>
-                    <div class="flex items-baseline gap-2 mb-1">
-                        <span id="usageNumber" class="text-3xl font-extrabold text-white">0</span>
-                        <span class="text-sm text-zinc-400">/ <span id="usageLimit">1000</span> requests</span>
-                    </div>
-                    <div class="w-full h-2 bg-white/10 rounded-full mt-2 overflow-hidden">
-                        <div id="usageProgressBar" class="h-full bg-primary rounded-full transition-all duration-700" style="width: 0%;"></div>
-                    </div>
-                    <div class="flex justify-between text-xs text-zinc-500 mt-1.5">
-                        <span id="usagePercentage">0% used</span>
-                        <span id="remainingText"><span id="remainingCount">1000</span> remaining</span>
-                    </div>
-                    <div id="usageWarning" class="mt-3 hidden text-sm text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-center gap-2">
-                        <i class="ph-bold ph-warning text-lg"></i>
-                        <span>You're approaching your monthly limit. Upgrade to continue uninterrupted.</span>
+                    
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/30 flex flex-col justify-between shadow-lg">
+                        <div class="h-5 w-32 bg-white/5 rounded mb-6 animate-pulse"></div>
+                        <div class="flex items-end gap-2 mb-6">
+                            <div class="h-12 w-24 bg-white/10 rounded-lg animate-pulse"></div>
+                            <div class="h-6 w-20 bg-white/5 rounded animate-pulse mb-1"></div>
+                        </div>
+                        <div class="h-3 w-full bg-white/5 rounded-full mb-3 animate-pulse"></div>
+                        <div class="flex justify-between">
+                            <div class="h-4 w-16 bg-white/5 rounded animate-pulse"></div>
+                            <div class="h-4 w-24 bg-white/5 rounded animate-pulse"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Feature List -->
-                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 mb-6">
-                    <h3 class="text-sm font-bold text-white uppercase tracking-wider text-zinc-400 mb-3">Included in Free Plan</h3>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> 1,000 requests / month</li>
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Domain whitelisting (up to 10)</li>
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Encrypted Groq key vault</li>
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> All models (Llama 3, Mixtral, etc.)</li>
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Community support</li>
-                        <li class="flex items-center gap-2 text-zinc-300"><i class="ph-bold ph-check-circle text-emerald-400"></i> Open source (MIT)</li>
-                    </ul>
-                </div>
+                <div id="billingContent" class="hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        
+                        <div class="lg:col-span-2 flex flex-col gap-6">
+                            <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/40 hover:border-primary/20 transition-all shadow-xl relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                                <div class="relative z-10 flex flex-col md:flex-row justify-between gap-6 items-start md:items-center">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span id="planBadge" class="text-xs font-black tracking-wide uppercase bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30 shadow-[0_0_10px_rgba(168,85,247,0.15)]">Free</span>
+                                            <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Cycle: <span id="billingCycle" class="text-zinc-400">Monthly</span></span>
+                                        </div>
+                                        <h2 id="planName" class="text-3xl font-black text-white tracking-tight mb-1">Free Tier</h2>
+                                        <p id="planPrice" class="text-base text-zinc-400 font-medium">$0 / month</p>
+                                    </div>
+                                    <div class="flex flex-col items-start md:items-end gap-3">
+                                        <span class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Resets on <span id="nextResetDate" class="text-zinc-300">—</span></span>
+                                        <button id="upgradeBtn" class="bg-white/5 text-zinc-400 border border-white/10 px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 cursor-not-allowed" disabled>
+                                            <i class="ph-bold ph-arrow-up-right"></i> Upgrade (Soon)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!-- Placeholder for future upgrades -->
-                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20 border-dashed border-primary/20">
-                    <div class="text-center py-4">
-                        <i class="ph-bold ph-rocket text-4xl text-primary/40 mb-3 block"></i>
-                        <h4 class="text-lg font-semibold text-white">More plans coming soon</h4>
-                        <p class="text-sm text-zinc-400 max-w-md mx-auto">We're working on Pro and Enterprise plans with higher limits and priority support.</p>
+                            <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-white/10 transition-all shadow-lg">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                                        <i class="ph-bold ph-check text-lg"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white tracking-wide">Included in Free Plan</h3>
+                                </div>
+                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                                    <li class="flex items-start gap-3 text-zinc-300 font-medium">
+                                        <i class="ph-fill ph-check-circle text-emerald-500 text-lg shrink-0 mt-0.5"></i> 
+                                        <span>1,000 inference requests / month</span>
+                                    </li>
+                                    <li class="flex items-start gap-3 text-zinc-300 font-medium">
+                                        <i class="ph-fill ph-check-circle text-emerald-500 text-lg shrink-0 mt-0.5"></i> 
+                                        <span>Domain whitelisting (up to 10 origins)</span>
+                                    </li>
+                                    <li class="flex items-start gap-3 text-zinc-300 font-medium">
+                                        <i class="ph-fill ph-check-circle text-emerald-500 text-lg shrink-0 mt-0.5"></i> 
+                                        <span>Encrypted Groq key vault architecture</span>
+                                    </li>
+                                    <li class="flex items-start gap-3 text-zinc-300 font-medium">
+                                        <i class="ph-fill ph-check-circle text-emerald-500 text-lg shrink-0 mt-0.5"></i> 
+                                        <span>Access to Llama 3 &amp; Mixtral open models</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/40 hover:border-primary/20 transition-all flex flex-col shadow-xl">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                    <i class="ph-bold ph-chart-donut text-lg"></i>
+                                </div>
+                                <h3 class="text-sm font-extrabold text-white uppercase tracking-wider text-zinc-300">Monthly Usage</h3>
+                            </div>
+                            
+                            <div class="flex items-baseline gap-2 mb-2">
+                                <span id="usageNumber" class="text-5xl font-black text-white tracking-tight">0</span>
+                                <span class="text-sm font-semibold text-zinc-500">/ <span id="usageLimit">1,000</span> req</span>
+                            </div>
+                            
+                            <div class="w-full h-3 bg-black/50 rounded-full mt-4 overflow-hidden border border-white/5 shadow-inner relative">
+                                <div id="usageProgressBar" class="h-full bg-gradient-to-r from-purple-500 to-primary rounded-full transition-all duration-1000 ease-out w-0 relative">
+                                    <div class="absolute right-0 top-0 bottom-0 w-4 bg-white/30 blur-[2px]"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between text-xs font-bold text-zinc-500 mt-3 tracking-wide">
+                                <span id="usagePercentage">0% used</span>
+                                <span id="remainingText"><span id="remainingCount" class="text-white">1,000</span> remaining</span>
+                            </div>
+
+                            <div id="usageWarning" class="mt-8 hidden text-sm font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                <i class="ph-bold ph-warning text-xl shrink-0 mt-0.5"></i>
+                                <span>You're approaching your monthly limit. Upgrade to continue uninterrupted.</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="glass-panel p-10 rounded-3xl border border-white/5 bg-gradient-to-b from-zinc-900/30 to-black/20 border-dashed border-zinc-700 mt-6 flex flex-col items-center justify-center text-center shadow-inner">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 text-zinc-500 shadow-md">
+                            <i class="ph-bold ph-receipt text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2 tracking-wide">More plans arriving soon</h4>
+                        <p class="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">We're actively developing Pro and Enterprise architectures featuring elevated limit thresholds, priority inference queues, and dedicated support.</p>
                     </div>
                 </div>
             </div>
