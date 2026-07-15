@@ -13,190 +13,125 @@
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="src/css/dashboard.css" />
     <style>
-        .glass-panel { background: rgba(24, 24, 27, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .scrollbar-custom::-webkit-scrollbar { width: 5px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0.6rem 1rem;
-            color: #a1a1aa;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            text-align: left;
+
+        .skeleton-text, .skeleton-badge, .skeleton-icon {
+            background: rgba(255,255,255,0.05);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        .sidebar-link i { font-size: 1.25rem; }
-        .sidebar-link:hover { color: #fafafa; background: rgba(255,255,255,0.03); }
-        .sidebar-link.active { color: #a855f7; background: rgba(168,85,247,0.1); font-weight: 600; }
-        .skeleton {
-            background: linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.8s ease-in-out infinite;
-            border-radius: 6px;
-            display: inline-block;
-        }
-        .skeleton-text { height: 16px; border-radius: 4px; background: linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%); background-size: 200% 100%; animation: shimmer 1.8s ease-in-out infinite; }
-        .skeleton-badge { height: 24px; border-radius: 30px; background: linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%); background-size: 200% 100%; animation: shimmer 1.8s ease-in-out infinite; }
-        .skeleton-icon { background: linear-gradient(90deg, rgba(30,30,35,0.6) 25%, rgba(50,50,58,0.8) 50%, rgba(30,30,35,0.6) 75%); background-size: 200% 100%; animation: shimmer 1.8s ease-in-out infinite; border-radius: 10px; }
-        .skeleton-card { position: relative; overflow: hidden; }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-        @media (max-width: 640px) { .skeleton-text { height: 14px; } }
+        .skeleton-text { height: 16px; border-radius: 6px; }
+        .skeleton-badge { height: 24px; border-radius: 30px; }
+        .skeleton-icon { border-radius: 12px; }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        
         .fade-in-up { animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .btn-danger {
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
-        }
-        .btn-danger:active { transform: scale(0.96); }
-        .btn-danger:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-ghost {
-            background: transparent;
-            color: #a1a1aa;
-            border: 1px solid rgba(255,255,255,0.06);
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-ghost:hover {
-            background: rgba(255,255,255,0.06);
-            color: #e4e4e7;
-            border-color: rgba(255,255,255,0.12);
-        }
-        .device-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-        .device-icon.desktop { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.15); }
-        .device-icon.mobile { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.15); }
-        .device-icon.tablet { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.15); }
-        .relative-time {
-            font-size: 0.7rem;
-            color: #71717a;
-            font-weight: 500;
-        }
+
+        .device-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .device-icon.desktop { background: rgba(168,85,247,0.1); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+        .device-icon.mobile { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .device-icon.tablet { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        
+        .relative-time { font-size: 0.75rem; color: #71717a; font-weight: 600; letter-spacing: 0.02em; }
         .relative-time.active { color: #34d399; }
-        @media (max-width: 640px) {
-            .btn-danger, .btn-ghost { font-size: 0.7rem; padding: 0.4rem 0.8rem; }
-        }
     </style>
 </head>
-<body class="bg-background text-zinc-300 font-sans antialiased flex h-screen overflow-hidden">
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
-    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 relative z-20">
-        <div class="h-16 flex items-center px-6 border-b border-border">
-            <a href="/" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold tracking-tight text-white">Nexus</span>
+                <span class="text-lg font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
             </a>
         </div>
-        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
-            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+        <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scrollbar-custom">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="/activity" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/activity" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
             </a>
-            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-credit-card text-lg"></i> Billing
             </a>
-            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
             </a>
         </nav>
-        <div class="p-4 border-t border-border">
-            <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20 border border-white/5">
-                <img id="sidebarAvatar" src="" alt="avatar" class="w-8 h-8 rounded-full border border-white/10" />
+        <div class="p-4 border-t border-white/5 bg-black/20">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
-                    <div id="sidebarName" class="text-sm font-semibold text-white truncate">User</div>
-                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate">user@example.com</div>
+                    <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
                 </div>
             </div>
-            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm text-zinc-400 hover:text-red-400 transition-colors py-2">
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
                 <i class="ph-bold ph-sign-out"></i> Sign Out
             </button>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
-        <div class="ambient-glow" style="top: -10%; left: 30%;"></div>
-        <header class="h-16 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md z-10 flex-shrink-0">
+        <div class="ambient-glow fixed top-[-10%] left-[30%] w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 to-transparent z-[-1] pointer-events-none blur-3xl opacity-50"></div>
+        
+        <header class="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 flex-shrink-0">
             <div class="flex items-center gap-4">
-                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
                     <i class="ph-bold ph-list text-2xl"></i>
                 </button>
-                <div class="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                    <span id="breadcrumbRoot">Nexus</span>
-                    <i class="ph-bold ph-caret-right text-xs"></i>
-                    <span id="breadcrumbCurrent" class="text-white">Activity</span>
+                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
+                    <span id="breadcrumbRoot" class="hover:text-zinc-300 transition-colors cursor-pointer">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs text-zinc-600"></i>
+                    <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">Activity</span>
                 </div>
             </div>
             <div class="flex items-center gap-4 hidden md:flex">
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5">
                     <i class="ph-bold ph-github-logo text-lg"></i> GitHub
                 </a>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-10 relative z-10 scrollbar-custom">
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom">
             <div class="max-w-5xl mx-auto pb-20">
-                <div class="mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">Login Activity & Sessions</h1>
-                    <p class="text-sm text-zinc-400">Monitor and manage your active sessions across different devices and locations.</p>
+                <div class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white mb-2">Login Activity &amp; Sessions</h1>
+                    <p class="text-base text-zinc-400 font-medium">Monitor and manage your active sessions across different devices and locations.</p>
                 </div>
 
-                <div class="glass-panel rounded-2xl p-6 border border-white/5 bg-black/20">
-                    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-                        <h2 class="text-lg font-bold text-zinc-200 flex items-center gap-2">
-                            <i class="ph-bold ph-shield-check text-emerald-400"></i> Active Sessions
-                        </h2>
+                <div class="glass-panel rounded-3xl p-8 border border-white/5 bg-zinc-900/30 shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                    
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)] flex-shrink-0">
+                                <i class="ph-bold ph-shield-check text-2xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white tracking-wide mb-1">Active Sessions</h2>
+                                <p class="text-sm text-zinc-500 font-medium">Devices currently logged into your account</p>
+                            </div>
+                        </div>
+                        
                         <div class="flex items-center gap-3 flex-wrap">
-                            <button id="refreshBtn" class="btn-ghost" title="Refresh sessions">
-                                <i class="ph-bold ph-arrows-clockwise text-base"></i> Refresh
+                            <button id="refreshBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md flex items-center gap-2" title="Refresh sessions">
+                                <i class="ph-bold ph-arrows-clockwise text-lg"></i> Refresh
                             </button>
-                            <button id="logoutAllBtn" class="btn-danger">
-                                <i class="ph-bold ph-sign-out text-base"></i> Sign Out All Others
+                            <button id="logoutAllBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(239,68,68,0.15)] flex items-center gap-2">
+                                <i class="ph-bold ph-sign-out text-lg"></i> Sign Out All Others
                             </button>
                         </div>
                     </div>
-                    <div id="sessionsContainer" class="space-y-4"></div>
+                    
+                    <div id="sessionsContainer" class="space-y-4 relative z-10"></div>
                 </div>
             </div>
         </main>
