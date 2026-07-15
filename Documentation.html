@@ -48,6 +48,12 @@
         .toc-link:hover { color: #fafafa; background: rgba(255, 255, 255, 0.03); }
         .toc-link.active-toc { color: #c084fc; background: rgba(168, 85, 247, 0.08); border-left-color: #a855f7; font-weight: 600; }
         .toc-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; padding: 0 1rem 0.75rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06); margin-bottom: 0.75rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 0.6rem 1rem; color: #a1a1aa; font-size: 0.875rem; font-weight: 600; border-radius: 12px; transition: all 0.2s ease; text-align: left; }
+        .sidebar-link i { font-size: 1.25rem; }
+        .sidebar-link:hover { color: #fafafa; background: rgba(255, 255, 255, 0.05); }
+        .sidebar-link.active { color: #c084fc; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168,85,247,0.2); box-shadow: inset 0 0 15px rgba(168,85,247,0.1); }
+        #docsSkeleton .pulse-bg { background: rgba(255,255,255,0.05); border-radius: 8px; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         .copy-btn { position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; z-index: 10; display: flex; align-items: center; gap: 0.4rem; backdrop-filter: blur(4px); opacity: 0; }
         .doc-content pre:hover .copy-btn { opacity: 1; }
         .copy-btn:hover { background: rgba(255, 255, 255, 0.15); color: #fff; border-color: rgba(255,255,255,0.2); }
@@ -61,12 +67,6 @@
         .feature-tag { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 12px; background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); margin-left: 0.5rem; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.05em; }
         @media (max-width: 1024px) { .toc-sidebar { display: none; } }
         @media (max-width: 640px) { .spec-grid { grid-template-columns: 1fr; } .doc-content h1 { font-size: 2rem; } .doc-content h2 { font-size: 1.5rem; } .hero-banner { padding: 2rem 1.5rem; } }
-        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 0.6rem 1rem; color: #a1a1aa; font-size: 0.875rem; font-weight: 600; border-radius: 12px; transition: all 0.2s ease; text-align: left; }
-        .sidebar-link i { font-size: 1.25rem; }
-        .sidebar-link:hover { color: #fafafa; background: rgba(255, 255, 255, 0.05); }
-        .sidebar-link.active { color: #c084fc; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168,85,247,0.2); box-shadow: inset 0 0 15px rgba(168,85,247,0.1); }
-        #docsSkeleton .pulse-bg { background: rgba(255,255,255,0.05); border-radius: 8px; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
@@ -468,91 +468,56 @@ window.NexusConfig = {
                             </div>
                         </section>
 
-                        <section id="version-history">
-                            <h2>📦 Version History</h2>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Version</th>
-                                        <th>Date</th>
-                                        <th>Changes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="badge">v3.0.0</span></td>
-                                        <td>July 2026</td>
-                                        <td class="font-medium text-white">Fixed Highly Risk Bugs & UI overhaul.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge text-zinc-400 bg-white/5 border-white/10">v2.2.0</span></td>
-                                        <td>July 2026</td>
-                                        <td>Updated default model to Llama 4 Scout, improved SPA detection, added chat history persistence.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge text-zinc-400 bg-white/5 border-white/10">v2.1.0</span></td>
-                                        <td>June 2026</td>
-                                        <td>Added file attachment support, vision model compatibility, 5MB size limit.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge text-zinc-400 bg-white/5 border-white/10">v2.0.0</span></td>
-                                        <td>May 2026</td>
-                                        <td>Complete rewrite with IndexedDB caching (24h TTL), better theming with user toggle.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </section>
-
                         <footer class="w-full border-t border-white/5 pt-16 pb-12 bg-zinc-950 px-6">
-            <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
-                    <div class="col-span-2 lg:col-span-2">
-                        <div class="flex items-center gap-2.5 mb-6">
-                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                                <i class="ph-fill ph-brain text-lg"></i>
+                            <div class="max-w-6xl mx-auto">
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+                                    <div class="col-span-2 lg:col-span-2">
+                                        <div class="flex items-center gap-2.5 mb-6">
+                                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                                <i class="ph-fill ph-brain text-lg"></i>
+                                            </div>
+                                            <span class="text-xl font-black text-white tracking-tight">Nexus</span>
+                                        </div>
+                                        <p class="text-sm text-zinc-400 max-w-xs leading-relaxed font-medium">The most secure, drop-in AI assistant for modern web applications. Powered by Groq for instantaneous inference.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-bold mb-5 tracking-wide">Product</h4>
+                                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                                            <li><a href="/docs#features" class="hover:text-primary transition-colors">Features</a></li>
+                                            <li><a href="/pricing" class="hover:text-primary transition-colors">Pricing</a></li>
+                                            <li><a href="/demo" class="hover:text-primary transition-colors">Live Demo</a></li>
+                                            <li><a href="/changeLog" class="hover:text-primary transition-colors">Changelog</a></li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-bold mb-5 tracking-wide">Resources</h4>
+                                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                                            <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
+                                            <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
+                                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                                            <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-bold mb-5 tracking-wide">Company</h4>
+                                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                                            <li><a href="/about" class="hover:text-primary transition-colors">About Us</a></li>
+                                            <li><a href="/privacyPolicy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                                            <li><a href="/termsConditions" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <p class="text-xs text-zinc-500 font-semibold tracking-wide">&copy; 2026 Nexus Web Assistant. All rights reserved.</p>
+                                    <div class="flex items-center gap-6 text-zinc-500">
+                                        <a href="https://www.linkedin.com/in/thekaifansari01" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-linkedin-logo"></i></a>
+                                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-github-logo"></i></a>
+                                        <a href="#" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-discord-logo"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="text-xl font-black text-white tracking-tight">Nexus</span>
-                        </div>
-                        <p class="text-sm text-zinc-400 max-w-xs leading-relaxed font-medium">The most secure, drop-in AI assistant for modern web applications. Powered by Groq for instantaneous inference.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-bold mb-5 tracking-wide">Product</h4>
-                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
-                            <li><a href="/docs#features" class="hover:text-primary transition-colors">Features</a></li>
-                            <li><a href="/pricing" class="hover:text-primary transition-colors">Pricing</a></li>
-                            <li><a href="/demo" class="hover:text-primary transition-colors">Live Demo</a></li>
-                            <li><a href="/changeLog" class="hover:text-primary transition-colors">Changelog</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-bold mb-5 tracking-wide">Resources</h4>
-                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
-                            <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
-                            <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-bold mb-5 tracking-wide">Company</h4>
-                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
-                            <li><a href="/about" class="hover:text-primary transition-colors">About Us</a></li>
-                            <li><a href="/privacyPolicy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
-                            <li><a href="/termsConditions" class="hover:text-primary transition-colors">Terms of Service</a></li>
-                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <p class="text-xs text-zinc-500 font-semibold tracking-wide">&copy; 2026 Nexus Web Assistant. All rights reserved.</p>
-                    <div class="flex items-center gap-6 text-zinc-500">
-                        <a href="https://www.linkedin.com/in/thekaifansari01" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-linkedin-logo"></i></a>
-                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-github-logo"></i></a>
-                        <a href="#" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-discord-logo"></i></a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+                        </footer>
                     </div>
                 </div>
 
@@ -566,7 +531,6 @@ window.NexusConfig = {
                     <a href="#security" class="toc-link">Security Model</a>
                     <a href="#advanced" class="toc-link">Advanced</a>
                     <a href="#api-reference" class="toc-link">API Reference</a>
-                    <a href="#version-history" class="toc-link">Version History</a>
                 </aside>
 
             </div>
