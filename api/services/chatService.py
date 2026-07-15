@@ -69,10 +69,17 @@ def handle_chat_request(body, request_origin):
                 try:
                     transaction = db.transaction()
                     doc = transaction.get(usage_ref)
-                    if doc:
-                        current_count = doc[0].to_dict().get('count', 0)
+                    if hasattr(doc, 'exists'):
+                        if doc.exists:
+                            current_count = doc.to_dict().get('count', 0)
+                        else:
+                            current_count = 0
                     else:
-                        current_count = 0
+                        docs = list(doc) if doc else []
+                        if docs:
+                            current_count = docs[0].to_dict().get('count', 0)
+                        else:
+                            current_count = 0
                     if current_count >= monthly_limit:
                         return False, current_count
                     transaction.set(usage_ref, {
