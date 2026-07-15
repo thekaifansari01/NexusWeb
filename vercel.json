@@ -33,6 +33,10 @@
       "destination": "/about.html"
     },
     {
+      "source": "/changeLog",
+      "destination": "/changelog.html"
+    },
+    {
       "source": "/activity",
       "destination": "/activity.html"
     },
