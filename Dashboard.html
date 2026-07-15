@@ -94,7 +94,7 @@
                 </button>
             </div>
 
-            <section id="tab-overview" class="tab-content active fade-in-up">
+            <section id="overview" class="tab-content active fade-in-up">
                 <div class="p-8 rounded-3xl border border-primary/20 mb-8 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-br from-zinc-900/60 to-black shadow-2xl">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-3">
@@ -124,11 +124,11 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div id="totalKeys" class="text-3xl font-black text-white tracking-tight"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div id="totalKeys" class="text-3xl font-black text-white tracking-tight transition-opacity duration-300"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <span class="text-xs text-zinc-500 font-semibold">Provisioned</span>
                         </div>
                         <div class="mt-3 text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
-                            <span id="activeKeys" class="font-bold"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Active <span class="text-zinc-600 mx-0.5">|</span> <span id="revokedKeys" class="text-rose-400 font-bold"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Revoked
+                            <span id="activeKeys" class="font-bold transition-opacity duration-300"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Active <span class="text-zinc-600 mx-0.5">|</span> <span id="revokedKeys" class="text-rose-400 font-bold transition-opacity duration-300"><div class="w-6 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span> Revoked
                         </div>
                     </div>
 
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <div id="totalDomains" class="text-3xl font-black text-white tracking-tight"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div id="totalDomains" class="text-3xl font-black text-white tracking-tight transition-opacity duration-300"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <span class="text-xs text-zinc-500 font-semibold">Slots Used</span>
                         </div>
                         <div class="mt-3 text-xs text-zinc-400 font-medium">
@@ -154,15 +154,15 @@
                             <span id="planBadge" class="text-[10px] font-black uppercase bg-primary/20 text-primary px-2.5 py-1 rounded-full border border-primary/30">Free</span>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-3xl font-black text-white tracking-tight" id="usageNumber"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></span>
-                            <span class="text-xs text-zinc-500 font-semibold">/ <span id="usageLimit"><div class="w-10 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span></span>
+                            <span class="text-3xl font-black text-white tracking-tight transition-opacity duration-300" id="usageNumber"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></span>
+                            <span class="text-xs text-zinc-500 font-semibold">/ <span id="usageLimit" class="transition-opacity duration-300"><div class="w-10 h-4 bg-white/10 rounded animate-pulse inline-block"></div></span></span>
                         </div>
                         <div class="w-full h-2 bg-black/50 rounded-full mt-3 overflow-hidden border border-white/5">
                             <div id="usageProgressBar" class="h-full bg-gradient-to-r from-purple-500 to-primary rounded-full transition-all duration-1000 ease-out relative w-0"></div>
                         </div>
                         <div class="flex justify-between text-[10px] font-bold text-zinc-500 mt-2">
-                            <span id="usagePercentText"><div class="w-12 h-3 bg-white/10 rounded animate-pulse"></div></span>
-                            <span id="usageRemainingText"><span id="usageRemaining"><div class="w-8 h-3 bg-white/10 rounded animate-pulse inline-block"></div></span> rem</span>
+                            <span id="usagePercentText" class="transition-opacity duration-300"><div class="w-12 h-3 bg-white/10 rounded animate-pulse"></div></span>
+                            <span id="usageRemainingText"><span id="usageRemaining" class="transition-opacity duration-300"><div class="w-8 h-3 bg-white/10 rounded animate-pulse inline-block"></div></span> rem</span>
                         </div>
                         <div id="usageWarning" class="mt-3 hidden text-[11px] font-bold text-amber-400 flex items-center gap-1.5 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20">
                             <i class="ph-bold ph-warning text-sm"></i>
@@ -235,14 +235,14 @@
                 </div>
             </section>
 
-            <section id="tab-api-keys" class="tab-content hidden fade-in-up">
+            <section id="api-keys" class="tab-content hidden fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center text-2xl">
                             <i class="ph-bold ph-key"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="keysTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="keysTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Total Keys</div>
                         </div>
                     </div>
@@ -251,7 +251,7 @@
                             <i class="ph-bold ph-check-circle"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="keysActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="keysActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Active Keys</div>
                         </div>
                     </div>
@@ -260,7 +260,7 @@
                             <i class="ph-bold ph-x-circle"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="keysRevoked"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="keysRevoked"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Revoked Keys</div>
                         </div>
                     </div>
@@ -302,14 +302,14 @@
                 </div>
             </section>
 
-            <section id="tab-domains" class="tab-content hidden fade-in-up">
+            <section id="domains" class="tab-content hidden fade-in-up">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 flex items-center gap-5 shadow-md">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center text-2xl">
                             <i class="ph-bold ph-globe-hemisphere-west"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="domainsTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="domainsTotal"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Total Domains</div>
                         </div>
                     </div>
@@ -318,7 +318,7 @@
                             <i class="ph-bold ph-check-circle"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="domainsActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="domainsActive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Active</div>
                         </div>
                     </div>
@@ -327,7 +327,7 @@
                             <i class="ph-bold ph-x-circle"></i>
                         </div>
                         <div>
-                            <div class="text-3xl font-black text-white" id="domainsInactive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                            <div class="text-3xl font-black text-white transition-opacity duration-300" id="domainsInactive"><div class="w-12 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                             <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mt-1">Inactive</div>
                         </div>
                     </div>
@@ -339,7 +339,7 @@
                         <p class="text-sm text-zinc-400 mt-1 font-medium">Whitelist origins to secure your API requests.</p>
                     </div>
                     <div class="flex items-center gap-4">
-                        <span id="domainLimitBadge" class="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full text-xs font-bold shadow-sm"><div class="w-16 h-4 bg-primary/20 rounded animate-pulse inline-block"></div></span>
+                        <span id="domainLimitBadge" class="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full text-xs font-bold shadow-sm transition-opacity duration-300"><div class="w-16 h-4 bg-primary/20 rounded animate-pulse inline-block"></div></span>
                         <button id="addDomainBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-2">
                             <i class="ph-bold ph-plus-circle text-lg"></i> Add Domain
                         </button>
@@ -373,7 +373,7 @@
                 </div>
             </section>
 
-            <section id="tab-usage" class="tab-content hidden fade-in-up">
+            <section id="usage" class="tab-content hidden fade-in-up">
                 <div class="flex flex-wrap items-center justify-between gap-6 mb-8">
                     <div>
                         <h1 class="text-3xl font-black text-white tracking-tight">Usage Analytics</h1>
@@ -399,8 +399,8 @@
                                 <i class="ph-bold ph-activity"></i>
                             </div>
                         </div>
-                        <div class="text-3xl font-black text-white mb-2" id="statTotalRequests"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
-                        <div class="text-xs text-zinc-500 font-semibold" id="statRequestsTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
+                        <div class="text-3xl font-black text-white mb-2 transition-opacity duration-300" id="statTotalRequests"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold transition-opacity duration-300" id="statRequestsTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
                     </div>
                     <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-yellow-500/30 transition-all shadow-md">
                         <div class="flex items-center justify-between mb-4">
@@ -409,8 +409,8 @@
                                 <i class="ph-bold ph-chart-bar"></i>
                             </div>
                         </div>
-                        <div class="text-3xl font-black text-white mb-2" id="statTotalTokens"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
-                        <div class="text-xs text-zinc-500 font-semibold" id="statTokensTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
+                        <div class="text-3xl font-black text-white mb-2 transition-opacity duration-300" id="statTotalTokens"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-xs text-zinc-500 font-semibold transition-opacity duration-300" id="statTokensTrend"><div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div></div>
                     </div>
                     <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-emerald-500/30 transition-all shadow-md">
                         <div class="flex items-center justify-between mb-4">
@@ -419,7 +419,7 @@
                                 <i class="ph-bold ph-clock"></i>
                             </div>
                         </div>
-                        <div class="text-3xl font-black text-white mb-2" id="statAvgResponse"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-3xl font-black text-white mb-2 transition-opacity duration-300" id="statAvgResponse"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                         <div class="text-xs text-zinc-500 font-semibold">Last 100 requests</div>
                     </div>
                     <div class="glass-panel p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-purple-500/30 transition-all shadow-md">
@@ -429,7 +429,7 @@
                                 <i class="ph-bold ph-check-circle"></i>
                             </div>
                         </div>
-                        <div class="text-3xl font-black text-white mb-2" id="statSuccessRate"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
+                        <div class="text-3xl font-black text-white mb-2 transition-opacity duration-300" id="statSuccessRate"><div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div></div>
                         <div class="text-xs text-zinc-500 font-semibold">Last 100 requests</div>
                     </div>
                 </div>
@@ -496,7 +496,7 @@
                                     <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i>
                                     <input id="logSearchInput" type="text" placeholder="Search logs..." class="w-64 bg-black/50 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all outline-none" />
                                 </div>
-                                <span id="logCount" class="text-xs font-bold text-zinc-400 uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">0 entries</span>
+                                <span id="logCount" class="text-xs font-bold text-zinc-400 uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 transition-opacity duration-300">0 entries</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-2 text-xs font-bold text-zinc-400 overflow-x-auto pb-3 scrollbar-custom" id="filterChips">
@@ -536,7 +536,7 @@
                 </div>
             </section>
 
-            <section id="tab-settings" class="tab-content hidden fade-in-up">
+            <section id="settings" class="tab-content hidden fade-in-up">
                 <div class="mb-8">
                     <h1 class="text-3xl font-black text-white tracking-tight">Vault Settings</h1>
                     <p class="text-sm text-zinc-400 mt-1 font-medium">Manage your profile, security, and API integrations.</p>
@@ -545,12 +545,12 @@
                 <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
                     <h3 class="text-xl font-bold text-white mb-6">Profile Information</h3>
                     <div class="flex flex-col md:flex-row items-start md:items-center gap-8">
-                        <img id="settingsAvatar" src="" alt="avatar" class="w-24 h-24 rounded-full border-[3px] border-primary/30 object-cover shadow-[0_0_20px_rgba(168,85,247,0.2)]" />
+                        <img id="settingsAvatar" src="" alt="avatar" class="w-24 h-24 rounded-full border-[3px] border-primary/30 object-cover shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-opacity duration-300" />
                         <div class="flex-1 space-y-2">
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Full Name</div>
-                            <div id="settingsName" class="text-xl font-black text-white tracking-wide">User</div>
+                            <div id="settingsName" class="text-xl font-black text-white tracking-wide transition-opacity duration-300">User</div>
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-4">Email Address</div>
-                            <div id="settingsEmail" class="text-base text-zinc-300 font-medium">user@example.com</div>
+                            <div id="settingsEmail" class="text-base text-zinc-300 font-medium transition-opacity duration-300">user@example.com</div>
                         </div>
                     </div>
                 </div>
@@ -603,7 +603,7 @@
                                 <button id="saveGroqBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hidden">Save Changes</button>
                                 <button id="cancelGroqBtn" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hidden">Cancel</button>
                                 <button id="deleteGroqBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hidden shadow-[0_0_15px_rgba(239,68,68,0.15)]">Delete Key</button>
-                                <span id="groqKeyStatus" class="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">No key saved</span>
+                                <span id="groqKeyStatus" class="text-xs font-bold text-zinc-500 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 transition-opacity duration-300">No key saved</span>
                             </div>
                         </div>
                     </div>

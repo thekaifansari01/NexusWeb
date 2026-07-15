@@ -1,11 +1,10 @@
-// src/js/modules/api-keys.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
 import { showToast } from "./ui.js";
 import { getApiKeys, deleteApiKey } from "./firestore.js";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase.js";
-import { showSkeleton, hideSkeleton, showStatSkeletons, showCaptchaModal, resetTurnstile, renderTurnstile } from "./dashboard-utils.js";
+import { showSkeleton, hideSkeleton, showStatSkeletons, showCaptchaModal, resetTurnstile, renderTurnstile, updateWithTransition } from "./dashboard-utils.js";
 
 export async function loadKeys() {
   if (!state.currentUser) return;
@@ -31,12 +30,12 @@ function updateStats(keys) {
   const total = keys.length;
   const active = keys.filter(k => k.status === 'active').length;
   const revoked = keys.filter(k => k.status === 'revoked').length;
-  if (dom.totalKeysEl) dom.totalKeysEl.textContent = total;
-  if (dom.activeKeysEl) dom.activeKeysEl.textContent = active;
-  if (dom.revokedKeysEl) dom.revokedKeysEl.textContent = revoked;
-  if (dom.keysTotalEl) dom.keysTotalEl.textContent = total;
-  if (dom.keysActiveEl) dom.keysActiveEl.textContent = active;
-  if (dom.keysRevokedEl) dom.keysRevokedEl.textContent = revoked;
+  updateWithTransition(dom.totalKeysEl, total);
+  updateWithTransition(dom.activeKeysEl, active);
+  updateWithTransition(dom.revokedKeysEl, revoked);
+  updateWithTransition(dom.keysTotalEl, total);
+  updateWithTransition(dom.keysActiveEl, active);
+  updateWithTransition(dom.keysRevokedEl, revoked);
 }
 
 function renderOverviewKeys(keys) {
@@ -44,19 +43,19 @@ function renderOverviewKeys(keys) {
   hideSkeleton('overviewKeysContainer');
   dom.overviewKeysContainer.innerHTML = '';
   if (keys.length === 0) {
-    dom.overviewKeysContainer.innerHTML = '<p class="text-sm text-zinc-500">No keys created yet.</p>';
+    dom.overviewKeysContainer.innerHTML = '<p class="text-sm text-zinc-500 font-medium">No keys created yet.</p>';
     return;
   }
   keys.slice(0, 3).forEach(key => {
     const div = document.createElement('div');
-    div.className = 'flex items-center justify-between p-3 rounded-lg bg-black/40 border border-white/5';
+    div.className = 'flex items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5';
     const isActive = key.status === 'active';
     div.innerHTML = `
       <div class="flex items-center gap-3">
-        <div class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-red-400'}"></div>
-        <span class="text-sm text-white font-medium">${key.name}</span>
+        <div class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]'}"></div>
+        <span class="text-sm text-white font-bold">${key.name}</span>
       </div>
-      <span class="text-xs font-mono text-zinc-500">${key.key ? key.key.slice(0, 8) + '...' : 'N/A'}</span>
+      <span class="text-xs font-mono text-zinc-500 bg-white/5 px-2 py-1 rounded-md">${key.key ? key.key.slice(0, 8) + '...' : 'N/A'}</span>
     `;
     dom.overviewKeysContainer.appendChild(div);
   });
@@ -73,43 +72,43 @@ function renderKeys(keys) {
   dom.emptyState.classList.add('hidden');
   keys.forEach((key, index) => {
     const card = document.createElement('div');
-    card.className = `key-card fade-in-up flex flex-col md:flex-row md:items-center justify-between gap-3`;
+    card.className = `key-card fade-in-up flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-primary/20 transition-all shadow-md`;
     card.style.animationDelay = `${index * 0.04}s`;
     const left = document.createElement('div');
     left.className = 'flex-1 min-w-0';
     const nameRow = document.createElement('div');
     nameRow.className = 'flex items-center gap-3 flex-wrap';
     const nameSpan = document.createElement('span');
-    nameSpan.className = 'key-name';
+    nameSpan.className = 'text-lg font-bold text-white tracking-wide';
     nameSpan.textContent = key.name;
     nameRow.appendChild(nameSpan);
     const isActive = key.status === 'active';
     const badge = document.createElement('span');
-    badge.className = `status-badge ${isActive ? 'active' : 'revoked'}`;
-    badge.innerHTML = `<span class="dot"></span> ${isActive ? 'Active' : 'Revoked'}`;
+    badge.className = `px-2.5 py-1 text-[10px] font-extrabold rounded-md flex items-center gap-1.5 uppercase tracking-wider ${isActive ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+    badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-rose-400'}"></span> ${isActive ? 'Active' : 'Revoked'}`;
     nameRow.appendChild(badge);
     left.appendChild(nameRow);
     const metaRow = document.createElement('div');
-    metaRow.className = 'flex items-center gap-4 mt-1.5 text-xs text-zinc-500';
+    metaRow.className = 'flex items-center gap-4 mt-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider';
     if (key.createdAt) {
       const d = key.createdAt.toDate ? key.createdAt.toDate() : new Date(key.createdAt);
       const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> ${dateStr} at ${timeStr}</span>`;
+      metaRow.innerHTML = `<span><i class="ph-bold ph-calendar-blank mr-1"></i> ${dateStr} at ${timeStr}</span>`;
     } else {
-      metaRow.innerHTML = `<span><i class="ph ph-calendar-blank mr-1"></i> Recently created</span>`;
+      metaRow.innerHTML = `<span><i class="ph-bold ph-calendar-blank mr-1"></i> Recently created</span>`;
     }
     left.appendChild(metaRow);
     const keyValRow = document.createElement('div');
-    keyValRow.className = 'key-value-wrapper mt-2';
+    keyValRow.className = 'mt-3 flex items-center gap-3';
     const keyText = document.createElement('span');
-    keyText.className = 'key-value';
+    keyText.className = 'font-mono text-sm text-zinc-400 bg-black/50 px-3 py-1.5 rounded-xl border border-white/5';
     const masked = key.key ? key.key.slice(0, 8) + '••••••••••••' : '••••••••';
     keyText.textContent = masked;
     keyValRow.appendChild(keyText);
     const copyBtn = document.createElement('button');
-    copyBtn.className = 'btn-icon success';
-    copyBtn.innerHTML = '<i class="ph ph-copy"></i>';
+    copyBtn.className = 'w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 flex items-center justify-center transition-colors';
+    copyBtn.innerHTML = '<i class="ph-bold ph-copy text-sm"></i>';
     copyBtn.title = 'Copy key';
     copyBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -124,11 +123,10 @@ function renderKeys(keys) {
     left.appendChild(keyValRow);
     card.appendChild(left);
     const actions = document.createElement('div');
-    actions.className = 'flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0';
+    actions.className = 'flex items-center gap-2 flex-shrink-0 mt-4 md:mt-0';
     const toggleBtn = document.createElement('button');
-    toggleBtn.className = `btn-icon ${isActive ? '' : 'text-primary'}`;
-    toggleBtn.innerHTML = `<i class="ph-bold ${isActive ? 'ph-toggle-right' : 'ph-toggle-left'}"></i>`;
-    toggleBtn.title = isActive ? 'Revoke' : 'Activate';
+    toggleBtn.className = `px-4 py-2 rounded-xl text-sm font-bold border transition-all ${isActive ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'}`;
+    toggleBtn.textContent = isActive ? 'Revoke' : 'Activate';
     toggleBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       showCaptchaModal(
@@ -145,8 +143,8 @@ function renderKeys(keys) {
     });
     actions.appendChild(toggleBtn);
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn-icon danger';
-    deleteBtn.innerHTML = '<i class="ph-bold ph-trash"></i>';
+    deleteBtn.className = 'w-10 h-10 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 flex items-center justify-center transition-all';
+    deleteBtn.innerHTML = '<i class="ph-bold ph-trash text-lg"></i>';
     deleteBtn.title = 'Delete permanently';
     deleteBtn.addEventListener('click', async (e) => {
       e.stopPropagation();

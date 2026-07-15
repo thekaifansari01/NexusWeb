@@ -1,7 +1,16 @@
-// src/js/modules/dashboard-utils.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
 import { showToast } from "./ui.js";
+
+export function updateWithTransition(element, value, isHTML = false) {
+  if (!element) return;
+  element.style.opacity = '0';
+  setTimeout(() => {
+    if (isHTML) element.innerHTML = value;
+    else element.textContent = value;
+    element.style.opacity = '1';
+  }, 250);
+}
 
 export function showSkeleton(containerId, type) {
   const container = document.getElementById(containerId);
@@ -10,25 +19,24 @@ export function showSkeleton(containerId, type) {
   if (type === 'keys') {
     for (let i = 0; i < 3; i++) {
       const skeleton = document.createElement('div');
-      skeleton.className = 'key-card skeleton-card';
+      skeleton.className = 'flex flex-col md:flex-row md:items-center justify-between gap-3 p-6 rounded-3xl border border-white/5 bg-zinc-900/30';
       skeleton.style.animationDelay = `${i * 0.05}s`;
       skeleton.innerHTML = `
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-3 flex-wrap">
-            <div class="skeleton skeleton-text" style="width: 120px; height: 20px;"></div>
-            <div class="skeleton skeleton-badge" style="width: 70px; height: 24px;"></div>
+            <div class="w-32 h-5 bg-white/10 rounded animate-pulse"></div>
+            <div class="w-16 h-6 bg-white/10 rounded-full animate-pulse"></div>
           </div>
-          <div class="flex items-center gap-4 mt-1.5">
-            <div class="skeleton skeleton-text" style="width: 150px; height: 14px;"></div>
+          <div class="flex items-center gap-4 mt-2">
+            <div class="w-48 h-3 bg-white/10 rounded animate-pulse"></div>
           </div>
-          <div class="key-value-wrapper mt-2">
-            <div class="skeleton skeleton-text" style="width: 120px; height: 20px;"></div>
-            <div class="skeleton skeleton-icon" style="width: 32px; height: 32px; border-radius: 8px;"></div>
+          <div class="mt-3">
+            <div class="w-40 h-5 bg-white/10 rounded animate-pulse"></div>
           </div>
         </div>
-        <div class="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
-          <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
-          <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+        <div class="flex items-center gap-2 flex-shrink-0 mt-4 md:mt-0">
+          <div class="w-20 h-10 bg-white/10 rounded-xl animate-pulse"></div>
+          <div class="w-10 h-10 bg-white/10 rounded-xl animate-pulse"></div>
         </div>
       `;
       container.appendChild(skeleton);
@@ -36,21 +44,21 @@ export function showSkeleton(containerId, type) {
   } else if (type === 'domains') {
     for (let i = 0; i < 3; i++) {
       const skeleton = document.createElement('div');
-      skeleton.className = 'domain-card skeleton-card';
+      skeleton.className = 'flex flex-col md:flex-row md:items-center justify-between gap-3 p-6 rounded-3xl border border-white/5 bg-zinc-900/30';
       skeleton.style.animationDelay = `${i * 0.05}s`;
       skeleton.innerHTML = `
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-3 flex-wrap">
-            <div class="skeleton skeleton-text" style="width: 150px; height: 20px;"></div>
-            <div class="skeleton skeleton-badge" style="width: 70px; height: 24px;"></div>
+            <div class="w-40 h-5 bg-white/10 rounded animate-pulse"></div>
+            <div class="w-16 h-6 bg-white/10 rounded-full animate-pulse"></div>
           </div>
-          <div class="flex items-center gap-4 mt-1.5">
-            <div class="skeleton skeleton-text" style="width: 120px; height: 14px;"></div>
+          <div class="flex items-center gap-4 mt-2">
+            <div class="w-32 h-3 bg-white/10 rounded animate-pulse"></div>
           </div>
         </div>
-        <div class="flex items-center gap-1 flex-shrink-0 mt-2 md:mt-0">
-          <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
-          <div class="skeleton skeleton-icon" style="width: 36px; height: 36px; border-radius: 10px;"></div>
+        <div class="flex items-center gap-2 flex-shrink-0 mt-4 md:mt-0">
+          <div class="w-10 h-10 bg-white/10 rounded-xl animate-pulse"></div>
+          <div class="w-10 h-10 bg-white/10 rounded-xl animate-pulse"></div>
         </div>
       `;
       container.appendChild(skeleton);
@@ -62,32 +70,32 @@ export function showSkeleton(containerId, type) {
       skeleton.style.animationDelay = `${i * 0.05}s`;
       skeleton.innerHTML = `
         <div class="flex items-center gap-3">
-          <div class="skeleton skeleton-icon" style="width: 8px; height: 8px; border-radius: 50%;"></div>
-          <div class="skeleton skeleton-text" style="width: 100px; height: 16px;"></div>
+          <div class="w-2 h-2 bg-white/10 rounded-full animate-pulse"></div>
+          <div class="w-24 h-4 bg-white/10 rounded animate-pulse"></div>
         </div>
-        <div class="skeleton skeleton-text" style="width: 60px; height: 14px;"></div>
+        <div class="w-16 h-3 bg-white/10 rounded animate-pulse"></div>
       `;
       container.appendChild(skeleton);
     }
   } else if (type === 'tableRows') {
     for (let i = 0; i < 5; i++) {
       const row = document.createElement('div');
-      row.className = 'flex items-center justify-between p-4 mb-3 rounded-xl bg-black/20 border border-white/5 skeleton-card';
+      row.className = 'flex items-center justify-between p-4 mb-3 rounded-xl bg-black/20 border border-white/5';
       row.style.animationDelay = `${i * 0.04}s`;
       row.innerHTML = `
         <div class="flex items-center gap-4">
-          <div class="skeleton skeleton-icon" style="width: 40px; height: 40px;"></div>
+          <div class="w-10 h-10 bg-white/10 rounded-xl animate-pulse"></div>
           <div class="flex flex-col gap-1.5">
-            <div class="skeleton skeleton-text" style="width: 100px; height: 14px;"></div>
-            <div class="skeleton skeleton-text" style="width: 140px; height: 10px;"></div>
+            <div class="w-24 h-4 bg-white/10 rounded animate-pulse"></div>
+            <div class="w-32 h-2 bg-white/10 rounded animate-pulse"></div>
           </div>
         </div>
         <div class="flex items-center gap-6">
-          <div class="skeleton skeleton-badge hidden md:block" style="width: 80px; height: 14px;"></div>
-          <div class="skeleton skeleton-badge" style="width: 60px; height: 24px;"></div>
+          <div class="w-20 h-3 bg-white/10 rounded animate-pulse hidden md:block"></div>
+          <div class="w-16 h-6 bg-white/10 rounded-full animate-pulse"></div>
           <div class="flex flex-col items-end gap-1">
-            <div class="skeleton skeleton-text" style="width: 50px; height: 16px;"></div>
-            <div class="skeleton skeleton-text" style="width: 30px; height: 10px;"></div>
+            <div class="w-12 h-4 bg-white/10 rounded animate-pulse"></div>
+            <div class="w-8 h-2 bg-white/10 rounded animate-pulse"></div>
           </div>
         </div>
       `;
@@ -99,8 +107,7 @@ export function showSkeleton(containerId, type) {
 export function hideSkeleton(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  const skeletons = container.querySelectorAll('.skeleton-card, .skeleton, .skeleton-text, .skeleton-badge, .skeleton-icon');
-  skeletons.forEach(el => el.remove());
+  container.innerHTML = '';
 }
 
 export function showStatSkeletons() {
@@ -109,32 +116,44 @@ export function showStatSkeletons() {
     dom.keysTotalEl, dom.keysActiveEl, dom.keysRevokedEl,
     dom.totalDomainsEl, dom.activeDomainsEl, dom.inactiveDomainsEl,
     dom.domainsTotalEl, dom.domainsActiveEl, dom.domainsInactiveEl,
-    dom.totalRequestsEl, dom.totalTokensEl, dom.successRateEl,
-    dom.domainLimitBadge,
-    dom.usageNumber, dom.usageLimit, dom.usagePercentText, dom.usageRemaining
+    dom.statTotalRequests, dom.statTotalTokens, dom.statAvgResponse, dom.statSuccessRate
   ];
   statElements.forEach(el => {
     if (!el) return;
-    if (el === dom.domainLimitBadge) {
-      el.className = 'domain-limit-badge';
-      el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
-    } else if (el === dom.usageNumber || el === dom.usageLimit) {
-      el.innerHTML = '<span class="skeleton skeleton-stat-sm"></span>';
-    } else if (el === dom.usagePercentText || el === dom.usageRemaining) {
-      el.innerHTML = '<span class="skeleton skeleton-text w-16"></span>';
-    } else {
-      el.innerHTML = '<span class="skeleton skeleton-stat"></span>';
-    }
+    el.style.opacity = '1';
+    el.innerHTML = '<div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div>';
   });
+  if (dom.domainLimitBadge) {
+    dom.domainLimitBadge.style.opacity = '1';
+    dom.domainLimitBadge.innerHTML = '<div class="w-16 h-4 bg-primary/20 rounded animate-pulse inline-block"></div>';
+  }
+  if (dom.usageNumber) {
+    dom.usageNumber.style.opacity = '1';
+    dom.usageNumber.innerHTML = '<div class="w-16 h-8 bg-white/10 rounded-lg animate-pulse"></div>';
+  }
+  if (dom.usageLimit) {
+    dom.usageLimit.style.opacity = '1';
+    dom.usageLimit.innerHTML = '<div class="w-10 h-4 bg-white/10 rounded animate-pulse inline-block"></div>';
+  }
+  if (dom.usagePercentText) {
+    dom.usagePercentText.style.opacity = '1';
+    dom.usagePercentText.innerHTML = '<div class="w-12 h-3 bg-white/10 rounded animate-pulse"></div>';
+  }
+  if (dom.usageRemaining) {
+    dom.usageRemaining.style.opacity = '1';
+    dom.usageRemaining.innerHTML = '<div class="w-8 h-3 bg-white/10 rounded animate-pulse inline-block"></div>';
+  }
 }
 
 export function showUsageSkeletons() {
-  const statElements = [dom.statTotalRequests, dom.statTotalTokens, dom.statAvgResponse, dom.statSuccessRate];
-  statElements.forEach(el => {
-    if (el) el.innerHTML = '<div class="skeleton skeleton-stat w-16 h-8"></div>';
-  });
-  if (dom.statRequestsTrend) dom.statRequestsTrend.innerHTML = '<div class="skeleton skeleton-text w-20 mt-1"></div>';
-  if (dom.statTokensTrend) dom.statTokensTrend.innerHTML = '<div class="skeleton skeleton-text w-20 mt-1"></div>';
+  if (dom.statRequestsTrend) {
+    dom.statRequestsTrend.style.opacity = '1';
+    dom.statRequestsTrend.innerHTML = '<div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div>';
+  }
+  if (dom.statTokensTrend) {
+    dom.statTokensTrend.style.opacity = '1';
+    dom.statTokensTrend.innerHTML = '<div class="w-20 h-3 bg-white/10 rounded animate-pulse"></div>';
+  }
   const charts = [dom.requestChartCanvas, dom.tokenChartCanvas, dom.modelChartCanvas];
   charts.forEach(canvas => {
     if (canvas && canvas.parentElement) {
@@ -142,7 +161,7 @@ export function showUsageSkeletons() {
       let placeholder = canvas.parentElement.querySelector('.chart-skeleton');
       if (!placeholder) {
         placeholder = document.createElement('div');
-        placeholder.className = 'chart-skeleton w-full h-full skeleton rounded-xl';
+        placeholder.className = 'chart-skeleton w-full h-full bg-white/5 animate-pulse rounded-xl absolute inset-0';
         canvas.parentElement.appendChild(placeholder);
       }
     }
@@ -150,13 +169,13 @@ export function showUsageSkeletons() {
   if (dom.topDomainsContainer) {
     dom.topDomainsContainer.innerHTML = '';
     for (let i = 0; i < 3; i++) {
-      dom.topDomainsContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="skeleton skeleton-text w-24"></div><div class="skeleton skeleton-text w-8"></div></div>`;
+      dom.topDomainsContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="w-24 h-4 bg-white/10 rounded animate-pulse"></div><div class="w-8 h-4 bg-white/10 rounded animate-pulse"></div></div>`;
     }
   }
   if (dom.busiestHoursContainer) {
     dom.busiestHoursContainer.innerHTML = '';
     for (let i = 0; i < 3; i++) {
-      dom.busiestHoursContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="skeleton skeleton-text w-16"></div><div class="skeleton skeleton-text w-10"></div></div>`;
+      dom.busiestHoursContainer.innerHTML += `<div class="flex justify-between py-2 border-b border-white/5"><div class="w-16 h-4 bg-white/10 rounded animate-pulse"></div><div class="w-10 h-4 bg-white/10 rounded animate-pulse"></div></div>`;
     }
   }
 }
@@ -304,9 +323,7 @@ export function updateUserUI(user) {
   if (dom.sidebarAvatar) dom.sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
   if (dom.sidebarEmail) dom.sidebarEmail.textContent = user.email || 'user@example.com';
   if (dom.sidebarName) dom.sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
-  if (dom.welcomeMessageEl) {
-    dom.welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
-  }
+  if (dom.welcomeMessageEl) dom.welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
   if (dom.settingsAvatar) dom.settingsAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=80';
   if (dom.settingsName) dom.settingsName.textContent = user.displayName || user.email.split('@')[0] || 'User';
   if (dom.settingsEmail) dom.settingsEmail.textContent = user.email || 'user@example.com';
@@ -317,9 +334,7 @@ export function updateUserUI(user) {
   if (isPassword) {
     if (dom.passwordChangeSection) dom.passwordChangeSection.classList.remove('hidden');
     if (dom.socialAuthInfo) dom.socialAuthInfo.classList.add('hidden');
-    if (dom.deletePassword && dom.deletePassword.parentElement) {
-      dom.deletePassword.parentElement.classList.remove('hidden');
-    }
+    if (dom.deletePassword && dom.deletePassword.parentElement) dom.deletePassword.parentElement.classList.remove('hidden');
     if (dom.deleteSocialReauth) dom.deleteSocialReauth.classList.add('hidden');
   } else {
     if (dom.passwordChangeSection) dom.passwordChangeSection.classList.add('hidden');
@@ -330,9 +345,7 @@ export function updateUserUI(user) {
       if (dom.deleteSocialProvider) dom.deleteSocialProvider.textContent = provName;
       if (dom.deleteSocialProviderName) dom.deleteSocialProviderName.textContent = provName;
     }
-    if (dom.deletePassword && dom.deletePassword.parentElement) {
-      dom.deletePassword.parentElement.classList.add('hidden');
-    }
+    if (dom.deletePassword && dom.deletePassword.parentElement) dom.deletePassword.parentElement.classList.add('hidden');
     if (dom.deleteSocialReauth) dom.deleteSocialReauth.classList.remove('hidden');
   }
   if (dom.deleteAccountModal) {
@@ -350,8 +363,6 @@ export function closeToast(overlay) {
     toast.style.opacity = '0';
   }
   setTimeout(() => {
-    if (overlay.parentNode) {
-      overlay.remove();
-    }
+    if (overlay.parentNode) overlay.remove();
   }, 350);
 }

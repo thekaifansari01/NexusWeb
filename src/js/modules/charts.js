@@ -1,15 +1,13 @@
-// src/js/modules/charts.js
 import { state } from "./dashboard-state.js";
 import { dom } from "./dashboard-dom.js";
+import { updateWithTransition } from "./dashboard-utils.js";
 
 export function renderStats(totals, daily) {
   if (dom.statTotalRequests) {
-    dom.statTotalRequests.className = 'stat-number text-2xl mt-1';
-    dom.statTotalRequests.textContent = totals.totalRequests || 0;
+    updateWithTransition(dom.statTotalRequests, totals.totalRequests || 0);
   }
   if (dom.statTotalTokens) {
-    dom.statTotalTokens.className = 'stat-number text-2xl mt-1';
-    dom.statTotalTokens.textContent = (totals.totalTokens || 0).toLocaleString();
+    updateWithTransition(dom.statTotalTokens, (totals.totalTokens || 0).toLocaleString());
   }
   if (daily && daily.length > 0) {
     const last = daily[daily.length - 1];
@@ -17,30 +15,28 @@ export function renderStats(totals, daily) {
     const reqDiff = last.requests - prev.requests;
     const tokDiff = last.tokens - prev.tokens;
     if (dom.statRequestsTrend) {
-      dom.statRequestsTrend.textContent = reqDiff >= 0 ? `↑ +${reqDiff} from yesterday` : `↓ ${reqDiff} from yesterday`;
-      dom.statRequestsTrend.className = `text-xs mt-0.5 ${reqDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+      dom.statRequestsTrend.className = `text-xs font-semibold transition-opacity duration-300 mt-1 ${reqDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+      updateWithTransition(dom.statRequestsTrend, reqDiff >= 0 ? `↑ +${reqDiff} from yesterday` : `↓ ${reqDiff} from yesterday`);
     }
     if (dom.statTokensTrend) {
-      dom.statTokensTrend.textContent = tokDiff >= 0 ? `↑ +${tokDiff} from yesterday` : `↓ ${tokDiff} from yesterday`;
-      dom.statTokensTrend.className = `text-xs mt-0.5 ${tokDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+      dom.statTokensTrend.className = `text-xs font-semibold transition-opacity duration-300 mt-1 ${tokDiff >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+      updateWithTransition(dom.statTokensTrend, tokDiff >= 0 ? `↑ +${tokDiff} from yesterday` : `↓ ${tokDiff} from yesterday`);
     }
   } else {
     if (dom.statRequestsTrend) {
-      dom.statRequestsTrend.textContent = '—';
-      dom.statRequestsTrend.className = 'text-xs mt-0.5 text-zinc-500';
+      dom.statRequestsTrend.className = 'text-xs font-semibold text-zinc-500 transition-opacity duration-300 mt-1';
+      updateWithTransition(dom.statRequestsTrend, '—');
     }
     if (dom.statTokensTrend) {
-      dom.statTokensTrend.textContent = '—';
-      dom.statTokensTrend.className = 'text-xs mt-0.5 text-zinc-500';
+      dom.statTokensTrend.className = 'text-xs font-semibold text-zinc-500 transition-opacity duration-300 mt-1';
+      updateWithTransition(dom.statTokensTrend, '—');
     }
   }
   if (dom.statAvgResponse) {
-    dom.statAvgResponse.className = 'stat-number text-2xl mt-1';
-    dom.statAvgResponse.textContent = '—';
+    updateWithTransition(dom.statAvgResponse, '—');
   }
   if (dom.statSuccessRate) {
-    dom.statSuccessRate.className = 'stat-number text-2xl mt-1';
-    dom.statSuccessRate.textContent = '—';
+    updateWithTransition(dom.statSuccessRate, '—');
   }
 }
 
@@ -150,8 +146,8 @@ export function renderBreakdowns(models, domains, hours) {
       const sorted = domains.sort((a, b) => b.count - a.count).slice(0, 5);
       sorted.forEach(d => {
         const div = document.createElement('div');
-        div.className = 'domain-item';
-        div.innerHTML = `<span>${d.name}</span><span class="count">${d.count}</span>`;
+        div.className = 'flex justify-between py-2 border-b border-white/5 text-sm';
+        div.innerHTML = `<span class="text-zinc-300 font-medium">${d.name}</span><span class="text-zinc-500 font-bold">${d.count}</span>`;
         dom.topDomainsContainer.appendChild(div);
       });
     } else {
@@ -164,9 +160,9 @@ export function renderBreakdowns(models, domains, hours) {
       const sorted = hours.sort((a, b) => b.count - a.count).slice(0, 5);
       sorted.forEach(h => {
         const div = document.createElement('div');
-        div.className = 'hour-item';
+        div.className = 'flex justify-between py-2 border-b border-white/5 text-sm';
         const hourLabel = `${String(h.hour).padStart(2, '0')}:00`;
-        div.innerHTML = `<span>${hourLabel}</span><span class="count">${h.count}</span>`;
+        div.innerHTML = `<span class="text-zinc-300 font-medium">${hourLabel}</span><span class="text-zinc-500 font-bold">${h.count}</span>`;
         dom.busiestHoursContainer.appendChild(div);
       });
     } else {
