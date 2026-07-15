@@ -36,7 +36,7 @@ def handle_chat_request(body, request_origin):
         clean_origin = netloc.lower()
 
         keys_ref = db.collection('apiKeys').where('key', '==', nexus_key).limit(1).get()
-        if not keys_ref:
+        if keys_ref.empty:
             return 401, {"error": "Invalid Nexus API Key"}
 
         key_data = keys_ref[0].to_dict()
@@ -46,14 +46,13 @@ def handle_chat_request(body, request_origin):
         user_id = key_data.get('userId')
 
         domains_ref = db.collection('authorizedDomains').where('userId', '==', user_id).where('domain', '==', clean_origin).limit(1).get()
-        if not domains_ref:
+        if domains_ref.empty:
             return 403, {"error": f"Domain '{clean_origin}' not authorized"}
 
         domain_data = domains_ref[0].to_dict()
         if domain_data.get('status') != 'active':
             return 403, {"error": "Domain is deactivated"}
 
-        # ----- MONTHLY USAGE LIMIT (Manual Transaction – NO DECORATOR) -----
         user_doc = db.collection('users').document(user_id).get()
         if not user_doc.exists:
             return 400, {"error": "User not found"}
@@ -84,7 +83,7 @@ def handle_chat_request(body, request_origin):
                         'lastUpdated': firestore.SERVER_TIMESTAMP
                     }, merge=True)
                     return True, current_count + 1
-                except Exception as e:
+                except Exception:
                     if attempt == max_retries - 1:
                         raise
                     time.sleep(0.1 * (attempt + 1))
@@ -93,7 +92,6 @@ def handle_chat_request(body, request_origin):
         success, new_count = check_and_increment()
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
-        # ----- END OF LIMIT CHECK -----
 
         groq_doc = db.collection('userGroqKeys').document(user_id).get()
         if not groq_doc.exists:
