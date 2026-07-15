@@ -53,7 +53,6 @@ def handle_chat_request(body, request_origin):
         if domain_data.get('status') != 'active':
             return 403, {"error": "Domain is deactivated"}
 
-        # === MONTHLY USAGE LIMIT CHECK (Added safely) ===
         user_doc = db.collection('users').document(user_id).get()
         if not user_doc.exists:
             return 400, {"error": "User not found"}
@@ -64,37 +63,35 @@ def handle_chat_request(body, request_origin):
         month_key = datetime.now(timezone.utc).strftime("%Y-%m")
         usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
 
-        # Simple retry logic without decorator
-        max_retries = 3
-        success = False
-        new_count = 0
-        for attempt in range(max_retries):
-            try:
-                transaction = db.transaction()
-                doc = transaction.get(usage_ref)
-                current_count = doc.to_dict().get('count', 0) if doc.exists else 0
-                if current_count >= monthly_limit:
-                    success = False
-                    new_count = current_count
-                    break
-                transaction.set(usage_ref, {
-                    'userId': user_id,
-                    'month': month_key,
-                    'count': current_count + 1,
-                    'limit': monthly_limit,
-                    'lastUpdated': firestore.SERVER_TIMESTAMP
-                }, merge=True)
-                success = True
-                new_count = current_count + 1
-                break
-            except Exception:
-                if attempt == max_retries - 1:
-                    raise
-                time.sleep(0.1 * (attempt + 1))
+        def check_and_increment():
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    transaction = db.transaction()
+                    doc = transaction.get(usage_ref)
+                    if doc:
+                        current_count = doc[0].to_dict().get('count', 0)
+                    else:
+                        current_count = 0
+                    if current_count >= monthly_limit:
+                        return False, current_count
+                    transaction.set(usage_ref, {
+                        'userId': user_id,
+                        'month': month_key,
+                        'count': current_count + 1,
+                        'limit': monthly_limit,
+                        'lastUpdated': firestore.SERVER_TIMESTAMP
+                    }, merge=True)
+                    return True, current_count + 1
+                except Exception:
+                    if attempt == max_retries - 1:
+                        raise
+                    time.sleep(0.1 * (attempt + 1))
+            return False, 0
 
+        success, new_count = check_and_increment()
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
-        # === END LIMIT CHECK ===
 
         groq_doc = db.collection('userGroqKeys').document(user_id).get()
         if not groq_doc.exists:
