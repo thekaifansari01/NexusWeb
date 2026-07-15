@@ -1,22 +1,24 @@
-# api/services/usageService.py
 from firebase_admin import firestore
 from api.core.config import db
 
 def check_and_increment_usage(user_id, plan, monthly_limit):
-    """
-    Atomically check and increment monthly usage count.
-    Returns (success, new_count, error_message)
-    """
     month_key = firestore.SERVER_TIMESTAMP.datetime().strftime("%Y-%m")
     usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
 
-    @firestore.transactional
     def transaction_logic(transaction):
         doc = transaction.get(usage_ref)
-        if doc.exists:
-            current_count = doc.to_dict().get('count', 0)
+        
+        if hasattr(doc, 'exists'):
+            if doc.exists:
+                current_count = doc.to_dict().get('count', 0)
+            else:
+                current_count = 0
         else:
-            current_count = 0
+            docs = list(doc) if doc else []
+            if docs:
+                current_count = docs[0].to_dict().get('count', 0)
+            else:
+                current_count = 0
 
         if current_count >= monthly_limit:
             return False, current_count
@@ -32,6 +34,7 @@ def check_and_increment_usage(user_id, plan, monthly_limit):
 
     transaction = db.transaction()
     success, new_count = transaction_logic(transaction)
+    
     if success:
         return True, new_count, None
     else:
