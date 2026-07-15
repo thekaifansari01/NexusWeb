@@ -6,16 +6,27 @@ import { openAddDomainModal, closeAddDomainModal } from "./domains.js";
 export function switchTab(tabId, updateHistory = true) {
   const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
   if (!btn) return;
+
   dom.tabBtns.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  dom.tabContents.forEach(tab => tab.classList.add('hidden'));
+
+  dom.tabContents.forEach(tab => {
+    tab.classList.remove('active', 'hidden');
+  });
+
   const activeTab = document.getElementById(`tab-${tabId}`);
-  if (activeTab) activeTab.classList.remove('hidden');
+  if (activeTab) {
+    activeTab.classList.add('active');
+    activeTab.classList.remove('hidden');
+  }
+
   dom.breadcrumbCurrent.textContent = btn.textContent.trim();
+
   if (window.innerWidth < 768 && dom.sidebar) {
     dom.sidebar.classList.add('hidden');
     dom.sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
   }
+
   if (updateHistory) {
     const url = new URL(window.location);
     url.searchParams.set('tab', tabId);
@@ -28,12 +39,15 @@ export function handleURLState() {
   const url = new URL(window.location);
   const tab = url.searchParams.get('tab') || 'overview';
   const action = url.searchParams.get('action');
+
   switchTab(tab, false);
+
   if (tab === 'api-keys' && action === 'create-key') {
     openCreateKeyModal(false);
   } else {
     closeCreateKeyModal(false);
   }
+
   if (tab === 'domains' && action === 'add-domain') {
     openAddDomainModal(false);
   } else {
