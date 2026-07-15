@@ -57,9 +57,10 @@ canvas {
 
 .tab-btn {
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-.tab-btn:hover {
+.tab-btn:not(.active):hover {
     background: rgba(255, 255, 255, 0.08);
     color: #fafafa;
 }
