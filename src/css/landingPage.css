@@ -1,82 +1,25 @@
 .hero-badge-pulse {
-    animation: badgePulse 2.5s ease-in-out infinite;
+    animation: badgePulse 3s ease-in-out infinite;
 }
 
 @keyframes badgePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.98); }
 }
 
 .floating-mockup {
-    animation: floatElement 6s ease-in-out infinite;
-    box-shadow: 0 30px 60px -12px rgba(168, 85, 247, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.5);
+    animation: floatElement 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 @keyframes floatElement {
-    0%, 100% { transform: translateY(0px) rotateX(2deg); }
-    50% { transform: translateY(-15px) rotateX(2deg); }
+    0%, 100% { transform: translateY(0px) rotateX(1.5deg) rotateY(-0.5deg); }
+    50% { transform: translateY(-12px) rotateX(2.5deg) rotateY(0.5deg); }
 }
 
 .dash-card-ui {
-    background: linear-gradient(145deg, rgba(39, 39, 42, 0.6) 0%, rgba(24, 24, 27, 0.9) 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.pricing-card {
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.pricing-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(168, 85, 247, 0.4);
-    box-shadow: 0 20px 60px rgba(168, 85, 247, 0.15);
-}
-
-.step-card::after {
-    background: linear-gradient(90deg, rgba(168, 85, 247, 0.4) 0%, rgba(168, 85, 247, 0) 100%) !important;
-}
-
-.trust-item {
-    transition: all 0.3s ease;
-}
-
-.trust-item:hover {
-    color: #e4e4e7;
-}
-
-.trust-item i {
-    transition: transform 0.3s ease;
-}
-
-.trust-item:hover i {
-    transform: scale(1.15);
-}
-
-.testimonial-card {
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.testimonial-card:hover {
-    border-color: rgba(168, 85, 247, 0.25);
-    background: rgba(24, 24, 27, 0.7);
-    transform: translateY(-3px) scale(1.02);
-}
-
-.usage-glow {
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
-}
-
-@media (max-width: 640px) {
-    .hero-usage-card {
-        padding: 1rem !important;
-    }
-    .pricing-card-grid {
-        gap: 1rem !important;
-    }
-    .testimonial-grid {
-        gap: 1rem !important;
-    }
+    background: linear-gradient(150deg, rgba(30, 30, 35, 0.7) 0%, rgba(15, 15, 18, 0.95) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .cta-glow-border {
@@ -87,12 +30,34 @@
     content: '';
     position: absolute;
     inset: -1px;
-    border-radius: 1.5rem;
+    border-radius: 2.5rem;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), transparent 50%, rgba(168, 85, 247, 0.1));
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), transparent 60%, rgba(168, 85, 247, 0.15));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+}
+
+.perspective-2000 {
+    perspective: 2000px;
+}
+
+.reveal-section > div {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-section.visible > div {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .floating-mockup {
+        animation: none;
+        transform: none;
+    }
 }
