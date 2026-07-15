@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark" data-theme="dark">
 <head>
@@ -17,31 +16,28 @@
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased">
 
-    <!-- PARTICLES CONTAINER -->
     <div id="tsparticles" class="fixed inset-0 z-0 pointer-events-auto" style="will-change: transform;"></div>
 
-    <!-- Ambient glow -->
     <div class="ambient-glow" style="z-index: -1;"></div>
 
-    <!-- ===== NAVBAR ===== -->
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
-        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/40 border-b border-white/10">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_10px_rgba(168,85,247,0.2)]">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold tracking-tight">Nexus</span>
+                <span class="text-lg font-extrabold tracking-tight text-white">Nexus</span>
             </a>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
-                <a href="/pricing" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Pricing</a>
-                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
+                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-primary transition-colors">Docs</a>
+                <a href="/pricing" class="text-sm font-medium text-zinc-400 hover:text-primary transition-colors">Pricing</a>
+                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-primary transition-colors">Demo</a>
                 <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
                     <i class="ph ph-github-logo text-lg"></i> GitHub
                 </a>
             </div>
             <div class="relative" id="auth-container">
-                <a href="/login" id="loginLink" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
+                <a href="/login" id="loginLink" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2 shadow-md">
                     <i class="ph-bold ph-sign-in"></i> Login
                 </a>
                 <div id="userArea" class="hidden relative">
@@ -62,339 +58,271 @@
         </nav>
     </div>
 
-    <!-- ===== HERO ===== -->
-    <main class="max-w-5xl mx-auto px-6 pt-40 pb-16 relative z-10 flex flex-col items-center text-center">
+    <main class="max-w-6xl mx-auto px-6 pt-40 pb-10 relative z-10 flex flex-col items-center text-center">
         <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/15 text-primary text-xs font-semibold border border-primary/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 hero-badge-pulse shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                 Freemium · 1,000 requests/month free
             </span>
-            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-semibold border border-amber-500/20">
-                <i class="ph-bold ph-rocket"></i> Pro coming soon
-            </span>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1] text-gradient">
-            AI for your website. <br class="hidden md:block" />
-            <span class="text-gradient-primary">Start free, scale with Pro.</span>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.15] text-white">
+            Give your website a <br class="hidden md:block" />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">brain in minutes.</span>
         </h1>
 
-        <p class="text-lg text-zinc-400 max-w-2xl mb-4 leading-relaxed">
-            Get <strong class="text-white">1,000 requests</strong> every month at no cost.
-            Upgrade for higher limits, priority support, and unlimited domains.
+        <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mb-8 leading-relaxed">
+            Secure, embeddable AI powered by Groq. Get <strong class="text-white">1,000 requests</strong> every month for free. Scale to Pro when you're ready.
         </p>
 
-        <div class="flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-500 mb-8">
-            <span class="flex items-center gap-1"><i class="ph-bold ph-check-circle text-emerald-400"></i> No credit card</span>
-            <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-            <span class="flex items-center gap-1"><i class="ph-bold ph-check-circle text-emerald-400"></i> 1,000 free / month</span>
-            <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-            <span class="flex items-center gap-1"><i class="ph-bold ph-check-circle text-emerald-400"></i> Cancel anytime</span>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a href="/login" id="heroSignInBtn" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
-                <i class="ph-bold ph-sign-in"></i> Start Free
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-16">
+            <a href="/login" id="heroSignInBtn" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                <i class="ph-bold ph-rocket"></i> Start Building Free
             </a>
-            <a href="/pricing" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 hover:border-primary/30 border border-white/10">
-                <i class="ph-bold ph-arrow-right"></i> View Pricing
-            </a>
-            <a href="/demo" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-semibold transition-all flex items-center justify-center gap-2 hover:border-primary/30">
-                <i class="ph-bold ph-play-circle text-lg"></i> Live Demo
+            <a href="/demo" class="glass-panel text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-white/5">
+                <i class="ph-bold ph-play-circle text-lg"></i> See Live Demo
             </a>
         </div>
 
-        <!-- Usage counter visual -->
-        <div class="mt-12 w-full max-w-md mx-auto">
-            <div class="glass-panel p-5 rounded-2xl border border-white/5 bg-black/30">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-medium text-zinc-400">Free tier usage</span>
-                    <span class="text-xs font-bold text-primary">1,000 / month</span>
+        <div class="w-full max-w-4xl mx-auto relative mt-4 floating-mockup perspective-1000">
+            <div class="absolute -inset-1 bg-gradient-to-b from-primary/30 to-transparent rounded-2xl blur-xl opacity-50 z-0"></div>
+            <div class="glass-panel p-2 rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl relative z-10 dash-card-ui overflow-hidden">
+                <div class="px-4 py-3 border-b border-white/5 flex items-center justify-between bg-black/40">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                    </div>
+                    <div class="text-[10px] font-mono text-zinc-500 flex items-center gap-2">
+                        <i class="ph-bold ph-lock-key text-primary"></i> nexus-dashboard.app
+                    </div>
                 </div>
-                <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div class="h-full w-[30%] bg-gradient-to-r from-primary to-primaryHover rounded-full animate-pulse" style="animation-duration: 2s;"></div>
+                <div class="p-6 md:p-8 flex flex-col md:flex-row gap-8 text-left bg-zinc-900/30">
+                    <div class="flex-1 glass-panel p-6 rounded-xl border border-white/5 bg-black/40 shadow-inner">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary"><i class="ph-bold ph-chart-line-up"></i></div>
+                                <span class="text-sm font-bold text-white">API Usage</span>
+                            </div>
+                            <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold rounded flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Active</span>
+                        </div>
+                        <div class="flex items-end gap-2 mb-2">
+                            <span class="text-3xl font-extrabold text-white">342</span>
+                            <span class="text-sm font-medium text-zinc-500 mb-1">/ 1,000 req</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-zinc-800 rounded-full overflow-hidden mt-4">
+                            <div class="h-full w-[34%] bg-gradient-to-r from-purple-500 to-primary rounded-full relative">
+                                <div class="absolute right-0 top-0 bottom-0 w-4 bg-white/20 blur-[2px]"></div>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-zinc-500 mt-3 font-mono">Reset in 14 days</p>
+                    </div>
+                    
+                    <div class="flex-1 glass-panel p-6 rounded-xl border border-white/5 bg-black/50 font-mono text-xs text-zinc-400 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-primary/20 text-primary px-3 py-1 rounded-bl-lg font-sans font-bold text-[10px]">Copy Script</div>
+                        <div class="mb-2 text-zinc-500">// 1. Embed script in your HTML</div>
+                        <div class="text-emerald-400 mb-1">&lt;script <span class="text-blue-400">src</span>=<span class="text-amber-300">"https://nexus.com/widget.js"</span>&gt;&lt;/script&gt;</div>
+                        <br/>
+                        <div class="mb-2 text-zinc-500">// 2. Initialize with your secure key</div>
+                        <div class="text-emerald-400">&lt;script&gt;</div>
+                        <div class="pl-4">Nexus.<span class="text-blue-400">init</span>({</div>
+                        <div class="pl-8 text-white">apiKey: <span class="text-amber-300">'nx_live_8f92...'</span>,</div>
+                        <div class="pl-8 text-white">theme: <span class="text-amber-300">'dark'</span></div>
+                        <div class="pl-4">});</div>
+                        <div class="text-emerald-400">&lt;/script&gt;</div>
+                    </div>
                 </div>
-                <p class="text-[10px] text-zinc-500 mt-2 flex items-center gap-1">
-                    <i class="ph-bold ph-info"></i>
-                    That's ~33 requests per day – enough for most websites.
-                </p>
             </div>
         </div>
     </main>
 
-    <!-- ===== TRUST BAR ===== -->
-    <section class="max-w-5xl mx-auto px-6 py-6 relative z-10">
-        <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-zinc-500 text-xs font-medium">
-            <span class="flex items-center gap-2"><i class="ph-bold ph-check-circle text-emerald-400/60"></i> 100% open source</span>
-            <span class="flex items-center gap-2"><i class="ph-bold ph-check-circle text-emerald-400/60"></i> Encrypted by default</span>
-            <span class="flex items-center gap-2"><i class="ph-bold ph-check-circle text-emerald-400/60"></i> Domain whitelisting</span>
-            <span class="flex items-center gap-2"><i class="ph-bold ph-check-circle text-emerald-400/60"></i> Powered by Groq</span>
+    <section class="max-w-5xl mx-auto px-6 py-8 relative z-10 border-b border-white/5">
+        <p class="text-center text-xs text-zinc-500 font-bold tracking-widest uppercase mb-6">Engineered for modern teams</p>
+        <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-zinc-400 text-sm font-semibold">
+            <span class="trust-item flex items-center gap-2 cursor-default"><i class="ph-bold ph-shield-check text-xl text-zinc-600"></i> Vault-Grade Auth</span>
+            <span class="trust-item flex items-center gap-2 cursor-default"><i class="ph-bold ph-lightning text-xl text-zinc-600"></i> Edge Powered</span>
+            <span class="trust-item flex items-center gap-2 cursor-default"><i class="ph-bold ph-code text-xl text-zinc-600"></i> Open Source</span>
+            <span class="trust-item flex items-center gap-2 cursor-default"><i class="ph-bold ph-cpu text-xl text-zinc-600"></i> Groq Inference</span>
         </div>
     </section>
 
-    <!-- ===== WHY NEXUS ===== -->
-    <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
-        <div class="text-center mb-12">
-            <span class="text-xs font-semibold text-primary uppercase tracking-widest">Features</span>
-            <h2 class="text-3xl font-bold text-white mt-2">Why choose Nexus?</h2>
-            <p class="text-zinc-400 mt-2">Everything you need to add AI to your site, built with security at its core.</p>
+    <section class="max-w-6xl mx-auto px-6 py-24 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Everything you need, <span class="text-primary">nothing you don't.</span></h2>
+            <p class="text-lg text-zinc-400 max-w-2xl mx-auto">Drop-in AI functionality built with security and speed at its core.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-8 rounded-2xl">
-                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+            
+            <div class="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-gradient-to-br from-zinc-900/80 to-black hover:border-primary/30 transition-all group overflow-hidden relative dash-card-ui">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-20 -mt-20 transition-all group-hover:bg-primary/20"></div>
+                <div class="relative z-10 h-full flex flex-col justify-center">
+                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 mb-6 text-primary group-hover:scale-110 transition-transform">
+                        <i class="ph-bold ph-globe-hemisphere-west text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Strict Domain Whitelisting</h3>
+                    <p class="text-zinc-400 text-base leading-relaxed max-w-md">Our backend strictly verifies the origin of every request. Nobody can steal your Nexus Key and run up your API bill on unauthorized sites.</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/50 hover:border-emerald-500/30 transition-all group dash-card-ui">
+                <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 mb-6 text-emerald-400 group-hover:scale-110 transition-transform">
                     <i class="ph-bold ph-lock-key text-2xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-zinc-100 mb-3">Vault-Grade Security</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Your Groq API key is encrypted and stored safely. We issue a separate, secure Nexus Key for your frontend widget.</p>
+                <h3 class="text-xl font-bold text-white mb-3">Vault-Grade Security</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Your Groq API key is heavily encrypted. We issue a separate frontend key.</p>
             </div>
-            <div class="glass-panel p-8 rounded-2xl">
-                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
-                    <i class="ph-bold ph-globe-hemisphere-west text-2xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-zinc-100 mb-3">Strict Whitelisting</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Our backend verifies the origin of every request. Nobody can steal your Nexus Key and use it on unauthorized domains.</p>
-            </div>
-            <div class="glass-panel p-8 rounded-2xl">
-                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 mb-6 text-primary">
-                    <i class="ph-bold ph-lightning text-2xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-zinc-100 mb-3">Zero Friction</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Drop a single script tag into your HTML. The widget automatically adapts to your site's theme and provides context-aware answers.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- ===== PRICING COMPARISON (The "Dum" Section) ===== -->
-    <section class="max-w-5xl mx-auto px-6 py-12 relative z-10">
-        <div class="text-center mb-12">
-            <span class="text-xs font-semibold text-primary uppercase tracking-widest">Pricing</span>
-            <h2 class="text-3xl font-bold text-white mt-2">Simple, transparent pricing</h2>
-            <p class="text-zinc-400 mt-2">Start free. Upgrade when you need more.</p>
-        </div>
+            <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/50 hover:border-amber-500/30 transition-all group dash-card-ui">
+                <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 mb-6 text-amber-400 group-hover:scale-110 transition-transform">
+                    <i class="ph-bold ph-paint-brush text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Zero Friction UI</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">The widget automatically adapts to your site's dark or light theme instantly.</p>
+            </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Free Plan -->
-            <div class="glass-panel p-8 rounded-2xl border border-primary/20 bg-black/30 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-primary/10 px-4 py-1 rounded-bl-xl text-xs font-semibold text-primary">Free</div>
-                <div class="mt-4">
-                    <div class="text-5xl font-extrabold text-white">$0</div>
-                    <p class="text-zinc-400 text-sm mt-1">forever – no strings attached</p>
-                    <ul class="mt-6 space-y-3 text-left">
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">1,000</strong> requests / month</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">All models</strong> (Llama 3, Mixtral, etc.)</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Up to 10</strong> authorized domains</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Vault‑grade</strong> encryption for your Groq key</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-emerald-400 text-xl"></i>
-                            <span><strong class="text-white">Open source</strong> (MIT) – self‑hostable</span>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        <a href="/login" class="btn-primary w-full justify-center text-center">Get Started Free</a>
+            <div class="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-gradient-to-tr from-zinc-900/80 to-primary/5 hover:border-primary/30 transition-all group overflow-hidden relative dash-card-ui flex items-center justify-between">
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-bold text-white mb-3 flex items-center gap-3">
+                        Powered by Groq <i class="ph-fill ph-lightning text-yellow-400"></i>
+                    </h3>
+                    <p class="text-zinc-400 text-base leading-relaxed max-w-sm mb-4">Access Llama 3 and Mixtral models on the LPU™ Inference Engine for instantaneous responses.</p>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-zinc-300">llama3-8b</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-zinc-300">mixtral-8x7b</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex relative w-32 h-32 mr-8">
+                    <div class="absolute inset-0 border-2 border-primary/30 rounded-full animate-[spin_4s_linear_infinite] border-t-primary"></div>
+                    <div class="absolute inset-2 border-2 border-purple-500/30 rounded-full animate-[spin_3s_linear_infinite_reverse] border-b-purple-500"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="ph-bold ph-cpu text-4xl text-primary drop-shadow-[0_0_15px_rgba(168,85,247,0.8)]"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Pro Plan (Coming Soon) -->
-            <div class="glass-panel p-8 rounded-2xl border border-amber-500/20 bg-black/20 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-amber-500/10 px-4 py-1 rounded-bl-xl text-xs font-semibold text-amber-400">Coming Soon</div>
-                <div class="mt-4">
-                    <div class="text-5xl font-extrabold text-white">$9</div>
-                    <p class="text-zinc-400 text-sm mt-1">per month – early adopter pricing</p>
-                    <ul class="mt-6 space-y-3 text-left">
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-amber-400 text-xl"></i>
-                            <span><strong class="text-white">10,000</strong> requests / month</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-amber-400 text-xl"></i>
-                            <span><strong class="text-white">Unlimited</strong> domains</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-amber-400 text-xl"></i>
-                            <span><strong class="text-white">Priority</strong> support</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-amber-400 text-xl"></i>
-                            <span><strong class="text-white">Advanced</strong> analytics</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="ph-bold ph-check-circle text-amber-400 text-xl"></i>
-                            <span><strong class="text-white">Custom</strong> models support</span>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        <button class="btn-secondary w-full justify-center text-center cursor-not-allowed opacity-60" disabled>
-                            <i class="ph-bold ph-hourglass"></i> Coming Soon
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Compare link -->
-        <div class="text-center mt-8">
-            <a href="/pricing" class="text-sm text-primary hover:underline flex items-center justify-center gap-1">
-                See full comparison <i class="ph-bold ph-arrow-right"></i>
-            </a>
         </div>
     </section>
 
-    <!-- ===== STEPS ===== -->
     <section class="max-w-5xl mx-auto px-6 py-16 relative z-10">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-white mb-4">From zero to AI in minutes</h2>
-            <p class="text-zinc-400">No complex backend setup required. We handle the infrastructure.</p>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Simple, transparent pricing</h2>
+            <p class="text-zinc-400">Start free. Upgrade when your traffic grows.</p>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="pricing-card glass-panel p-10 rounded-3xl border border-white/10 bg-zinc-900/40 relative overflow-hidden dash-card-ui">
+                <div class="mt-2">
+                    <h3 class="text-xl font-bold text-white mb-2">Hobby</h3>
+                    <div class="flex items-baseline gap-2 mb-1">
+                        <span class="text-5xl font-extrabold text-white">$0</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm mb-8 font-medium">Forever free, no credit card</p>
+                    
+                    <ul class="space-y-4 text-left mb-10">
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> <strong>1,000</strong> requests / month
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> Up to <strong>10</strong> authorized domains
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> All Groq open-source models
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> Community support
+                        </li>
+                    </ul>
+                    <a href="/login" class="block w-full text-center bg-white/10 hover:bg-white/20 text-white py-3.5 rounded-xl text-sm font-bold transition-all border border-white/5">Start for free</a>
+                </div>
+            </div>
+
+            <div class="pricing-card glass-panel p-10 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/10 to-zinc-900/40 relative overflow-hidden dash-card-ui shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+                <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-500 to-primary"></div>
+                <div class="absolute top-6 right-6 px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-bold rounded-full border border-amber-500/20">Coming Soon</div>
+                <div class="mt-2">
+                    <h3 class="text-xl font-bold text-white mb-2 text-primary">Pro</h3>
+                    <div class="flex items-baseline gap-2 mb-1">
+                        <span class="text-5xl font-extrabold text-white">$9</span>
+                        <span class="text-zinc-500 font-medium">/mo</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm mb-8 font-medium">For scaling applications</p>
+                    
+                    <ul class="space-y-4 text-left mb-10">
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> <strong>10,000</strong> requests / month
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> <strong>Unlimited</strong> domains
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> Custom widget branding
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-zinc-300">
+                            <i class="ph-bold ph-check text-primary text-lg"></i> Priority email support
+                        </li>
+                    </ul>
+                    <button class="w-full text-center bg-primary/50 text-white/50 py-3.5 rounded-xl text-sm font-bold border border-primary/20 cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="ph-bold ph-hourglass"></i> Waitlist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-6 py-16 relative z-10 border-t border-white/5 mt-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div class="step-card text-center relative">
-                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">1</div>
-                <h3 class="text-lg font-bold text-white mb-2">Create an API Key</h3>
-                <p class="text-zinc-400 text-sm">Sign in to the dashboard and generate a secure Nexus Key for your project.</p>
+            <div class="step-card relative">
+                <span class="text-6xl font-black text-white/5 absolute -top-6 -left-2 z-0">01</span>
+                <h3 class="text-lg font-bold text-white mb-2 relative z-10">Generate Key</h3>
+                <p class="text-zinc-400 text-sm relative z-10">Sign in to the secure dashboard and create a unique Nexus Key.</p>
             </div>
-            <div class="step-card text-center relative">
-                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">2</div>
-                <h3 class="text-lg font-bold text-white mb-2">Whitelist Domains</h3>
-                <p class="text-zinc-400 text-sm">Add your website's domain to ensure requests are only accepted from your site.</p>
+            <div class="step-card relative">
+                <span class="text-6xl font-black text-white/5 absolute -top-6 -left-2 z-0">02</span>
+                <h3 class="text-lg font-bold text-white mb-2 relative z-10">Whitelist</h3>
+                <p class="text-zinc-400 text-sm relative z-10">Add your domain. We'll reject requests from anywhere else automatically.</p>
             </div>
-            <div class="step-card text-center relative">
-                <div class="w-12 h-12 bg-zinc-900 rounded-full flex items-center justify-center border-2 border-primary text-primary font-bold text-xl mx-auto mb-6 relative z-10">3</div>
-                <h3 class="text-lg font-bold text-white mb-2">Embed the Script</h3>
-                <p class="text-zinc-400 text-sm">Copy and paste a simple JavaScript snippet into your HTML. You're live!</p>
+            <div class="step-card relative">
+                <span class="text-6xl font-black text-white/5 absolute -top-6 -left-2 z-0">03</span>
+                <h3 class="text-lg font-bold text-white mb-2 relative z-10">Embed</h3>
+                <p class="text-zinc-400 text-sm relative z-10">Drop the JS snippet into your HTML header. You're live instantly.</p>
             </div>
         </div>
     </section>
 
-    <!-- ===== TESTIMONIALS / SOCIAL PROOF ===== -->
-    <section class="max-w-5xl mx-auto px-6 py-12 relative z-10">
-        <div class="text-center mb-12">
-            <span class="text-xs font-semibold text-primary uppercase tracking-widest">Trusted by developers</span>
-            <h2 class="text-3xl font-bold text-white mt-2">What people are saying</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
-                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                </div>
-                <p class="text-sm text-zinc-300 leading-relaxed">"Nexus saved us weeks of work. The security model is exactly what we needed for our enterprise clients."</p>
-                <div class="flex items-center gap-3 mt-4">
-                    <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">AK</div>
-                    <div>
-                        <p class="text-xs font-semibold text-white">Amit Kumar</p>
-                        <p class="text-[10px] text-zinc-500">CTO, TechFlow</p>
-                    </div>
-                </div>
-            </div>
-            <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
-                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                </div>
-                <p class="text-sm text-zinc-300 leading-relaxed">"The free tier is generous and the upgrade path is clear. We're excited for the Pro plan!"</p>
-                <div class="flex items-center gap-3 mt-4">
-                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs">SR</div>
-                    <div>
-                        <p class="text-xs font-semibold text-white">Sneha Reddy</p>
-                        <p class="text-[10px] text-zinc-500">Lead Developer, SaaSify</p>
-                    </div>
-                </div>
-            </div>
-            <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/20">
-                <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
-                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                </div>
-                <p class="text-sm text-zinc-300 leading-relaxed">"Domain whitelisting is a game-changer. I can finally deploy AI without worrying about API abuse."</p>
-                <div class="flex items-center gap-3 mt-4">
-                    <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">RJ</div>
-                    <div>
-                        <p class="text-xs font-semibold text-white">Rahul Jain</p>
-                        <p class="text-[10px] text-zinc-500">Founder, BuildFast</p>
-                    </div>
+    <section class="max-w-4xl mx-auto px-6 py-24 relative z-10 text-center">
+        <div class="cta-glow-border glass-panel p-12 rounded-[2rem] bg-zinc-900/60 dash-card-ui relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-zinc-900/0 to-transparent"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Ready to upgrade your site?</h2>
+                <p class="text-zinc-400 mb-8 text-lg max-w-xl mx-auto">Join developers building smarter websites with Nexus. Start with 1,000 free requests today.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="/login" class="bg-white text-black hover:bg-zinc-200 px-8 py-3.5 rounded-full text-base font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                        Get Started for Free
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== GROQ ===== -->
-    <section class="max-w-5xl mx-auto px-6 py-12 relative z-10">
-        <div class="glass-panel p-10 rounded-3xl border border-primary/20 bg-gradient-to-br from-black/60 to-primary/5 flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
-            <div class="flex-1">
-                <h2 class="text-3xl font-bold text-white mb-4">Powered by Groq's blazing fast inference</h2>
-                <p class="text-zinc-400 mb-6 leading-relaxed">
-                    Nexus utilizes Llama 3 and Mixtral models hosted on Groq's LPU™ Inference Engine. Deliver instant, human-like responses to your visitors without the wait.
-                </p>
-                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> llama3-8b-8192</span>
-                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> llama3-70b-8192</span>
-                    <span class="bg-white/5 border border-white/10 text-zinc-300 text-xs px-3 py-1.5 rounded-full"><i class="ph-bold ph-cpu text-primary mr-1"></i> mixtral-8x7b</span>
-                </div>
-            </div>
-            <div class="w-full md:w-1/3 flex justify-center">
-                <div class="w-40 h-40 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 relative">
-                    <div class="absolute inset-0 rounded-full border border-primary/50 animate-ping opacity-20"></div>
-                    <i class="ph-bold ph-rocket text-6xl text-primary"></i>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== CTA WITH URGENCY ===== -->
-    <section class="max-w-3xl mx-auto px-6 py-20 relative z-10 text-center">
-        <div class="glass-panel p-10 rounded-3xl border border-primary/20 bg-black/30">
-            <span class="inline-block text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full border border-primary/20 mb-4">Limited Free Tier</span>
-            <h2 class="text-4xl font-extrabold text-white mb-4 tracking-tight">Start with <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">1,000 free</span> requests</h2>
-            <p class="text-zinc-400 mb-6 text-lg">No credit card required. Upgrade when you need more. <br class="hidden sm:block" /> Join thousands of developers building with Nexus.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/login" class="bg-primary hover:bg-primaryHover text-white px-8 py-3.5 rounded-full text-base font-bold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2">
-                    <i class="ph-bold ph-sign-in"></i> Get Started Free
-                </a>
-                <a href="/pricing" class="glass-panel text-white px-8 py-3.5 rounded-full text-base font-bold transition-all flex items-center justify-center gap-2 hover:border-primary/30 border border-white/10">
-                    <i class="ph-bold ph-arrow-right"></i> Compare Plans
-                </a>
-            </div>
-            <p class="text-xs text-zinc-500 mt-6 flex items-center justify-center gap-1">
-                <i class="ph-bold ph-shield-check text-emerald-400"></i>
-                No commitment · Cancel anytime · Open source
-            </p>
-        </div>
-    </section>
-
-    <!-- ===== FOOTER ===== -->
-    <footer class="border-t border-white/5 py-8 bg-black/40 relative z-10">
-        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <footer class="border-t border-white/5 py-10 bg-black/60 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white">
                     <i class="ph-fill ph-brain text-sm"></i>
                 </div>
-                <span class="text-base font-bold text-white tracking-tight">Nexus Web Assistant</span>
-                <span class="text-[10px] font-medium text-zinc-500 bg-zinc-800/50 px-2 py-0.5 rounded-full">Freemium</span>
+                <span class="text-base font-bold text-white tracking-tight">Nexus</span>
             </div>
-            <div class="flex flex-wrap items-center gap-6 text-sm text-zinc-500 font-medium">
-                <a href="/docs" class="hover:text-white transition-colors">Documentation</a>
+            <div class="flex flex-wrap items-center justify-center gap-8 text-sm text-zinc-500 font-medium">
+                <a href="/docs" class="hover:text-white transition-colors">Docs</a>
                 <a href="/pricing" class="hover:text-white transition-colors">Pricing</a>
-                <a href="/demo" class="hover:text-white transition-colors">Demo</a>
                 <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+                <a href="/privacyPolicy" class="hover:text-white transition-colors">Privacy</a>
+                <a href="/termsConditions" class="hover:text-white transition-colors">Terms</a>
             </div>
-        </div>
-        <div class="text-center text-zinc-500 text-xs mt-4">
-            Built for speed, designed for security ·
-            <a href="/privacyPolicy" class="text-primary hover:underline">Privacy Policy</a> ·
-            <a href="/termsConditions" class="text-primary hover:underline">Terms of Service</a>
         </div>
     </footer>
 
-    <!-- ===== FIREBASE IMPORTS ===== -->
     <script type="importmap">
         {
             "imports": {
@@ -406,10 +334,8 @@
         }
     </script>
 
-    <!-- ===== APP ===== -->
     <script type="module" src="src/js/app.js"></script>
 
-    <!-- ===== PARTICLES ===== -->
     <script src="src/js/particles.js"></script>
 
 </body>

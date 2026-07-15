@@ -1,30 +1,15 @@
+// src/js/particles.js
 (function() {
     let particlesContainer;
     const MIN_WIDTH = 969;
-    const MAX_PARTICLES = 120; // Maximum allowed particles
+    const MAX_PARTICLES = 60; 
 
     function getParticleColor() {
         const theme = document.documentElement.getAttribute('data-theme');
         if (theme === 'dark') {
-            return ['#ffffff', '#dddddd', '#bbbbbb', '#999999'];
+            return ['#ffffff', '#a855f7', '#d8b4fe']; 
         }
-        return ['#333333', '#555555', '#777777', '#999999'];
-    }
-
-    function getLinkColor() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        if (theme === 'dark') {
-            return 'rgba(255,255,255,0.15)';
-        }
-        return 'rgba(0,0,0,0.15)';
-    }
-
-    function getGrabColor() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        if (theme === 'dark') {
-            return '#ffffff';
-        }
-        return '#333333';
+        return ['#333333', '#a855f7', '#777777'];
     }
 
     async function initParticles() {
@@ -33,13 +18,10 @@
             return;
         }
 
-        // If already initialized, do nothing
         if (particlesContainer) return;
 
         try {
             const particleColor = getParticleColor();
-            const linkColor = getLinkColor();
-            const grabColor = getGrabColor();
 
             particlesContainer = await tsParticles.load({
                 id: "tsparticles",
@@ -53,54 +35,38 @@
                             type: "circle",
                         },
                         size: {
-                            value: { min: 1.5, max: 4.5 },
+                            value: { min: 1, max: 3 }, 
                             animation: {
                                 enable: true,
-                                speed: 0.8,
+                                speed: 0.5,
                                 minimumValue: 0.5,
                                 sync: false,
                             },
                         },
                         opacity: {
-                            value: { min: 0.2, max: 0.7 },
+                            value: { min: 0.1, max: 0.4 }, 
                             animation: {
                                 enable: true,
-                                speed: 0.3,
-                                minimumValue: 0.1,
+                                speed: 0.2,
+                                minimumValue: 0.05,
                                 sync: false,
                             },
                         },
                         move: {
-                            direction: "none",
+                            direction: "top", 
                             enable: true,
-                            outModes: { default: "bounce" },
-                            random: false,
-                            speed: 0.8,
+                            outModes: { default: "out" },
+                            random: true,
+                            speed: 0.3, 
                             straight: false,
-                            attract: {
-                                enable: true,
-                                rotateX: 600,
-                                rotateY: 800,
-                            },
                         },
                         number: {
                             density: { enable: true, area: 800 },
-                            value: 50,
-                            limit: MAX_PARTICLES, // Cap the total number of particles
+                            value: 40,
+                            limit: MAX_PARTICLES,
                         },
                         links: {
-                            color: { value: linkColor },
-                            distance: 150,
-                            enable: true,
-                            opacity: 0.25,
-                            width: 0.8,
-                        },
-                        twinkle: {
-                            particles: {
-                                enable: true,
-                                frequency: 0.04,
-                                opacity: 0.6,
-                            },
+                            enable: false, 
                         },
                     },
                     background: {
@@ -110,29 +76,16 @@
                         events: {
                             onHover: {
                                 enable: true,
-                                mode: "grab",
-                                parallax: {
-                                    enable: true,
-                                    force: 30,
-                                    smooth: 5,
-                                },
-                            },
-                            onClick: {
-                                enable: true,
-                                mode: "push",
+                                mode: "bubble", 
                             },
                             resize: true,
                         },
                         modes: {
-                            grab: {
-                                distance: 160,
-                                links: {
-                                    opacity: 0.5,
-                                    color: grabColor,
-                                },
-                            },
-                            push: {
-                                quantity: 1, // Reduced from 3 to 1 to slow particle growth
+                            bubble: {
+                                distance: 200,
+                                size: 4,
+                                duration: 2,
+                                opacity: 0.8,
                             },
                         },
                     },
@@ -171,7 +124,6 @@
         }
     }
 
-    // Watch for theme changes to reload particles with new colors
     const themeObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'data-theme') {
@@ -183,14 +135,12 @@
     const htmlElement = document.documentElement;
     themeObserver.observe(htmlElement, { attributes: true });
 
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', handleParticlesState);
     } else {
         handleParticlesState();
     }
 
-    // Debounced resize handler to avoid frequent re-initialization
     let resizeTimeout;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
