@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About the Builder · Nexus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css" />
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <link rel="stylesheet" href="src/css/landingPage.css" />
+    <link rel="icon" type="image/png" href="assets/favico.png" />
+</head>
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased scroll-smooth selection:bg-primary/30 selection:text-white">
+
+    <div class="ambient-glow fixed top-[-15%] left-1/2 -translate-x-1/2 w-[1000px] h-[700px] max-w-[100vw] z-[-1] pointer-events-none opacity-40"></div>
+
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-8 py-3.5 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-zinc-950/40 backdrop-blur-xl">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.25)] group-hover:scale-105 transition-transform">
+                    <i class="ph-fill ph-brain text-xl"></i>
+                </div>
+                <span class="text-xl font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="/docs" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Docs</a>
+                <a href="/pricing" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Pricing</a>
+                <a href="/demo" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Demo</a>
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 tracking-wide">
+                    <i class="ph ph-github-logo text-xl"></i> GitHub
+                </a>
+            </div>
+            <div class="relative" id="auth-container">
+                <a href="/login" id="loginLink" class="bg-white text-black hover:bg-zinc-200 px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:-translate-y-0.5">
+                    <i class="ph-bold ph-sign-in"></i> Login
+                </a>
+                <div id="userArea" class="hidden relative">
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
+                        <img id="userAvatar" src="" alt="avatar" />
+                    </div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-email" id="userEmail">user@example.com</div>
+                        <a href="/dashboard" class="w-full text-left px-4 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
+                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
+                        </a>
+                        <button id="signOutBtn">
+                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <main class="relative z-10 w-full pt-40">
+        <section class="max-w-5xl mx-auto px-6 pb-20 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-extrabold border border-primary/30 shadow-[0_0_15px_rgba(168,85,247,0.1)] mb-6">
+                Behind the Code
+            </span>
+            <h1 class="text-4xl md:text-7xl font-black text-white tracking-tight mb-6">
+                One Builder.<br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">Zero-Trust Mission.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto font-medium leading-relaxed">
+                Nexus is entirely engineered, designed, and maintained by a solo independent developer committed to shifting web architectures towards a safer future.
+                No bloated corporate teams—just pure focused craftsmanship.
+            </p>
+        </section>
+
+        <section class="max-w-5xl mx-auto px-6 pb-24">
+            <div class="glass-panel p-8 md:p-12 rounded-[2.5rem] border border-white/10 bg-zinc-950/40 backdrop-blur-2xl shadow-2xl flex flex-col md:flex-row items-center gap-10 relative overflow-hidden group hover:border-primary/20">
+                <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/10 transition-colors"></div>
+                
+                <div class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-primary/30 p-1 flex-shrink-0 shadow-[0_0_30px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform overflow-hidden bg-black/40">
+                    <img src="https://github.com/thekaifansari01.png" alt="Kaif Ansari" class="w-full h-full rounded-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Kaif+Ansari&background=a855f7&color=fff&size=200'" />
+                </div>
+
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-black text-white tracking-tight mb-2">Kaif Ansari</h2>
+                    <p class="text-sm font-extrabold text-primary tracking-widest uppercase mb-4">Founder & Lead Engineer</p>
+                    <p class="text-zinc-400 text-base leading-relaxed mb-8 max-w-xl font-medium">
+                        I specialize in constructing secure proxy networks, dynamic server ciphers, and cutting-edge machine learning platforms. Building in the open and shipping optimized solutions.
+                    </p>
+                    
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                        <a href="https://github.com/thekaifansari01" target="_blank" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all hover:-translate-y-0.5 shadow-sm">
+                            <i class="ph-bold ph-github-logo text-base"></i> GitHub
+                        </a>
+                        <a href="https://linkedin.com/in/thekaifansari01" target="_blank" class="flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all hover:-translate-y-0.5 shadow-sm">
+                            <i class="ph-bold ph-linkedin-logo text-base"></i> LinkedIn
+                        </a>
+                        <a href="https://instagram.com/thekaifansari01" target="_blank" class="flex items-center gap-2 bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/20 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all hover:-translate-y-0.5 shadow-sm">
+                            <i class="ph-bold ph-instagram-logo text-base"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-5xl mx-auto px-6 pb-32">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+                
+                <div class="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 flex flex-col justify-center relative overflow-hidden group shadow-lg hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-colors"></div>
+                    <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 mb-5"><i class="ph-bold ph-shield-check text-xl"></i></div>
+                    <h3 class="text-xl font-extrabold text-white mb-2 tracking-wide">The Origin: Why Nexus?</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed font-medium max-w-xl">
+                        Exposing root AI upstream provider keys directly inside modern frontend codebases remains a severe software vulnerability. Nexus was architecturalized single-handedly to resolve this—introducing dynamic domain origin mapping and block cipher vaults to mask credentials flawlessly.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 flex flex-col justify-center relative overflow-hidden group shadow-lg hover:-translate-y-1">
+                    <div class="w-11 h-11 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 border border-purple-500/20 mb-5"><i class="ph-bold ph-lightning text-xl"></i></div>
+                    <h3 class="text-xl font-extrabold text-white mb-2 tracking-wide">Inference Architecture</h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed font-medium">
+                        Utilizing ultra-optimized asynchronous proxy configurations combined with Groq LPUs and Firebase backends to deliver response handshakes beneath microsecond execution thresholds.
+                    </p>
+                </div>
+
+                <div class="md:col-span-3 glass-panel p-8 md:p-10 rounded-3xl border border-white/5 bg-gradient-to-br from-zinc-900/30 via-zinc-950/20 to-purple-500/5 hover:border-purple-500/30 transition-all duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group shadow-xl hover:-translate-y-1">
+                    <div class="max-w-2xl">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-purple-500/10 text-purple-400 text-[10px] font-extrabold rounded-md border border-purple-500/20 uppercase tracking-widest">Sister Lab Experiment</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white tracking-wide mb-3 flex items-center gap-2">
+                            Jarvis AI Assistant <i class="ph-bold ph-cpu text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"></i>
+                        </h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                            A highly complex, standalone multi-modal Python entity engineered with speaker voice biometric verification (Picovoice Eagle) and facial live liveness detection (Face++ API). Driven by a stateful hybrid router combining stateless ultra-fast Groq Llama blocks with multi-step Gemini Agent execution arrays.
+                        </p>
+                    </div>
+                    <a href="https://github.com/thekaifansari01/jarvis-by-kaif-ansari" target="_blank" class="flex-shrink-0 bg-white/5 hover:bg-white/10 text-white border border-white/10 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2.5 shadow-md">
+                        Explore Code <i class="ph-bold ph-arrow-square-out text-base"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="max-w-5xl mx-auto px-6 pb-32">
+            <div class="text-center mb-14">
+                <h3 class="text-2xl font-black text-white tracking-tight">The Independent Builder Blueprint</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40 text-center shadow-md">
+                    <div class="text-3xl font-black text-white tracking-tight mb-1 font-mono">100%</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Handcrafted Codebase</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40 text-center shadow-md">
+                    <div class="text-3xl font-black text-white tracking-tight mb-1 font-mono">0</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Corporate VC Funding</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40 text-center shadow-md">
+                    <div class="text-3xl font-black text-white tracking-tight mb-1 font-mono">∞</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Coffee Packs Consumed</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40 text-center shadow-md">
+                    <div class="text-3xl font-black text-primary tracking-tight mb-1 font-mono">Active</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Building in Public</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="w-full border-t border-white/5 pt-16 pb-12 bg-zinc-950 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+                    <div class="col-span-2 lg:col-span-2">
+                        <div class="flex items-center gap-2.5 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                <i class="ph-fill ph-brain text-lg"></i>
+                            </div>
+                            <span class="text-xl font-black text-white tracking-tight">Nexus</span>
+                        </div>
+                        <p class="text-sm text-zinc-400 max-w-xs leading-relaxed font-medium">The most secure, drop-in AI assistant for modern web applications. Powered by Groq for instantaneous inference.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-5 tracking-wide">Product</h4>
+                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                            <li><a href="/docs#features" class="hover:text-primary transition-colors">Features</a></li>
+                            <li><a href="/pricing" class="hover:text-primary transition-colors">Pricing</a></li>
+                            <li><a href="/demo" class="hover:text-primary transition-colors">Live Demo</a></li>
+                            <li><a href="/docs#version-history" class="hover:text-primary transition-colors">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-5 tracking-wide">Resources</h4>
+                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                            <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
+                            <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-5 tracking-wide">Company</h4>
+                        <ul class="space-y-3 text-sm text-zinc-400 font-medium">
+                            <li><a href="/about" class="hover:text-primary transition-colors">About Us</a></li>
+                            <li><a href="/privacyPolicy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li><a href="/termsConditions" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <p class="text-xs text-zinc-500 font-semibold tracking-wide">&copy; 2026 Nexus Web Assistant. All rights reserved.</p>
+                    <div class="flex items-center gap-6 text-zinc-500">
+                        <a href="www.linkedin.com/in/thekaifansari01" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-linkedin-logo"></i></a>
+                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-github-logo"></i></a>
+                        <a href="#" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-discord-logo"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>
