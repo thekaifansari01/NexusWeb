@@ -67,30 +67,36 @@ def handle_chat_request(body, request_origin):
             max_retries = 3
             for attempt in range(max_retries):
                 try:
-                    transaction = db.transaction()
-                    doc = transaction.get(usage_ref)
-                    if hasattr(doc, 'exists'):
-                        if doc.exists:
-                            current_count = doc.to_dict().get('count', 0)
+                    def transaction_callback(transaction):
+                        doc = transaction.get(usage_ref)
+                        if hasattr(doc, 'exists'):
+                            if doc.exists:
+                                current_count = doc.to_dict().get('count', 0)
+                            else:
+                                current_count = 0
                         else:
-                            current_count = 0
-                    else:
-                        docs = list(doc) if doc else []
-                        if docs:
-                            current_count = docs[0].to_dict().get('count', 0)
-                        else:
-                            current_count = 0
-                    if current_count >= monthly_limit:
-                        return False, current_count
-                    transaction.set(usage_ref, {
-                        'userId': user_id,
-                        'month': month_key,
-                        'count': current_count + 1,
-                        'limit': monthly_limit,
-                        'lastUpdated': firestore.SERVER_TIMESTAMP
-                    }, merge=True)
-                    return True, current_count + 1
-                except Exception:
+                            docs = list(doc) if doc else []
+                            if docs:
+                                current_count = docs[0].to_dict().get('count', 0)
+                            else:
+                                current_count = 0
+
+                        if current_count >= monthly_limit:
+                            return False, current_count
+
+                        transaction.set(usage_ref, {
+                            'userId': user_id,
+                            'month': month_key,
+                            'count': current_count + 1,
+                            'limit': monthly_limit,
+                            'lastUpdated': firestore.SERVER_TIMESTAMP
+                        }, merge=True)
+                        return True, current_count + 1
+
+                    success, new_count = db.transaction(transaction_callback)
+                    return success, new_count
+
+                except Exception as e:
                     if attempt == max_retries - 1:
                         raise
                     time.sleep(0.1 * (attempt + 1))
