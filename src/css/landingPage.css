@@ -16,12 +16,6 @@
     50% { transform: translateY(-12px) rotateX(2.5deg) rotateY(0.5deg); }
 }
 
-.dash-card-ui {
-    background: linear-gradient(150deg, rgba(30, 30, 35, 0.7) 0%, rgba(15, 15, 18, 0.95) 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    border-left: 1px solid rgba(255, 255, 255, 0.06);
-}
-
 .cta-glow-border {
     position: relative;
 }
@@ -53,6 +47,22 @@
 .reveal-section.visible > div {
     opacity: 1;
     transform: translateY(0);
+}
+
+.marquee-container {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee-content {
+    animation: marquee 35s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
