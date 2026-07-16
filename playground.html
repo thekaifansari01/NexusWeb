@@ -9,6 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <link rel="stylesheet" href="src/css/tailwind-output.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
@@ -73,6 +81,18 @@
         .chat-user { background: #27272a; color: #fff; border-bottom-right-radius: 4px; margin-left: auto; }
         .chat-ai { background: rgba(168, 85, 247, 0.1); color: #e4e4e7; border: 1px solid rgba(168, 85, 247, 0.2); border-bottom-left-radius: 4px; margin-right: auto; }
         
+        .chat-ai pre { background: #18181b; padding: 1rem; border-radius: 8px; position: relative; margin: 0.75rem 0; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .chat-ai code { font-family: 'ui-monospace', monospace; font-size: 0.85em; }
+        .chat-ai p { margin-bottom: 0.5rem; }
+        .chat-ai p:last-child { margin-bottom: 0; }
+        .chat-ai ul, .chat-ai ol { margin-left: 1.5rem; margin-bottom: 0.5rem; }
+        .chat-ai ul { list-style-type: disc; }
+        .chat-ai ol { list-style-type: decimal; }
+        .chat-ai a { color: #a855f7; text-decoration: underline; }
+        
+        .copy-code-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: bold; transition: all 0.2s; backdrop-filter: blur(4px); }
+        .copy-code-btn:hover { background: rgba(255,255,255,0.2); }
+        
         .raw-view pre { font-family: 'ui-monospace', monospace; font-size: 0.8rem; color: #a1a1aa; line-height: 1.5; white-space: pre-wrap; }
         .raw-view .string { color: #86efac; }
         .raw-view .number { color: #fca5a5; }
@@ -89,14 +109,15 @@
 </head>
 <body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
-    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
-        <div class="h-16 flex items-center px-6 border-b border-white/5">
+    <aside id="sidebarMenu" class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-40 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/5">
             <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
                 <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
                     <i class="ph-fill ph-brain text-lg"></i>
                 </div>
                 <span class="text-lg font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
             </a>
+            <button id="closeMobileMenuBtn" class="md:hidden text-zinc-400 hover:text-white"><i class="ph-bold ph-x text-lg"></i></button>
         </div>
         <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scrollbar-custom">
             <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
@@ -172,11 +193,11 @@
                         </div>
                         <select id="modelSelect" class="pg-select">
                             <option value="meta-llama/llama-4-scout-17b-16e-instruct">Llama 4 Scout (17B)</option>
-                            <option value="llama-3.1-8b-instant">Llama 3.1(8B)</option>
-                            <option value="llama-3.3-70b-versatile">Llama 3(70b)</option>
-                            <option value="qwen/qwen3-32b">Qwen 3(32B)</option>
-                            <option value="qwen/qwen3.6-27b">Qwen 3.6(27B)</option>
-                            <option value="openai/gpt-oss-120b">GPT OSS(120B)</option>
+                            <option value="llama-3.1-8b-instant">Llama 3.1 (8B)</option>
+                            <option value="llama-3.3-70b-versatile">Llama 3 (70B)</option>
+                            <option value="qwen/qwen3-32b">Qwen 3 (32B)</option>
+                            <option value="qwen/qwen3.6-27b">Qwen 3.6 (27B)</option>
+                            <option value="openai/gpt-oss-120b">GPT OSS (120B)</option>
                         </select>
                     </div>
 

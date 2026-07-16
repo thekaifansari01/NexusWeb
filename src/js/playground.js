@@ -30,6 +30,9 @@ const dom = {
     copyCodeBtn: document.getElementById('copyCodeBtn'),
     curlCode: document.getElementById('curlCode'),
 
+    sidebarMenu: document.getElementById('sidebarMenu'),
+    mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+    closeMobileMenuBtn: document.getElementById('closeMobileMenuBtn'),
     sidebarAvatar: document.getElementById('sidebarAvatar'),
     sidebarName: document.getElementById('sidebarName'),
     sidebarEmail: document.getElementById('sidebarEmail'),
@@ -37,6 +40,7 @@ const dom = {
 };
 
 let chatHistory = [];
+const MAX_HISTORY_LENGTH = 16;
 let currentRawData = null;
 
 function init() {
@@ -56,8 +60,26 @@ function init() {
     dom.closeCodeBtn.addEventListener('click', hideCodeModal);
     dom.copyCodeBtn.addEventListener('click', copyCode);
 
-    if(dom.sidebarSignOut) {
+    if (dom.mobileMenuBtn && dom.sidebarMenu) {
+        dom.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+    
+    if (dom.closeMobileMenuBtn && dom.sidebarMenu) {
+        dom.closeMobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+
+    if (dom.sidebarSignOut) {
         dom.sidebarSignOut.addEventListener('click', signOutUser);
+    }
+}
+
+function toggleMobileMenu() {
+    if (dom.sidebarMenu.classList.contains('hidden')) {
+        dom.sidebarMenu.classList.remove('hidden');
+        dom.sidebarMenu.classList.add('absolute', 'inset-y-0', 'left-0');
+    } else {
+        dom.sidebarMenu.classList.add('hidden');
+        dom.sidebarMenu.classList.remove('absolute', 'inset-y-0', 'left-0');
     }
 }
 
@@ -128,7 +150,38 @@ function appendBubble(role, text) {
     dom.chatEmptyState.classList.add('hidden');
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${role === 'user' ? 'chat-user' : 'chat-ai'}`;
-    bubble.textContent = text;
+    
+    if (role === 'ai') {
+        const rawHtml = marked.parse(text);
+        const safeHtml = DOMPurify.sanitize(rawHtml);
+        bubble.innerHTML = safeHtml;
+        
+        Prism.highlightAllUnder(bubble);
+        
+        const preElements = bubble.querySelectorAll('pre');
+        preElements.forEach((pre) => {
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>';
+            copyBtn.title = 'Copy code';
+            
+            copyBtn.addEventListener('click', () => {
+                const codeBlock = pre.querySelector('code');
+                const textToCopy = codeBlock ? codeBlock.innerText : pre.innerText;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyBtn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i>';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>';
+                    }, 2000);
+                });
+            });
+            
+            pre.appendChild(copyBtn);
+        });
+    } else {
+        bubble.textContent = text;
+    }
+    
     dom.chatContainer.appendChild(bubble);
     scrollToBottom();
     return bubble;
@@ -163,6 +216,11 @@ async function sendMessage() {
     dom.sendBtn.disabled = true;
 
     chatHistory.push({ role: 'user', content: text });
+    
+    if (chatHistory.length > MAX_HISTORY_LENGTH) {
+        chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
+    }
+
     appendBubble('user', text);
     showTyping();
     dom.statusMetric.textContent = 'Processing request...';
@@ -206,6 +264,11 @@ async function sendMessage() {
         }
 
         chatHistory.push({ role: 'assistant', content: aiText });
+        
+        if (chatHistory.length > MAX_HISTORY_LENGTH) {
+            chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
+        }
+
         appendBubble('ai', aiText);
         updateRawView(payload, data);
         
@@ -302,7 +365,7 @@ observeAuthState(async (user) => {
             dom.sendBtn.disabled = false;
         }
     } catch(e) {
-        console.error('Error loading keys', e);
+        console.error(e);
     }
     
     dom.loadingOverlay.classList.add('hidden');
