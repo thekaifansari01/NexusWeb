@@ -167,7 +167,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl">
+                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl" id="servicesContainer">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-white/5 pb-4">
                             <h2 class="text-lg font-bold text-white tracking-wide">System Components</h2>
                             <span class="text-xs font-semibold text-zinc-500 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">90 Days History</span>
@@ -175,7 +175,7 @@
                         <div id="serviceList" class="space-y-8"></div>
                     </div>
 
-                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl">
+                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl" id="latencyContainer">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                             <h2 class="text-lg font-bold text-white tracking-wide">API Latency</h2>
                             <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
@@ -229,7 +229,9 @@
             serviceList: document.getElementById('serviceList'),
             incidentList: document.getElementById('incidentList'),
             lastUpdated: document.getElementById('lastUpdated'),
-            refreshBtn: document.getElementById('refreshStatus')
+            refreshBtn: document.getElementById('refreshStatus'),
+            servicesContainer: document.getElementById('servicesContainer'),
+            latencyContainer: document.getElementById('latencyContainer')
         };
 
         let latencyChart = null;
@@ -264,63 +266,41 @@
             dom.refreshBtn.addEventListener('click', fetchStatus);
         }
 
-        function generateMockData() {
-            const labels = [];
-            const values = [];
-            const now = new Date();
-            for (let i = 24; i > 0; i--) {
-                const d = new Date(now.getTime() - (i * 60 * 60 * 1000));
-                labels.push(`${d.getHours().toString().padStart(2, '0')}:00`);
-                values.push(Math.floor(Math.random() * (180 - 120 + 1) + 120));
-            }
-            
-            const generateBars = (type) => {
-                const bars = [];
-                for(let i=0; i<60; i++) {
-                    let status = 'up';
-                    if(type === 'buggy' && i === 12) status = 'down';
-                    if(type === 'buggy' && i === 13) status = 'issue';
-                    bars.push({ date: new Date(now.getTime() - ((59-i) * 24 * 60 * 60 * 1000)).toLocaleDateString(), status });
-                }
-                return bars;
-            };
-
-            return {
-                status: 'operational',
-                uptime: 99.99,
-                metrics: { avgResponseTime: 142, totalRequests: 845920, errorRate: 0.01 },
-                services: [
-                    { name: 'API Gateway', status: 'Operational', uptime: '100%', bars: generateBars('perfect') },
-                    { name: 'Inference Engine (Groq)', status: 'Operational', uptime: '99.98%', bars: generateBars('buggy') },
-                    { name: 'Dashboard UI', status: 'Operational', uptime: '100%', bars: generateBars('perfect') },
-                    { name: 'Vector Database', status: 'Operational', uptime: '100%', bars: generateBars('perfect') }
-                ],
-                incidents: [
-                    { date: 'Jul 14, 2026', title: 'Elevated latency on Inference Engine', status: 'Resolved', desc: 'A misconfiguration in our edge proxy caused temporary latency spikes. The issue has been identified and mitigated.' },
-                    { date: 'Jul 02, 2026', title: 'Dashboard Authentication Outage', status: 'Resolved', desc: 'Firebase authentication tokens were failing to refresh. We have deployed a patch and all sessions are functioning normally.' }
-                ],
-                history: { labels, values }
-            };
-        }
-
         async function fetchStatus() {
             dom.skeleton.classList.remove('hidden');
             dom.content.classList.add('hidden');
 
             try {
                 const resp = await fetch('/api/status');
-                if (!resp.ok) throw new Error('API not available, using fallback');
+                if (!resp.ok) throw new Error('API request failed');
                 const data = await resp.json();
                 renderStatus(data);
             } catch (err) {
-                console.log("Using intelligent mock fallback for status page");
-                setTimeout(() => {
-                    renderStatus(generateMockData());
-                }, 600);
+                dom.overallStatusLabel.textContent = 'System Status Unavailable';
+                dom.overallStatusLabel.className = 'text-3xl font-black tracking-tight text-red-500';
+                dom.uptimeText.textContent = 'Unable to reach backend API. Check your connection.';
+                dom.uptimeText.className = 'text-sm font-medium mt-1 text-red-400 opacity-90';
+                dom.heroBanner.className = 'hero-status p-8 md:p-10 rounded-3xl border flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md outage';
+                
+                dom.statUptime.textContent = '—';
+                dom.statResponse.textContent = '—';
+                dom.statRequests.textContent = '—';
+                dom.statErrors.textContent = '—';
+                
+                dom.servicesContainer.classList.add('hidden');
+                dom.latencyContainer.classList.add('hidden');
+                dom.incidentSection.classList.add('hidden');
+
+                dom.skeleton.classList.add('hidden');
+                dom.content.classList.remove('hidden');
             }
         }
 
         function renderStatus(data) {
+            dom.servicesContainer.classList.remove('hidden');
+            dom.latencyContainer.classList.remove('hidden');
+            if (dom.incidentSection) dom.incidentSection.classList.remove('hidden');
+
             dom.skeleton.classList.add('hidden');
             dom.content.classList.remove('hidden');
 

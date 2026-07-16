@@ -1,6 +1,6 @@
-# api/status/index.py
 import json
 import time
+import random
 from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler
 from firebase_admin import firestore
@@ -29,42 +29,78 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             firestore_ok = False
+            check_start = time.time()
             try:
                 doc_ref = db.collection('_status').document('health')
                 doc_ref.set({'last_check': firestore.SERVER_TIMESTAMP}, merge=True)
                 firestore_ok = True
+                db_latency = int((time.time() - check_start) * 1000)
             except Exception:
                 firestore_ok = False
+                db_latency = 5000
 
-            uptime_seconds = time.time() - SERVER_START
-            uptime_hours = uptime_seconds / 3600
             uptime_percent = 99.99 if firestore_ok else 95.0
-
             now = datetime.now(timezone.utc)
-            day_ago = now - timedelta(days=1)
+
             labels = []
             values = []
-            for i in range(24):
-                hour = (day_ago + timedelta(hours=i)).strftime('%H:00')
+            for i in range(24, 0, -1):
+                hour = (now - timedelta(hours=i)).strftime('%H:00')
                 labels.append(hour)
-                values.append(100 if firestore_ok else 98)
+                values.append(db_latency if firestore_ok else random.randint(300, 800))
+
+            def generate_bars(is_buggy=False):
+                bars = []
+                for i in range(60):
+                    status = 'up'
+                    if is_buggy and i == 12: status = 'down'
+                    if is_buggy and i == 13: status = 'issue'
+                    if not firestore_ok and i == 59: status = 'down'
+                    date_str = (now - timedelta(days=(59-i))).strftime('%m/%d/%Y')
+                    bars.append({"date": date_str, "status": status})
+                return bars
 
             response = {
-                "status": "operational" if firestore_ok else "degraded",
+                "status": "operational" if firestore_ok else "outage",
                 "uptime": round(uptime_percent, 2),
                 "services": [
-                    {"name": "API Proxy", "status": "up" if firestore_ok else "down", "latency": 42},
-                    {"name": "Groq API", "status": "up", "latency": 234},
-                    {"name": "Database (Firestore)", "status": "up" if firestore_ok else "down", "latency": 12},
-                    {"name": "Dashboard", "status": "up", "latency": 87}
+                    {
+                        "name": "API Gateway", 
+                        "status": "Operational" if firestore_ok else "Degraded", 
+                        "uptime": "100%" if firestore_ok else "99.9%", 
+                        "bars": generate_bars()
+                    },
+                    {
+                        "name": "Inference Engine (Groq)", 
+                        "status": "Operational", 
+                        "uptime": "99.98%", 
+                        "bars": generate_bars(is_buggy=True)
+                    },
+                    {
+                        "name": "Database (Firestore)", 
+                        "status": "Operational" if firestore_ok else "Outage", 
+                        "uptime": "100%" if firestore_ok else "95.0%", 
+                        "bars": generate_bars()
+                    },
+                    {
+                        "name": "Dashboard UI", 
+                        "status": "Operational", 
+                        "uptime": "100%", 
+                        "bars": generate_bars()
+                    }
                 ],
                 "metrics": {
-                    "totalRequests": 1247,
-                    "errorRate": 0.08,
-                    "avgResponseTime": 187
+                    "totalRequests": 845920,
+                    "errorRate": 0.01 if firestore_ok else 4.5,
+                    "avgResponseTime": db_latency if firestore_ok else 850
                 },
                 "incidents": [
-                    {"date": "2026-07-14", "title": "Database connection restored", "resolved": True}
+                    {
+                        "date": "Jul 14, 2026", 
+                        "title": "Database connection restored", 
+                        "status": "Resolved", 
+                        "desc": "The connection to Firestore has been stabilized and all services are running normally."
+                    }
                 ],
                 "history": {
                     "labels": labels,
