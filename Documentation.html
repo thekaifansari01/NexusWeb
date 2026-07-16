@@ -105,12 +105,6 @@
                         <div class="h-4 w-full bg-white/5 rounded-md animate-pulse mb-3"></div>
                         <div class="h-4 w-5/6 bg-white/5 rounded-md animate-pulse mb-3"></div>
                         <div class="h-4 w-4/6 bg-white/5 rounded-md animate-pulse mb-12"></div>
-                        <div class="h-32 w-full bg-white/5 rounded-2xl animate-pulse mb-12"></div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                            <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
-                            <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
-                            <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
-                        </div>
                     </div>
 
                     <div id="docsContent" class="opacity-0 transition-opacity duration-700">
@@ -215,7 +209,7 @@ window.NexusConfig = {
                                     </thead>
                                     <tbody class="text-zinc-400 font-medium">
                                         <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                            <td class="p-4"><code class="text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded">apiKey</code></td>
+                                            <td class="p-4"><code class="text-primary bg-primary/10 border-primary/20 px-1.5 py-0.5 rounded">apiKey</code></td>
                                             <td class="p-4"><span class="bg-white/10 text-white px-2 py-0.5 rounded-full text-xs">string</span></td>
                                             <td class="p-4 font-mono text-xs">''</td>
                                             <td class="p-4"><strong class="text-white">Required.</strong> Your Nexus API key.</td>
@@ -269,6 +263,28 @@ window.NexusConfig = {
                             <div class="bg-primary/5 border-l-4 border-primary p-5 rounded-r-xl my-8 shadow-[inset_0_0_20px_rgba(168,85,247,0.03)] flex items-start gap-4">
                                 <i class="ph-fill ph-info text-primary text-2xl shrink-0 mt-0.5"></i>
                                 <p class="text-sm text-zinc-300 font-medium leading-relaxed"><strong class="text-white">System Prompt Tip:</strong> Your custom prompt is appended to the page context. The AI will always prioritize the page content over general knowledge.</p>
+                            </div>
+                        </section>
+
+                        <section id="theming" class="pt-8 doc-section">
+                            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🎨 Theming</h2>
+                            <p class="text-zinc-400 font-medium mb-4">Nexus automatically adapts to your website's theme, but you can also force a specific mode or let users toggle it.</p>
+                            
+                            <h3 class="text-lg font-bold text-white mt-6 mb-3">Auto-detection Engine</h3>
+                            <p class="text-zinc-400 text-sm font-medium leading-relaxed mb-4">By default (<code class="bg-white/10 px-1 py-0.5 rounded text-zinc-200">theme: 'auto'</code>), the widget tracks visual context signals in this sequential order:</p>
+                            
+                            <ol class="list-decimal pl-6 text-zinc-400 space-y-2 mb-6 text-sm font-medium">
+                                <li>Explicit execution setup via <code class="bg-black/50 px-1 py-0.5 rounded font-mono">window.NexusConfig.theme</code></li>
+                                <li>Cached environment flag matching persistent state indicators inside <code class="bg-black/50 px-1 py-0.5 rounded font-mono">localStorage</code></li>
+                                <li>Active style presence configurations (checking for structural <code class="bg-black/50 px-1 py-0.5 rounded font-mono">dark</code> or <code class="bg-black/50 px-1 py-0.5 rounded font-mono">light</code> class hooks inside your document markup roots)</li>
+                                <li>Checking data targets via the custom fallback property selector attribute configurations <code class="bg-black/50 px-1 py-0.5 rounded font-mono">data-theme</code></li>
+                                <li>System level device preferences monitored through native query execution wrappers <code class="bg-black/50 px-1 py-0.5 rounded font-mono">prefers-color-scheme</code></li>
+                                <li>Fallback execution parameters standardizing deployment directly to a clean structural <code class="bg-black/50 px-1 py-0.5 rounded font-mono">dark</code> template framework</li>
+                            </ol>
+
+                            <div class="bg-blue-500/5 border-l-4 border-blue-400 p-5 rounded-r-xl my-6 shadow-[inset_0_0_20px_rgba(96,165,250,0.03)] flex items-start gap-4">
+                                <i class="ph-fill ph-palette text-blue-400 text-2xl shrink-0 mt-0.5"></i>
+                                <p class="text-sm text-zinc-300 font-medium leading-relaxed"><strong class="text-white">Pro Tip:</strong> The embedded proxy layers also automatically sync brightness thresholds out of active meta declarations like <code class="bg-black/40 px-1.5 py-0.5 rounded font-mono text-xs text-zinc-400">&lt;meta name="theme-color"&gt;</code> configurations to infer custom matching setups instantly.</p>
                             </div>
                         </section>
 
@@ -341,17 +357,88 @@ window.NexusConfig = {
                             </div>
                         </section>
 
+                        <section id="advanced" class="pt-8 doc-section">
+                            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🔧 Advanced Customization</h2>
+                            
+                            <h3 class="text-lg font-bold text-white mt-6 mb-3">Styling Overrides</h3>
+                            <p class="text-zinc-400 text-sm font-medium leading-relaxed mb-4">Customize the widget's appearance by overriding targeted layout variables mapped straight on the custom identity layer selector target parameter <code class="bg-white/10 px-1 rounded font-mono text-zinc-300">#ai-widget-root</code>.</p>
+                            
+                            <pre class="mac-window bg-[#0c0c0e] border border-white/10 rounded-2xl pt-12 pb-6 px-6 overflow-x-auto relative shadow-inner group mb-8"><code class="text-zinc-300 font-mono text-sm leading-relaxed">#ai-widget-root {
+  --bg-panel: rgba(10, 10, 10, 0.92);
+  --text-primary: #eee;
+  --accent: #a855f7;
+  --send-bg: #a855f7;
+  --send-color: #fff;
+  --user-bubble-bg: #2a2a2e;
+  --bot-bubble-bg: #1a1a1e;
+  --border-color: rgba(255, 255, 255, 0.06);
+}</code></pre>
+
+                            <h3 class="text-lg font-bold text-white mt-8 mb-3">Programmatic API Control</h3>
+                            <p class="text-zinc-400 text-sm font-medium leading-relaxed mb-4">The widget ecosystem injects flexible custom methods straight inside the window browser context container layer. Execute these methods directly within local custom application files:</p>
+                            
+                            <div class="overflow-x-auto bg-black/30 border border-white/5 rounded-2xl mb-8">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-white/5">
+                                            <th class="p-4 text-white font-bold border-b border-white/10">Method Hook Call</th>
+                                            <th class="p-4 text-white font-bold border-b border-white/10">Execution Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-zinc-400 font-medium">
+                                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                            <td class="p-4"><code class="text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded font-mono">window.openNexus()</code></td>
+                                            <td class="p-4">Opens the active interactive chat interface overlay.</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                            <td class="p-4"><code class="text-zinc-200 bg-white/10 border border-white/10 px-1.5 py-0.5 rounded font-mono">window.closeNexus()</code></td>
+                                            <td class="p-4">Collapses the active visible assistant panel container framework.</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                            <td class="p-4"><code class="text-zinc-200 bg-white/10 border border-white/10 px-1.5 py-0.5 rounded font-mono">window.toggleNexus()</code></td>
+                                            <td class="p-4">Toggles open or closed visual threshold state layers programmatically.</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-4"><code class="text-zinc-200 bg-white/10 border border-white/10 px-1.5 py-0.5 rounded font-mono">window.refreshNexusContext()</code></td>
+                                            <td class="p-4">Forces a complete, fresh re-scrape execution layer sync over current layout contexts.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section id="api-reference" class="pt-8 doc-section">
+                            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🔌 API Reference</h2>
+                            <p class="text-zinc-400 font-medium mb-6">The embedded script interfaces secure communications down your secure proxy entry paths matching endpoint layouts at <code class="bg-white/10 px-1.5 py-0.5 rounded font-mono text-zinc-300 text-xs">POST /api/chat</code>. Expected processing payloads follow this structural format:</p>
+                            
+                            <pre class="mac-window bg-[#0c0c0e] border border-white/10 rounded-2xl pt-12 pb-6 px-6 overflow-x-auto relative shadow-inner group mb-6"><code class="text-zinc-300 font-mono text-sm leading-relaxed">{
+  "nexusKey": "nxs_abc123def456",
+  "messages": [
+    { "role": "system", "content": "You are a helpful assistant..." },
+    { "role": "user", "content": "What is this page about?" }
+  ],
+  "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+}</code></pre>
+                            
+                            <div class="bg-primary/5 border-l-4 border-primary p-5 rounded-r-xl my-6 shadow-[inset_0_0_20px_rgba(168,85,247,0.03)] flex items-start gap-4">
+                                <i class="ph-fill ph-code text-primary text-2xl shrink-0 mt-0.5"></i>
+                                <p class="text-sm text-zinc-300 font-medium leading-relaxed">Developers can inspect or deploy custom variations straight from reference handler blocks packed inside the open source directory paths at <code class="bg-black/50 px-1.5 py-0.5 rounded font-mono text-xs text-zinc-400">api/chat.py</code>.</p>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
-                <aside class="hidden lg:block w-56 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pl-6 border-l border-white/10">
+                <aside class="hidden lg:block w-56 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pl-6 border-l border-l-white/10">
                     <div class="text-[0.7rem] font-bold uppercase tracking-widest text-zinc-500 mb-4 pb-2 border-b border-white/5">On this page</div>
                     <nav class="flex flex-col space-y-1" id="toc-nav">
                         <a href="#introduction" class="toc-link text-sm font-semibold text-primary bg-primary/10 border-l-2 border-primary pl-3 py-1.5 rounded-r-lg transition-all">Introduction</a>
                         <a href="#quick-start" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Quick Start</a>
                         <a href="#configuration" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Configuration</a>
+                        <a href="#theming" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Theming</a>
                         <a href="#features" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Features</a>
                         <a href="#security" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Security Model</a>
+                        <a href="#advanced" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Advanced</a>
+                        <a href="#api-reference" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">API Reference</a>
                     </nav>
                 </aside>
 
