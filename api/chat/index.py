@@ -48,7 +48,16 @@ class handler(BaseHTTPRequestHandler):
 
             if body.get('nexusKey'):
                 request_origin = self.headers.get('Origin') or self.headers.get('Referer') or ''
-                status, response = handle_chat_request(body, request_origin)
+
+                uid = None
+                is_authenticated = False
+                try:
+                    uid, _ = get_user_from_cookie(self)
+                    is_authenticated = True
+                except Exception:
+                    pass  
+
+                status, response = handle_chat_request(body, request_origin, uid, is_authenticated)
                 return self.send_json(status, response, origin)
             else:
                 try:

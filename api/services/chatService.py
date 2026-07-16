@@ -6,7 +6,7 @@ from firebase_admin import firestore
 from api.core.config import db, PLAN_LIMITS
 from api.core.crypto_utils import decrypt
 
-def handle_chat_request(body, request_origin):
+def handle_chat_request(body, request_origin, uid=None, is_authenticated=False):
     try:
         session_id = body.get('sessionId')
         if session_id:
@@ -43,17 +43,20 @@ def handle_chat_request(body, request_origin):
         if key_data.get('status') != 'active':
             return 403, {"error": "Nexus Key is inactive"}
 
-        user_id = key_data.get('userId')
+        key_user_id = key_data.get('userId')
 
-        domains_ref = db.collection('authorizedDomains').where('userId', '==', user_id).where('domain', '==', clean_origin).limit(1).get()
-        if not domains_ref:
-            return 403, {"error": f"Domain '{clean_origin}' not authorized"}
+        if is_authenticated and uid == key_user_id:
+            pass
+        else:
+            domains_ref = db.collection('authorizedDomains').where('userId', '==', key_user_id).where('domain', '==', clean_origin).limit(1).get()
+            if not domains_ref:
+                return 403, {"error": f"Domain '{clean_origin}' not authorized"}
 
-        domain_data = domains_ref[0].to_dict()
-        if domain_data.get('status') != 'active':
-            return 403, {"error": "Domain is deactivated"}
+            domain_data = domains_ref[0].to_dict()
+            if domain_data.get('status') != 'active':
+                return 403, {"error": "Domain is deactivated"}
 
-        user_doc = db.collection('users').document(user_id).get()
+        user_doc = db.collection('users').document(key_user_id).get()
         if not user_doc.exists:
             return 400, {"error": "User not found"}
         user_data = user_doc.to_dict()
@@ -61,7 +64,7 @@ def handle_chat_request(body, request_origin):
         monthly_limit = PLAN_LIMITS.get(plan, 1000)
 
         month_key = datetime.now(timezone.utc).strftime("%Y-%m")
-        usage_ref = db.collection('userMonthlyUsage').document(f"{user_id}_{month_key}")
+        usage_ref = db.collection('userMonthlyUsage').document(f"{key_user_id}_{month_key}")
 
         def check_and_increment():
             max_retries = 3
@@ -77,7 +80,7 @@ def handle_chat_request(body, request_origin):
                         return False, current_count
 
                     usage_ref.set({
-                        'userId': user_id,
+                        'userId': key_user_id,
                         'month': month_key,
                         'count': current_count + 1,
                         'limit': monthly_limit,
@@ -95,7 +98,8 @@ def handle_chat_request(body, request_origin):
         if not success:
             return 429, {"error": "Monthly request limit exceeded. Upgrade your plan to continue."}
 
-        groq_doc = db.collection('userGroqKeys').document(user_id).get()
+        # Get encrypted Groq key
+        groq_doc = db.collection('userGroqKeys').document(key_user_id).get()
         if not groq_doc.exists:
             return 400, {"error": "No Groq API Key configured"}
 
@@ -129,7 +133,7 @@ def handle_chat_request(body, request_origin):
             total_tokens = usage.get('total_tokens', 0)
 
             db.collection('usageLogs').add({
-                'userId': user_id,
+                'userId': key_user_id,
                 'nexusKeyId': keys_ref[0].id,
                 'nexusKeyName': key_data.get('name', 'Unknown'),
                 'model': model,
@@ -142,8 +146,8 @@ def handle_chat_request(body, request_origin):
             })
 
             today = datetime.now(timezone.utc).date().isoformat()
-            db.collection('userDailyUsage').document(f"{user_id}_{today}").set({
-                'userId': user_id,
+            db.collection('userDailyUsage').document(f"{key_user_id}_{today}").set({
+                'userId': key_user_id,
                 'date': today,
                 'totalRequests': firestore.Increment(1),
                 'totalTokens': firestore.Increment(total_tokens),
