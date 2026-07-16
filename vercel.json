@@ -49,6 +49,10 @@
       "destination": "/Pricing.html"
     },
     {
+      "source": "/intergrations",
+      "destination": "/intergration.html"
+    },
+    {
       "source": "/demo",
       "destination": "/Demo.html"
     },

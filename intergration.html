@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Integrations · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <style>
+        .scrollbar-custom::-webkit-scrollbar { width: 4px; }
+        .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 10px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+
+        .integration-tab-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .integration-tab-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fafafa;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .integration-tab-btn.active {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            border-color: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.05);
+        }
+        .integration-tab-content {
+            display: none;
+        }
+        .integration-tab-content.active {
+            display: block;
+        }
+        .code-block-wrapper {
+            position: relative;
+            background: rgba(12, 12, 14, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .code-block-wrapper .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .code-block-wrapper .code-header .lang-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #71717a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: ui-monospace, monospace;
+        }
+        .code-block-wrapper .code-header .copy-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #a1a1aa;
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .code-block-wrapper .code-header .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fafafa;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        .code-block-wrapper .code-header .copy-btn.copied {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+        .code-block-wrapper pre {
+            margin: 0;
+            padding: 1.25rem;
+            overflow-x: auto;
+            background: transparent;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .code-block-wrapper pre code {
+            background: transparent;
+            padding: 0;
+            font-size: inherit;
+            font-family: inherit;
+            color: #d4d4d8;
+        }
+        .code-block-wrapper pre code .hljs-comment { color: #6a9955; font-style: italic; }
+        .code-block-wrapper pre code .hljs-keyword { color: #c586c0; }
+        .code-block-wrapper pre code .hljs-string { color: #ce9178; }
+        .code-block-wrapper pre code .hljs-number { color: #b5cea8; }
+        .code-block-wrapper pre code .hljs-function { color: #dcdcaa; }
+        .code-block-wrapper pre code .hljs-title { color: #4ec9b0; }
+        .code-block-wrapper pre code .hljs-params { color: #d4d4d8; }
+        .code-block-wrapper pre code .hljs-variable { color: #9cdcfe; }
+        .code-block-wrapper pre code .hljs-operator { color: #d4d4d8; }
+        .code-block-wrapper pre code .hljs-built_in { color: #4ec9b0; }
+        .code-block-wrapper pre code .hljs-type { color: #4ec9b0; }
+        .code-block-wrapper pre code .hljs-class { color: #dcdcaa; }
+        .code-block-wrapper pre code .hljs-meta { color: #c586c0; }
+        .code-block-wrapper pre code .hljs-tag { color: #569cd6; }
+        .code-block-wrapper pre code .hljs-attr { color: #9cdcfe; }
+        .code-block-wrapper pre code .hljs-name { color: #569cd6; }
+        .code-block-wrapper pre code .hljs-selector-tag { color: #c586c0; }
+        .code-block-wrapper pre code .hljs-selector-id { color: #d7ba7d; }
+        .code-block-wrapper pre code .hljs-selector-class { color: #d7ba7d; }
+        .code-block-wrapper pre code .hljs-regexp { color: #d16969; }
+
+        .framework-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .framework-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+        .framework-card .icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin: 0 auto 0.75rem;
+        }
+        .framework-card .icon-wrap.react { background: rgba(97, 219, 251, 0.1); color: #61dafb; border: 1px solid rgba(97, 219, 251, 0.15); }
+        .framework-card .icon-wrap.wp { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.15); }
+        .framework-card .icon-wrap.vanilla { background: rgba(247, 223, 30, 0.1); color: #f7df1e; border: 1px solid rgba(247, 223, 30, 0.15); }
+        .framework-card .icon-wrap.webflow { background: rgba(67, 56, 202, 0.1); color: #7c3aed; border: 1px solid rgba(67, 56, 202, 0.15); }
+        .framework-card .icon-wrap.shopify { background: rgba(150, 201, 62, 0.1); color: #96c93e; border: 1px solid rgba(150, 201, 62, 0.15); }
+        .framework-card .icon-wrap.vue { background: rgba(66, 184, 131, 0.1); color: #42b883; border: 1px solid rgba(66, 184, 131, 0.15); }
+        .framework-card.active {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.06);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.05);
+        }
+        .framework-card .check-mark {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .framework-card.active .check-mark {
+            opacity: 1;
+        }
+        .check-mark i {
+            color: #a855f7;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
+
+    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div class="h-16 flex items-center px-6 border-b border-white/5">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
+                    <i class="ph-fill ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
+            </a>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scrollbar-custom">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+                <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
+            </a>
+            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+                <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
+            </a>
+            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+                <i class="ph-bold ph-credit-card text-lg"></i> Billing
+            </a>
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+                <i class="ph-bold ph-book-open text-lg"></i> Documentation
+            </a>
+            <a href="/integrations" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
+                <i class="ph-bold ph-plug text-lg"></i> Integrations
+            </a>
+        </nav>
+        <div class="p-4 border-t border-white/5 bg-black/20">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+                <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
+                <div class="flex-1 min-w-0">
+                    <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
+                    <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
+                </div>
+            </div>
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
+                <i class="ph-bold ph-sign-out"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 h-screen relative">
+        <div class="ambient-glow fixed top-[-10%] left-[30%] w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 to-transparent z-[-1] pointer-events-none blur-3xl opacity-50"></div>
+
+        <header class="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 sticky top-0 shadow-sm flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
+                    <i class="ph-bold ph-list text-2xl"></i>
+                </button>
+                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
+                    <span id="breadcrumbRoot" class="hover:text-zinc-300 transition-colors cursor-pointer">Nexus</span>
+                    <i class="ph-bold ph-caret-right text-xs text-zinc-600"></i>
+                    <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">Integrations</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 hidden md:flex">
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5">
+                    <i class="ph-bold ph-github-logo text-lg"></i> GitHub
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom" id="main-scroll-area">
+            <div class="max-w-7xl mx-auto pb-20">
+
+                <div class="mb-12">
+                    <div class="flex items-center gap-3 mb-4 flex-wrap">
+                        <span class="inline-block bg-primary/15 text-purple-400 text-xs font-bold px-3 py-1 rounded-full border border-primary/20">🔌 Ecosystem</span>
+                        <span class="inline-block bg-emerald-500/15 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/20">⚡ Zero Friction</span>
+                        <span class="inline-block bg-amber-500/15 text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/20">📦 Copy-Paste Ready</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-4 leading-tight">
+                        Integrations & <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-primary">Ecosystem</span>
+                    </h1>
+                    <p class="text-zinc-400 text-base md:text-lg max-w-2xl font-medium leading-relaxed">
+                        Choose your tech stack and embed Nexus in <strong class="text-white">2 minutes</strong>.
+                        Production-tested code snippets for every framework.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+                    <div class="framework-card glass-panel p-4 rounded-2xl border border-white/5 bg-zinc-900/20 text-center active" data-tab="react">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap react mx-auto">⚛️</div>
+                        <span class="text-sm font-bold text-white">React</span>
+                        <span class="text-[10px] text-zinc-500 block mt-0.5">Next.js · Gatsby</span>
+                    </div>
+                    <div class="framework-card glass-panel p-4 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="wordpress">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap wp mx-auto">🔷</div>
+                        <span class="text-sm font-bold text-white">WordPress</span>
+                        <span class="text-[10px] text-zinc-500 block mt-0.5">PHP · Elementor</span>
+                    </div>
+                    <div class="framework-card glass-panel p-4 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vanilla">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap vanilla mx-auto">🟨</div>
+                        <span class="text-sm font-bold text-white">Vanilla JS</span>
+                        <span class="text-[10px] text-zinc-500 block mt-0.5">HTML · Any Site</span>
+                    </div>
+                    <div class="framework-card glass-panel p-4 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="webflow">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap webflow mx-auto">🌐</div>
+                        <span class="text-sm font-bold text-white">Webflow</span>
+                        <span class="text-[10px] text-zinc-500 block mt-0.5">No-Code</span>
+                    </div>
+                    <div class="framework-card glass-panel p-4 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="shopify">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap shopify mx-auto">🛍️</div>
+                        <span class="text-sm font-bold text-white">Shopify</span>
+                        <span class="text-[10px] text-zinc-500 block mt-0.5">E‑Commerce</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/30 shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+
+                    <div class="flex flex-wrap gap-2 mb-8 border-b border-white/5 pb-4 overflow-x-auto scrollbar-custom" id="integrationTabs">
+                        <button class="integration-tab-btn active px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-primary/15 border-primary/25 whitespace-nowrap" data-tab="react">
+                            <i class="ph-bold ph-code text-base mr-1.5"></i> React
+                        </button>
+                        <button class="integration-tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white whitespace-nowrap" data-tab="wordpress">
+                            <i class="ph-bold ph-code text-base mr-1.5"></i> WordPress
+                        </button>
+                        <button class="integration-tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white whitespace-nowrap" data-tab="vanilla">
+                            <i class="ph-bold ph-code text-base mr-1.5"></i> Vanilla JS
+                        </button>
+                        <button class="integration-tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white whitespace-nowrap" data-tab="webflow">
+                            <i class="ph-bold ph-code text-base mr-1.5"></i> Webflow
+                        </button>
+                        <button class="integration-tab-btn px-5 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white whitespace-nowrap" data-tab="shopify">
+                            <i class="ph-bold ph-code text-base mr-1.5"></i> Shopify
+                        </button>
+                    </div>
+
+                    <div id="tab-react" class="integration-tab-content active relative z-10">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <span class="text-2xl">⚛️</span> React / Next.js
+                                </h3>
+                                <p class="text-sm text-zinc-400 mt-1 font-medium">Drop-in component for your React application.</p>
+                            </div>
+                            <span class="text-xs font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-400">React · Next.js · Gatsby</span>
+                        </div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="lang-label">JavaScript (React)</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'code-react')">
+                                    <i class="ph-bold ph-copy"></i> Copy
+                                </button>
+                            </div>
+                            <pre><code id="code-react" class="language-javascript">// 1. Create NexusWidget.jsx
+import { useEffect } from 'react';
+
+export default function NexusWidget() {
+  useEffect(() => {
+    window.NexusConfig = {
+      apiKey: 'YOUR_NEXUS_API_KEY',
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      theme: 'auto'
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+  }, []);
+
+  return null;
+}
+
+// 2. Use it anywhere:
+// &lt;NexusWidget /&gt;</code></pre>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-start gap-3">
+                            <i class="ph-fill ph-check-circle text-emerald-400 text-xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium">Works with Next.js App Router and Pages Router. Add to <code class="bg-black/40 px-1.5 py-0.5 rounded text-xs text-zinc-300">_app.js</code> or <code class="bg-black/40 px-1.5 py-0.5 rounded text-xs text-zinc-300">layout.js</code>.</p>
+                        </div>
+                    </div>
+
+                    <div id="tab-wordpress" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <span class="text-2xl">🔷</span> WordPress
+                                </h3>
+                                <p class="text-sm text-zinc-400 mt-1 font-medium">Add Nexus to your WordPress site in 2 clicks.</p>
+                            </div>
+                            <span class="text-xs font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-400">PHP · WordPress</span>
+                        </div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="lang-label">PHP (functions.php)</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'code-wp')">
+                                    <i class="ph-bold ph-copy"></i> Copy
+                                </button>
+                            </div>
+                            <pre><code id="code-wp" class="language-php">// Add to functions.php or use a Code Snippets plugin
+function add_nexus_ai_widget() {
+    if (!is_admin()) {
+        ?>
+        &lt;script&gt;
+        window.NexusConfig = {
+            apiKey: 'YOUR_NEXUS_API_KEY',
+            theme: 'auto'
+        };
+        &lt;/script&gt;
+        &lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;
+        &lt;?php
+    }
+}
+add_action('wp_head', 'add_nexus_ai_widget');</code></pre>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-start gap-3">
+                            <i class="ph-fill ph-check-circle text-emerald-400 text-xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium">Alternatively, install <strong class="text-white">Nexus AI Widget</strong> plugin from WordPress.org (coming soon).</p>
+                        </div>
+                    </div>
+
+                    <div id="tab-vanilla" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <span class="text-2xl">🟨</span> Vanilla JS
+                                </h3>
+                                <p class="text-sm text-zinc-400 mt-1 font-medium">Basic script tag for any HTML website.</p>
+                            </div>
+                            <span class="text-xs font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-400">HTML · JavaScript</span>
+                        </div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="lang-label">HTML</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'code-vanilla')">
+                                    <i class="ph-bold ph-copy"></i> Copy
+                                </button>
+                            </div>
+                            <pre><code id="code-vanilla" class="language-html">&lt;!-- Add this to your HTML, preferably before &lt;/body&gt; --&gt;
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    botName: 'Nexus AI',
+    greeting: '👋 Hello! Ask me anything about this page.',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-start gap-3">
+                            <i class="ph-fill ph-check-circle text-emerald-400 text-xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium">Works on any static site, Ghost, Jekyll, or plain HTML. <strong class="text-white">No build tools needed.</strong></p>
+                        </div>
+                    </div>
+
+                    <div id="tab-webflow" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <span class="text-2xl">🌐</span> Webflow
+                                </h3>
+                                <p class="text-sm text-zinc-400 mt-1 font-medium">No-code integration for Webflow sites.</p>
+                            </div>
+                            <span class="text-xs font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-400">Webflow · No-Code</span>
+                        </div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="lang-label">HTML (Webflow)</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'code-webflow')">
+                                    <i class="ph-bold ph-copy"></i> Copy
+                                </button>
+                            </div>
+                            <pre><code id="code-webflow" class="language-html">&lt;!-- Go to Site Settings → Custom Code → Footer --&gt;
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- For specific pages, add to Page Settings → Custom Code --&gt;</code></pre>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-start gap-3">
+                            <i class="ph-fill ph-check-circle text-emerald-400 text-xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium">Add to <strong class="text-white">Site Settings → Custom Code</strong> for global install, or per-page for specific pages.</p>
+                        </div>
+                    </div>
+
+                    <div id="tab-shopify" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <span class="text-2xl">🛍️</span> Shopify
+                                </h3>
+                                <p class="text-sm text-zinc-400 mt-1 font-medium">Add AI assistant to your Shopify store.</p>
+                            </div>
+                            <span class="text-xs font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-400">Liquid · Shopify</span>
+                        </div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="lang-label">Liquid (Shopify)</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'code-shopify')">
+                                    <i class="ph-bold ph-copy"></i> Copy
+                                </button>
+                            </div>
+                            <pre><code id="code-shopify" class="language-liquid">&lt;!-- Go to Online Store → Themes → Edit Code --&gt;
+&lt;!-- Open theme.liquid and add before &lt;/body&gt; --&gt;
+
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    botName: 'Store Assistant',
+    greeting: '🛍️ Hi! Ask me about our products.',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-start gap-3">
+                            <i class="ph-fill ph-check-circle text-emerald-400 text-xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium">Add to <code class="bg-black/40 px-1.5 py-0.5 rounded text-xs text-zinc-300">theme.liquid</code> for global install, or specific templates.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 glass-panel p-8 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-lg text-center relative overflow-hidden">
+                    <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <div class="w-14 h-14 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-2xl mx-auto mb-4">
+                            <i class="ph-bold ph-rocket"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Don't see your stack?</h3>
+                        <p class="text-sm text-zinc-400 font-medium leading-relaxed mb-6">
+                            We're actively adding support for <strong class="text-white">Vue.js, Svelte, Angular, and more</strong>.
+                            Need help with a custom integration?
+                        </p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="https://github.com/thekaifansari01/NexusWeb/issues" target="_blank" class="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-6 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-md">
+                                <i class="ph-bold ph-github-logo"></i> Request Integration
+                            </a>
+                            <a href="mailto:kaif.ansari.global@gmail.com" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.3)] flex items-center gap-2">
+                                <i class="ph-bold ph-envelope"></i> Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module">
+        import { observeAuthState, signOutUser } from "./src/js/modules/auth.js";
+
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const sidebarName = document.getElementById('sidebarName');
+        const sidebarEmail = document.getElementById('sidebarEmail');
+        const sidebarSignOut = document.getElementById('sidebarSignOut');
+
+        observeAuthState((user) => {
+            if (!user) {
+                window.location.href = '/login';
+                return;
+            }
+            if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+            if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
+            if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
+        });
+
+        if (sidebarSignOut) {
+            sidebarSignOut.addEventListener('click', async () => {
+                await signOutUser();
+            });
+        }
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.querySelector('aside');
+        if (mobileMenuBtn && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                if (!sidebar.classList.contains('hidden')) {
+                    sidebar.classList.add('absolute', 'z-50', 'h-full', 'w-64');
+                } else {
+                    sidebar.classList.remove('absolute', 'z-50', 'h-full', 'w-64');
+                }
+            });
+        }
+
+        const tabBtns = document.querySelectorAll('.integration-tab-btn');
+        const tabContents = {
+            react: document.getElementById('tab-react'),
+            wordpress: document.getElementById('tab-wordpress'),
+            vanilla: document.getElementById('tab-vanilla'),
+            webflow: document.getElementById('tab-webflow'),
+            shopify: document.getElementById('tab-shopify')
+        };
+
+        const frameworkCards = document.querySelectorAll('.framework-card');
+
+        function switchTab(tabId) {
+            tabBtns.forEach(btn => {
+                btn.classList.remove('active', 'text-white', 'bg-primary/15', 'border-primary/25');
+                btn.classList.add('text-zinc-400');
+            });
+            const activeBtn = document.querySelector(`.integration-tab-btn[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'text-white', 'bg-primary/15', 'border-primary/25');
+                activeBtn.classList.remove('text-zinc-400');
+            }
+
+            frameworkCards.forEach(card => {
+                card.classList.remove('active');
+            });
+            const activeCard = document.querySelector(`.framework-card[data-tab="${tabId}"]`);
+            if (activeCard) {
+                activeCard.classList.add('active');
+            }
+
+            Object.keys(tabContents).forEach(key => {
+                if (tabContents[key]) {
+                    tabContents[key].classList.remove('active');
+                }
+            });
+            if (tabContents[tabId]) {
+                tabContents[tabId].classList.add('active');
+                setTimeout(() => {
+                    const codeBlocks = tabContents[tabId].querySelectorAll('pre code');
+                    codeBlocks.forEach(block => {
+                        if (window.hljs) {
+                            window.hljs.highlightElement(block);
+                        }
+                    });
+                }, 50);
+            }
+        }
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                switchTab(tabId);
+            });
+        });
+
+        frameworkCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const tabId = card.dataset.tab;
+                switchTab(tabId);
+            });
+        });
+
+        window.copyCode = function(btn, codeId) {
+            const codeEl = document.getElementById(codeId);
+            if (codeEl) {
+                const text = codeEl.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        };
+
+        document.querySelectorAll('.code-block-wrapper pre code').forEach(block => {
+            if (window.hljs) {
+                window.hljs.highlightElement(block);
+            }
+        });
+
+        const activeTab = document.querySelector('.integration-tab-btn.active');
+        if (activeTab) {
+            const tabId = activeTab.dataset.tab;
+            const activeCard = document.querySelector(`.framework-card[data-tab="${tabId}"]`);
+            if (activeCard) {
+                activeCard.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
