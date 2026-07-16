@@ -31,25 +31,33 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
         }
         .framework-card .icon-wrap {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            margin: 0 auto 0.75rem;
+            margin: 0 auto 0.65rem;
             transition: transform 0.3s ease;
         }
-        .framework-card:hover .icon-wrap {
-            transform: scale(1.08);
-        }
+        .framework-card:hover .icon-wrap { transform: scale(1.08); }
         .framework-card .icon-wrap.react { background: rgba(97, 219, 251, 0.1); color: #61dafb; border: 1px solid rgba(97, 219, 251, 0.15); }
+        .framework-card .icon-wrap.next { background: rgba(0, 0, 0, 0.2); color: #fafafa; border: 1px solid rgba(255, 255, 255, 0.1); }
         .framework-card .icon-wrap.vue { background: rgba(66, 184, 131, 0.1); color: #42b883; border: 1px solid rgba(66, 184, 131, 0.15); }
-        .framework-card .icon-wrap.angular { background: rgba(22dd, 27, 65, 0.1); color: #dd1b16; border: 1px solid rgba(221, 27, 22, 0.15); }
+        .framework-card .icon-wrap.nuxt { background: rgba(0, 220, 130, 0.1); color: #00dc82; border: 1px solid rgba(0, 220, 130, 0.15); }
+        .framework-card .icon-wrap.svelte { background: rgba(255, 62, 0, 0.1); color: #ff3e00; border: 1px solid rgba(255, 62, 0, 0.15); }
+        .framework-card .icon-wrap.astro { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border: 1px solid rgba(255, 90, 0, 0.15); }
+        .framework-card .icon-wrap.angular { background: rgba(221, 27, 22, 0.1); color: #dd1b16; border: 1px solid rgba(221, 27, 22, 0.15); }
         .framework-card .icon-wrap.wp { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.15); }
+        .framework-card .icon-wrap.webflow { background: rgba(67, 56, 202, 0.1); color: #7c3aed; border: 1px solid rgba(67, 56, 202, 0.15); }
+        .framework-card .icon-wrap.shopify { background: rgba(150, 201, 62, 0.1); color: #96c93e; border: 1px solid rgba(150, 201, 62, 0.15); }
         .framework-card .icon-wrap.vanilla { background: rgba(247, 223, 30, 0.1); color: #f7df1e; border: 1px solid rgba(247, 223, 30, 0.15); }
+        .framework-card .icon-wrap.gatsby { background: rgba(98, 52, 143, 0.15); color: #663399; border: 1px solid rgba(98, 52, 143, 0.15); }
+        .framework-card .icon-wrap.remix { background: rgba(0, 0, 0, 0.2); color: #fafafa; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .framework-card .icon-wrap.laravel { background: rgba(255, 43, 43, 0.1); color: #ff2d20; border: 1px solid rgba(255, 43, 43, 0.15); }
+        .framework-card .icon-wrap.vite { background: rgba(146, 84, 222, 0.12); color: #a855f7; border: 1px solid rgba(146, 84, 222, 0.15); }
         
         .framework-card.active {
             border-color: rgba(168, 85, 247, 0.4);
@@ -58,26 +66,16 @@
         }
         .framework-card .check-mark {
             position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
+            top: 0.5rem;
+            right: 0.5rem;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .framework-card.active .check-mark {
-            opacity: 1;
-        }
-        .check-mark i {
-            color: #a855f7;
-            font-size: 1.1rem;
-            filter: drop-shadow(0 0 8px rgba(168,85,247,0.6));
-        }
+        .framework-card.active .check-mark { opacity: 1; }
+        .check-mark i { color: #a855f7; font-size: 1rem; filter: drop-shadow(0 0 8px rgba(168,85,247,0.6)); }
 
-        .integration-tab-content {
-            display: none;
-        }
-        .integration-tab-content.active {
-            display: block;
-        }
+        .integration-tab-content { display: none; }
+        .integration-tab-content.active { display: block; }
         
         .mac-window {
             position: relative;
@@ -120,9 +118,9 @@
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #a1a1aa;
-            padding: 0.4rem 1rem;
+            padding: 0.35rem 0.9rem;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -140,6 +138,26 @@
             background: rgba(52, 211, 153, 0.15);
             color: #34d399;
             border-color: rgba(52, 211, 153, 0.25);
+        }
+
+        .cards-scroll {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .cards-scroll .framework-card {
+            flex: 0 0 auto;
+            width: 92px;
+            padding: 0.75rem 0.5rem;
+        }
+        .cards-scroll .framework-card .icon-wrap { width: 36px; height: 36px; font-size: 1rem; margin-bottom: 0.4rem; }
+        .cards-scroll .framework-card span { font-size: 0.65rem; }
+        .cards-scroll .framework-card .text-[10px] { font-size: 0.55rem; }
+        @media (max-width: 640px) {
+            .cards-scroll { gap: 0.5rem; }
+            .cards-scroll .framework-card { width: 72px; padding: 0.5rem 0.25rem; }
+            .cards-scroll .framework-card .icon-wrap { width: 30px; height: 30px; font-size: 0.85rem; }
+            .cards-scroll .framework-card span { font-size: 0.55rem; }
         }
     </style>
 </head>
@@ -229,36 +247,96 @@
                     </p>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
-                    <div class="framework-card glass-panel p-5 rounded-2xl border border-white/5 bg-zinc-900/20 text-center active" data-tab="react">
+                <div class="cards-scroll mb-10">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center active" data-tab="react">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap react mx-auto">⚛️</div>
-                        <span class="text-sm font-bold text-white block mt-2">React</span>
-                        <span class="text-[10px] text-zinc-500 block mt-0.5">Next.js · Gatsby</span>
+                        <span class="text-xs font-bold text-white block">React</span>
+                        <span class="text-[9px] text-zinc-500 block">Next.js</span>
                     </div>
-                    <div class="framework-card glass-panel p-5 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vue">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="next">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap next mx-auto">▲</div>
+                        <span class="text-xs font-bold text-white block">Next.js</span>
+                        <span class="text-[9px] text-zinc-500 block">App Router</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vue">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap vue mx-auto">🟢</div>
-                        <span class="text-sm font-bold text-white block mt-2">Vue.js</span>
-                        <span class="text-[10px] text-zinc-500 block mt-0.5">Nuxt · Composition</span>
+                        <span class="text-xs font-bold text-white block">Vue.js</span>
+                        <span class="text-[9px] text-zinc-500 block">Composition</span>
                     </div>
-                    <div class="framework-card glass-panel p-5 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="angular">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="nuxt">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap nuxt mx-auto">⎔</div>
+                        <span class="text-xs font-bold text-white block">Nuxt</span>
+                        <span class="text-[9px] text-zinc-500 block">Vue Meta</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="svelte">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap svelte mx-auto">🟠</div>
+                        <span class="text-xs font-bold text-white block">Svelte</span>
+                        <span class="text-[9px] text-zinc-500 block">SvelteKit</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="astro">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap astro mx-auto">🚀</div>
+                        <span class="text-xs font-bold text-white block">Astro</span>
+                        <span class="text-[9px] text-zinc-500 block">Islands</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="angular">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap angular mx-auto">🔴</div>
-                        <span class="text-sm font-bold text-white block mt-2">Angular</span>
-                        <span class="text-[10px] text-zinc-500 block mt-0.5">TypeScript · Module</span>
+                        <span class="text-xs font-bold text-white block">Angular</span>
+                        <span class="text-[9px] text-zinc-500 block">TypeScript</span>
                     </div>
-                    <div class="framework-card glass-panel p-5 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="wordpress">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="wordpress">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap wp mx-auto">🔷</div>
-                        <span class="text-sm font-bold text-white block mt-2">WordPress</span>
-                        <span class="text-[10px] text-zinc-500 block mt-0.5">PHP Hooks · Core</span>
+                        <span class="text-xs font-bold text-white block">WordPress</span>
+                        <span class="text-[9px] text-zinc-500 block">PHP Hooks</span>
                     </div>
-                    <div class="framework-card glass-panel p-5 rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vanilla">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="webflow">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap webflow mx-auto">🌐</div>
+                        <span class="text-xs font-bold text-white block">Webflow</span>
+                        <span class="text-[9px] text-zinc-500 block">No-Code</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="shopify">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap shopify mx-auto">🛍️</div>
+                        <span class="text-xs font-bold text-white block">Shopify</span>
+                        <span class="text-[9px] text-zinc-500 block">Liquid</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vanilla">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap vanilla mx-auto">🟨</div>
-                        <span class="text-sm font-bold text-white block mt-2">Vanilla JS</span>
-                        <span class="text-[10px] text-zinc-500 block mt-0.5">Static · Script Tag</span>
+                        <span class="text-xs font-bold text-white block">Vanilla JS</span>
+                        <span class="text-[9px] text-zinc-500 block">Static</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="gatsby">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap gatsby mx-auto">🔮</div>
+                        <span class="text-xs font-bold text-white block">Gatsby</span>
+                        <span class="text-[9px] text-zinc-500 block">GraphQL</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="remix">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap remix mx-auto">💿</div>
+                        <span class="text-xs font-bold text-white block">Remix</span>
+                        <span class="text-[9px] text-zinc-500 block">Edge</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="laravel">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap laravel mx-auto">⚡</div>
+                        <span class="text-xs font-bold text-white block">Laravel</span>
+                        <span class="text-[9px] text-zinc-500 block">PHP</span>
+                    </div>
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vite">
+                        <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="icon-wrap vite mx-auto">⚡</div>
+                        <span class="text-xs font-bold text-white block">Vite</span>
+                        <span class="text-[9px] text-zinc-500 block">Build Tool</span>
                     </div>
                 </div>
 
@@ -267,11 +345,11 @@
                     <div id="tab-react" class="integration-tab-content active relative z-10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div>
-                                <h3 class="text-lg font-bold text-white tracking-wide">React / Next.js Lifecycle Engine</h3>
+                                <h3 class="text-lg font-bold text-white tracking-wide">React Lifecycle Engine</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Asynchronous layout injection via standard React hooks framework.</p>
                             </div>
                             <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-react')">
-                                <i class="ph-bold ph-copy"></i> Copy Snippet
+                                <i class="ph-bold ph-copy"></i> Copy
                             </button>
                         </div>
                         <div class="mac-window">
@@ -296,14 +374,50 @@ export default function NexusWidget() {
                         </div>
                     </div>
 
+                    <div id="tab-next" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Next.js App Router Integration</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Client-side component with 'use client' directive for App Router.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-next')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-next" class="language-javascript">'use client';
+
+import { useEffect } from 'react';
+
+export default function NexusWidget() {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.NexusConfig = {
+        apiKey: 'YOUR_NEXUS_API_KEY',
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        theme: 'auto'
+      };
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  return null;
+}</code></pre>
+                        </div>
+                    </div>
+
                     <div id="tab-vue" class="integration-tab-content relative z-10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Vue.js Composition Setup</h3>
-                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Lifecycle mounting initialization within reactive composition components.</p>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Lifecycle mounting within reactive composition components.</p>
                             </div>
                             <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vue')">
-                                <i class="ph-bold ph-copy"></i> Copy Snippet
+                                <i class="ph-bold ph-copy"></i> Copy
                             </button>
                         </div>
                         <div class="mac-window">
@@ -328,14 +442,104 @@ export default {
                         </div>
                     </div>
 
+                    <div id="tab-nuxt" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Nuxt.js Plugin Module</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Server-side safe mounting via Nuxt plugin architecture.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-nuxt')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-nuxt" class="language-javascript">// plugins/nexus.client.js
+export default defineNuxtPlugin(() => {
+  if (process.client) {
+    window.NexusConfig = {
+      apiKey: 'YOUR_NEXUS_API_KEY',
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      theme: 'auto'
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }
+});</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-svelte" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Svelte Component Mount</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Reactive onMount lifecycle for Svelte applications.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-svelte')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-svelte" class="language-javascript">&lt;script&gt;
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    window.NexusConfig = {
+      apiKey: 'YOUR_NEXUS_API_KEY',
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      theme: 'auto'
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+  });
+&lt;/script&gt;
+
+&lt;!-- No template needed, widget auto-mounts --&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-astro" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Astro Component Islands</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Client-side directive for Astro island architecture.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-astro')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-astro" class="language-html">---
+// src/components/NexusWidget.astro
+---
+
+&lt;script&gt;
+  window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    theme: 'auto'
+  };
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+  script.async = true;
+  document.body.appendChild(script);
+&lt;/script&gt;
+
+&lt;!-- Use with client:load for hydration --&gt;</code></pre>
+                        </div>
+                    </div>
+
                     <div id="tab-angular" class="integration-tab-content relative z-10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Angular Component Strategy</h3>
-                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Strict TypeScript type assignment mapping directly to global DOM interfaces.</p>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Strict TypeScript type assignment mapping to global DOM interfaces.</p>
                             </div>
                             <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-angular')">
-                                <i class="ph-bold ph-copy"></i> Copy Snippet
+                                <i class="ph-bold ph-copy"></i> Copy
                             </button>
                         </div>
                         <div class="mac-window">
@@ -365,10 +569,10 @@ export class NexusWidgetComponent implements OnInit {
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">WordPress Core WP_HEAD Hook</h3>
-                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Inject engine headers safely through action hook layers inside your template files.</p>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Inject engine headers through action hook layers inside template files.</p>
                             </div>
                             <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-wp')">
-                                <i class="ph-bold ph-copy"></i> Copy Snippet
+                                <i class="ph-bold ph-copy"></i> Copy
                             </button>
                         </div>
                         <div class="mac-window">
@@ -389,6 +593,58 @@ add_action('wp_head', 'add_nexus_ai_widget');</code></pre>
                         </div>
                     </div>
 
+                    <div id="tab-webflow" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Webflow Custom Code Injection</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Place inside Site Settings → Custom Code → Footer section.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-webflow')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-webflow" class="language-html">&lt;!-- Go to Site Settings → Custom Code → Footer --&gt;
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- For specific pages, add to Page Settings → Custom Code --&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-shopify" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Shopify Theme Liquid Injection</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Add to theme.liquid or specific template files for global install.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-shopify')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-shopify" class="language-liquid">&lt;!-- Go to Online Store → Themes → Edit Code --&gt;
+&lt;!-- Open theme.liquid and add before &lt;/body&gt; --&gt;
+
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    botName: 'Store Assistant',
+    greeting: '🛍️ Hi! Ask me about our products.',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
+                        </div>
+                    </div>
+
                     <div id="tab-vanilla" class="integration-tab-content relative z-10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <div>
@@ -396,7 +652,7 @@ add_action('wp_head', 'add_nexus_ai_widget');</code></pre>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Native declarative parameters optimized for static layouts and HTML containers.</p>
                             </div>
                             <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vanilla')">
-                                <i class="ph-bold ph-copy"></i> Copy Snippet
+                                <i class="ph-bold ph-copy"></i> Copy
                             </button>
                         </div>
                         <div class="mac-window">
@@ -410,6 +666,115 @@ window.NexusConfig = {
 };
 &lt;/script&gt;
 &lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-gatsby" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Gatsby SSR/Client Wrapper</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Safe mounting with Gatsby's browser API and SSR awareness.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-gatsby')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-gatsby" class="language-javascript">// gatsby-browser.js
+export const onClientEntry = () => {
+  window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    theme: 'auto'
+  };
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+  script.async = true;
+  document.body.appendChild(script);
+};</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-remix" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Remix Client-Only Mount</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Safe hydration with Remix's client entry and loader context.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-remix')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-remix" class="language-javascript">// app/entry.client.jsx
+import { useEffect } from 'react';
+
+export default function NexusWidget() {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.NexusConfig = {
+        apiKey: 'YOUR_NEXUS_API_KEY',
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        theme: 'auto'
+      };
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+  return null;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-laravel" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Laravel Blade Directives</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Embed directly inside Blade templates with PHP safety.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-laravel')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-laravel" class="language-php">// resources/views/layouts/app.blade.php
+@push('scripts')
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: '{{ env('NEXUS_API_KEY') }}',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;
+@endpush</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="tab-vite" class="integration-tab-content relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-wide">Vite Plugin Injection</h3>
+                                <p class="text-xs text-zinc-500 mt-0.5 font-medium">Add to index.html or use Vite's transform hooks for module loading.</p>
+                            </div>
+                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vite')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mac-window">
+                            <pre><code id="code-vite" class="language-html">&lt;!-- index.html --&gt;
+&lt;script&gt;
+window.NexusConfig = {
+    apiKey: 'YOUR_NEXUS_API_KEY',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    theme: 'auto'
+};
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3/dist/nexus-assistant.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- For React/Vue projects, use the framework-specific approach --&gt;</code></pre>
                         </div>
                     </div>
 

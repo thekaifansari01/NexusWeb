@@ -7,51 +7,65 @@
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="src/css/tailwind-output.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
-        .scrollbar-custom::-webkit-scrollbar { width: 5px; height: 5px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #ededed; }
+        .scrollbar-custom::-webkit-scrollbar { width: 4px; height: 4px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-        .hero-status { transition: all 0.5s ease; }
-        .hero-status.operational { background: rgba(52, 211, 153, 0.05); border-color: rgba(52, 211, 153, 0.2); box-shadow: 0 20px 40px rgba(52, 211, 153, 0.05), inset 0 0 40px rgba(52, 211, 153, 0.05); }
-        .hero-status.degraded { background: rgba(251, 191, 36, 0.05); border-color: rgba(251, 191, 36, 0.2); box-shadow: 0 20px 40px rgba(251, 191, 36, 0.05), inset 0 0 40px rgba(251, 191, 36, 0.05); }
-        .hero-status.outage { background: rgba(248, 113, 113, 0.05); border-color: rgba(248, 113, 113, 0.2); box-shadow: 0 20px 40px rgba(248, 113, 113, 0.05), inset 0 0 40px rgba(248, 113, 113, 0.05); }
+        .glass-panel { background: rgba(24, 24, 27, 0.4); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(16px); }
 
-        .status-pulse { position: relative; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; }
-        .status-pulse::before { content: ''; position: absolute; inset: 0; border-radius: 50%; animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
-        .status-pulse .core { position: relative; z-index: 10; width: 24px; height: 24px; border-radius: 50%; box-shadow: 0 0 15px currentColor; }
-        .operational .status-pulse::before { background: rgba(52, 211, 153, 0.4); }
-        .operational .status-pulse .core { background: #34d399; color: #34d399; }
-        .degraded .status-pulse::before { background: rgba(251, 191, 36, 0.4); }
-        .degraded .status-pulse .core { background: #fbbf24; color: #fbbf24; }
-        .outage .status-pulse::before { background: rgba(248, 113, 113, 0.4); }
-        .outage .status-pulse .core { background: #f87171; color: #f87171; }
+        .hero-banner { transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .hero-banner.operational { background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(0,0,0,0) 100%); border-top: 1px solid rgba(16, 185, 129, 0.2); }
+        .hero-banner.degraded { background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(0,0,0,0) 100%); border-top: 1px solid rgba(245, 158, 11, 0.2); }
+        .hero-banner.outage { background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, rgba(0,0,0,0) 100%); border-top: 1px solid rgba(239, 68, 68, 0.2); }
 
-        .uptime-track { display: flex; gap: 4px; align-items: flex-end; height: 36px; width: 100%; overflow: hidden; }
-        .uptime-bar { flex: 1; min-width: 4px; border-radius: 4px; transition: opacity 0.2s; cursor: pointer; }
-        .uptime-bar:hover { opacity: 0.6; }
-        .uptime-bar.up { background: #34d399; height: 100%; }
-        .uptime-bar.issue { background: #fbbf24; height: 70%; }
-        .uptime-bar.down { background: #f87171; height: 40%; }
-        .uptime-bar.empty { background: rgba(255, 255, 255, 0.05); height: 100%; }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; position: relative; }
+        .status-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; opacity: 0.5; animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .operational .status-dot, .status-up .status-dot { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .operational .status-dot::after, .status-up .status-dot::after { background: #10b981; }
+        .degraded .status-dot, .status-issue .status-dot { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+        .degraded .status-dot::after, .status-issue .status-dot::after { background: #f59e0b; }
+        .outage .status-dot, .status-down .status-dot { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .outage .status-dot::after, .status-down .status-dot::after { background: #ef4444; }
 
-        .timeline-item { position: relative; padding-left: 2.5rem; padding-bottom: 2rem; border-left: 2px solid rgba(255, 255, 255, 0.05); margin-left: 1rem; }
-        .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
-        .timeline-dot { position: absolute; left: -9px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #09090b; border: 2px solid #52525b; z-index: 10; display: flex; align-items: center; justify-content: center; }
-        .timeline-item.resolved .timeline-dot { border-color: #34d399; }
-        .timeline-item.investigating .timeline-dot { border-color: #fbbf24; }
-        .timeline-item.resolved .timeline-dot::after { content: ''; width: 6px; height: 6px; background: #34d399; border-radius: 50%; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(2); opacity: 0; } }
+
+        .metric-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); transition: transform 0.2s; }
+        .metric-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.04); }
+
+        .uptime-row { display: flex; align-items: center; gap: 2px; height: 32px; width: 100%; border-radius: 4px; overflow: hidden; }
+        .uptime-tick { flex: 1; height: 100%; min-width: 2px; border-radius: 2px; transition: opacity 0.2s; cursor: crosshair; }
+        .uptime-tick:hover { opacity: 0.5; }
+        .uptime-tick.up { background: #10b981; }
+        .uptime-tick.issue { background: #f59e0b; }
+        .uptime-tick.down { background: #ef4444; }
+        .uptime-tick.empty { background: rgba(255,255,255,0.1); }
+
+        .timeline-container { position: relative; padding-left: 2rem; }
+        .timeline-container::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 0; width: 2px; background: rgba(255,255,255,0.1); }
+        .timeline-item { position: relative; margin-bottom: 2.5rem; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-marker { position: absolute; left: -2rem; top: 0.25rem; width: 16px; height: 16px; border-radius: 50%; background: #000; border: 2px solid rgba(255,255,255,0.2); z-index: 10; }
+        .timeline-item.resolved .timeline-marker { border-color: #10b981; }
+        .timeline-item.investigating .timeline-marker { border-color: #f59e0b; }
+        .timeline-item.resolved .timeline-marker::after { content: ''; position: absolute; inset: 3px; background: #10b981; border-radius: 50%; }
+
+        #tooltip { position: absolute; background: #18181b; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; pointer-events: none; z-index: 50; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transform: translate(-50%, -100%); margin-top: -8px; }
+        #tooltip::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: rgba(255,255,255,0.1) transparent transparent transparent; }
     </style>
 </head>
-<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
+<body class="flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
-    <aside class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+    <div id="tooltip"></div>
+
+    <aside class="w-64 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-20 bg-black/50 backdrop-blur-xl">
         <div class="h-16 flex items-center px-6 border-b border-white/5">
             <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
                 <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
@@ -83,116 +97,106 @@
                 <i class="ph-bold ph-chart-line text-lg"></i> Status
             </a>
         </nav>
-        <div class="p-4 border-t border-white/5 bg-black/20">
-            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+        <div class="p-4 border-t border-white/5">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5">
                 <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
                     <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
                     <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
                 </div>
             </div>
-            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
-                <i class="ph-bold ph-sign-out"></i> Sign Out
-            </button>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 h-screen relative">
-        <div class="ambient-glow fixed top-[-10%] left-[30%] w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 to-transparent z-[-1] pointer-events-none blur-3xl opacity-50"></div>
-
-        <header class="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 sticky top-0 shadow-sm flex-shrink-0">
+        <header class="h-16 flex items-center justify-between px-6 border-b border-white/5 bg-black/80 backdrop-blur-xl z-10 sticky top-0 flex-shrink-0">
             <div class="flex items-center gap-4">
-                <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
-                    <i class="ph-bold ph-list text-2xl"></i>
+                <button class="md:hidden text-zinc-400 hover:text-white" id="mobileMenuBtn">
+                    <i class="ph-bold ph-list text-xl"></i>
                 </button>
-                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
-                    <span id="breadcrumbRoot" class="hover:text-zinc-300 transition-colors cursor-pointer">Nexus</span>
-                    <i class="ph-bold ph-caret-right text-xs text-zinc-600"></i>
-                    <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">System Status</span>
+                <div class="text-sm font-semibold text-zinc-400">
+                    Nexus <span class="mx-2 text-zinc-600">/</span> <span class="text-white">Status</span>
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <span class="hidden md:block text-xs font-medium text-zinc-500">Last updated: <span id="lastUpdated">just now</span></span>
-                <button id="refreshStatus" class="bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-md">
+                <span class="text-xs font-medium text-zinc-500 hidden sm:block">Refreshed: <span id="lastUpdated" class="text-zinc-300">Just now</span></span>
+                <button id="refreshStatus" class="bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
                     <i class="ph-bold ph-arrows-clockwise"></i> Refresh
                 </button>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom">
-            <div class="max-w-5xl mx-auto pb-20">
+        <main class="flex-1 overflow-y-auto scrollbar-custom p-6 lg:p-12 relative z-10">
+            <div class="max-w-4xl mx-auto space-y-8 pb-20">
 
                 <div id="statusSkeleton" class="space-y-8">
-                    <div class="h-32 bg-white/5 rounded-3xl animate-pulse"></div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="h-28 bg-white/5 rounded-2xl animate-pulse"></div>
-                        <div class="h-28 bg-white/5 rounded-2xl animate-pulse"></div>
-                        <div class="h-28 bg-white/5 rounded-2xl animate-pulse"></div>
-                        <div class="h-28 bg-white/5 rounded-2xl animate-pulse"></div>
+                    <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="h-24 bg-white/5 rounded-xl animate-pulse"></div>
+                        <div class="h-24 bg-white/5 rounded-xl animate-pulse"></div>
+                        <div class="h-24 bg-white/5 rounded-xl animate-pulse"></div>
+                        <div class="h-24 bg-white/5 rounded-xl animate-pulse"></div>
                     </div>
-                    <div class="h-96 bg-white/5 rounded-3xl animate-pulse"></div>
                 </div>
 
                 <div id="statusContent" class="hidden space-y-8">
-                    <div id="heroBanner" class="hero-status p-8 md:p-10 rounded-3xl border flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md">
-                        <div class="relative z-10 flex items-center gap-6">
-                            <div class="status-pulse"><div class="core"></div></div>
+                    
+                    <div id="heroBanner" class="hero-banner rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-l border-r border-white/5">
+                        <div class="flex items-center gap-5">
+                            <div class="status-dot"></div>
                             <div>
-                                <h1 class="text-3xl font-black text-white tracking-tight" id="overallStatusLabel">Loading...</h1>
-                                <p class="text-sm font-medium mt-1 opacity-80" id="uptimeText">Checking global system metrics</p>
+                                <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight" id="overallStatusLabel">Loading...</h1>
+                                <p class="text-sm text-zinc-400 mt-1" id="uptimeText">Monitoring global systems</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-zinc-900/20 shadow-md flex flex-col">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Total Uptime</span>
-                            <span class="text-3xl font-black text-white" id="statUptime">-</span>
-                            <span class="text-[10px] text-zinc-500 mt-auto pt-2 font-medium">Last 90 days</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="metric-card p-5 rounded-xl flex flex-col">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">90-Day Uptime</span>
+                            <span class="text-2xl font-black text-white" id="statUptime">-</span>
                         </div>
-                        <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-zinc-900/20 shadow-md flex flex-col">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">API Latency</span>
-                            <span class="text-3xl font-black text-white" id="statResponse">-</span>
-                            <span class="text-[10px] text-zinc-500 mt-auto pt-2 font-medium">Average across endpoints</span>
+                        <div class="metric-card p-5 rounded-xl flex flex-col">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">Avg Latency</span>
+                            <span class="text-2xl font-black text-white" id="statResponse">-</span>
                         </div>
-                        <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-zinc-900/20 shadow-md flex flex-col">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Traffic</span>
-                            <span class="text-3xl font-black text-white" id="statRequests">-</span>
-                            <span class="text-[10px] text-zinc-500 mt-auto pt-2 font-medium">Total requests today</span>
+                        <div class="metric-card p-5 rounded-xl flex flex-col">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">Today's Traffic</span>
+                            <span class="text-2xl font-black text-white" id="statRequests">-</span>
                         </div>
-                        <div class="glass-panel p-6 rounded-2xl border border-white/5 bg-zinc-900/20 shadow-md flex flex-col">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Error Rate</span>
-                            <span class="text-3xl font-black text-white" id="statErrors">-</span>
-                            <span class="text-[10px] text-zinc-500 mt-auto pt-2 font-medium">Global average</span>
+                        <div class="metric-card p-5 rounded-xl flex flex-col">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">Error Rate</span>
+                            <span class="text-2xl font-black text-white" id="statErrors">-</span>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl" id="servicesContainer">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-white/5 pb-4">
-                            <h2 class="text-lg font-bold text-white tracking-wide">System Components</h2>
-                            <span class="text-xs font-semibold text-zinc-500 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">90 Days History</span>
+                    <div class="glass-panel rounded-2xl overflow-hidden" id="servicesContainer">
+                        <div class="px-6 py-5 border-b border-white/5 bg-white/5">
+                            <h2 class="text-sm font-bold text-white uppercase tracking-wider">System Components</h2>
                         </div>
-                        <div id="serviceList" class="space-y-8"></div>
+                        <div class="p-6" id="serviceList"></div>
                     </div>
 
-                    <div class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl" id="latencyContainer">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                            <h2 class="text-lg font-bold text-white tracking-wide">API Latency</h2>
-                            <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live
-                            </span>
+                    <div class="glass-panel rounded-2xl overflow-hidden" id="latencyContainer">
+                        <div class="px-6 py-5 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                            <h2 class="text-sm font-bold text-white uppercase tracking-wider">API Latency (24h)</h2>
+                            <span class="text-xs font-bold text-zinc-500">Global Average</span>
                         </div>
-                        <div class="h-72 w-full relative">
+                        <div class="p-6 h-[300px] w-full">
                             <canvas id="latencyChart"></canvas>
                         </div>
                     </div>
 
-                    <div id="incidentSection" class="glass-panel p-6 md:p-10 rounded-3xl border border-white/5 bg-zinc-900/20 shadow-xl">
-                        <h2 class="text-lg font-bold text-white tracking-wide mb-8">Past Incidents</h2>
-                        <div id="incidentList" class="space-y-0"></div>
+                    <div class="glass-panel rounded-2xl overflow-hidden" id="incidentSection">
+                        <div class="px-6 py-5 border-b border-white/5 bg-white/5">
+                            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Past Incidents</h2>
+                        </div>
+                        <div class="p-6 lg:p-8">
+                            <div id="incidentList" class="timeline-container"></div>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </main>
     </div>
@@ -214,7 +218,6 @@
             sidebarAvatar: document.getElementById('sidebarAvatar'),
             sidebarName: document.getElementById('sidebarName'),
             sidebarEmail: document.getElementById('sidebarEmail'),
-            sidebarSignOut: document.getElementById('sidebarSignOut'),
             mobileMenuBtn: document.getElementById('mobileMenuBtn'),
             sidebar: document.querySelector('aside'),
             skeleton: document.getElementById('statusSkeleton'),
@@ -231,7 +234,9 @@
             lastUpdated: document.getElementById('lastUpdated'),
             refreshBtn: document.getElementById('refreshStatus'),
             servicesContainer: document.getElementById('servicesContainer'),
-            latencyContainer: document.getElementById('latencyContainer')
+            latencyContainer: document.getElementById('latencyContainer'),
+            incidentSection: document.getElementById('incidentSection'),
+            tooltip: document.getElementById('tooltip')
         };
 
         let latencyChart = null;
@@ -246,10 +251,6 @@
             if (dom.sidebarName) dom.sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
             fetchStatus();
         });
-
-        if (dom.sidebarSignOut) {
-            dom.sidebarSignOut.addEventListener('click', signOutUser);
-        }
 
         if (dom.mobileMenuBtn && dom.sidebar) {
             dom.mobileMenuBtn.addEventListener('click', () => {
@@ -266,6 +267,18 @@
             dom.refreshBtn.addEventListener('click', fetchStatus);
         }
 
+        function showTooltip(e, text) {
+            dom.tooltip.textContent = text;
+            dom.tooltip.style.display = 'block';
+            const rect = e.target.getBoundingClientRect();
+            dom.tooltip.style.left = rect.left + (rect.width / 2) + 'px';
+            dom.tooltip.style.top = rect.top + 'px';
+        }
+
+        function hideTooltip() {
+            dom.tooltip.style.display = 'none';
+        }
+
         async function fetchStatus() {
             dom.skeleton.classList.remove('hidden');
             dom.content.classList.add('hidden');
@@ -276,11 +289,9 @@
                 const data = await resp.json();
                 renderStatus(data);
             } catch (err) {
-                dom.overallStatusLabel.textContent = 'System Status Unavailable';
-                dom.overallStatusLabel.className = 'text-3xl font-black tracking-tight text-red-500';
-                dom.uptimeText.textContent = 'Unable to reach backend API. Check your connection.';
-                dom.uptimeText.className = 'text-sm font-medium mt-1 text-red-400 opacity-90';
-                dom.heroBanner.className = 'hero-status p-8 md:p-10 rounded-3xl border flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md outage';
+                dom.overallStatusLabel.textContent = 'Service Unavailable';
+                dom.uptimeText.textContent = 'Unable to fetch status metrics.';
+                dom.heroBanner.className = 'hero-banner rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 outage';
                 
                 dom.statUptime.textContent = '—';
                 dom.statResponse.textContent = '—';
@@ -299,47 +310,53 @@
         function renderStatus(data) {
             dom.servicesContainer.classList.remove('hidden');
             dom.latencyContainer.classList.remove('hidden');
-            if (dom.incidentSection) dom.incidentSection.classList.remove('hidden');
+            dom.incidentSection.classList.remove('hidden');
 
             dom.skeleton.classList.add('hidden');
             dom.content.classList.remove('hidden');
 
-            dom.heroBanner.className = `hero-status p-8 md:p-10 rounded-3xl border flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md ${data.status}`;
+            dom.heroBanner.className = `hero-banner rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 ${data.status}`;
             dom.overallStatusLabel.textContent = data.status === 'operational' ? 'All Systems Operational' : 'Degraded Performance';
-            dom.overallStatusLabel.className = `text-3xl font-black tracking-tight ${data.status === 'operational' ? 'text-emerald-400' : 'text-amber-400'}`;
-            dom.uptimeText.textContent = `Overall Uptime: ${data.uptime}% over the last 90 days.`;
-            dom.uptimeText.className = `text-sm font-medium mt-1 opacity-90 ${data.status === 'operational' ? 'text-emerald-500' : 'text-amber-500'}`;
+            dom.uptimeText.textContent = `Overall Uptime: ${data.uptime}% over 90 days`;
 
             dom.statUptime.textContent = data.uptime + '%';
             dom.statResponse.textContent = data.metrics.avgResponseTime + 'ms';
-            dom.statRequests.textContent = data.metrics.totalRequests.toLocaleString();
+            dom.statRequests.textContent = (data.metrics.totalRequests / 1000).toFixed(1) + 'k';
             dom.statErrors.textContent = data.metrics.errorRate + '%';
 
             dom.serviceList.innerHTML = '';
-            data.services.forEach(svc => {
+            data.services.forEach((svc, index) => {
+                const isLast = index === data.services.length - 1;
                 const container = document.createElement('div');
+                container.className = isLast ? '' : 'mb-8 pb-8 border-b border-white/5';
                 
                 let barsHTML = '';
                 svc.bars.forEach(bar => {
-                    barsHTML += `<div class="uptime-bar ${bar.status}" title="${bar.date}: ${bar.status}"></div>`;
+                    barsHTML += `<div class="uptime-tick ${bar.status}" data-tooltip="${bar.date} - ${bar.status}"></div>`;
                 });
 
+                const statusColor = svc.status === 'Operational' ? 'text-emerald-500' : 'text-amber-500';
+
                 container.innerHTML = `
-                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-2">
-                        <span class="text-sm font-bold text-white">${svc.name}</span>
-                        <div class="flex items-center gap-4 text-xs font-bold">
-                            <span class="${svc.status === 'Operational' ? 'text-emerald-400' : 'text-amber-400'}">${svc.status}</span>
-                            <span class="text-zinc-500 hidden sm:inline">${svc.uptime} uptime</span>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-bold text-zinc-200">${svc.name}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold ${statusColor}">${svc.status}</span>
                         </div>
                     </div>
-                    <div class="uptime-track bg-black/40 rounded-lg p-1 border border-white/5">${barsHTML}</div>
-                    <div class="flex justify-between mt-2 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+                    <div class="uptime-row mb-2">${barsHTML}</div>
+                    <div class="flex justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                         <span>90 days ago</span>
-                        <span class="sm:hidden">${svc.uptime} uptime</span>
+                        <span>${svc.uptime} uptime</span>
                         <span>Today</span>
                     </div>
                 `;
                 dom.serviceList.appendChild(container);
+            });
+
+            document.querySelectorAll('.uptime-tick').forEach(tick => {
+                tick.addEventListener('mouseenter', (e) => showTooltip(e, e.target.dataset.tooltip));
+                tick.addEventListener('mouseleave', hideTooltip);
             });
 
             dom.incidentList.innerHTML = '';
@@ -348,24 +365,26 @@
                     const isResolved = inc.status.toLowerCase() === 'resolved';
                     const div = document.createElement('div');
                     div.className = `timeline-item ${isResolved ? 'resolved' : 'investigating'}`;
+                    const badgeClass = isResolved ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500';
                     div.innerHTML = `
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
-                            <h3 class="text-base font-bold text-white">${inc.title}</h3>
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md border ${isResolved ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'} w-fit">
+                        <div class="timeline-marker"></div>
+                        <span class="text-xs font-bold text-zinc-500 mb-1 block">${inc.date}</span>
+                        <h3 class="text-base font-bold text-zinc-200 mb-2">${inc.title}</h3>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${badgeClass} inline-block mb-2">
                                 ${inc.status}
                             </span>
+                            <p class="text-sm text-zinc-400 font-medium leading-relaxed">${inc.desc}</p>
                         </div>
-                        <p class="text-xs text-zinc-500 font-bold mb-3">${inc.date}</p>
-                        <p class="text-sm text-zinc-300 font-medium leading-relaxed bg-black/30 p-4 rounded-xl border border-white/5">${inc.desc}</p>
                     `;
                     dom.incidentList.appendChild(div);
                 });
             } else {
-                dom.incidentList.innerHTML = '<div class="text-center py-10 bg-black/20 rounded-2xl border border-white/5"><p class="text-sm text-zinc-500 font-medium">No incidents in the past 90 days.</p></div>';
+                dom.incidentList.innerHTML = '<p class="text-sm text-zinc-500 font-medium">No incidents reported in the past 90 days.</p>';
             }
 
-            dom.lastUpdated.textContent = new Date().toLocaleTimeString();
+            const now = new Date();
+            dom.lastUpdated.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
             if (latencyChart) latencyChart.destroy();
             const ctx = document.getElementById('latencyChart').getContext('2d');
@@ -374,13 +393,13 @@
                 data: {
                     labels: data.history.labels,
                     datasets: [{
-                        label: 'Latency (ms)',
+                        label: 'Latency',
                         data: data.history.values,
                         borderColor: '#a855f7',
                         backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        borderWidth: 2,
                         fill: true,
                         tension: 0.4,
-                        borderWidth: 2,
                         pointRadius: 0,
                         pointHoverRadius: 6,
                         pointBackgroundColor: '#a855f7'
@@ -393,23 +412,21 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleFont: { family: 'Plus Jakarta Sans', size: 13 },
-                            bodyFont: { family: 'Plus Jakarta Sans', size: 14, weight: 'bold' },
-                            padding: 12,
+                            backgroundColor: '#18181b',
+                            titleFont: { family: 'Plus Jakarta Sans', size: 12 },
+                            bodyFont: { family: 'Plus Jakarta Sans', size: 13, weight: 'bold' },
+                            padding: 10,
                             borderColor: 'rgba(255,255,255,0.1)',
                             borderWidth: 1,
                             displayColors: false,
-                            callbacks: {
-                                label: function(context) { return context.parsed.y + ' ms'; }
-                            }
+                            callbacks: { label: function(context) { return context.parsed.y + ' ms'; } }
                         }
                     },
                     scales: {
                         y: {
-                            beginAtZero: false,
-                            grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false },
-                            ticks: { color: '#71717a', font: { family: 'Plus Jakarta Sans', size: 11 }, callback: function(value) { return value + 'ms'; } }
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                            ticks: { color: '#71717a', font: { family: 'Plus Jakarta Sans', size: 11 }, maxTicksLimit: 5, callback: function(value) { return value + 'ms'; } }
                         },
                         x: {
                             grid: { display: false, drawBorder: false },
