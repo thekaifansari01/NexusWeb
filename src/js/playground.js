@@ -1,139 +1,185 @@
 import { observeAuthState, signOutUser } from "./modules/auth.js";
 import { getApiKeys } from "./modules/firestore.js";
 
-const signInBtn = document.getElementById('signInBtn');
-const userArea = document.getElementById('userArea');
-const userAvatar = document.getElementById('userAvatar');
-const userEmail = document.getElementById('userEmail');
-const signOutBtn = document.getElementById('signOutBtn');
-const avatarBtn = document.getElementById('avatarBtn');
-const avatarDropdown = document.getElementById('avatarDropdown');
+const dom = {
+    loadingOverlay: document.getElementById('loadingOverlay'),
+    keySelect: document.getElementById('keySelect'),
+    modelSelect: document.getElementById('modelSelect'),
+    systemPrompt: document.getElementById('systemPrompt'),
+    tempSlider: document.getElementById('tempSlider'),
+    tempValue: document.getElementById('tempValue'),
+    tokensSlider: document.getElementById('tokensSlider'),
+    tokensValue: document.getElementById('tokensValue'),
+    
+    tabChat: document.getElementById('tabChat'),
+    tabRaw: document.getElementById('tabRaw'),
+    chatView: document.getElementById('chatView'),
+    rawView: document.getElementById('rawView'),
+    chatContainer: document.getElementById('chatContainer'),
+    chatEmptyState: document.getElementById('chatEmptyState'),
+    jsonOutput: document.getElementById('jsonOutput'),
+    
+    messageInput: document.getElementById('messageInput'),
+    sendBtn: document.getElementById('sendBtn'),
+    clearChatBtn: document.getElementById('clearChatBtn'),
+    statusMetric: document.getElementById('statusMetric'),
+    
+    viewCodeBtn: document.getElementById('viewCodeBtn'),
+    codeModal: document.getElementById('codeModal'),
+    closeCodeBtn: document.getElementById('closeCodeBtn'),
+    copyCodeBtn: document.getElementById('copyCodeBtn'),
+    curlCode: document.getElementById('curlCode'),
 
-const loadingKeys = document.getElementById('loadingKeys');
-const playgroundForm = document.getElementById('playgroundForm');
-const emptyKeys = document.getElementById('emptyKeys');
-const keySelect = document.getElementById('keySelect');
-const modelSelect = document.getElementById('modelSelect');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-const clearBtn = document.getElementById('clearBtn');
-const responseArea = document.getElementById('responseArea');
-const responseBody = document.getElementById('responseBody');
-const statusValue = document.getElementById('statusValue');
-const timeValue = document.getElementById('timeValue');
-const tokensValue = document.getElementById('tokensValue');
+    sidebarAvatar: document.getElementById('sidebarAvatar'),
+    sidebarName: document.getElementById('sidebarName'),
+    sidebarEmail: document.getElementById('sidebarEmail'),
+    sidebarSignOut: document.getElementById('sidebarSignOut')
+};
 
-let currentUser = null;
+let chatHistory = [];
+let currentRawData = null;
 
-function updateUIForUser(user) {
-    if (signInBtn) signInBtn.classList.add('hidden');
-    if (userArea) userArea.classList.remove('hidden');
-    if (userAvatar) userAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
-    if (userEmail) userEmail.textContent = user.email || 'user@example.com';
-}
+function init() {
+    dom.tempSlider.addEventListener('input', (e) => dom.tempValue.textContent = e.target.value);
+    dom.tokensSlider.addEventListener('input', (e) => dom.tokensValue.textContent = e.target.value);
+    
+    dom.tabChat.addEventListener('click', () => switchTab('chat'));
+    dom.tabRaw.addEventListener('click', () => switchTab('raw'));
+    
+    dom.messageInput.addEventListener('input', autoResizeTextarea);
+    dom.messageInput.addEventListener('keydown', handleEnterKey);
+    
+    dom.sendBtn.addEventListener('click', sendMessage);
+    dom.clearChatBtn.addEventListener('click', clearChat);
+    
+    dom.viewCodeBtn.addEventListener('click', showCodeModal);
+    dom.closeCodeBtn.addEventListener('click', hideCodeModal);
+    dom.copyCodeBtn.addEventListener('click', copyCode);
 
-function updateUIForSignedOut() {
-    if (signInBtn) signInBtn.classList.remove('hidden');
-    if (userArea) userArea.classList.add('hidden');
-    if (avatarDropdown) avatarDropdown.classList.remove('open');
-}
-
-function toggleDropdown(e) {
-    e.stopPropagation();
-    if (avatarDropdown) avatarDropdown.classList.toggle('open');
-}
-
-function closeDropdown() {
-    if (avatarDropdown) avatarDropdown.classList.remove('open');
-}
-
-function showLoadingState() {
-    loadingKeys.classList.remove('hidden');
-    playgroundForm.classList.add('hidden');
-    emptyKeys.classList.add('hidden');
-    responseArea.classList.add('hidden');
-}
-
-function showFormState() {
-    loadingKeys.classList.add('hidden');
-    playgroundForm.classList.remove('hidden');
-    emptyKeys.classList.add('hidden');
-}
-
-function showEmptyState() {
-    loadingKeys.classList.add('hidden');
-    playgroundForm.classList.add('hidden');
-    emptyKeys.classList.remove('hidden');
-    responseArea.classList.add('hidden');
-}
-
-function formatJSON(data) {
-    try {
-        return JSON.stringify(data, null, 2);
-    } catch {
-        return String(data);
+    if(dom.sidebarSignOut) {
+        dom.sidebarSignOut.addEventListener('click', signOutUser);
     }
 }
 
-function setResponse(status, time, tokens, body) {
-    responseArea.classList.remove('hidden');
-    const isSuccess = status >= 200 && status < 300;
-    statusValue.textContent = `${status} ${isSuccess ? 'OK' : 'Error'}`;
-    statusValue.className = `value ${isSuccess ? 'success' : 'error'}`;
-    timeValue.textContent = time ? `${time}ms` : '—';
-    tokensValue.textContent = tokens !== undefined && tokens !== null ? tokens : '—';
-    responseBody.textContent = body ? formatJSON(body) : 'No response body';
+function switchTab(tab) {
+    if (tab === 'chat') {
+        dom.tabChat.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white/10 text-white';
+        dom.tabRaw.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white';
+        dom.chatView.classList.remove('hidden');
+        dom.rawView.classList.add('hidden');
+        scrollToBottom();
+    } else {
+        dom.tabRaw.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white/10 text-white';
+        dom.tabChat.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white';
+        dom.rawView.classList.remove('hidden');
+        dom.chatView.classList.add('hidden');
+    }
 }
 
-function clearResponse() {
-    responseArea.classList.add('hidden');
-    statusValue.textContent = '—';
-    statusValue.className = 'value';
-    timeValue.textContent = '—';
-    tokensValue.textContent = '—';
-    responseBody.textContent = 'Response will appear here…';
+function autoResizeTextarea() {
+    dom.messageInput.style.height = 'auto';
+    dom.messageInput.style.height = Math.min(dom.messageInput.scrollHeight, 150) + 'px';
 }
 
-async function loadKeys(user) {
-    showLoadingState();
-    try {
-        const keys = await getApiKeys(user.uid);
-        const activeKeys = keys.filter(k => k.status === 'active');
-        if (activeKeys.length === 0) {
-            showEmptyState();
-            return;
+function handleEnterKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+}
+
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\\b(true|false|null)\\b|-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)/g, function (match) {
+        let cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
         }
-        keySelect.innerHTML = '';
-        activeKeys.forEach(key => {
-            const option = document.createElement('option');
-            option.value = key.key;
-            option.textContent = `${key.name} (${key.key.slice(0, 8)}...)`;
-            keySelect.appendChild(option);
-        });
-        showFormState();
-    } catch (error) {
-        console.error('Failed to load keys:', error);
-        showEmptyState();
-    }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
 }
 
-async function sendRequest() {
-    const key = keySelect.value;
-    const model = modelSelect.value;
-    const message = messageInput.value.trim();
+function updateRawView(payload, response) {
+    const rawObj = {
+        timestamp: new Date().toISOString(),
+        requestPayload: payload,
+        responseContent: response
+    };
+    currentRawData = rawObj;
+    dom.jsonOutput.innerHTML = syntaxHighlight(rawObj);
+}
 
-    if (!key) {
-        alert('Please select a valid Nexus key.');
-        return;
-    }
-    if (!message) {
-        alert('Please enter a message.');
-        return;
-    }
+function scrollToBottom() {
+    dom.chatView.scrollTop = dom.chatView.scrollHeight;
+}
 
-    sendBtn.disabled = true;
-    sendBtn.classList.add('loading');
-    clearResponse();
+function appendBubble(role, text) {
+    dom.chatEmptyState.classList.add('hidden');
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${role === 'user' ? 'chat-user' : 'chat-ai'}`;
+    bubble.textContent = text;
+    dom.chatContainer.appendChild(bubble);
+    scrollToBottom();
+    return bubble;
+}
+
+function showTyping() {
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble chat-ai typing-indicator';
+    bubble.id = 'typingBubble';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    dom.chatContainer.appendChild(bubble);
+    scrollToBottom();
+}
+
+function removeTyping() {
+    const t = document.getElementById('typingBubble');
+    if (t) t.remove();
+}
+
+async function sendMessage() {
+    const text = dom.messageInput.value.trim();
+    if (!text || !dom.keySelect.value) return;
+
+    const apiKey = dom.keySelect.value;
+    const model = dom.modelSelect.value;
+    const sysPrompt = dom.systemPrompt.value.trim();
+    const temp = parseFloat(dom.tempSlider.value);
+    const maxTokens = parseInt(dom.tokensSlider.value);
+
+    dom.messageInput.value = '';
+    autoResizeTextarea();
+    dom.sendBtn.disabled = true;
+
+    chatHistory.push({ role: 'user', content: text });
+    appendBubble('user', text);
+    showTyping();
+    dom.statusMetric.textContent = 'Processing request...';
+
+    const payloadMessages = [];
+    if (sysPrompt) {
+        payloadMessages.push({ role: 'system', content: sysPrompt });
+    }
+    payloadMessages.push(...chatHistory);
+
+    const payload = {
+        nexusKey: apiKey,
+        model: model,
+        messages: payloadMessages,
+        temperature: temp,
+        max_tokens: maxTokens
+    };
 
     const startTime = performance.now();
 
@@ -141,85 +187,126 @@ async function sendRequest() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-                nexusKey: key,
-                messages: [{ role: 'user', content: message }],
-                model: model
-            })
+            body: JSON.stringify(payload)
         });
 
+        const data = await response.json();
         const endTime = performance.now();
         const elapsed = Math.round(endTime - startTime);
 
-        let data;
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
+        removeTyping();
+
+        let aiText = '';
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            aiText = data.choices[0].message.content;
+        } else if (data.error) {
+            aiText = `Error: ${data.error.message || JSON.stringify(data.error)}`;
         } else {
-            data = await response.text();
+            aiText = JSON.stringify(data);
         }
 
-        let tokens = null;
-        if (data && typeof data === 'object' && data.usage && data.usage.total_tokens !== undefined) {
-            tokens = data.usage.total_tokens;
-        } else if (data && typeof data === 'object' && data.totalTokens !== undefined) {
-            tokens = data.totalTokens;
-        }
+        chatHistory.push({ role: 'assistant', content: aiText });
+        appendBubble('ai', aiText);
+        updateRawView(payload, data);
+        
+        let tokens = data.usage ? data.usage.total_tokens : 'N/A';
+        dom.statusMetric.textContent = `${response.status} OK • ${elapsed}ms • ${tokens} tokens`;
 
-        setResponse(response.status, elapsed, tokens, data);
-
-    } catch (error) {
-        const endTime = performance.now();
-        const elapsed = Math.round(endTime - startTime);
-        setResponse(0, elapsed, null, { error: error.message || 'Network error' });
-    } finally {
-        sendBtn.disabled = false;
-        sendBtn.classList.remove('loading');
+    } catch (err) {
+        removeTyping();
+        appendBubble('ai', `System Error: ${err.message}`);
+        dom.statusMetric.textContent = `Failed • ${err.message}`;
     }
+
+    dom.sendBtn.disabled = false;
+    dom.messageInput.focus();
 }
 
-function clearAll() {
-    messageInput.value = '';
-    clearResponse();
-    messageInput.focus();
+function clearChat() {
+    chatHistory = [];
+    dom.chatContainer.innerHTML = '';
+    dom.jsonOutput.textContent = 'No request made yet.';
+    dom.statusMetric.textContent = 'Ready';
+    dom.chatEmptyState.classList.remove('hidden');
 }
 
-observeAuthState((user) => {
+function showCodeModal() {
+    const apiKey = dom.keySelect.value || 'YOUR_NEXUS_KEY';
+    const model = dom.modelSelect.value;
+    const sysPrompt = dom.systemPrompt.value.trim();
+    const text = dom.messageInput.value.trim() || 'Hello AI!';
+    
+    const msgs = [];
+    if (sysPrompt) msgs.push({ role: 'system', content: sysPrompt });
+    msgs.push({ role: 'user', content: text });
+
+    const payload = {
+        nexusKey: apiKey,
+        model: model,
+        messages: msgs,
+        temperature: parseFloat(dom.tempSlider.value),
+        max_tokens: parseInt(dom.tokensSlider.value)
+    };
+
+    const curl = `curl -X POST https://your-domain.com/api/chat \\
+  -H "Content-Type: application/json" \\
+  -d '${JSON.stringify(payload, null, 2)}'`;
+
+    dom.curlCode.textContent = curl;
+    
+    dom.codeModal.classList.remove('hidden');
+    setTimeout(() => dom.codeModal.classList.remove('opacity-0'), 10);
+}
+
+function hideCodeModal() {
+    dom.codeModal.classList.add('opacity-0');
+    setTimeout(() => dom.codeModal.classList.add('hidden'), 300);
+}
+
+function copyCode() {
+    navigator.clipboard.writeText(dom.curlCode.textContent).then(() => {
+        const originalText = dom.copyCodeBtn.innerHTML;
+        dom.copyCodeBtn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i> Copied!';
+        dom.copyCodeBtn.classList.add('border-emerald-500/30', 'text-emerald-400');
+        setTimeout(() => {
+            dom.copyCodeBtn.innerHTML = originalText;
+            dom.copyCodeBtn.classList.remove('border-emerald-500/30', 'text-emerald-400');
+        }, 2000);
+    });
+}
+
+observeAuthState(async (user) => {
     if (!user) {
         window.location.href = '/login';
         return;
     }
-    currentUser = user;
-    updateUIForUser(user);
-    loadKeys(user);
-});
+    
+    if (dom.sidebarAvatar) dom.sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+    if (dom.sidebarEmail) dom.sidebarEmail.textContent = user.email || 'user@example.com';
+    if (dom.sidebarName) dom.sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
 
-if (signOutBtn) {
-    signOutBtn.addEventListener('click', async () => {
-        await signOutUser();
-    });
-}
-
-if (avatarBtn) {
-    avatarBtn.addEventListener('click', toggleDropdown);
-}
-
-document.addEventListener('click', closeDropdown);
-
-if (sendBtn) {
-    sendBtn.addEventListener('click', sendRequest);
-}
-
-if (clearBtn) {
-    clearBtn.addEventListener('click', clearAll);
-}
-
-messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        if (!sendBtn.disabled) {
-            sendRequest();
+    try {
+        const keys = await getApiKeys(user.uid);
+        const activeKeys = keys.filter(k => k.status === 'active');
+        dom.keySelect.innerHTML = '';
+        if (activeKeys.length === 0) {
+            dom.keySelect.innerHTML = '<option value="">No active keys found</option>';
+            dom.sendBtn.disabled = true;
+        } else {
+            activeKeys.forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key.key;
+                opt.textContent = `${key.name} (${key.key.slice(0,8)}...)`;
+                dom.keySelect.appendChild(opt);
+            });
+            dom.sendBtn.disabled = false;
         }
+    } catch(e) {
+        console.error('Error loading keys', e);
     }
+    
+    dom.loadingOverlay.classList.add('hidden');
+    dom.chatEmptyState.classList.remove('hidden');
 });
+
+init();
