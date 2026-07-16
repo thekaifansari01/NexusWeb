@@ -10,7 +10,6 @@ const dom = {
     tempValue: document.getElementById('tempValue'),
     tokensSlider: document.getElementById('tokensSlider'),
     tokensValue: document.getElementById('tokensValue'),
-    
     tabChat: document.getElementById('tabChat'),
     tabRaw: document.getElementById('tabRaw'),
     chatView: document.getElementById('chatView'),
@@ -18,18 +17,15 @@ const dom = {
     chatContainer: document.getElementById('chatContainer'),
     chatEmptyState: document.getElementById('chatEmptyState'),
     jsonOutput: document.getElementById('jsonOutput'),
-    
     messageInput: document.getElementById('messageInput'),
     sendBtn: document.getElementById('sendBtn'),
     clearChatBtn: document.getElementById('clearChatBtn'),
     statusMetric: document.getElementById('statusMetric'),
-    
     viewCodeBtn: document.getElementById('viewCodeBtn'),
     codeModal: document.getElementById('codeModal'),
     closeCodeBtn: document.getElementById('closeCodeBtn'),
     copyCodeBtn: document.getElementById('copyCodeBtn'),
     curlCode: document.getElementById('curlCode'),
-
     sidebarMenu: document.getElementById('sidebarMenu'),
     mobileMenuBtn: document.getElementById('mobileMenuBtn'),
     closeMobileMenuBtn: document.getElementById('closeMobileMenuBtn'),
@@ -46,31 +42,18 @@ let currentRawData = null;
 function init() {
     dom.tempSlider.addEventListener('input', (e) => dom.tempValue.textContent = e.target.value);
     dom.tokensSlider.addEventListener('input', (e) => dom.tokensValue.textContent = e.target.value);
-    
     dom.tabChat.addEventListener('click', () => switchTab('chat'));
     dom.tabRaw.addEventListener('click', () => switchTab('raw'));
-    
     dom.messageInput.addEventListener('input', autoResizeTextarea);
     dom.messageInput.addEventListener('keydown', handleEnterKey);
-    
     dom.sendBtn.addEventListener('click', sendMessage);
     dom.clearChatBtn.addEventListener('click', clearChat);
-    
     dom.viewCodeBtn.addEventListener('click', showCodeModal);
     dom.closeCodeBtn.addEventListener('click', hideCodeModal);
     dom.copyCodeBtn.addEventListener('click', copyCode);
-
-    if (dom.mobileMenuBtn && dom.sidebarMenu) {
-        dom.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    }
-    
-    if (dom.closeMobileMenuBtn && dom.sidebarMenu) {
-        dom.closeMobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    }
-
-    if (dom.sidebarSignOut) {
-        dom.sidebarSignOut.addEventListener('click', signOutUser);
-    }
+    if (dom.mobileMenuBtn && dom.sidebarMenu) dom.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    if (dom.closeMobileMenuBtn && dom.sidebarMenu) dom.closeMobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    if (dom.sidebarSignOut) dom.sidebarSignOut.addEventListener('click', signOutUser);
 }
 
 function toggleMobileMenu() {
@@ -111,18 +94,13 @@ function handleEnterKey(e) {
 }
 
 function syntaxHighlight(json) {
-    if (typeof json != 'string') {
-         json = JSON.stringify(json, undefined, 2);
-    }
+    if (typeof json != 'string') json = JSON.stringify(json, undefined, 2);
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\\b(true|false|null)\\b|-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)/g, function (match) {
         let cls = 'number';
         if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
+            if (/:$/.test(match)) cls = 'key';
+            else cls = 'string';
         } else if (/true|false/.test(match)) {
             cls = 'boolean';
         } else if (/null/.test(match)) {
@@ -152,10 +130,25 @@ function appendBubble(role, text) {
     bubble.className = `chat-bubble ${role === 'user' ? 'chat-user' : 'chat-ai'}`;
     
     if (role === 'ai') {
-        const rawHtml = marked.parse(text);
-        const safeHtml = DOMPurify.sanitize(rawHtml);
-        bubble.innerHTML = safeHtml;
+        let thoughtProcess = "";
+        let finalAnswer = text;
         
+        const thinkMatch = text.match(/<think>([\s\S]*?)<\/think>/);
+        if (thinkMatch) {
+            thoughtProcess = thinkMatch[1].trim();
+            finalAnswer = text.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+        }
+
+        let bubbleHtml = "";
+        
+        if (thoughtProcess) {
+            const safeThought = DOMPurify.sanitize(marked.parse(thoughtProcess));
+            bubbleHtml += `<details class="chat-think-box"><summary class="chat-think-summary"><i class="ph-bold ph-brain"></i> AI Thought Process</summary><div class="chat-think-content">${safeThought}</div></details>`;
+        }
+        
+        const safeHtml = DOMPurify.sanitize(marked.parse(finalAnswer));
+        bubbleHtml += safeHtml;
+        bubble.innerHTML = bubbleHtml;
         Prism.highlightAllUnder(bubble);
         
         const preElements = bubble.querySelectorAll('pre');
@@ -164,18 +157,14 @@ function appendBubble(role, text) {
             copyBtn.className = 'copy-code-btn';
             copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>';
             copyBtn.title = 'Copy code';
-            
             copyBtn.addEventListener('click', () => {
                 const codeBlock = pre.querySelector('code');
                 const textToCopy = codeBlock ? codeBlock.innerText : pre.innerText;
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     copyBtn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i>';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>';
-                    }, 2000);
+                    setTimeout(() => copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>', 2000);
                 });
             });
-            
             pre.appendChild(copyBtn);
         });
     } else {
@@ -216,19 +205,14 @@ async function sendMessage() {
     dom.sendBtn.disabled = true;
 
     chatHistory.push({ role: 'user', content: text });
-    
-    if (chatHistory.length > MAX_HISTORY_LENGTH) {
-        chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
-    }
+    if (chatHistory.length > MAX_HISTORY_LENGTH) chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
 
     appendBubble('user', text);
     showTyping();
     dom.statusMetric.textContent = 'Processing request...';
 
     const payloadMessages = [];
-    if (sysPrompt) {
-        payloadMessages.push({ role: 'system', content: sysPrompt });
-    }
+    if (sysPrompt) payloadMessages.push({ role: 'system', content: sysPrompt });
     payloadMessages.push(...chatHistory);
 
     const payload = {
@@ -255,26 +239,18 @@ async function sendMessage() {
         removeTyping();
 
         let aiText = '';
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-            aiText = data.choices[0].message.content;
-        } else if (data.error) {
-            aiText = `Error: ${data.error.message || JSON.stringify(data.error)}`;
-        } else {
-            aiText = JSON.stringify(data);
-        }
+        if (data.choices && data.choices[0] && data.choices[0].message) aiText = data.choices[0].message.content;
+        else if (data.error) aiText = `Error: ${data.error.message || JSON.stringify(data.error)}`;
+        else aiText = JSON.stringify(data);
 
         chatHistory.push({ role: 'assistant', content: aiText });
-        
-        if (chatHistory.length > MAX_HISTORY_LENGTH) {
-            chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
-        }
+        if (chatHistory.length > MAX_HISTORY_LENGTH) chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
 
         appendBubble('ai', aiText);
         updateRawView(payload, data);
         
         let tokens = data.usage ? data.usage.total_tokens : 'N/A';
         dom.statusMetric.textContent = `${response.status} OK • ${elapsed}ms • ${tokens} tokens`;
-
     } catch (err) {
         removeTyping();
         appendBubble('ai', `System Error: ${err.message}`);
@@ -311,12 +287,8 @@ function showCodeModal() {
         max_tokens: parseInt(dom.tokensSlider.value)
     };
 
-    const curl = `curl -X POST https://your-domain.com/api/chat \\
-  -H "Content-Type: application/json" \\
-  -d '${JSON.stringify(payload, null, 2)}'`;
-
+    const curl = `curl -X POST https://your-domain.com/api/chat \\\n  -H "Content-Type: application/json" \\\n  -d '${JSON.stringify(payload, null, 2)}'`;
     dom.curlCode.textContent = curl;
-    
     dom.codeModal.classList.remove('hidden');
     setTimeout(() => dom.codeModal.classList.remove('opacity-0'), 10);
 }
