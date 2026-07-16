@@ -49,6 +49,10 @@
       "destination": "/Pricing.html"
     },
     {
+      "source": "/playground",
+      "destination": "/playground.html"
+    },
+    {
       "source": "/intergrations",
       "destination": "/intergration.html"
     },
