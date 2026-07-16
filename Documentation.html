@@ -314,6 +314,38 @@ window.NexusConfig = {
                         </div>
                     </section>
 
+                    <section id="integrations" class="pt-8 doc-section">
+                        <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🔌 Framework Integrations</h2>
+                        <p class="text-zinc-400 font-medium mb-6">Nexus works seamlessly with every major frontend framework. Visit the <a href="/integrations" class="text-primary hover:underline font-bold">Integrations</a> page for framework-specific code snippets.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">⚛️</span>
+                                <span class="text-sm font-bold text-white">React</span>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">🟢</span>
+                                <span class="text-sm font-bold text-white">Vue</span>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">🔴</span>
+                                <span class="text-sm font-bold text-white">Angular</span>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">▲</span>
+                                <span class="text-sm font-bold text-white">Next.js</span>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">🚀</span>
+                                <span class="text-sm font-bold text-white">Astro</span>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-4 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <span class="text-2xl block mb-1">🟠</span>
+                                <span class="text-sm font-bold text-white">Svelte</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-zinc-500 mt-6 font-medium">Plus WordPress, Shopify, Webflow, Laravel, Vite, Gatsby, Remix, and more. See <a href="/integrations" class="text-primary hover:underline">full list →</a></p>
+                    </section>
+
                     <section id="theming" class="pt-8 doc-section">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🎨 Theming</h2>
                         <p class="text-zinc-400 font-medium mb-4">Nexus automatically adapts to your website's theme, but you can also force a specific mode or let users toggle it.</p>
@@ -474,6 +506,36 @@ window.NexusConfig = {
                         </div>
                     </section>
 
+                    <section id="playground" class="pt-8 doc-section">
+                        <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">🧪 API Playground</h2>
+                        <p class="text-zinc-400 font-medium mb-6">The <a href="/playground" class="text-primary hover:underline font-bold">Nexus Playground</a> is a live testing environment where you can send requests to the API using your own keys — with zero configuration.</p>
+
+                        <div class="bg-zinc-900/30 border border-primary/30 rounded-2xl p-6 md:p-8 my-6 relative overflow-hidden shadow-lg">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 border border-primary/20">
+                                        <i class="ph-bold ph-play text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-white mb-2">Test Your Own Keys</h3>
+                                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">Select any of your active Nexus keys, choose a model, enter a message, and inspect the raw JSON response — including status, latency, and token usage.</p>
+                                        <div class="mt-3 flex flex-wrap gap-3">
+                                            <span class="inline-flex items-center gap-1.5 text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20"><i class="ph-fill ph-check-circle"></i> No setup</span>
+                                            <span class="inline-flex items-center gap-1.5 text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full border border-blue-500/20"><i class="ph-fill ph-lock"></i> Your session only</span>
+                                            <span class="inline-flex items-center gap-1.5 text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20"><i class="ph-fill ph-shield-check"></i> Domain whitelist bypassed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-500/5 border-l-4 border-emerald-500 p-5 rounded-r-xl my-6 shadow-[inset_0_0_20px_rgba(52,211,153,0.03)] flex items-start gap-4">
+                            <i class="ph-fill ph-shield-check text-emerald-400 text-2xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium leading-relaxed"><strong class="text-white">Secure by design:</strong> The Playground uses your authenticated session. Domain whitelist checks are automatically skipped only for your own keys, so you can test freely without modifying your domain list.</p>
+                        </div>
+                    </section>
+
                     <section id="errors" class="pt-8 doc-section">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">⚠️ Error Codes</h2>
                         <p class="text-zinc-400 font-medium mb-6">Common HTTP status codes returned by the Nexus proxy and their meanings:</p>
@@ -546,6 +608,26 @@ window.NexusConfig = {
                                 <p class="text-sm text-zinc-400 ml-7">Yes, but you must whitelist each domain in the Dashboard → Domains tab. You can add up to <strong class="text-white">10 domains</strong> on the free tier.</p>
                             </div>
                         </div>
+                    </section>
+
+                    <section id="system-status" class="pt-8 doc-section">
+                        <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight border-b border-white/10 pb-4 mb-6">📊 System Status</h2>
+                        <p class="text-zinc-400 font-medium mb-6">Monitor the health of the Nexus platform in real time. The <a href="/status" class="text-primary hover:underline font-bold">Status Page</a> provides uptime metrics, service latencies, and incident history.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-6 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <div class="text-3xl font-black text-emerald-400 mb-1">99.99%</div>
+                                <div class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Uptime</div>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-6 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <div class="text-3xl font-black text-white mb-1">&lt;200ms</div>
+                                <div class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Avg Response</div>
+                            </div>
+                            <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-6 text-center shadow-sm hover:border-primary/30 transition-all">
+                                <div class="text-3xl font-black text-white mb-1">24/7</div>
+                                <div class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Monitoring</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-zinc-500 mt-6 flex items-center gap-2"><i class="ph-bold ph-check-circle text-emerald-400"></i> Status page updates automatically every 30 seconds. All incidents are documented with timestamps.</p>
                     </section>
 
                     <section id="self-hosting" class="pt-8 doc-section">
@@ -629,13 +711,16 @@ npm run build
                         <a href="#introduction" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Introduction</a>
                         <a href="#quick-start" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Quick Start</a>
                         <a href="#configuration" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Configuration</a>
+                        <a href="#integrations" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Integrations</a>
                         <a href="#theming" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Theming</a>
                         <a href="#features" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Features</a>
                         <a href="#security" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Security</a>
                         <a href="#advanced" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Advanced</a>
                         <a href="#api-reference" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">API Reference</a>
+                        <a href="#playground" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Playground</a>
                         <a href="#errors" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Error Codes</a>
                         <a href="#faq" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Troubleshooting</a>
+                        <a href="#system-status" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">System Status</a>
                         <a href="#self-hosting" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Self-Hosting</a>
                         <a href="#browser-support" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Browser Support</a>
                         <a href="#support" class="toc-link text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent pl-3 py-1.5 rounded-r-lg transition-all">Support</a>
