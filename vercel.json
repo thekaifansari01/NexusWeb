@@ -57,6 +57,10 @@
       "destination": "/intergration.html"
     },
     {
+      "source": "/status",
+      "destination": "/status.html"
+    },
+    {
       "source": "/demo",
       "destination": "/Demo.html"
     },
