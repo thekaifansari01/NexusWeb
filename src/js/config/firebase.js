@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAEptheO-640PV6s7lbDZ_4pxkRoCXe_VE",
-    authDomain: "trynexusweb.vercel.app",
+    authDomain: "trynexus.site",
     projectId: "nexuswebassistant",
     storageBucket: "nexuswebassistant.firebasestorage.app",
     messagingSenderId: "69132729895",
