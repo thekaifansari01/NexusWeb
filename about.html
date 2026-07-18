@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About the Builder · Nexus</title>
+    <title>About Nexus – Built by a Solo Developer for Security &amp; Speed</title>
+    <meta name="description" content="Learn about Nexus – a secure AI assistant built by a solo developer. Zero-trust security model, open-source, powered by Groq. Meet the founder &amp; lead engineer." />
+    <link rel="canonical" href="https://trynexus.site/about" />
+    <meta property="og:title" content="About Nexus – Built by a Solo Developer for Security &amp; Speed" />
+    <meta property="og:description" content="Learn about Nexus – a secure AI assistant built by a solo developer. Zero-trust security model, open-source, powered by Groq. Meet the founder &amp; lead engineer." />
+    <meta property="og:url" content="https://trynexus.site/about" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="About Nexus – Built by a Solo Developer for Security &amp; Speed" />
+    <meta name="twitter:description" content="Learn about Nexus – a secure AI assistant built by a solo developer. Zero-trust security model, open-source, powered by Groq." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -12,6 +22,44 @@
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="src/css/landingPage.css" />
     <link rel="icon" type="image/png" href="assets/favico.png" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Nexus",
+            "url": "https://trynexus.site",
+            "logo": "https://trynexus.site/assets/favico.png",
+            "description": "Nexus is a free, secure AI assistant for websites powered by Groq with a zero-trust security model.",
+            "founder": {
+                "@type": "Person",
+                "name": "Kaif Ansari",
+                "url": "https://github.com/thekaifansari01",
+                "jobTitle": "Founder & Lead Engineer"
+            },
+            "sameAs": [
+                "https://github.com/thekaifansari01/NexusWeb",
+                "https://www.linkedin.com/in/thekaifansari01"
+            ]
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Kaif Ansari",
+            "url": "https://github.com/thekaifansari01",
+            "jobTitle": "Founder & Lead Engineer",
+            "worksFor": {
+                "@type": "Organization",
+                "name": "Nexus"
+            },
+            "sameAs": [
+                "https://github.com/thekaifansari01",
+                "https://linkedin.com/in/thekaifansari01",
+                "https://instagram.com/thekaifansari01"
+            ]
+        }
+    </script>
 </head>
 <body class="bg-[#09090b] text-zinc-300 font-sans antialiased scroll-smooth selection:bg-primary/30 selection:text-white">
 
@@ -39,7 +87,7 @@
                 </a>
                 <div id="userArea" class="hidden relative">
                     <div class="user-avatar-btn" id="avatarBtn" title="Account">
-                        <img id="userAvatar" src="" alt="avatar" />
+                        <img id="userAvatar" src="" alt="user avatar" />
                     </div>
                     <div class="avatar-dropdown" id="avatarDropdown">
                         <div class="dropdown-email" id="userEmail">user@example.com</div>
@@ -75,7 +123,7 @@
                 <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/10 transition-colors"></div>
                 
                 <div class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-primary/30 p-1 flex-shrink-0 shadow-[0_0_30px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform overflow-hidden bg-black/40">
-                    <img src="https://github.com/thekaifansari01.png" alt="Kaif Ansari" class="w-full h-full rounded-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Kaif+Ansari&background=a855f7&color=fff&size=200'" />
+                    <img src="https://github.com/thekaifansari01.png" alt="Kaif Ansari - Founder & Lead Engineer of Nexus" class="w-full h-full rounded-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Kaif+Ansari&background=a855f7&color=fff&size=200'" />
                 </div>
 
                 <div class="flex-1 text-center md:text-left">
@@ -190,7 +238,7 @@
                         <ul class="space-y-3 text-sm text-zinc-400 font-medium">
                             <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
                             <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
                             <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
                         </ul>
                     </div>

@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentation · Nexus</title>
+    <title>Nexus Documentation – How to Embed AI Chatbot on Your Website</title>
+    <meta name="description" content="Complete step-by-step guide to install Nexus AI assistant on any website. API keys, domain whitelisting, Groq setup, and troubleshooting." />
+    <link rel="canonical" href="https://trynexus.site/docs" />
+    <meta property="og:title" content="Nexus Documentation – How to Embed AI Chatbot" />
+    <meta property="og:description" content="Complete step-by-step guide to install Nexus AI assistant on any website. API keys, domain whitelisting, Groq setup, and troubleshooting." />
+    <meta property="og:url" content="https://trynexus.site/docs" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexus Documentation – How to Embed AI Chatbot" />
+    <meta name="twitter:description" content="Complete step-by-step guide to install Nexus AI assistant on any website. API keys, domain whitelisting, Groq setup, and troubleshooting." />
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,6 +57,80 @@
         .faq-question { font-weight: 700; color: #fafafa; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 1rem; }
         .faq-question i { color: #a855f7; font-size: 1.25rem; }
     </style>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": "How to Embed Nexus AI Assistant on Your Website",
+            "description": "Step-by-step guide to install Nexus AI widget on any website.",
+            "step": [
+                {
+                    "@type": "HowToStep",
+                    "position": "1",
+                    "name": "Get your Nexus API Key",
+                    "text": "Sign in to the Nexus Dashboard. In the Nexus Keys tab, click New Key, give it a name, and copy the generated key."
+                },
+                {
+                    "@type": "HowToStep",
+                    "position": "2",
+                    "name": "Store your Groq API Key",
+                    "text": "In the Dashboard, navigate to Settings. Paste your Groq API key into the Groq Configuration section and click Save Changes."
+                },
+                {
+                    "@type": "HowToStep",
+                    "position": "3",
+                    "name": "Whitelist your Domain",
+                    "text": "In the Dashboard, go to the Domains tab. Add your website domain. Only whitelisted domains can use your Nexus API key."
+                },
+                {
+                    "@type": "HowToStep",
+                    "position": "4",
+                    "name": "Add the script tag",
+                    "text": "Paste the Nexus configuration script into your HTML before the closing body tag."
+                }
+            ]
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Why is my Nexus widget not showing up?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ensure window.NexusConfig.apiKey is set correctly. Check the browser console for errors. Verify your domain is whitelisted in the Dashboard → Domains tab."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What does 403 Forbidden error mean?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Your domain is not authorized. Go to the Dashboard → Domains tab and add your exact website domain."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I clear the chat history?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Click the trash icon in the widget header. This clears the current session and resets the conversation."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What happens when I hit the free tier limit?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Once you exceed 1,000 requests in a month, the API will return a 429 Too Many Requests error. Usage resets on the 1st of every month."
+                    }
+                }
+            ]
+        }
+    </script>
 </head>
 <body class="flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
@@ -213,7 +297,7 @@ window.NexusConfig = {
 
                         <div class="bg-emerald-500/5 border-l-2 border-emerald-500 p-6 rounded-r-2xl mt-8 flex items-start gap-4">
                             <i class="ph-fill ph-check-circle text-emerald-400 text-2xl shrink-0 mt-0.5"></i>
-                            <p class="text-sm text-zinc-300 font-medium leading-loose">That's it! Your website now has an AI assistant that understands its content. Users can ask questions and get instant, context-aware answers.</p>
+                            <p class="text-sm text-zinc-300 font-medium leading-loose">That's it! Your website now has an AI assistant that understands its content. Users can ask questions and get instant, context-aware answers. See it in action on the <a href="/demo" class="text-primary hover:underline font-bold">Live Demo</a> page.</p>
                         </div>
                     </section>
 
@@ -539,7 +623,7 @@ window.NexusConfig = {
                                     <tr>
                                         <td>429</td>
                                         <td>Too Many Requests</td>
-                                        <td class="leading-relaxed">Upgrade your plan or wait for the next monthly reset (1,000 requests/month for free tier).</td>
+                                        <td class="leading-relaxed">Upgrade your plan or wait for the next monthly reset (1,000 requests/month for free tier). See <a href="/pricing" class="text-primary hover:underline">Pricing</a> for details.</td>
                                     </tr>
                                     <tr>
                                         <td>500</td>
@@ -570,7 +654,7 @@ window.NexusConfig = {
                             </div>
                             <div class="faq-item">
                                 <div class="faq-question"><i class="ph-bold ph-question"></i> What happens when I hit the free tier limit?</div>
-                                <p class="text-sm text-zinc-400 leading-loose ml-9">Once you exceed 1,000 requests in a month, the API will return a <strong class="text-zinc-200">429 Too Many Requests</strong> error. Usage resets on the 1st of every month.</p>
+                                <p class="text-sm text-zinc-400 leading-loose ml-9">Once you exceed 1,000 requests in a month, the API will return a <strong class="text-zinc-200">429 Too Many Requests</strong> error. Usage resets on the 1st of every month. <a href="/pricing" class="text-primary hover:underline">Upgrade your plan</a> for higher limits.</p>
                             </div>
                         </div>
                     </section>

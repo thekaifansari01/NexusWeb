@@ -1,0 +1,14 @@
+# robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /login
+Disallow: /activity
+Disallow: /billing
+Disallow: /playground
+Disallow: /api/
+Disallow: /src/
+Disallow: /assets/
+
+Sitemap: https://trynexus.site/sitemap.xml

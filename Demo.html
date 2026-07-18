@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus AI · Live Demo</title>
+    <title>Live Demo – Nexus AI Web Assistant in Action | trynexus.site</title>
+    <meta name="description" content="Experience the Nexus AI widget live. Ask questions about this page and see instant answers. Try the free AI web assistant demo now." />
+    <link rel="canonical" href="https://trynexus.site/demo" />
+    <meta property="og:title" content="Live Demo – Nexus AI Web Assistant" />
+    <meta property="og:description" content="Experience the Nexus AI widget live. Ask questions and see instant answers. Try the free AI web assistant demo." />
+    <meta property="og:url" content="https://trynexus.site/demo" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Live Demo – Nexus AI Web Assistant" />
+    <meta name="twitter:description" content="Experience the Nexus AI widget live. Ask questions and see instant answers. Try the free AI web assistant demo." />
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,11 +85,50 @@
             flex-shrink: 0;
         }
     </style>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is Nexus?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Nexus is a lightweight, embeddable AI assistant that turns any website into a conversational knowledge base using Groq's ultra-fast LLMs."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does domain whitelisting work?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Domain whitelisting ensures only authorized domains can use your Nexus API keys. Our gateway enforces strict origin verification on every request."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What models does Nexus support?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Nexus supports llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, and more Groq-powered open models."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is my API key secure?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Your Groq API key is encrypted and stored securely in our vault. The widget uses a separate domain-restricted Nexus key for communication."
+                    }
+                }
+            ]
+        }
+    </script>
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased">
     <div class="ambient-glow"></div>
 
-    <!-- ===== TOP NAVBAR (identical to index.html) ===== -->
     <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
         <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="/" class="flex items-center gap-2 cursor-pointer">
@@ -118,12 +167,11 @@
         </nav>
     </div>
 
-    <!-- ===== MAIN CONTENT ===== -->
     <main class="max-w-5xl mx-auto px-6 pt-32 pb-20 relative z-10">
         <div class="text-center mb-12">
             <span class="demo-badge">✨ Interactive Demo</span>
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-4 leading-[1.1] text-white">
-                Nexus AI <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">in Action</span>
+                Nexus AI <span class="text-transparent bg-gradient-to-r from-primary to-primaryHover bg-clip-text">Live Interactive Demo</span>
             </h1>
             <p class="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
                 This page is packed with rich content so the AI can answer your questions instantly.
@@ -292,7 +340,7 @@
                         <ul class="space-y-3 text-sm text-zinc-400 font-medium">
                             <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
                             <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
                             <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
                         </ul>
                     </div>
@@ -318,7 +366,6 @@
         </footer>
     </main>
 
-    <!-- ===== WIDGET CONFIG (unchanged) ===== -->
     <script>
         window.NexusConfig = {
             apiKey: 'e0415383ab2f7ffb5c0bbeb2412849068e515047ed8ca17058a25383fcfca14d',
@@ -326,7 +373,6 @@
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.0.0/dist/nexus-assistant.min.js"></script>
 
-    <!-- ===== FIREBASE + AUTH (same as index.html) ===== -->
     <script type="importmap">
         {
             "imports": {

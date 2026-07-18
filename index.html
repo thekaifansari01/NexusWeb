@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus - Secure AI Assistant · Freemium</title>
+    <title>Nexus - Free AI Web Assistant for Your Website</title>
+    <meta name="description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month. Embed Nexus AI widget now." />
+    <link rel="canonical" href="https://trynexus.site/" />
+    <meta property="og:title" content="Nexus - Free AI Web Assistant" />
+    <meta property="og:description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month." />
+    <meta property="og:url" content="https://trynexus.site/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexus - Free AI Web Assistant" />
+    <meta name="twitter:description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -13,6 +23,34 @@
     <link rel="stylesheet" href="src/css/landingPage.css" />
     <link rel="icon" type="image/png" href="assets/favico.png" />
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer></script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Nexus Web Assistant",
+            "description": "Add a free, secure AI assistant to your website in minutes. Powered by Groq.",
+            "applicationCategory": "WebApplication",
+            "operatingSystem": "All",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            }
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Nexus",
+            "url": "https://trynexus.site",
+            "logo": "https://trynexus.site/assets/favico.png",
+            "sameAs": [
+                "https://github.com/thekaifansari01/NexusWeb",
+                "https://www.linkedin.com/in/thekaifansari01"
+            ]
+        }
+    </script>
 </head>
 <body class="bg-[#09090b] text-zinc-300 font-sans antialiased scroll-smooth selection:bg-primary/30 selection:text-white">
 
@@ -69,7 +107,7 @@
 
                 <h1 class="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-[1.1] text-white max-w-5xl">
                     Give your website a <br class="hidden md:block" />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">brain in minutes.</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">free AI assistant in minutes.</span>
                 </h1>
 
                 <p class="text-lg md:text-2xl text-zinc-400 max-w-3xl mb-12 leading-relaxed font-medium">
@@ -304,6 +342,41 @@
             </div>
         </section>
 
+        <section class="reveal-section py-16 px-6 border-t border-white/5 bg-zinc-950/30">
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40">
+                        <h3 class="text-xl font-bold text-white mb-4">Frequently Asked Questions</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-sm font-semibold text-primary">What is Nexus?</h4>
+                                <p class="text-sm text-zinc-400 mt-1">Nexus is a free, embeddable AI assistant that turns any website into a conversational knowledge base using Groq's ultra-fast LLMs.</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-primary">Is Nexus really free?</h4>
+                                <p class="text-sm text-zinc-400 mt-1">Yes, the free tier gives you 1,000 requests per month at no cost. No credit card required.</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-primary">How do I install Nexus?</h4>
+                                <p class="text-sm text-zinc-400 mt-1">Simply generate an API key from the dashboard, whitelist your domain, and add a single script tag to your website.</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-primary">Is my API key secure?</h4>
+                                <p class="text-sm text-zinc-400 mt-1">Absolutely. Your Groq key is encrypted and stored securely. The widget uses a separate domain-restricted Nexus key for communication.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40 flex flex-col justify-center items-center text-center">
+                        <h3 class="text-xl font-bold text-white mb-4">Ready to get started?</h3>
+                        <p class="text-sm text-zinc-400 mb-6">Join thousands of developers using Nexus to power their websites.</p>
+                        <a href="/login" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                            Create Free Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="reveal-section py-32 px-6 border-t border-white/5 bg-black/40">
             <div class="max-w-4xl w-full mx-auto">
                 <div class="cta-glow-border glass-panel p-16 rounded-[2.5rem] bg-zinc-950/80 relative overflow-hidden text-center mb-24 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10 hover:shadow-[0_40px_100px_rgba(168,85,247,0.2)] transition-shadow duration-500">
@@ -347,7 +420,7 @@
                         <ul class="space-y-3 text-sm text-zinc-400 font-medium">
                             <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
                             <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
                             <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
                         </ul>
                     </div>

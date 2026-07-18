@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>System Status · Nexus</title>
+    <title>Nexus System Status – Uptime, Latency &amp; Performance Metrics</title>
+    <meta name="description" content="Real-time system status for Nexus AI assistant. Check uptime, API latency, service health, and incident history. 99.99% uptime guaranteed." />
+    <link rel="canonical" href="https://trynexus.site/status" />
+    <meta property="og:title" content="Nexus System Status – Uptime, Latency &amp; Performance Metrics" />
+    <meta property="og:description" content="Real-time system status for Nexus AI assistant. Check uptime, API latency, service health, and incident history. 99.99% uptime guaranteed." />
+    <meta property="og:url" content="https://trynexus.site/status" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexus System Status – Uptime, Latency &amp; Performance Metrics" />
+    <meta name="twitter:description" content="Real-time system status for Nexus AI assistant. Check uptime, API latency, service health, and incident history." />
+    <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -60,6 +71,39 @@
         #tooltip { position: absolute; background: #18181b; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; pointer-events: none; z-index: 50; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transform: translate(-50%, -100%); margin-top: -8px; }
         #tooltip::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: rgba(255,255,255,0.1) transparent transparent transparent; }
     </style>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://trynexus.site/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Status",
+                    "item": "https://trynexus.site/status"
+                }
+            ]
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "Nexus System Status",
+            "description": "Real-time system status for Nexus AI assistant. Check uptime, API latency, service health, and incident history.",
+            "url": "https://trynexus.site/status",
+            "about": {
+                "@type": "SoftwareApplication",
+                "name": "Nexus Web Assistant"
+            }
+        }
+    </script>
 </head>
 <body class="flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
@@ -99,7 +143,7 @@
         </nav>
         <div class="p-4 border-t border-white/5">
             <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5">
-                <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
+                <img id="sidebarAvatar" src="" alt="User avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
                     <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
                     <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>

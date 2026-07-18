@@ -1,10 +1,19 @@
-<!-- Pricing.html -->
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pricing · Nexus</title>
+    <title>Nexus Pricing – Free AI Assistant with 1,000 Requests/month</title>
+    <meta name="description" content="Start with a generous free tier – 1,000 requests/month at no cost. No credit card needed. Upgrade for higher limits when you need them." />
+    <link rel="canonical" href="https://trynexus.site/pricing" />
+    <meta property="og:title" content="Nexus Pricing – Free AI Assistant with 1,000 Requests/month" />
+    <meta property="og:description" content="Start with a generous free tier – 1,000 requests/month at no cost. No credit card needed. Upgrade for higher limits when you need them." />
+    <meta property="og:url" content="https://trynexus.site/pricing" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexus Pricing – Free AI Assistant with 1,000 Requests/month" />
+    <meta name="twitter:description" content="Start with a generous free tier – 1,000 requests/month at no cost. No credit card needed. Upgrade for higher limits when you need them." />
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -105,6 +114,96 @@
             vertical-align: middle;
         }
     </style>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Nexus Web Assistant",
+            "description": "Free AI assistant for websites powered by Groq. 1,000 requests/month free.",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+            }
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Is Nexus really free?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes! The free tier gives you 1,000 requests per month at no cost. No credit card required, ever."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Are there any usage limits?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes – the free tier allows 1,000 requests per month. If you need more, Pro plans with higher limits are coming soon."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need to provide a credit card for the free tier?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Not for the free tier. Just sign in with Google and you're good to go."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is my Groq API key safe with Nexus?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Absolutely. Your Groq key is encrypted and stored securely in Firestore. It never leaves our backend, and we use a separate Nexus key for the frontend widget."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I use Nexus on multiple websites?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes – you can authorise up to 10 domains on the free tier. Unlimited domains will be available with Pro."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is this a commercial product?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Nexus is an open-source portfolio project. We offer paid plans to sustain development and provide higher limits for power users."
+                    }
+                }
+            ]
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://trynexus.site/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Pricing",
+                    "item": "https://trynexus.site/pricing"
+                }
+            ]
+        }
+    </script>
 </head>
 <body class="bg-background text-zinc-300 font-sans antialiased">
     <div class="ambient-glow"></div>
@@ -323,7 +422,7 @@
                         <ul class="space-y-3 text-sm text-zinc-400 font-medium">
                             <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
                             <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
-                            <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
                             <li><a href="#" class="hover:text-primary transition-colors">Community</a></li>
                         </ul>
                     </div>
