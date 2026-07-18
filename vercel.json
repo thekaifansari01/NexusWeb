@@ -86,6 +86,14 @@
     {
       "source": "/blog/nexus-ai-vs-others",
       "destination": "/blog/nexus-ai-vs-others.html"
+    },
+    {
+      "source": "/blog/secure-groq-api-key",
+      "destination": "/blog/secure-groq-api-key.html"
+    },
+    {
+      "source": "/blog/ai-chatbot-react-integration",
+      "destination": "/blog/ai-chatbot-react-integration.html"
     }
   ]
 }
