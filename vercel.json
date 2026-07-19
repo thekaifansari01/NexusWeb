@@ -94,6 +94,10 @@
     {
       "source": "/blog/ai-chatbot-react-integration",
       "destination": "/blog/ai-chatbot-react-integration.html"
+    },
+    {
+      "source": "/blog/ai-chatbot-vs-human-support",
+      "destination": "/blog/ai-chatbot-vs-human-support.html"
     }
   ]
 }
