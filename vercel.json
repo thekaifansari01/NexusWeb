@@ -80,24 +80,24 @@
       "destination": "/blog/index.html"
     },
     {
-      "source": "/blog/add-ai-assistant-to-website",
-      "destination": "/blog/add-ai-assistant-to-website.html"
+      "source": "/blog/post/add-ai-assistant-to-website",
+      "destination": "/blog/post/add-ai-assistant-to-website.html"
     },
     {
-      "source": "/blog/nexus-ai-vs-others",
-      "destination": "/blog/nexus-ai-vs-others.html"
+      "source": "/blog/post/nexus-ai-vs-others",
+      "destination": "/blog/post/nexus-ai-vs-others.html"
     },
     {
-      "source": "/blog/secure-groq-api-key",
-      "destination": "/blog/secure-groq-api-key.html"
+      "source": "/blog/post/secure-groq-api-key",
+      "destination": "/blog/post/secure-groq-api-key.html"
     },
     {
-      "source": "/blog/ai-chatbot-react-integration",
-      "destination": "/blog/ai-chatbot-react-integration.html"
+      "source": "/blog/post/ai-chatbot-react-integration",
+      "destination": "/blog/post/ai-chatbot-react-integration.html"
     },
     {
-      "source": "/blog/ai-chatbot-vs-human-support",
-      "destination": "/blog/ai-chatbot-vs-human-support.html"
+      "source": "/blog/post/ai-chatbot-vs-human-support",
+      "destination": "/blog/post/ai-chatbot-vs-human-support.html"
     }
   ]
 }
