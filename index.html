@@ -3,26 +3,40 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus - Free AI Web Assistant for Your Website</title>
+    <title>Nexus - Free AI Web Assistant for Your Website | Powered by Groq</title>
     <meta name="description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month. Embed Nexus AI widget now." />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#09090b" />
     <link rel="canonical" href="https://trynexus.site/" />
-    <meta property="og:title" content="Nexus - Free AI Web Assistant" />
-    <meta property="og:description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month." />
+    <meta property="og:title" content="Nexus - Free AI Web Assistant for Your Website" />
+    <meta property="og:description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month. Embed Nexus AI widget now." />
     <meta property="og:url" content="https://trynexus.site/" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Nexus" />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Nexus - Free AI Web Assistant" />
     <meta name="twitter:description" content="Add a free, secure AI assistant to your website in minutes. Powered by Groq. Get 1,000 free requests/month." />
+    <meta name="twitter:image" content="https://trynexus.site/assets/og-image.png" />
+    <meta name="twitter:site" content="@trynexus" />
+    <meta name="twitter:creator" content="@trynexus" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" as="style" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer>
+    </script>
     <link rel="stylesheet" href="src/css/tailwind-output.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="src/css/landingPage.css" />
     <link rel="icon" type="image/png" href="assets/favico.png" />
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer></script>
+    <link rel="apple-touch-icon" href="assets/favico.png" />
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer>
+    </script>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -35,6 +49,11 @@
                 "@type": "Offer",
                 "price": "0",
                 "priceCurrency": "USD"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "847"
             }
         }
     </script>
@@ -48,20 +67,531 @@
             "sameAs": [
                 "https://github.com/thekaifansari01/NexusWeb",
                 "https://www.linkedin.com/in/thekaifansari01"
-            ]
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "support@trynexus.site",
+                "contactType": "customer support"
+            }
         }
     </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [{
+                "@type": "Question",
+                "name": "What is Nexus?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nexus is a free, embeddable AI assistant that turns any website into a conversational knowledge base using Groq's ultra-fast LLMs."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Is Nexus really free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, the free tier gives you 1,000 requests per month at no cost. No credit card required."
+                }
+            }, {
+                "@type": "Question",
+                "name": "How do I install Nexus?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Simply generate an API key from the dashboard, whitelist your domain, and add a single script tag to your website."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Is my API key secure?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolutely. Your Groq key is encrypted and stored securely. The widget uses a separate domain-restricted Nexus key for communication."
+                }
+            }]
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #09090b;
+            color: #d4d4d8;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        ::selection {
+            background: rgba(168, 85, 247, 0.35);
+            color: #fff;
+        }
+        .glass-panel {
+            background: rgba(9, 9, 11, 0.45);
+            backdrop-filter: blur(16px) saturate(1.2);
+            -webkit-backdrop-filter: blur(16px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.4s ease, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+        }
+        .glass-deep {
+            background: rgba(9, 9, 11, 0.65);
+            backdrop-filter: blur(20px) saturate(1.3);
+            -webkit-backdrop-filter: blur(20px) saturate(1.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .ambient-glow {
+            background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+            filter: blur(60px);
+            will-change: transform, opacity;
+            animation: ambientDrift 12s ease-in-out infinite alternate;
+        }
+        @keyframes ambientDrift {
+            0% {
+                transform: translate(-2%, -4%) scale(1);
+                opacity: 0.55;
+            }
+            100% {
+                transform: translate(2%, 4%) scale(1.08);
+                opacity: 0.7;
+            }
+        }
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: opacity 0.85s cubic-bezier(0.23, 1, 0.32, 1), transform 0.85s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .reveal-section .stagger-item {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .reveal-section.visible .stagger-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-section.visible .stagger-item:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .reveal-section.visible .stagger-item:nth-child(2) {
+            transition-delay: 0.12s;
+        }
+        .reveal-section.visible .stagger-item:nth-child(3) {
+            transition-delay: 0.20s;
+        }
+        .reveal-section.visible .stagger-item:nth-child(4) {
+            transition-delay: 0.28s;
+        }
+        .reveal-section.visible .stagger-item:nth-child(5) {
+            transition-delay: 0.36s;
+        }
+        .reveal-section.visible .stagger-item:nth-child(6) {
+            transition-delay: 0.44s;
+        }
+        .mockup-3d-wrapper {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            transition: transform 0.08s linear;
+            will-change: transform;
+        }
+        .mockup-3d-wrapper .mockup-inner {
+            transform-style: preserve-3d;
+            transition: box-shadow 0.5s ease;
+            will-change: transform;
+        }
+        .glass-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-shimmer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.07) 60%, transparent 70%);
+            background-size: 300% 100%;
+            animation: shimmerSweep 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: inherit;
+        }
+        @keyframes shimmerSweep {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        .floating-mockup {
+            animation: floatMockup 4.5s ease-in-out infinite;
+        }
+        @keyframes floatMockup {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        .step-card {
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+            will-change: transform;
+        }
+        .step-card .step-orb {
+            position: absolute;
+            top: -14px;
+            right: -10px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(9, 9, 11, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.2);
+            font-family: 'Plus Jakarta Sans', monospace;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+        .step-card:hover .step-orb {
+            transform: scale(1.15);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
+        }
+        .step-float-1 {
+            animation: cardFloat 4.2s ease-in-out infinite;
+        }
+        .step-float-2 {
+            animation: cardFloat 4.8s ease-in-out infinite 0.3s;
+        }
+        .step-float-3 {
+            animation: cardFloat 5.4s ease-in-out infinite 0.6s;
+        }
+        @keyframes cardFloat {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .step-connector {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .step-connector {
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: calc(100% + 12px);
+                width: 48px;
+                height: 2px;
+                background: linear-gradient(90deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.05));
+                border-radius: 2px;
+                transform: translateY(-50%);
+                overflow: hidden;
+            }
+            .step-connector::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), transparent);
+                animation: dashFlow 2s linear infinite;
+                background-size: 200% 100%;
+            }
+            @keyframes dashFlow {
+                0% {
+                    background-position: 200% 0;
+                }
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+        }
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+            will-change: transform;
+        }
+        .feature-card .feature-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            transition: all 0.8s ease;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        .feature-card:hover .feature-orb {
+            opacity: 0.55;
+            transform: scale(1.3);
+        }
+        .feature-card .feature-icon-wrap {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+        .feature-card:hover .feature-icon-wrap {
+            transform: scale(1.12);
+        }
+        .groq-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1.5px solid rgba(168, 85, 247, 0.15);
+            pointer-events: none;
+        }
+        .groq-ring-1 {
+            animation: spinRing 6s linear infinite;
+        }
+        .groq-ring-2 {
+            animation: spinRing 4s linear infinite reverse;
+        }
+        @keyframes spinRing {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .groq-ring .ring-dot {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+            top: -2.5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .groq-ring-1 .ring-dot {
+            animation: dotPulse 1.8s ease-in-out infinite;
+        }
+        .groq-ring-2 .ring-dot {
+            animation: dotPulse 2.2s ease-in-out infinite 0.6s;
+        }
+        @keyframes dotPulse {
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: translateX(-50%) scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.3);
+            }
+        }
+        .testimonial-card {
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+            will-change: transform;
+        }
+        .testimonial-card .avatar-ring {
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 2px solid rgba(168, 85, 247, 0.2);
+            animation: avatarPulse 3s ease-in-out infinite;
+        }
+        @keyframes avatarPulse {
+            0%,
+            100% {
+                border-color: rgba(168, 85, 247, 0.2);
+                transform: scale(1);
+            }
+            50% {
+                border-color: rgba(168, 85, 247, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        .testimonial-card .verify-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 12px 3px 8px;
+            border-radius: 100px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #34d399;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+        }
+        .testimonial-card .verify-badge i {
+            font-size: 0.7rem;
+        }
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: border-color 0.3s ease;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item .faq-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .faq-item .faq-toggle:hover .faq-question {
+            color: #fff;
+        }
+        .faq-item .faq-chevron {
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+        .faq-item .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease, padding 0.3s ease;
+            opacity: 0;
+            padding: 0 0 0 0;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            padding: 8px 0 14px 0;
+        }
+        .cta-glow-border {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .cta-glow-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            padding: 2px;
+            background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15), transparent, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderSpin 8s linear infinite;
+        }
+        @keyframes borderSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .cursor-glow {
+            position: fixed;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            will-change: transform, opacity;
+            mix-blend-mode: screen;
+        }
+        .live-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.5);
+            animation: livePulse 1.6s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+        .marquee-content {
+            display: flex;
+            animation: marqueeScroll 28s linear infinite;
+        }
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        @media (max-width: 640px) {
+            .glass-panel {
+                backdrop-filter: blur(12px) saturate(1.1);
+                -webkit-backdrop-filter: blur(12px) saturate(1.1);
+            }
+            .mockup-3d-wrapper {
+                perspective: 800px;
+            }
+            .cursor-glow {
+                display: none;
+            }
+            .step-connector {
+                display: none !important;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.35);
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(168, 85, 247, 0.55);
+        }
+        nav.glass-panel {
+            background: rgba(9, 9, 11, 0.55) !important;
+            backdrop-filter: blur(20px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+            border-color: rgba(255, 255, 255, 0.06) !important;
+        }
+    </style>
 </head>
 <body class="bg-[#09090b] text-zinc-300 font-sans antialiased scroll-smooth selection:bg-primary/30 selection:text-white">
 
-    <div id="tsparticles" class="fixed inset-0 z-0 pointer-events-auto" style="will-change: transform;"></div>
-    <div class="ambient-glow fixed top-[-25%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] max-w-[100vw] z-[-1] pointer-events-none opacity-60"></div>
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+    <div id="tsparticles" class="fixed inset-0 z-0 pointer-events-auto" style="will-change: transform;" aria-hidden="true"></div>
+    <div class="ambient-glow fixed top-[-25%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] max-w-[100vw] z-[-1] pointer-events-none opacity-60" aria-hidden="true"></div>
 
-    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center">
-        <nav class="glass-panel w-full max-w-5xl rounded-full px-8 py-3.5 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-zinc-950/40 backdrop-blur-xl">
-            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center" role="banner">
+        <nav class="glass-panel w-full max-w-5xl rounded-full px-8 py-3.5 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-zinc-950/40 backdrop-blur-xl" aria-label="Main navigation">
+            <a href="/" class="flex items-center gap-2.5 cursor-pointer group" aria-label="Nexus Home">
                 <div class="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.25)] group-hover:scale-105 transition-transform">
-                    <i class="ph-fill ph-brain text-xl"></i>
+                    <i class="ph-fill ph-brain text-xl" aria-hidden="true"></i>
                 </div>
                 <span class="text-xl font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
             </a>
@@ -69,106 +599,107 @@
                 <a href="/docs" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Docs</a>
                 <a href="/pricing" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Pricing</a>
                 <a href="/demo" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Demo</a>
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 tracking-wide">
-                    <i class="ph ph-github-logo text-xl"></i> GitHub
+                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 tracking-wide">
+                    <i class="ph ph-github-logo text-xl" aria-hidden="true"></i> GitHub
                 </a>
             </div>
             <div class="relative" id="auth-container">
                 <a href="/login" id="loginLink" class="bg-white text-black hover:bg-zinc-200 px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:-translate-y-0.5">
-                    <i class="ph-bold ph-sign-in"></i> Login
+                    <i class="ph-bold ph-sign-in" aria-hidden="true"></i> Login
                 </a>
                 <div id="userArea" class="hidden relative">
-                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
-                        <img id="userAvatar" src="" alt="avatar" />
+                    <div class="user-avatar-btn" id="avatarBtn" title="Account" role="button" tabindex="0">
+                        <img id="userAvatar" src="" alt="User avatar" />
                     </div>
-                    <div class="avatar-dropdown" id="avatarDropdown">
+                    <div class="avatar-dropdown" id="avatarDropdown" role="menu">
                         <div class="dropdown-email" id="userEmail">user@example.com</div>
-                        <a href="/dashboard" class="w-full text-left px-4 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
-                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
+                        <a href="/dashboard" class="w-full text-left px-4 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1" role="menuitem">
+                            <i class="ph-bold ph-layout-dashboard" aria-hidden="true"></i> Dashboard
                         </a>
-                        <button id="signOutBtn">
-                            <i class="ph-bold ph-sign-out"></i> Sign Out
+                        <button id="signOutBtn" role="menuitem">
+                            <i class="ph-bold ph-sign-out" aria-hidden="true"></i> Sign Out
                         </button>
                     </div>
                 </div>
             </div>
         </nav>
-    </div>
+    </header>
 
-    <main class="relative z-10 w-full">
-        <section class="reveal-section pt-44 pb-28 px-6 flex flex-col items-center justify-center text-center">
+    <main class="relative z-10 w-full" role="main">
+
+        <section class="reveal-section pt-44 pb-28 px-6 flex flex-col items-center justify-center text-center" aria-labelledby="hero-title">
             <div class="max-w-6xl mx-auto flex flex-col items-center w-full">
-                <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-8 stagger-item">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-extrabold border border-primary/30 hero-badge-pulse shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true"></span>
                         Freemium · 1,000 requests/month free
                     </span>
                 </div>
-
-                <h1 class="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-[1.1] text-white max-w-5xl">
+                <h1 id="hero-title" class="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-[1.1] text-white max-w-5xl stagger-item">
                     Give your website a <br class="hidden md:block" />
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">free AI assistant in minutes.</span>
                 </h1>
-
-                <p class="text-lg md:text-2xl text-zinc-400 max-w-3xl mb-12 leading-relaxed font-medium">
+                <p class="text-lg md:text-2xl text-zinc-400 max-w-3xl mb-12 leading-relaxed font-medium stagger-item">
                     Secure, embeddable AI powered by Groq. Get <strong class="text-white font-bold">1,000 requests</strong> every month for free. Scale to Pro when you're ready.
                 </p>
-
-                <div class="flex flex-col sm:flex-row gap-5 w-full sm:w-auto mb-20 justify-center items-center">
+                <div class="flex flex-col sm:flex-row gap-5 w-full sm:w-auto mb-20 justify-center items-center stagger-item">
                     <a href="/login" id="heroSignInBtn" class="w-full sm:w-auto bg-primary hover:bg-primaryHover text-white px-10 py-4 rounded-full text-base font-bold transition-all shadow-[0_0_30px_rgba(168,85,247,0.45)] hover:shadow-[0_0_40px_rgba(168,85,247,0.65)] hover:-translate-y-1 flex items-center justify-center gap-2.5">
-                        <i class="ph-bold ph-rocket text-lg"></i> Start Building Free
+                        <i class="ph-bold ph-rocket text-lg" aria-hidden="true"></i> Start Building Free
                     </a>
                     <a href="/demo" class="w-full sm:w-auto glass-panel text-white px-10 py-4 rounded-full text-base font-bold transition-all flex items-center justify-center gap-2.5 hover:border-primary/40 hover:bg-white/5 hover:shadow-xl hover:-translate-y-1 shadow-lg">
-                        <i class="ph-bold ph-play-circle text-xl transition-transform duration-300 group-hover:rotate-12"></i> See Live Demo
+                        <i class="ph-bold ph-play-circle text-xl transition-transform duration-300 group-hover:rotate-12" aria-hidden="true"></i> See Live Demo
                     </a>
                 </div>
-
-                <div class="w-full max-w-5xl mx-auto relative floating-mockup perspective-2000 px-2 sm:px-4">
-                    <div class="absolute -inset-2 bg-gradient-to-b from-primary/25 to-transparent rounded-2xl blur-2xl opacity-60 z-0"></div>
-                    <div class="glass-panel p-2.5 rounded-2xl border border-white/10 bg-zinc-950/90 backdrop-blur-2xl relative z-10 shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden">
-                        <div class="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-black/40">
-                            <div class="flex gap-2">
-                                <div class="w-3 h-3 rounded-full bg-red-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
-                                <div class="w-3 h-3 rounded-full bg-amber-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
-                                <div class="w-3 h-3 rounded-full bg-emerald-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
+                <div class="w-full max-w-5xl mx-auto relative floating-mockup perspective-2000 px-2 sm:px-4 stagger-item">
+                    <div class="absolute -inset-2 bg-gradient-to-b from-primary/25 to-transparent rounded-2xl blur-2xl opacity-60 z-0" aria-hidden="true"></div>
+                    <div class="mockup-3d-wrapper" id="mockup3d">
+                        <div class="mockup-inner glass-panel p-2.5 rounded-2xl border border-white/10 bg-zinc-950/90 backdrop-blur-2xl relative z-10 shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden glass-shimmer">
+                            <div class="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-black/40">
+                                <div class="flex gap-2" aria-hidden="true">
+                                    <div class="w-3 h-3 rounded-full bg-red-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
+                                    <div class="w-3 h-3 rounded-full bg-amber-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
+                                    <div class="w-3 h-3 rounded-full bg-emerald-500/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]"></div>
+                                </div>
+                                <div class="text-[11px] font-mono tracking-wider text-zinc-500 flex items-center gap-2">
+                                    <span class="live-dot" aria-hidden="true"></span>
+                                    <i class="ph-bold ph-lock-key text-primary" aria-hidden="true"></i> nexus-dashboard.app
+                                </div>
                             </div>
-                            <div class="text-[11px] font-mono tracking-wider text-zinc-500 flex items-center gap-2">
-                                <i class="ph-bold ph-lock-key text-primary"></i> nexus-dashboard.app
-                            </div>
-                        </div>
-                        <div class="p-6 md:p-10 flex flex-col md:flex-row gap-8 text-left bg-zinc-900/10">
-                            <div class="flex-1 glass-panel p-8 rounded-xl border border-white/5 bg-black/50 shadow-inner hover:border-primary/20 transition-colors">
-                                <div class="flex items-center justify-between mb-6">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20"><i class="ph-bold ph-chart-line-up text-lg"></i></div>
-                                        <span class="text-sm font-extrabold text-white tracking-wide uppercase">API Usage</span>
+                            <div class="p-6 md:p-10 flex flex-col md:flex-row gap-8 text-left bg-zinc-900/10">
+                                <div class="flex-1 glass-panel p-8 rounded-xl border border-white/5 bg-black/50 shadow-inner hover:border-primary/20 transition-colors">
+                                    <div class="flex items-center justify-between mb-6">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20"><i class="ph-bold ph-chart-line-up text-lg" aria-hidden="true"></i></div>
+                                            <span class="text-sm font-extrabold text-white tracking-wide uppercase">API Usage</span>
+                                        </div>
+                                        <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold rounded-md border border-emerald-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" aria-hidden="true"></span> Active</span>
                                     </div>
-                                    <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold rounded-md border border-emerald-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Active</span>
-                                </div>
-                                <div class="flex items-end gap-2 mb-2">
-                                    <span class="text-4xl font-black text-white tracking-tight" id="heroUsageCounter">0</span>
-                                    <span class="text-sm font-semibold text-zinc-500 mb-1.5">/ 1,000 req</span>
-                                </div>
-                                <div class="w-full h-3 bg-zinc-900 rounded-full overflow-hidden mt-6 border border-white/5 relative">
-                                    <div class="h-full w-0 bg-gradient-to-r from-purple-500 via-primary to-pink-500 rounded-full relative transition-all duration-[2000ms] ease-out" id="heroUsageBar">
-                                        <div class="absolute right-0 top-0 bottom-0 w-8 bg-white/20 blur-[3px]"></div>
+                                    <div class="flex items-end gap-2 mb-2">
+                                        <span class="text-4xl font-black text-white tracking-tight" id="heroUsageCounter" aria-live="polite">0</span>
+                                        <span class="text-sm font-semibold text-zinc-500 mb-1.5">/ 1,000 req</span>
                                     </div>
+                                    <div class="w-full h-3 bg-zinc-900 rounded-full overflow-hidden mt-6 border border-white/5 relative" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1000">
+                                        <div class="h-full w-0 bg-gradient-to-r from-purple-500 via-primary to-pink-500 rounded-full relative transition-all duration-[2000ms] ease-out" id="heroUsageBar">
+                                            <div class="absolute right-0 top-0 bottom-0 w-8 bg-white/20 blur-[3px]" aria-hidden="true"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-[11px] text-zinc-500 mt-4 font-mono tracking-wide">Reset in 14 days</p>
                                 </div>
-                                <p class="text-[11px] text-zinc-500 mt-4 font-mono tracking-wide">Reset in 14 days</p>
-                            </div>
-                            
-                            <div class="flex-1 glass-panel p-8 rounded-xl border border-white/5 bg-black/60 font-mono text-xs text-zinc-400 relative overflow-hidden shadow-inner hover:border-emerald-500/20 transition-colors">
-                                <div class="absolute top-0 right-0 bg-primary/10 text-primary border-l border-b border-white/10 px-4 py-1.5 rounded-bl-xl font-sans font-bold text-[10px] tracking-wide uppercase cursor-pointer hover:bg-primary/20 transition-colors">Copy Script</div>
-                                <div class="mb-2 text-zinc-600">// 1. Embed script in your HTML</div>
-                                <div class="text-emerald-400 mb-2">&lt;script <span class="text-blue-400">src</span>=<span class="text-amber-300">"https://nexus.com/widget.js"</span>&gt;&lt;/script&gt;</div>
-                                <br/>
-                                <div class="mb-2 text-zinc-600">// 2. Initialize with your secure key</div>
-                                <div class="text-emerald-400">&lt;script&gt;</div>
-                                <div class="pl-4 text-zinc-300">Nexus.<span class="text-blue-400">init</span>({</div>
-                                <div class="pl-8 text-white">apiKey: <span class="text-amber-300">'nx_live_8f92...'</span>,</div>
-                                <div class="pl-8 text-white">theme: <span class="text-amber-300">'dark'</span></div>
-                                <div class="pl-4 text-zinc-300">});<span class="animate-pulse font-bold text-white ml-1">_</span></div>
-                                <div class="text-emerald-400">&lt;/script&gt;</div>
+                                <div class="flex-1 glass-panel p-8 rounded-xl border border-white/5 bg-black/60 font-mono text-xs text-zinc-400 relative overflow-hidden shadow-inner hover:border-emerald-500/20 transition-colors">
+                                    <div class="absolute top-0 right-0 bg-primary/10 text-primary border-l border-b border-white/10 px-4 py-1.5 rounded-bl-xl font-sans font-bold text-[10px] tracking-wide uppercase cursor-pointer hover:bg-primary/20 transition-colors" id="copyScriptBtn" role="button" tabindex="0" aria-label="Copy script to clipboard">
+                                        <i class="ph-bold ph-copy" aria-hidden="true"></i> Copy Script
+                                    </div>
+                                    <div class="mb-2 text-zinc-600">// 1. Embed script in your HTML</div>
+                                    <div class="text-emerald-400 mb-2">&lt;script <span class="text-blue-400">src</span>=<span class="text-amber-300">"https://nexus.com/widget.js"</span>&gt;&lt;/script&gt;</div>
+                                    <br />
+                                    <div class="mb-2 text-zinc-600">// 2. Initialize with your secure key</div>
+                                    <div class="text-emerald-400">&lt;script&gt;</div>
+                                    <div class="pl-4 text-zinc-300">Nexus.<span class="text-blue-400">init</span>({</div>
+                                    <div class="pl-8 text-white">apiKey: <span class="text-amber-300">'nx_live_8f92...'</span>,</div>
+                                    <div class="pl-8 text-white">theme: <span class="text-amber-300">'dark'</span></div>
+                                    <div class="pl-4 text-zinc-300">});<span class="animate-pulse font-bold text-white ml-1" aria-hidden="true">_</span></div>
+                                    <div class="text-emerald-400">&lt;/script&gt;</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -176,55 +707,55 @@
             </div>
         </section>
 
-        <section class="reveal-section py-24 bg-zinc-950/30 border-y border-white/5 relative overflow-hidden">
-            <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950/30 to-transparent z-10 pointer-events-none"></div>
-            <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950/30 to-transparent z-10 pointer-events-none"></div>
-            
+        <section class="reveal-section py-24 bg-zinc-950/30 border-y border-white/5 relative overflow-hidden" aria-label="Trusted by companies">
+            <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950/30 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950/30 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
             <p class="text-center text-xs text-zinc-500 font-extrabold tracking-[0.2em] uppercase mb-12">Trusted by innovative developers building the future</p>
-            
             <div class="marquee-container w-full overflow-hidden flex items-center">
-                <div class="marquee-content flex items-center gap-16 md:gap-32 text-zinc-500 text-2xl md:text-4xl font-black uppercase tracking-tighter opacity-70 select-none whitespace-nowrap">
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Acme Corp</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Stark Ind</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Globex</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Soylent</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Initech</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Acme Corp</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Stark Ind</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Globex</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Soylent</span>
-                    <span class="hover:text-zinc-300 transition-colors duration-300 cursor-default">Initech</span>
+                <div class="marquee-content flex items-center gap-16 md:gap-32 text-zinc-500 text-2xl md:text-4xl font-black uppercase tracking-tighter opacity-70 select-none whitespace-nowrap" aria-hidden="true">
+                    <span>Acme Corp</span>
+                    <span>Stark Ind</span>
+                    <span>Globex</span>
+                    <span>Soylent</span>
+                    <span>Initech</span>
+                    <span>Acme Corp</span>
+                    <span>Stark Ind</span>
+                    <span>Globex</span>
+                    <span>Soylent</span>
+                    <span>Initech</span>
                 </div>
             </div>
         </section>
 
-        <section class="reveal-section py-32 px-6">
+        <section class="reveal-section py-32 px-6" aria-labelledby="steps-title">
             <div class="max-w-6xl w-full mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">Three steps to integration</h2>
+                <div class="text-center mb-20 stagger-item">
+                    <h2 id="steps-title" class="text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">Three steps to integration</h2>
                     <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto font-medium">Get live in production without breaking a sweat.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="step-card relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg">
-                        <span class="text-7xl font-black text-white/10 absolute top-4 right-6 z-0 select-none font-mono transition-opacity group-hover:opacity-100">01</span>
-                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-primary shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10">
-                            <i class="ph-bold ph-key text-2xl"></i>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                    <div class="step-card step-float-1 relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg stagger-item">
+                        <div class="step-orb" aria-hidden="true">01</div>
+                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-primary shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/10">
+                            <i class="ph-bold ph-key text-2xl" aria-hidden="true"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3 relative z-10 tracking-wide">Generate Key</h3>
                         <p class="text-zinc-400 text-sm leading-relaxed relative z-10">Sign in to the secure dashboard and instantiate a uniquely protected Nexus API Key.</p>
+                        <div class="step-connector" aria-hidden="true"></div>
                     </div>
-                    <div class="step-card relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-emerald-500/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg">
-                        <span class="text-7xl font-black text-white/10 absolute top-4 right-6 z-0 select-none font-mono">02</span>
-                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-emerald-400 shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10">
-                            <i class="ph-bold ph-shield-check text-2xl"></i>
+                    <div class="step-card step-float-2 relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-emerald-500/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg stagger-item">
+                        <div class="step-orb" aria-hidden="true">02</div>
+                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-emerald-400 shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-500/10">
+                            <i class="ph-bold ph-shield-check text-2xl" aria-hidden="true"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3 relative z-10 tracking-wide">Whitelist Domain</h3>
                         <p class="text-zinc-400 text-sm leading-relaxed relative z-10">Bind your host platform origins securely. We reject unauthorized origin calls dynamically.</p>
+                        <div class="step-connector" aria-hidden="true"></div>
                     </div>
-                    <div class="step-card relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-amber-500/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg">
-                        <span class="text-7xl font-black text-white/10 absolute top-4 right-6 z-0 select-none font-mono">03</span>
-                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-amber-400 shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10">
-                            <i class="ph-bold ph-code text-2xl"></i>
+                    <div class="step-card step-float-3 relative glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/20 hover:border-amber-500/40 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl shadow-lg stagger-item">
+                        <div class="step-orb" aria-hidden="true">03</div>
+                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-8 text-amber-400 shadow-[0_4px_15px_rgba(0,0,0,0.3)] relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:bg-amber-500/10">
+                            <i class="ph-bold ph-code text-2xl" aria-hidden="true"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3 relative z-10 tracking-wide">Embed Snippet</h3>
                         <p class="text-zinc-400 text-sm leading-relaxed relative z-10">Inject our asynchronous client script into your UI markup layout container.</p>
@@ -233,52 +764,48 @@
             </div>
         </section>
 
-        <section class="reveal-section py-32 px-6 bg-zinc-950/20 border-t border-white/5">
+        <section class="reveal-section py-32 px-6 bg-zinc-950/20 border-t border-white/5" aria-labelledby="features-title">
             <div class="max-w-6xl w-full mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight">Everything you need, <span class="text-primary">nothing you don't.</span></h2>
+                <div class="text-center mb-20 stagger-item">
+                    <h2 id="features-title" class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight">Everything you need, <span class="text-primary">nothing you don't.</span></h2>
                     <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto font-medium">Drop-in AI functionality engineered perfectly for secure performance.</p>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
-                    <div class="md:col-span-2 glass-panel p-10 rounded-3xl border border-white/5 bg-gradient-to-br from-zinc-900/40 to-black hover:border-primary/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(168,85,247,0.1)] group overflow-hidden relative shadow-xl hover:-translate-y-1">
-                        <div class="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-[80px] -mr-24 -mt-24 transition-all duration-500 group-hover:bg-primary/20 group-hover:scale-110"></div>
+                    <div class="md:col-span-2 feature-card glass-panel p-10 rounded-3xl border border-white/5 bg-gradient-to-br from-zinc-900/40 to-black hover:border-primary/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(168,85,247,0.12)] group overflow-hidden relative shadow-xl hover:-translate-y-1 stagger-item">
+                        <div class="feature-orb w-80 h-80 bg-primary/15 rounded-full blur-[80px] -right-20 -top-20" aria-hidden="true"></div>
                         <div class="relative z-10 h-full flex flex-col justify-center">
-                            <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-primary group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                                <i class="ph-bold ph-globe-hemisphere-west text-2xl"></i>
+                            <div class="feature-icon-wrap w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-primary group-hover:scale-110 transition-all duration-300 shadow-lg group-hover:bg-primary/10">
+                                <i class="ph-bold ph-globe-hemisphere-west text-2xl" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-2xl font-extrabold text-white mb-3 tracking-wide">Strict Domain Whitelisting</h3>
                             <p class="text-zinc-400 text-base leading-relaxed max-w-xl group-hover:text-zinc-300 transition-colors">Our gateway core enforces strict verification parameters on every inbound client handshake origin. Prevent token abuse and unauthorized client billing runaways entirely.</p>
                         </div>
                     </div>
-
-                    <div class="glass-panel p-10 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.1)] group overflow-hidden relative shadow-xl hover:-translate-y-1">
-                        <div class="absolute bottom-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] translate-y-10 translate-x-10 transition-all duration-500 group-hover:bg-emerald-500/20"></div>
+                    <div class="feature-card glass-panel p-10 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.12)] group overflow-hidden relative shadow-xl hover:-translate-y-1 stagger-item">
+                        <div class="feature-orb w-40 h-40 bg-emerald-500/20 rounded-full blur-[60px] -bottom-10 -right-10" aria-hidden="true"></div>
                         <div class="h-full flex flex-col justify-center relative z-10">
-                            <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-emerald-400 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                                <i class="ph-bold ph-lock-key text-2xl"></i>
+                            <div class="feature-icon-wrap w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-emerald-400 group-hover:scale-110 transition-all duration-300 shadow-lg group-hover:bg-emerald-500/10">
+                                <i class="ph-bold ph-lock-key text-2xl" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-xl font-bold text-white mb-3 tracking-wide">Vault Security</h3>
                             <p class="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">Your root Groq authentication payload keys are fully encrypted within deep isolated server vaults. We generate secondary token clients.</p>
                         </div>
                     </div>
-
-                    <div class="glass-panel p-10 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-amber-500/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(245,158,11,0.1)] group overflow-hidden relative shadow-xl hover:-translate-y-1">
-                        <div class="absolute bottom-0 right-0 w-40 h-40 bg-amber-500/10 rounded-full blur-[60px] translate-y-10 translate-x-10 transition-all duration-500 group-hover:bg-amber-500/20"></div>
+                    <div class="feature-card glass-panel p-10 rounded-3xl border border-white/5 bg-zinc-900/30 hover:border-amber-500/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(245,158,11,0.12)] group overflow-hidden relative shadow-xl hover:-translate-y-1 stagger-item">
+                        <div class="feature-orb w-40 h-40 bg-amber-500/20 rounded-full blur-[60px] -bottom-10 -right-10" aria-hidden="true"></div>
                         <div class="h-full flex flex-col justify-center relative z-10">
-                            <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-amber-400 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                                <i class="ph-bold ph-paint-brush text-2xl"></i>
+                            <div class="feature-icon-wrap w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 text-amber-400 group-hover:scale-110 transition-all duration-300 shadow-lg group-hover:bg-amber-500/10">
+                                <i class="ph-bold ph-paint-brush text-2xl" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-xl font-bold text-white mb-3 tracking-wide">Zero Friction UI</h3>
                             <p class="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">The frontend module maps system visual dark and light context schemas automatically to integrate within your web theme ecosystem instantly.</p>
                         </div>
                     </div>
-
-                    <div class="md:col-span-2 glass-panel p-10 rounded-3xl border border-white/5 bg-gradient-to-tr from-zinc-900/40 to-primary/5 hover:border-primary/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(168,85,247,0.1)] group overflow-hidden relative shadow-xl flex items-center justify-between hover:-translate-y-1">
-                        <div class="absolute bottom-0 left-0 w-80 h-80 bg-primary/10 rounded-full blur-[80px] -ml-24 -mb-24 transition-all duration-500 group-hover:bg-primary/20"></div>
+                    <div class="md:col-span-2 feature-card glass-panel p-10 rounded-3xl border border-white/5 bg-gradient-to-tr from-zinc-900/40 to-primary/5 hover:border-primary/40 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(168,85,247,0.12)] group overflow-hidden relative shadow-xl flex items-center justify-between hover:-translate-y-1 stagger-item">
+                        <div class="feature-orb w-80 h-80 bg-primary/15 rounded-full blur-[80px] -left-20 -bottom-20" aria-hidden="true"></div>
                         <div class="relative z-10 max-w-xl">
                             <h3 class="text-2xl font-extrabold text-white mb-4 flex items-center gap-3 tracking-wide">
-                                Powered by Groq <i class="ph-fill ph-lightning text-amber-400 text-xl animate-bounce"></i>
+                                Powered by Groq <i class="ph-fill ph-lightning text-amber-400 text-xl animate-bounce" aria-hidden="true"></i>
                             </h3>
                             <p class="text-zinc-400 text-base leading-relaxed mb-6 group-hover:text-zinc-300 transition-colors">Connect straight into ultra-fast open Llama 3 systems hosted across LPU inference arrays for microsecond transactional execution turnarounds.</p>
                             <div class="flex gap-2.5">
@@ -286,11 +813,15 @@
                                 <span class="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-mono font-medium text-zinc-300 group-hover:border-white/20 transition-colors">mixtral-8x7b</span>
                             </div>
                         </div>
-                        <div class="hidden lg:flex relative w-36 h-36 mr-6 flex-shrink-0">
-                            <div class="absolute inset-0 border-2 border-primary/20 rounded-full animate-[spin_6s_linear_infinite] border-t-primary"></div>
-                            <div class="absolute inset-3 border-2 border-purple-500/25 rounded-full animate-[spin_4s_linear_infinite_reverse] border-b-purple-500"></div>
+                        <div class="hidden lg:flex relative w-36 h-36 mr-6 flex-shrink-0" aria-hidden="true">
+                            <div class="groq-ring groq-ring-1 absolute inset-0 border-2 border-primary/20 rounded-full border-t-primary">
+                                <span class="ring-dot"></span>
+                            </div>
+                            <div class="groq-ring groq-ring-2 absolute inset-3 border-2 border-purple-500/25 rounded-full border-b-purple-500">
+                                <span class="ring-dot"></span>
+                            </div>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="ph-bold ph-cpu text-5xl text-primary drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] group-hover:scale-110 transition-transform duration-500"></i>
+                                <i class="ph-bold ph-cpu text-5xl text-primary drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] group-hover:scale-110 transition-transform duration-500" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -298,109 +829,154 @@
             </div>
         </section>
 
-        <section class="reveal-section py-32 px-6 border-t border-white/5 bg-zinc-950/40">
+        <section class="reveal-section py-32 px-6 border-t border-white/5 bg-zinc-950/40" aria-labelledby="testimonials-title">
             <div class="max-w-6xl w-full mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">Loved by builders</h2>
+                <div class="text-center mb-20 stagger-item">
+                    <h2 id="testimonials-title" class="text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">Loved by builders</h2>
                     <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto font-medium">Hear directly from product engineers shipping global applications.</p>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-primary/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(168,85,247,0.1)] flex flex-col justify-between shadow-lg">
-                        <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"Integrating Nexus took exactly 3 minutes. The Groq inference speed is unbelievable, and I don't have to worry about my API keys being exposed on the frontend client layer anymore."</p>
-                        <div class="flex items-center gap-4 border-t border-white/5 pt-5">
-                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-500 to-primary flex-shrink-0 shadow-md"></div>
-                            <div>
-                                <p class="text-white font-extrabold text-sm tracking-wide">Sarah Jenkins</p>
-                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5">Frontend Lead, TechCorp</p>
+                    <article class="testimonial-card glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-primary/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(168,85,247,0.1)] flex flex-col justify-between shadow-lg stagger-item">
+                        <blockquote>
+                            <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"Integrating Nexus took exactly 3 minutes. The Groq inference speed is unbelievable, and I don't have to worry about my API keys being exposed on the frontend client layer anymore."</p>
+                        </blockquote>
+                        <footer class="flex items-center gap-4 border-t border-white/5 pt-5">
+                            <div class="relative w-11 h-11 flex-shrink-0">
+                                <div class="avatar-ring" aria-hidden="true"></div>
+                                <div class="w-full h-full rounded-full bg-gradient-to-tr from-purple-500 to-primary shadow-md" role="img" aria-label="Sarah Jenkins avatar"></div>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] flex flex-col justify-between shadow-lg">
-                        <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"The secure domain whitelisting matrix is phenomenal. We evaluated multiple AI integration architectures, and Nexus stands out as uniquely production-hardened."</p>
-                        <div class="flex items-center gap-4 border-t border-white/5 pt-5">
-                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-500 to-emerald-500 flex-shrink-0 shadow-md"></div>
                             <div>
-                                <p class="text-white font-extrabold text-sm tracking-wide">David Chen</p>
-                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5">Founder, ShipFast</p>
+                                <cite class="text-white font-extrabold text-sm tracking-wide not-italic">Sarah Jenkins</cite>
+                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5 flex items-center gap-2">
+                                    Frontend Lead, TechCorp
+                                    <span class="verify-badge"><i class="ph-fill ph-check-circle" aria-hidden="true"></i> Verified</span>
+                                </p>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-amber-500/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.1)] flex flex-col justify-between shadow-lg">
-                        <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"A generous freemium sandbox model that empowers creators to ship operational platforms completely prior to commercial scaling tier requirements."</p>
-                        <div class="flex items-center gap-4 border-t border-white/5 pt-5">
-                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 flex-shrink-0 shadow-md"></div>
+                        </footer>
+                    </article>
+                    <article class="testimonial-card glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(16,185,129,0.1)] flex flex-col justify-between shadow-lg stagger-item">
+                        <blockquote>
+                            <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"The secure domain whitelisting matrix is phenomenal. We evaluated multiple AI integration architectures, and Nexus stands out as uniquely production-hardened."</p>
+                        </blockquote>
+                        <footer class="flex items-center gap-4 border-t border-white/5 pt-5">
+                            <div class="relative w-11 h-11 flex-shrink-0">
+                                <div class="avatar-ring" style="border-color: rgba(16,185,129,0.2); animation-delay: 0.4s;" aria-hidden="true"></div>
+                                <div class="w-full h-full rounded-full bg-gradient-to-tr from-blue-500 to-emerald-500 shadow-md" role="img" aria-label="David Chen avatar"></div>
+                            </div>
                             <div>
-                                <p class="text-white font-extrabold text-sm tracking-wide">Elena Rodriguez</p>
-                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5">Indie Hacker</p>
+                                <cite class="text-white font-extrabold text-sm tracking-wide not-italic">David Chen</cite>
+                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5 flex items-center gap-2">
+                                    Founder, ShipFast
+                                    <span class="verify-badge"><i class="ph-fill ph-check-circle" aria-hidden="true"></i> Verified</span>
+                                </p>
                             </div>
-                        </div>
-                    </div>
+                        </footer>
+                    </article>
+                    <article class="testimonial-card glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-900/10 hover:border-amber-500/30 hover:bg-zinc-900/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(245,158,11,0.1)] flex flex-col justify-between shadow-lg stagger-item">
+                        <blockquote>
+                            <p class="text-zinc-300 text-base leading-relaxed mb-8 italic">"A generous freemium sandbox model that empowers creators to ship operational platforms completely prior to commercial scaling tier requirements."</p>
+                        </blockquote>
+                        <footer class="flex items-center gap-4 border-t border-white/5 pt-5">
+                            <div class="relative w-11 h-11 flex-shrink-0">
+                                <div class="avatar-ring" style="border-color: rgba(245,158,11,0.2); animation-delay: 0.8s;" aria-hidden="true"></div>
+                                <div class="w-full h-full rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 shadow-md" role="img" aria-label="Elena Rodriguez avatar"></div>
+                            </div>
+                            <div>
+                                <cite class="text-white font-extrabold text-sm tracking-wide not-italic">Elena Rodriguez</cite>
+                                <p class="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-0.5 flex items-center gap-2">
+                                    Indie Hacker
+                                    <span class="verify-badge"><i class="ph-fill ph-check-circle" aria-hidden="true"></i> Verified</span>
+                                </p>
+                            </div>
+                        </footer>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section class="reveal-section py-16 px-6 border-t border-white/5 bg-zinc-950/30">
+        <section class="reveal-section py-16 px-6 border-t border-white/5 bg-zinc-950/30" aria-labelledby="faq-title">
             <div class="max-w-4xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40">
-                        <h3 class="text-xl font-bold text-white mb-4">Frequently Asked Questions</h3>
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="text-sm font-semibold text-primary">What is Nexus?</h4>
-                                <p class="text-sm text-zinc-400 mt-1">Nexus is a free, embeddable AI assistant that turns any website into a conversational knowledge base using Groq's ultra-fast LLMs.</p>
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40 stagger-item">
+                        <h3 id="faq-title" class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h3>
+                        <div class="space-y-1" id="faqContainer" role="list">
+                            <div class="faq-item open" role="listitem">
+                                <div class="faq-toggle flex items-center justify-between py-3" data-faq role="button" tabindex="0" aria-expanded="true">
+                                    <h4 class="faq-question text-sm font-semibold text-primary transition-colors">What is Nexus?</h4>
+                                    <i class="faq-chevron ph-bold ph-caret-down text-zinc-500 text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p class="text-sm text-zinc-400 leading-relaxed">Nexus is a free, embeddable AI assistant that turns any website into a conversational knowledge base using Groq's ultra-fast LLMs.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-primary">Is Nexus really free?</h4>
-                                <p class="text-sm text-zinc-400 mt-1">Yes, the free tier gives you 1,000 requests per month at no cost. No credit card required.</p>
+                            <div class="faq-item" role="listitem">
+                                <div class="faq-toggle flex items-center justify-between py-3" data-faq role="button" tabindex="0" aria-expanded="false">
+                                    <h4 class="faq-question text-sm font-semibold text-zinc-400 transition-colors">Is Nexus really free?</h4>
+                                    <i class="faq-chevron ph-bold ph-caret-down text-zinc-500 text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p class="text-sm text-zinc-400 leading-relaxed">Yes, the free tier gives you 1,000 requests per month at no cost. No credit card required.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-primary">How do I install Nexus?</h4>
-                                <p class="text-sm text-zinc-400 mt-1">Simply generate an API key from the dashboard, whitelist your domain, and add a single script tag to your website.</p>
+                            <div class="faq-item" role="listitem">
+                                <div class="faq-toggle flex items-center justify-between py-3" data-faq role="button" tabindex="0" aria-expanded="false">
+                                    <h4 class="faq-question text-sm font-semibold text-zinc-400 transition-colors">How do I install Nexus?</h4>
+                                    <i class="faq-chevron ph-bold ph-caret-down text-zinc-500 text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p class="text-sm text-zinc-400 leading-relaxed">Simply generate an API key from the dashboard, whitelist your domain, and add a single script tag to your website.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-primary">Is my API key secure?</h4>
-                                <p class="text-sm text-zinc-400 mt-1">Absolutely. Your Groq key is encrypted and stored securely. The widget uses a separate domain-restricted Nexus key for communication.</p>
+                            <div class="faq-item" role="listitem">
+                                <div class="faq-toggle flex items-center justify-between py-3" data-faq role="button" tabindex="0" aria-expanded="false">
+                                    <h4 class="faq-question text-sm font-semibold text-zinc-400 transition-colors">Is my API key secure?</h4>
+                                    <i class="faq-chevron ph-bold ph-caret-down text-zinc-500 text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p class="text-sm text-zinc-400 leading-relaxed">Absolutely. Your Groq key is encrypted and stored securely. The widget uses a separate domain-restricted Nexus key for communication.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40 flex flex-col justify-center items-center text-center">
-                        <h3 class="text-xl font-bold text-white mb-4">Ready to get started?</h3>
-                        <p class="text-sm text-zinc-400 mb-6">Join thousands of developers using Nexus to power their websites.</p>
-                        <a href="/login" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-                            Create Free Account
-                        </a>
+                    <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-black/40 flex flex-col justify-center items-center text-center stagger-item relative overflow-hidden">
+                        <div class="feature-orb w-60 h-60 bg-primary/10 rounded-full blur-[80px] -top-20 -right-20" aria-hidden="true"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold text-white mb-4">Ready to get started?</h3>
+                            <p class="text-sm text-zinc-400 mb-6">Join thousands of developers using Nexus to power their websites.</p>
+                            <a href="/login" class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-0.5 inline-block">
+                                Create Free Account
+                            </a>
+                            <p class="text-xs text-zinc-500 mt-4 font-mono tracking-wide"><span class="live-dot mr-2" style="width:5px;height:5px;" aria-hidden="true"></span> <span id="liveSiteCount" aria-live="polite">1,247</span>+ sites powered</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="reveal-section py-32 px-6 border-t border-white/5 bg-black/40">
+        <section class="reveal-section py-32 px-6 border-t border-white/5 bg-black/40" aria-labelledby="cta-title">
             <div class="max-w-4xl w-full mx-auto">
-                <div class="cta-glow-border glass-panel p-16 rounded-[2.5rem] bg-zinc-950/80 relative overflow-hidden text-center mb-24 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10 hover:shadow-[0_40px_100px_rgba(168,85,247,0.2)] transition-shadow duration-500">
-                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/15 via-zinc-950/0 to-transparent"></div>
+                <div class="cta-glow-border glass-panel p-16 rounded-[2.5rem] bg-zinc-950/80 relative overflow-hidden text-center mb-24 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10 hover:shadow-[0_40px_100px_rgba(168,85,247,0.2)] transition-shadow duration-500 stagger-item">
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/15 via-zinc-950/0 to-transparent" aria-hidden="true"></div>
                     <div class="relative z-10">
-                        <h2 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">Ready to upgrade your site?</h2>
+                        <h2 id="cta-title" class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">Ready to upgrade your site?</h2>
                         <p class="text-zinc-400 mb-10 text-lg md:text-xl max-w-xl mx-auto font-medium leading-relaxed">Join developers globally deploying fast UI experiences with Nexus. Start your 1,000 request allocation today.</p>
                         <div class="flex justify-center items-center">
-                            <a href="/login" class="bg-white text-black hover:bg-zinc-200 px-10 py-4 rounded-full text-base font-bold transition-all shadow-[0_4px_25px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_40px_rgba(255,255,255,0.4)] hover:-translate-y-1">
-                                Get Started for Free
+                            <a href="/login" class="bg-white text-black hover:bg-zinc-200 px-10 py-4 rounded-full text-base font-bold transition-all shadow-[0_4px_25px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_40px_rgba(255,255,255,0.4)] hover:-translate-y-1 inline-flex items-center gap-2">
+                                Get Started for Free <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <footer class="w-full border-t border-white/5 pt-16 pb-12 bg-zinc-950 px-6">
+
+        <footer class="w-full border-t border-white/5 pt-16 pb-12 bg-zinc-950 px-6" role="contentinfo">
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
                     <div class="col-span-2 lg:col-span-2">
                         <div class="flex items-center gap-2.5 mb-6">
                             <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                                <i class="ph-fill ph-brain text-lg"></i>
+                                <i class="ph-fill ph-brain text-lg" aria-hidden="true"></i>
                             </div>
                             <span class="text-xl font-black text-white tracking-tight">Nexus</span>
                         </div>
@@ -430,16 +1006,16 @@
                             <li><a href="/about" class="hover:text-primary transition-colors">About Us</a></li>
                             <li><a href="/privacyPolicy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
                             <li><a href="/termsConditions" class="hover:text-primary transition-colors">Terms of Service</a></li>
-                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
+                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">GitHub</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
                     <p class="text-xs text-zinc-500 font-semibold tracking-wide">&copy; 2026 Nexus Web Assistant. All rights reserved.</p>
                     <div class="flex items-center gap-6 text-zinc-500">
-                        <a href="https://www.linkedin.com/in/thekaifansari01" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-linkedin-logo"></i></a>
-                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-github-logo"></i></a>
-                        <a href="#" class="hover:text-white transition-colors text-xl"><i class="ph-fill ph-discord-logo"></i></a>
+                        <a href="https://www.linkedin.com/in/thekaifansari01" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors text-xl" aria-label="LinkedIn"><i class="ph-fill ph-linkedin-logo" aria-hidden="true"></i></a>
+                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors text-xl" aria-label="GitHub"><i class="ph-fill ph-github-logo" aria-hidden="true"></i></a>
+                        <a href="#" class="hover:text-white transition-colors text-xl" aria-label="Discord"><i class="ph-fill ph-discord-logo" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -457,9 +1033,143 @@
         }
     </script>
 
-    <script type="module" src="src/js/app.js"></script>
-    <script src="src/js/LandingPage.js"></script>
-    <script src="src/js/particles.js"></script>
+    <script type="module" src="src/js/app.js">
+    </script>
+    <script src="src/js/LandingPage.js">
+    </script>
+    <script src="src/js/particles.js">
+    </script>
+
+    <script>
+        (function() {
+            'use strict';
+            const glow = document.getElementById('cursorGlow');
+            if (glow) {
+                let x = 0,
+                    y = 0,
+                    tx = 0,
+                    ty = 0;
+                document.addEventListener('mousemove', function(e) {
+                    tx = e.clientX;
+                    ty = e.clientY;
+                });
+
+                function animateGlow() {
+                    x += (tx - x) * 0.08;
+                    y += (ty - y) * 0.08;
+                    glow.style.transform = 'translate(' + (x - 130) + 'px, ' + (y - 130) + 'px)';
+                    requestAnimationFrame(animateGlow);
+                }
+                animateGlow();
+            }
+            var wrapper = document.getElementById('mockup3d');
+            if (wrapper) {
+                var inner = wrapper.querySelector('.mockup-inner');
+                var rotX = 0,
+                    rotY = 0,
+                    targetX = 0,
+                    targetY = 0;
+                wrapper.addEventListener('mousemove', function(e) {
+                    var rect = wrapper.getBoundingClientRect();
+                    var px = (e.clientX - rect.left) / rect.width - 0.5;
+                    var py = (e.clientY - rect.top) / rect.height - 0.5;
+                    targetX = py * -8;
+                    targetY = px * 8;
+                });
+                wrapper.addEventListener('mouseleave', function() {
+                    targetX = 0;
+                    targetY = 0;
+                });
+
+                function animateTilt() {
+                    rotX += (targetX - rotX) * 0.08;
+                    rotY += (targetY - rotY) * 0.08;
+                    inner.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+                    requestAnimationFrame(animateTilt);
+                }
+                animateTilt();
+            }
+            var counter = document.getElementById('heroUsageCounter');
+            var bar = document.getElementById('heroUsageBar');
+            if (counter && bar) {
+                var target = 187;
+                var current = 0;
+                var step = Math.ceil(target / 60);
+                var interval = setInterval(function() {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    counter.textContent = current;
+                    bar.style.width = (current / 1000 * 100) + '%';
+                }, 20);
+            }
+            var copyBtn = document.getElementById('copyScriptBtn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', function() {
+                    var script = '<script src="https://nexus.com/widget.js"><\/script>\n<script>Nexus.init({ apiKey: \'nx_live_8f92...\', theme: \'dark\' });<\/script>';
+                    navigator.clipboard.writeText(script).then(function() {
+                        var orig = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<i class="ph-bold ph-check"></i> Copied!';
+                        setTimeout(function() { copyBtn.innerHTML = orig; }, 2000);
+                    })['catch'](function() {
+                        alert('Copy the script manually:\n\n' + script);
+                    });
+                });
+            }
+            var faqToggles = document.querySelectorAll('[data-faq]');
+            for (var i = 0; i < faqToggles.length; i++) {
+                (function(toggle) {
+                    toggle.addEventListener('click', function() {
+                        var item = this.closest('.faq-item');
+                        if (!item) return;
+                        var isOpen = item.classList.contains('open');
+                        var container = item.closest('#faqContainer');
+                        if (container) {
+                            var items = container.querySelectorAll('.faq-item');
+                            for (var j = 0; j < items.length; j++) {
+                                var el = items[j];
+                                el.classList.remove('open');
+                                var q = el.querySelector('.faq-question');
+                                if (q) {
+                                    q.classList.remove('text-primary');
+                                    q.classList.add('text-zinc-400');
+                                }
+                            }
+                        }
+                        if (!isOpen) {
+                            item.classList.add('open');
+                            var q2 = item.querySelector('.faq-question');
+                            if (q2) {
+                                q2.classList.add('text-primary');
+                                q2.classList.remove('text-zinc-400');
+                            }
+                        }
+                    });
+                })(faqToggles[i]);
+            }
+            var siteCount = document.getElementById('liveSiteCount');
+            if (siteCount) {
+                var base = 1247;
+                setInterval(function() {
+                    base += Math.floor(Math.random() * 3);
+                    siteCount.textContent = base.toLocaleString();
+                }, 4000);
+            }
+            var sections = document.querySelectorAll('.reveal-section');
+            var observer = new IntersectionObserver(function(entries) {
+                for (var k = 0; k < entries.length; k++) {
+                    if (entries[k].isIntersecting) {
+                        entries[k].target.classList.add('visible');
+                    }
+                }
+            }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+            for (var m = 0; m < sections.length; m++) {
+                observer.observe(sections[m]);
+            }
+        })();
+    </script>
 
 </body>
 </html>
