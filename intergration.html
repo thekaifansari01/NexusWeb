@@ -13,22 +13,36 @@
     <link rel="stylesheet" href="src/css/styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
     <style>
-        .scrollbar-custom::-webkit-scrollbar { width: 4px; height: 4px; }
-        .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 10px; }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+        * {
+            scroll-behavior: smooth;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
         .framework-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
         }
         .framework-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(168, 85, 247, 0.25);
             background: rgba(24, 24, 27, 0.6);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(168, 85, 247, 0.05);
         }
         .framework-card .icon-wrap {
             width: 44px;
@@ -40,70 +54,236 @@
             font-size: 1.3rem;
             flex-shrink: 0;
             margin: 0 auto 0.65rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .framework-card:hover .icon-wrap { transform: scale(1.08); }
-        .framework-card .icon-wrap.react { background: rgba(97, 219, 251, 0.1); color: #61dafb; border: 1px solid rgba(97, 219, 251, 0.15); }
-        .framework-card .icon-wrap.next { background: rgba(0, 0, 0, 0.2); color: #fafafa; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .framework-card .icon-wrap.vue { background: rgba(66, 184, 131, 0.1); color: #42b883; border: 1px solid rgba(66, 184, 131, 0.15); }
-        .framework-card .icon-wrap.nuxt { background: rgba(0, 220, 130, 0.1); color: #00dc82; border: 1px solid rgba(0, 220, 130, 0.15); }
-        .framework-card .icon-wrap.svelte { background: rgba(255, 62, 0, 0.1); color: #ff3e00; border: 1px solid rgba(255, 62, 0, 0.15); }
-        .framework-card .icon-wrap.astro { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border: 1px solid rgba(255, 90, 0, 0.15); }
-        .framework-card .icon-wrap.angular { background: rgba(221, 27, 22, 0.1); color: #dd1b16; border: 1px solid rgba(221, 27, 22, 0.15); }
-        .framework-card .icon-wrap.wp { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.15); }
-        .framework-card .icon-wrap.webflow { background: rgba(67, 56, 202, 0.1); color: #7c3aed; border: 1px solid rgba(67, 56, 202, 0.15); }
-        .framework-card .icon-wrap.shopify { background: rgba(150, 201, 62, 0.1); color: #96c93e; border: 1px solid rgba(150, 201, 62, 0.15); }
-        .framework-card .icon-wrap.vanilla { background: rgba(247, 223, 30, 0.1); color: #f7df1e; border: 1px solid rgba(247, 223, 30, 0.15); }
-        .framework-card .icon-wrap.gatsby { background: rgba(98, 52, 143, 0.15); color: #663399; border: 1px solid rgba(98, 52, 143, 0.15); }
-        .framework-card .icon-wrap.remix { background: rgba(0, 0, 0, 0.2); color: #fafafa; border: 1px solid rgba(255, 255, 255, 0.08); }
-        .framework-card .icon-wrap.laravel { background: rgba(255, 43, 43, 0.1); color: #ff2d20; border: 1px solid rgba(255, 43, 43, 0.15); }
-        .framework-card .icon-wrap.vite { background: rgba(146, 84, 222, 0.12); color: #a855f7; border: 1px solid rgba(146, 84, 222, 0.15); }
-        
+        .framework-card:hover .icon-wrap {
+            transform: scale(1.1) rotate(-3deg);
+        }
+        .framework-card .icon-wrap.react {
+            background: rgba(97, 219, 251, 0.1);
+            color: #61dafb;
+            border: 1px solid rgba(97, 219, 251, 0.15);
+        }
+        .framework-card .icon-wrap.next {
+            background: rgba(0, 0, 0, 0.2);
+            color: #fafafa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .framework-card .icon-wrap.vue {
+            background: rgba(66, 184, 131, 0.1);
+            color: #42b883;
+            border: 1px solid rgba(66, 184, 131, 0.15);
+        }
+        .framework-card .icon-wrap.nuxt {
+            background: rgba(0, 220, 130, 0.1);
+            color: #00dc82;
+            border: 1px solid rgba(0, 220, 130, 0.15);
+        }
+        .framework-card .icon-wrap.svelte {
+            background: rgba(255, 62, 0, 0.1);
+            color: #ff3e00;
+            border: 1px solid rgba(255, 62, 0, 0.15);
+        }
+        .framework-card .icon-wrap.astro {
+            background: rgba(255, 90, 0, 0.1);
+            color: #ff5a00;
+            border: 1px solid rgba(255, 90, 0, 0.15);
+        }
+        .framework-card .icon-wrap.angular {
+            background: rgba(221, 27, 22, 0.1);
+            color: #dd1b16;
+            border: 1px solid rgba(221, 27, 22, 0.15);
+        }
+        .framework-card .icon-wrap.wp {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.15);
+        }
+        .framework-card .icon-wrap.webflow {
+            background: rgba(67, 56, 202, 0.1);
+            color: #7c3aed;
+            border: 1px solid rgba(67, 56, 202, 0.15);
+        }
+        .framework-card .icon-wrap.shopify {
+            background: rgba(150, 201, 62, 0.1);
+            color: #96c93e;
+            border: 1px solid rgba(150, 201, 62, 0.15);
+        }
+        .framework-card .icon-wrap.vanilla {
+            background: rgba(247, 223, 30, 0.1);
+            color: #f7df1e;
+            border: 1px solid rgba(247, 223, 30, 0.15);
+        }
+        .framework-card .icon-wrap.gatsby {
+            background: rgba(98, 52, 143, 0.15);
+            color: #663399;
+            border: 1px solid rgba(98, 52, 143, 0.15);
+        }
+        .framework-card .icon-wrap.remix {
+            background: rgba(0, 0, 0, 0.2);
+            color: #fafafa;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .framework-card .icon-wrap.laravel {
+            background: rgba(255, 43, 43, 0.1);
+            color: #ff2d20;
+            border: 1px solid rgba(255, 43, 43, 0.15);
+        }
+        .framework-card .icon-wrap.vite {
+            background: rgba(146, 84, 222, 0.12);
+            color: #a855f7;
+            border: 1px solid rgba(146, 84, 222, 0.15);
+        }
+
         .framework-card.active {
-            border-color: rgba(168, 85, 247, 0.4);
+            border-color: rgba(168, 85, 247, 0.5);
             background: rgba(168, 85, 247, 0.08);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.12), inset 0 0 30px rgba(168, 85, 247, 0.05);
+            transform: translateY(-2px) scale(1.01);
         }
         .framework-card .check-mark {
             position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
+            top: 0.4rem;
+            right: 0.4rem;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transform: scale(0.5);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .framework-card.active .check-mark { opacity: 1; }
-        .check-mark i { color: #a855f7; font-size: 1rem; filter: drop-shadow(0 0 8px rgba(168,85,247,0.6)); }
+        .framework-card.active .check-mark {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .check-mark i {
+            color: #a855f7;
+            font-size: 1rem;
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+        }
 
-        .integration-tab-content { display: none; }
-        .integration-tab-content.active { display: block; }
-        
+        .framework-card .card-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.2);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .integration-tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .integration-tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .mac-window {
             position: relative;
-            background: rgba(12, 12, 14, 0.9);
+            background: rgba(12, 12, 14, 0.92);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        .mac-window::before {
-            content: '';
+        .mac-window:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        }
+        .mac-window .window-dots {
             position: absolute;
-            top: 1.25rem;
+            top: 1.1rem;
             left: 1.25rem;
+            display: flex;
+            gap: 0.55rem;
+            z-index: 10;
+        }
+        .mac-window .window-dots span {
             width: 11px;
             height: 11px;
             border-radius: 50%;
-            background: #ff5f56;
-            box-shadow: 19px 0 0 #ffbd2e, 38px 0 0 #27c93f;
-            z-index: 10;
+            display: block;
         }
+        .mac-window .window-dots .dot-red {
+            background: #ff5f56;
+        }
+        .mac-window .window-dots .dot-yellow {
+            background: #ffbd2e;
+        }
+        .mac-window .window-dots .dot-green {
+            background: #27c93f;
+        }
+
+        .mac-window .lang-badge {
+            position: absolute;
+            top: 0.95rem;
+            left: 5.2rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #a1a1aa;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .mac-window .copy-btn {
+            position: absolute;
+            top: 0.85rem;
+            right: 1.2rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #a1a1aa;
+            padding: 0.3rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            backdrop-filter: blur(8px);
+            opacity: 0.6;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .mac-window:hover .copy-btn {
+            opacity: 1;
+        }
+        .mac-window .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fafafa;
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.04);
+        }
+        .mac-window .copy-btn.copied {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+
         .mac-window pre {
             margin: 0;
             padding: 3.5rem 1.5rem 1.5rem 1.5rem;
             overflow-x: auto;
             background: transparent;
             font-size: 0.85rem;
-            line-height: 1.7;
+            line-height: 1.75;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         }
         .mac-window pre code {
@@ -113,31 +293,68 @@
             font-family: inherit;
             color: #d4d4d8;
         }
-        
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #a1a1aa;
-            padding: 0.35rem 0.9rem;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            backdrop-filter: blur(4px);
+
+        .mac-window pre code .hljs-comment,
+        .mac-window pre code .hljs-quote {
+            color: #6a737d;
+            font-style: italic;
         }
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: #fafafa;
-            border-color: rgba(255, 255, 255, 0.2);
+        .mac-window pre code .hljs-keyword,
+        .mac-window pre code .hljs-selector-tag,
+        .mac-window pre code .hljs-subst {
+            color: #c678dd;
         }
-        .copy-btn.copied {
-            background: rgba(52, 211, 153, 0.15);
-            color: #34d399;
-            border-color: rgba(52, 211, 153, 0.25);
+        .mac-window pre code .hljs-number,
+        .mac-window pre code .hljs-literal,
+        .mac-window pre code .hljs-variable,
+        .mac-window pre code .hljs-template-variable,
+        .mac-window pre code .hljs-tag .hljs-attr {
+            color: #d19a66;
+        }
+        .mac-window pre code .hljs-string,
+        .mac-window pre code .hljs-doctag {
+            color: #98c379;
+        }
+        .mac-window pre code .hljs-title,
+        .mac-window pre code .hljs-section,
+        .mac-window pre code .hljs-selector-id {
+            color: #61afef;
+        }
+        .mac-window pre code .hljs-type,
+        .mac-window pre code .hljs-class .hljs-title {
+            color: #e5c07b;
+        }
+        .mac-window pre code .hljs-tag,
+        .mac-window pre code .hljs-name,
+        .mac-window pre code .hljs-attribute {
+            color: #e06c75;
+        }
+        .mac-window pre code .hljs-regexp,
+        .mac-window pre code .hljs-link {
+            color: #56b6c2;
+        }
+        .mac-window pre code .hljs-symbol,
+        .mac-window pre code .hljs-bullet {
+            color: #d19a66;
+        }
+        .mac-window pre code .hljs-built_in,
+        .mac-window pre code .hljs-builtin-name {
+            color: #e5c07b;
+        }
+        .mac-window pre code .hljs-meta {
+            color: #abb2bf;
+        }
+        .mac-window pre code .hljs-deletion {
+            background: #3e4451;
+        }
+        .mac-window pre code .hljs-addition {
+            background: #2c323d;
+        }
+        .mac-window pre code .hljs-emphasis {
+            font-style: italic;
+        }
+        .mac-window pre code .hljs-strong {
+            font-weight: bold;
         }
 
         .cards-scroll {
@@ -150,14 +367,276 @@
             width: 92px;
             padding: 0.75rem 0.5rem;
         }
-        .cards-scroll .framework-card .icon-wrap { width: 36px; height: 36px; font-size: 1rem; margin-bottom: 0.4rem; }
-        .cards-scroll .framework-card span { font-size: 0.65rem; }
-        .cards-scroll .framework-card .text-[10px] { font-size: 0.55rem; }
+        .cards-scroll .framework-card .icon-wrap {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+        .cards-scroll .framework-card span {
+            font-size: 0.65rem;
+        }
+        .cards-scroll .framework-card .text-[10px] {
+            font-size: 0.55rem;
+        }
+
+        .cards-scroll .framework-card .framework-badge {
+            font-size: 0.45rem;
+            padding: 0.05rem 0.45rem;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.12);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            margin-top: 0.15rem;
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .search-filter-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+        }
+        .search-filter-wrap input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 0.55rem 1rem 0.55rem 2.5rem;
+            color: #fafafa;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            outline: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .search-filter-wrap input::placeholder {
+            color: #52525b;
+            font-weight: 400;
+        }
+        .search-filter-wrap input:focus {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+        }
+        .search-filter-wrap .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #52525b;
+            font-size: 1.1rem;
+        }
+        .search-filter-wrap .clear-search {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #52525b;
+            font-size: 0.9rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .search-filter-wrap .clear-search.visible {
+            opacity: 1;
+        }
+        .search-filter-wrap .clear-search:hover {
+            color: #fafafa;
+        }
+
+        .framework-card.hidden-card {
+            display: none !important;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 0.9rem 1.4rem;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 280px;
+            max-width: 420px;
+        }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .toast.hide {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+        .toast .toast-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .toast .toast-icon.success {
+            color: #34d399;
+        }
+        .toast .toast-icon.info {
+            color: #60a5fa;
+        }
+        .toast .toast-icon.error {
+            color: #f87171;
+        }
+        .toast .toast-msg {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fafafa;
+        }
+        .toast .toast-msg span {
+            font-weight: 400;
+            color: #a1a1aa;
+        }
+
+        .scroll-progress {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: transparent;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .scroll-progress .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+            border-radius: 0 2px 2px 0;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .category-tags .cat-tag {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #71717a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .category-tags .cat-tag:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fafafa;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        .category-tags .cat-tag.active-tag {
+            background: rgba(168, 85, 247, 0.12);
+            color: #a855f7;
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+
         @media (max-width: 640px) {
-            .cards-scroll { gap: 0.5rem; }
-            .cards-scroll .framework-card { width: 72px; padding: 0.5rem 0.25rem; }
-            .cards-scroll .framework-card .icon-wrap { width: 30px; height: 30px; font-size: 0.85rem; }
-            .cards-scroll .framework-card span { font-size: 0.55rem; }
+            .cards-scroll {
+                gap: 0.5rem;
+            }
+            .cards-scroll .framework-card {
+                width: 72px;
+                padding: 0.5rem 0.25rem;
+            }
+            .cards-scroll .framework-card .icon-wrap {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
+            .cards-scroll .framework-card span {
+                font-size: 0.55rem;
+            }
+            .mac-window .copy-btn {
+                font-size: 0.55rem;
+                padding: 0.2rem 0.6rem;
+            }
+            .mac-window .lang-badge {
+                font-size: 0.45rem;
+                padding: 0.1rem 0.5rem;
+                left: 4.8rem;
+            }
+            .mac-window pre {
+                font-size: 0.7rem;
+                padding: 3.2rem 1rem 1rem 1rem;
+            }
+            .toast-container {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+            .toast {
+                min-width: unset;
+                width: 100%;
+                padding: 0.75rem 1rem;
+            }
+            .search-filter-wrap {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mac-window .window-dots {
+                top: 0.8rem;
+                left: 0.9rem;
+            }
+            .mac-window .window-dots span {
+                width: 9px;
+                height: 9px;
+            }
+            .mac-window .lang-badge {
+                left: 4.2rem;
+                top: 0.7rem;
+            }
+            .mac-window .copy-btn {
+                top: 0.6rem;
+                right: 0.8rem;
+                padding: 0.15rem 0.5rem;
+                font-size: 0.5rem;
+            }
+            .mac-window pre {
+                padding: 2.8rem 0.8rem 0.8rem 0.8rem;
+                font-size: 0.6rem;
+                line-height: 1.6;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
@@ -193,7 +672,7 @@
             </a>
             <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
-            </a>  
+            </a>
         </nav>
         <div class="p-4 border-t border-white/5 bg-black/20">
             <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
@@ -230,6 +709,10 @@
             </div>
         </header>
 
+        <div class="scroll-progress">
+            <div class="progress-bar" id="scrollProgressBar"></div>
+        </div>
+
         <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 relative z-10 scrollbar-custom" id="main-scroll-area">
             <div class="max-w-5xl mx-auto pb-20">
 
@@ -247,112 +730,144 @@
                     </p>
                 </div>
 
-                <div class="cards-scroll mb-10">
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center active" data-tab="react">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                    <div class="category-tags">
+                        <span class="cat-tag active-tag" data-cat="all">All</span>
+                        <span class="cat-tag" data-cat="react">React</span>
+                        <span class="cat-tag" data-cat="fullstack">Full-Stack</span>
+                        <span class="cat-tag" data-cat="nocode">No-Code</span>
+                        <span class="cat-tag" data-cat="static">Static</span>
+                    </div>
+                    <div class="search-filter-wrap">
+                        <i class="ph-bold ph-magnifying-glass search-icon"></i>
+                        <input type="text" id="frameworkSearch" placeholder="Search frameworks..." autocomplete="off" />
+                        <button class="clear-search" id="clearSearchBtn"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+
+                <div class="cards-scroll mb-10" id="cardsContainer">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center active" data-tab="react" data-cat="react">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap react mx-auto">⚛️</div>
                         <span class="text-xs font-bold text-white block">React</span>
                         <span class="text-[9px] text-zinc-500 block">Next.js</span>
+                        <span class="framework-badge">v18+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="next">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="next" data-cat="react fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap next mx-auto">▲</div>
                         <span class="text-xs font-bold text-white block">Next.js</span>
                         <span class="text-[9px] text-zinc-500 block">App Router</span>
+                        <span class="framework-badge">v14+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vue">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vue" data-cat="react">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap vue mx-auto">🟢</div>
                         <span class="text-xs font-bold text-white block">Vue.js</span>
                         <span class="text-[9px] text-zinc-500 block">Composition</span>
+                        <span class="framework-badge">v3+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="nuxt">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="nuxt" data-cat="react fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap nuxt mx-auto">⎔</div>
                         <span class="text-xs font-bold text-white block">Nuxt</span>
                         <span class="text-[9px] text-zinc-500 block">Vue Meta</span>
+                        <span class="framework-badge">v3+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="svelte">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="svelte" data-cat="react">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap svelte mx-auto">🟠</div>
                         <span class="text-xs font-bold text-white block">Svelte</span>
                         <span class="text-[9px] text-zinc-500 block">SvelteKit</span>
+                        <span class="framework-badge">v4+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="astro">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="astro" data-cat="react static">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap astro mx-auto">🚀</div>
                         <span class="text-xs font-bold text-white block">Astro</span>
                         <span class="text-[9px] text-zinc-500 block">Islands</span>
+                        <span class="framework-badge">v4+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="angular">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="angular" data-cat="react">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap angular mx-auto">🔴</div>
                         <span class="text-xs font-bold text-white block">Angular</span>
                         <span class="text-[9px] text-zinc-500 block">TypeScript</span>
+                        <span class="framework-badge">v17+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="wordpress">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="wordpress" data-cat="nocode fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap wp mx-auto">🔷</div>
                         <span class="text-xs font-bold text-white block">WordPress</span>
                         <span class="text-[9px] text-zinc-500 block">PHP Hooks</span>
+                        <span class="framework-badge">v6+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="webflow">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="webflow" data-cat="nocode">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap webflow mx-auto">🌐</div>
                         <span class="text-xs font-bold text-white block">Webflow</span>
                         <span class="text-[9px] text-zinc-500 block">No-Code</span>
+                        <span class="framework-badge">Stable</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="shopify">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="shopify" data-cat="nocode fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap shopify mx-auto">🛍️</div>
                         <span class="text-xs font-bold text-white block">Shopify</span>
                         <span class="text-[9px] text-zinc-500 block">Liquid</span>
+                        <span class="framework-badge">v2+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vanilla">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vanilla" data-cat="static">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap vanilla mx-auto">🟨</div>
                         <span class="text-xs font-bold text-white block">Vanilla JS</span>
                         <span class="text-[9px] text-zinc-500 block">Static</span>
+                        <span class="framework-badge">ES6+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="gatsby">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="gatsby" data-cat="react static">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap gatsby mx-auto">🔮</div>
                         <span class="text-xs font-bold text-white block">Gatsby</span>
                         <span class="text-[9px] text-zinc-500 block">GraphQL</span>
+                        <span class="framework-badge">v5+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="remix">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="remix" data-cat="react fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap remix mx-auto">💿</div>
                         <span class="text-xs font-bold text-white block">Remix</span>
                         <span class="text-[9px] text-zinc-500 block">Edge</span>
+                        <span class="framework-badge">v2+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="laravel">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="laravel" data-cat="fullstack">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap laravel mx-auto">⚡</div>
                         <span class="text-xs font-bold text-white block">Laravel</span>
                         <span class="text-[9px] text-zinc-500 block">PHP</span>
+                        <span class="framework-badge">v11+</span>
                     </div>
-                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vite">
+                    <div class="framework-card glass-panel rounded-2xl border border-white/5 bg-zinc-900/20 text-center" data-tab="vite" data-cat="static">
                         <div class="check-mark"><i class="ph-fill ph-check-circle"></i></div>
                         <div class="icon-wrap vite mx-auto">⚡</div>
                         <span class="text-xs font-bold text-white block">Vite</span>
                         <span class="text-[9px] text-zinc-500 block">Build Tool</span>
+                        <span class="framework-badge">v5+</span>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    
+                <div class="space-y-6" id="tabContainer">
+
                     <div id="tab-react" class="integration-tab-content active relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">React Lifecycle Engine</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Asynchronous layout injection via standard React hooks framework.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-react')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-react')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-react" class="language-javascript">import { useEffect } from 'react';
 
 export default function NexusWidget() {
@@ -375,16 +890,18 @@ export default function NexusWidget() {
                     </div>
 
                     <div id="tab-next" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Next.js App Router Integration</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Client-side component with 'use client' directive for App Router.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-next')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-next')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-next" class="language-javascript">'use client';
 
 import { useEffect } from 'react';
@@ -411,16 +928,18 @@ export default function NexusWidget() {
                     </div>
 
                     <div id="tab-vue" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Vue.js Composition Setup</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Lifecycle mounting within reactive composition components.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vue')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-vue')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-vue" class="language-javascript">import { onMounted } from 'vue';
 
 export default {
@@ -443,16 +962,18 @@ export default {
                     </div>
 
                     <div id="tab-nuxt" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Nuxt.js Plugin Module</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Server-side safe mounting via Nuxt plugin architecture.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-nuxt')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-nuxt')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-nuxt" class="language-javascript">// plugins/nexus.client.js
 export default defineNuxtPlugin(() => {
   if (process.client) {
@@ -471,16 +992,18 @@ export default defineNuxtPlugin(() => {
                     </div>
 
                     <div id="tab-svelte" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Svelte Component Mount</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Reactive onMount lifecycle for Svelte applications.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-svelte')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">Svelte</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-svelte')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-svelte" class="language-javascript">&lt;script&gt;
   import { onMount } from 'svelte';
 
@@ -502,16 +1025,18 @@ export default defineNuxtPlugin(() => {
                     </div>
 
                     <div id="tab-astro" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Astro Component Islands</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Client-side directive for Astro island architecture.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-astro')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">Astro</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-astro')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-astro" class="language-html">---
 // src/components/NexusWidget.astro
 ---
@@ -533,16 +1058,18 @@ export default defineNuxtPlugin(() => {
                     </div>
 
                     <div id="tab-angular" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Angular Component Strategy</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Strict TypeScript type assignment mapping to global DOM interfaces.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-angular')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">TypeScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-angular')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-angular" class="language-typescript">import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -566,19 +1093,21 @@ export class NexusWidgetComponent implements OnInit {
                     </div>
 
                     <div id="tab-wordpress" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">WordPress Core WP_HEAD Hook</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Inject engine headers through action hook layers inside template files.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-wp')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">PHP</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-wp')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-wp" class="language-php">function add_nexus_ai_widget() {
     if (!is_admin()) {
-        ?>
+        ?&gt;
         &lt;script&gt;
         window.NexusConfig = {
             apiKey: 'YOUR_NEXUS_API_KEY',
@@ -594,16 +1123,18 @@ add_action('wp_head', 'add_nexus_ai_widget');</code></pre>
                     </div>
 
                     <div id="tab-webflow" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Webflow Custom Code Injection</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Place inside Site Settings → Custom Code → Footer section.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-webflow')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-webflow')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-webflow" class="language-html">&lt;!-- Go to Site Settings → Custom Code → Footer --&gt;
 &lt;script&gt;
 window.NexusConfig = {
@@ -619,17 +1150,19 @@ window.NexusConfig = {
                     </div>
 
                     <div id="tab-shopify" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Shopify Theme Liquid Injection</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Add to theme.liquid or specific template files for global install.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-shopify')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
-                            <pre><code id="code-shopify" class="language-liquid">&lt;!-- Go to Online Store → Themes → Edit Code --&gt;
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">Liquid</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-shopify')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
+                            <pre><code id="code-shopify" class="language-html">&lt;!-- Go to Online Store → Themes → Edit Code --&gt;
 &lt;!-- Open theme.liquid and add before &lt;/body&gt; --&gt;
 
 &lt;script&gt;
@@ -646,16 +1179,18 @@ window.NexusConfig = {
                     </div>
 
                     <div id="tab-vanilla" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Vanilla Production Script Placement</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Native declarative parameters optimized for static layouts and HTML containers.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vanilla')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-vanilla')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-vanilla" class="language-html">&lt;script&gt;
 window.NexusConfig = {
     apiKey: 'YOUR_NEXUS_API_KEY',
@@ -670,16 +1205,18 @@ window.NexusConfig = {
                     </div>
 
                     <div id="tab-gatsby" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Gatsby SSR/Client Wrapper</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Safe mounting with Gatsby's browser API and SSR awareness.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-gatsby')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-gatsby')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-gatsby" class="language-javascript">// gatsby-browser.js
 export const onClientEntry = () => {
   window.NexusConfig = {
@@ -696,16 +1233,18 @@ export const onClientEntry = () => {
                     </div>
 
                     <div id="tab-remix" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Remix Client-Only Mount</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Safe hydration with Remix's client entry and loader context.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-remix')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-remix')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-remix" class="language-javascript">// app/entry.client.jsx
 import { useEffect } from 'react';
 
@@ -729,16 +1268,18 @@ export default function NexusWidget() {
                     </div>
 
                     <div id="tab-laravel" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Laravel Blade Directives</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Embed directly inside Blade templates with PHP safety.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-laravel')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">PHP</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-laravel')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-laravel" class="language-php">// resources/views/layouts/app.blade.php
 @push('scripts')
 &lt;script&gt;
@@ -754,16 +1295,18 @@ window.NexusConfig = {
                     </div>
 
                     <div id="tab-vite" class="integration-tab-content relative z-10">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                             <div>
                                 <h3 class="text-lg font-bold text-white tracking-wide">Vite Plugin Injection</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5 font-medium">Add to index.html or use Vite's transform hooks for module loading.</p>
                             </div>
-                            <button class="copy-btn self-start sm:self-center" onclick="copyCode(this, 'code-vite')">
-                                <i class="ph-bold ph-copy"></i> Copy
-                            </button>
                         </div>
                         <div class="mac-window">
+                            <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                            <span class="lang-badge">HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'code-vite')">
+                                <i class="ph-bold ph-copy"></i> Copy
+                            </button>
                             <pre><code id="code-vite" class="language-html">&lt;!-- index.html --&gt;
 &lt;script&gt;
 window.NexusConfig = {
@@ -795,11 +1338,18 @@ window.NexusConfig = {
         </main>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js">
+    </script>
 
     <script type="importmap">
         {
@@ -824,7 +1374,8 @@ window.NexusConfig = {
                 window.location.href = '/login';
                 return;
             }
-            if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+            if (sidebarAvatar) sidebarAvatar.src = user.photoURL ||
+                'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
             if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
             if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
         });
@@ -861,38 +1412,191 @@ window.NexusConfig = {
             if (targetCard && targetContent) {
                 targetCard.classList.add('active');
                 targetContent.classList.add('active');
-                
+
                 const block = targetContent.querySelector('pre code');
                 if (block && window.hljs) {
                     window.hljs.highlightElement(block);
+                }
+
+                if (window.location.hash !== `#${tabId}`) {
+                    history.pushState(null, '', `#${tabId}`);
                 }
             }
         }
 
         frameworkCards.forEach(card => {
-            card.addEventListener('click', () => {
-                switchTab(card.dataset.tab);
+            card.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const ripple = document.createElement('span');
+                ripple.className = 'card-ripple';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(168,85,247,0.2)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'rippleAnim 0.6s ease-out forwards';
+                ripple.style.pointerEvents = 'none';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+                switchTab(this.dataset.tab);
             });
         });
+
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+            const exists = document.querySelector(`.framework-card[data-tab="${hash}"]`);
+            if (exists) switchTab(hash);
+        }
 
         window.copyCode = function(btn, codeId) {
             const codeEl = document.getElementById(codeId);
             if (codeEl) {
-                navigator.clipboard.writeText(codeEl.textContent).then(() => {
+                const text = codeEl.textContent;
+                navigator.clipboard.writeText(text).then(() => {
                     const orig = btn.innerHTML;
                     btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> Copied!';
                     btn.classList.add('copied');
+                    showToast('✓ Code copied to clipboard', 'success');
                     setTimeout(() => {
                         btn.innerHTML = orig;
                         btn.classList.remove('copied');
                     }, 2000);
+                }).catch(() => {
+                    showToast('Failed to copy code', 'error');
                 });
             }
         };
 
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: 'ph-fill ph-check-circle',
+                info: 'ph-fill ph-info',
+                error: 'ph-fill ph-x-circle'
+            };
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <i class="${icons[type] || icons.info} toast-icon ${type}"></i>
+                <span class="toast-msg">${message}</span>
+            `;
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            }, 2800);
+        }
+
         document.querySelectorAll('.mac-window pre code').forEach(block => {
             if (window.hljs) {
                 window.hljs.highlightElement(block);
+            }
+        });
+
+        const searchInput = document.getElementById('frameworkSearch');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const allCards = cardsContainer.querySelectorAll('.framework-card');
+
+        function filterCards(query) {
+            const q = query.toLowerCase().trim();
+            let visibleCount = 0;
+            allCards.forEach(card => {
+                const name = card.querySelector('span:first-of-type')?.textContent?.toLowerCase() || '';
+                const sub = card.querySelector('.text-[9px]')?.textContent?.toLowerCase() || '';
+                const match = name.includes(q) || sub.includes(q);
+                if (q === '' || match) {
+                    card.classList.remove('hidden-card');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden-card');
+                }
+            });
+            clearBtn.classList.toggle('visible', q.length > 0);
+            if (visibleCount === 0 && q.length > 0) {
+                showToast('No frameworks found for "' + q + '"', 'info');
+            }
+        }
+
+        searchInput.addEventListener('input', function() {
+            filterCards(this.value);
+        });
+
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            filterCards('');
+            searchInput.focus();
+        });
+
+        const catTags = document.querySelectorAll('.cat-tag');
+        catTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                catTags.forEach(t => t.classList.remove('active-tag'));
+                this.classList.add('active-tag');
+                const cat = this.dataset.cat;
+                allCards.forEach(card => {
+                    const cardCats = (card.dataset.cat || '').split(' ');
+                    if (cat === 'all' || cardCats.includes(cat)) {
+                        card.classList.remove('hidden-card');
+                    } else {
+                        card.classList.add('hidden-card');
+                    }
+                });
+                searchInput.value = '';
+                clearBtn.classList.remove('visible');
+            });
+        });
+
+        const scrollArea = document.getElementById('main-scroll-area');
+        const progressBar = document.getElementById('scrollProgressBar');
+
+        scrollArea.addEventListener('scroll', function() {
+            const scrollTop = this.scrollTop;
+            const scrollHeight = this.scrollHeight - this.clientHeight;
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        });
+
+        if (window.location.hash) {
+            const hashTab = window.location.hash.replace('#', '');
+            const exists = document.querySelector(`.framework-card[data-tab="${hashTab}"]`);
+            if (exists) switchTab(hashTab);
+        }
+
+        const savedTab = localStorage.getItem('nexus_last_tab');
+        if (savedTab && !window.location.hash) {
+            const exists = document.querySelector(`.framework-card[data-tab="${savedTab}"]`);
+            if (exists) switchTab(savedTab);
+        }
+
+        frameworkCards.forEach(card => {
+            card.addEventListener('click', function() {
+                localStorage.setItem('nexus_last_tab', this.dataset.tab);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'c' || e.key === 'C')) {
+                const activeContent = document.querySelector('.integration-tab-content.active');
+                if (activeContent) {
+                    const codeBlock = activeContent.querySelector('pre code');
+                    if (codeBlock) {
+                        const btn = activeContent.querySelector('.copy-btn');
+                        if (btn) {
+                            e.preventDefault();
+                            btn.click();
+                        }
+                    }
+                }
             }
         });
     </script>
