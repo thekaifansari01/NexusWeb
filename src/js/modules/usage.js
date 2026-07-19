@@ -72,11 +72,11 @@ function renderTable(logs) {
   }
   let data = [...logs];
   if (state.activeFilter) {
-    const { type, value } = state.activeFilter;
+    const { type } = state.activeFilter;
     data = data.filter(log => {
-      if (type === 'model') return (log.model || '').toLowerCase() === value.toLowerCase();
-      if (type === 'domain') return (log.domain || '').toLowerCase() === value.toLowerCase();
-      if (type === 'status') return (log.status || '').toLowerCase() === value.toLowerCase();
+      if (type === 'model') return !!(log.model);
+      if (type === 'domain') return !!(log.domain);
+      if (type === 'status') return !!(log.status);
       return true;
     });
   }
@@ -160,7 +160,7 @@ export function filterLogs(query) {
   if (dom.logCount) dom.logCount.textContent = `${state.filteredLogs.length} entries`;
 }
 
-export function applyFilter(type, value) {
+export function applyFilter(type) {
   if (type === 'all') {
     state.activeFilter = null;
     dom.filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
@@ -172,7 +172,8 @@ export function applyFilter(type, value) {
       dom.filterChips.forEach(c => c.classList.remove('active', 'bg-primary/20', 'text-primary', 'border-primary/30'));
       if (!isActive) {
         chip.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
-        state.activeFilter = { type: chip.dataset.filterType || 'model', value: chip.textContent.trim().toLowerCase() };
+        const filterType = chip.dataset.filterType || chip.dataset.filter;
+        state.activeFilter = { type: filterType };
       } else {
         state.activeFilter = null;
         document.querySelector('.filter-chip[data-filter="all"]')?.classList.add('active', 'bg-primary/20', 'text-primary', 'border-primary/30');
@@ -210,12 +211,12 @@ export function sortLogs(field) {
 }
 
 export function exportLogs() {
-  if (!state.allLogs || state.allLogs.length === 0) {
+  if (!state.filteredLogs || state.filteredLogs.length === 0) {
     showToast('No data to export.', 3000, 'warning');
     return;
   }
   let csv = 'Timestamp,Model,Tokens,Status,Domain\n';
-  state.allLogs.forEach(log => {
+  state.filteredLogs.forEach(log => {
     const date = log.timestamp ? new Date(log.timestamp).toISOString() : '';
     csv += `${date},${log.model || ''},${log.totalTokens || 0},${log.status || ''},${log.domain || ''}\n`;
   });

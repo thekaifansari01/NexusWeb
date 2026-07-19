@@ -322,15 +322,18 @@ export function resetDeleteTurnstile() {
 export function updateUserUI(user) {
   if (dom.sidebarAvatar) dom.sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
   if (dom.sidebarEmail) dom.sidebarEmail.textContent = user.email || 'user@example.com';
-  if (dom.sidebarName) dom.sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
-  if (dom.welcomeMessageEl) dom.welcomeMessageEl.textContent = `Welcome back, ${user.displayName || user.email.split('@')[0] || 'User'}!`;
+  const displayName = user?.displayName || (user?.email ? user.email.split('@')[0] : 'User');
+  if (dom.sidebarName) dom.sidebarName.textContent = displayName;
+  if (dom.welcomeMessageEl) dom.welcomeMessageEl.textContent = `Welcome back, ${displayName}!`;
   if (dom.settingsAvatar) dom.settingsAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=80';
-  if (dom.settingsName) dom.settingsName.textContent = user.displayName || user.email.split('@')[0] || 'User';
+  if (dom.settingsName) dom.settingsName.textContent = displayName;
   if (dom.settingsEmail) dom.settingsEmail.textContent = user.email || 'user@example.com';
+
   const providerData = user.providerData || [];
   const isPassword = providerData.some(p => p.providerId === 'password');
   const socialProviderData = providerData.find(p => p.providerId !== 'password');
   state.isSocialUser = !isPassword && !!socialProviderData;
+
   if (isPassword) {
     if (dom.passwordChangeSection) dom.passwordChangeSection.classList.remove('hidden');
     if (dom.socialAuthInfo) dom.socialAuthInfo.classList.add('hidden');
@@ -348,21 +351,9 @@ export function updateUserUI(user) {
     if (dom.deletePassword && dom.deletePassword.parentElement) dom.deletePassword.parentElement.classList.add('hidden');
     if (dom.deleteSocialReauth) dom.deleteSocialReauth.classList.remove('hidden');
   }
+
   if (dom.deleteAccountModal) {
     dom.deleteAccountModal.classList.add('hidden');
     dom.deleteAccountModal.style.display = 'none';
   }
-}
-
-export function closeToast(overlay) {
-  if (!overlay) return;
-  overlay.style.opacity = '0';
-  const toast = overlay.querySelector('div');
-  if (toast) {
-    toast.style.transform = 'scale(0.92) translateY(16px)';
-    toast.style.opacity = '0';
-  }
-  setTimeout(() => {
-    if (overlay.parentNode) overlay.remove();
-  }, 350);
 }

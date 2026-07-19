@@ -48,12 +48,7 @@ export function openDeleteAccountModal() {
     dom.deleteAccountModal.classList.remove('hidden');
     dom.deleteAccountModal.style.display = 'flex';
   }
-  state.deleteReauthToken = 'dummy';
   if (dom.deleteConfirmBtn) dom.deleteConfirmBtn.disabled = true;
-  if (dom.deletePassword && dom.deletePassword.parentElement) {
-    dom.deletePassword.parentElement.classList.add('hidden');
-  }
-  if (dom.deleteSocialReauth) dom.deleteSocialReauth.classList.add('hidden');
   renderDeleteTurnstile();
 }
 
@@ -63,7 +58,6 @@ export function closeDeleteAccountModal() {
     dom.deleteAccountModal.style.display = 'none';
   }
   resetDeleteTurnstile();
-  state.deleteReauthToken = null;
   if (dom.deleteConfirmBtn) dom.deleteConfirmBtn.disabled = true;
 }
 

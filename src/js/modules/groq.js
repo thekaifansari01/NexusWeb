@@ -15,9 +15,9 @@ export async function loadGroqKey() {
       dom.groqStatus.style.color = '#34d399';
       dom.deleteGroqBtn.classList.remove('hidden');
       resetGroqForm();
-      if (dom.groqVaultStatusEl) {
-        dom.groqVaultStatusEl.textContent = '🔒 Encrypted';
-        dom.groqVaultStatusEl.className = 'stat-number text-emerald-400 text-xl font-bold';
+      if (dom.groqVaultStatus) {
+        dom.groqVaultStatus.innerHTML = '🔒 Encrypted';
+        dom.groqVaultStatus.className = 'text-2xl font-black text-emerald-400 tracking-tight flex items-center gap-2';
       }
     } else {
       dom.groqInput.value = '';
@@ -25,9 +25,9 @@ export async function loadGroqKey() {
       dom.groqStatus.style.color = '#71717a';
       dom.deleteGroqBtn.classList.add('hidden');
       resetGroqForm();
-      if (dom.groqVaultStatusEl) {
-        dom.groqVaultStatusEl.textContent = '⚠️ Not Configured';
-        dom.groqVaultStatusEl.className = 'stat-number text-amber-400 text-xl font-bold';
+      if (dom.groqVaultStatus) {
+        dom.groqVaultStatus.innerHTML = '⚠️ Not Configured';
+        dom.groqVaultStatus.className = 'text-2xl font-black text-amber-400 tracking-tight flex items-center gap-2';
       }
     }
   } catch (error) {
@@ -35,9 +35,9 @@ export async function loadGroqKey() {
     dom.groqStatus.style.color = '#fb7185';
     dom.deleteGroqBtn.classList.add('hidden');
     resetGroqForm();
-    if (dom.groqVaultStatusEl) {
-      dom.groqVaultStatusEl.textContent = '❌ Error';
-      dom.groqVaultStatusEl.className = 'stat-number text-red-400 text-xl font-bold';
+    if (dom.groqVaultStatus) {
+      dom.groqVaultStatus.innerHTML = '❌ Error';
+      dom.groqVaultStatus.className = 'text-2xl font-black text-red-400 tracking-tight flex items-center gap-2';
     }
   }
 }
@@ -96,7 +96,7 @@ export function saveGroqKeyHandler() {
       dom.groqStatus.style.color = '#34d399';
       dom.deleteGroqBtn.classList.remove('hidden');
       resetGroqForm();
-      loadGroqKey();
+      await loadGroqKey();
     }
   );
 }
@@ -113,7 +113,7 @@ export function deleteGroqKeyHandler() {
       dom.deleteGroqBtn.classList.add('hidden');
       resetGroqForm();
       showToast('Groq API key deleted.', 3000, 'success');
-      loadGroqKey();
+      await loadGroqKey();
     }
   );
 }

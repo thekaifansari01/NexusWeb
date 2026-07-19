@@ -50,12 +50,13 @@ function renderOverviewKeys(keys) {
     const div = document.createElement('div');
     div.className = 'flex items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5';
     const isActive = key.status === 'active';
+    const keyPreview = key?.key ? key.key.slice(0, 8) + '...' : 'N/A';
     div.innerHTML = `
       <div class="flex items-center gap-3">
         <div class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]'}"></div>
         <span class="text-sm text-white font-bold">${key.name}</span>
       </div>
-      <span class="text-xs font-mono text-zinc-500 bg-white/5 px-2 py-1 rounded-md">${key.key ? key.key.slice(0, 8) + '...' : 'N/A'}</span>
+      <span class="text-xs font-mono text-zinc-500 bg-white/5 px-2 py-1 rounded-md">${keyPreview}</span>
     `;
     dom.overviewKeysContainer.appendChild(div);
   });
@@ -103,7 +104,7 @@ function renderKeys(keys) {
     keyValRow.className = 'mt-3 flex items-center gap-3';
     const keyText = document.createElement('span');
     keyText.className = 'font-mono text-sm text-zinc-400 bg-black/50 px-3 py-1.5 rounded-xl border border-white/5';
-    const masked = key.key ? key.key.slice(0, 8) + '••••••••••••' : '••••••••';
+    const masked = key?.key ? key.key.slice(0, 8) + '••••••••••••' : '••••••••';
     keyText.textContent = masked;
     keyValRow.appendChild(keyText);
     const copyBtn = document.createElement('button');
@@ -112,7 +113,7 @@ function renderKeys(keys) {
     copyBtn.title = 'Copy key';
     copyBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (key.key) {
+      if (key?.key) {
         await navigator.clipboard.writeText(key.key);
         showToast('Key copied to clipboard!', 2500, 'success');
       } else {
