@@ -1,0 +1,429 @@
+/* ================================================================= */
+/* ================================================================= */
+
+/* --- Premium Glassmorphism Core --- */
+.nx-glass-nav {
+    background: rgba(10, 10, 12, 0.45);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.2), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1000; /* Stays above mobile overlay */
+}
+
+.nx-glass-nav.scrolled {
+    background: rgba(10, 10, 12, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 
+        0 16px 40px -4px rgba(0, 0, 0, 0.6), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* --- Logo Luxury Animations --- */
+.nx-logo-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    border-top-color: rgba(168, 85, 247, 0.6);
+    border-right-color: rgba(217, 70, 239, 0.4);
+    animation: nx-spin 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+@keyframes nx-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.nx-logo-pulse {
+    animation: nx-pulseGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes nx-pulseGlow {
+    0% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); }
+    100% { box-shadow: 0 0 35px rgba(168, 85, 247, 0.4); }
+}
+
+/* --- Premium Desktop Nav Links --- */
+.nx-nav-link {
+    position: relative;
+    font-weight: 600;
+    color: #a1a1aa;
+    transition: color 0.3s ease;
+    padding: 6px 0;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+}
+
+.nx-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #a855f7, #d946ef);
+    border-radius: 2px;
+    transition: width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nx-nav-link:hover, .nx-nav-link.nx-active {
+    color: #fff;
+}
+
+.nx-nav-link:hover::after, .nx-nav-link.nx-active::after {
+    width: 100%;
+}
+
+/* --- Smooth Dropdown Engine --- */
+.nx-premium-dropdown {
+    position: absolute;
+    background: rgba(15, 15, 18, 0.85);
+    backdrop-filter: blur(32px) saturate(1.5);
+    -webkit-backdrop-filter: blur(32px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 24px 64px -8px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 200;
+}
+
+.nx-avatar-dropdown {
+    top: calc(100% + 14px);
+    right: 0;
+    min-width: 250px;
+    transform: translateY(12px) scale(0.95);
+}
+
+.nx-avatar-dropdown.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.nx-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #d4d4d8;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+}
+
+.nx-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transform: translateX(4px);
+}
+
+.nx-dropdown-item i {
+    font-size: 18px;
+    color: #a1a1aa;
+    transition: color 0.2s;
+}
+
+.nx-dropdown-item:hover i {
+    color: #fff;
+}
+
+.nx-dropdown-item.nx-danger {
+    color: #f87171;
+    margin-top: 4px;
+}
+
+.nx-dropdown-item.nx-danger i {
+    color: #f87171;
+}
+
+.nx-dropdown-item.nx-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+/* --- Resources Hover Setup --- */
+.nx-resources-dropdown { position: relative; }
+
+.nx-resources-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #a1a1aa;
+    transition: color 0.3s ease;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 0;
+    letter-spacing: 0.01em;
+}
+
+.nx-resources-toggle:hover { color: #fff; }
+.nx-resources-toggle i {
+    font-size: 12px;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nx-resources-dropdown:hover .nx-resources-toggle i,
+.nx-resources-dropdown:focus-within .nx-resources-toggle i {
+    transform: rotate(180deg);
+    color: #a855f7;
+}
+
+.nx-resources-menu {
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(12px) scale(0.95);
+    min-width: 220px;
+}
+
+.nx-resources-dropdown:hover .nx-resources-menu,
+.nx-resources-dropdown:focus-within .nx-resources-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.nx-menu-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    margin: 8px 12px;
+}
+
+/* --- Account Button Minimalist Design --- */
+.nx-avatar-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a855f7, #d946ef);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+}
+
+.nx-avatar-btn:hover {
+    border-color: rgba(168, 85, 247, 0.8);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+}
+
+.nx-avatar-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Micro-Interactions: Hamburger --- */
+.nx-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1001; /* Layered above overlay button */
+}
+
+.nx-hamburger span {
+    display: block;
+    width: 26px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-origin: left center;
+}
+
+.nx-hamburger.open span:nth-child(1) { transform: rotate(45deg); }
+.nx-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+.nx-hamburger.open span:nth-child(3) { transform: rotate(-45deg); }
+
+/* --- Mobile Menu System (Conflict Free) --- */
+.nx-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 990; /* Right underneath navbar panel */
+    background: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(40px) saturate(1.8);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    flex-direction: column;
+    padding: 110px 32px 60px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: translateY(-20px);
+}
+
+.nx-mobile-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.nx-mobile-link {
+    font-size: 22px;
+    font-weight: 600;
+    color: #d4d4d8;
+    text-decoration: none;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.3s ease;
+}
+
+.nx-mobile-link:hover {
+    color: #fff;
+    transform: translateX(8px);
+}
+
+.nx-mobile-link i {
+    font-size: 20px;
+    color: #a855f7;
+    width: 32px;
+    text-align: center;
+    background: rgba(168, 85, 247, 0.1);
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.nx-mobile-ctas {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.nx-mobile-ctas a, .nx-mobile-ctas button {
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.nx-btn-primary-mobile {
+    background: linear-gradient(135deg, #a855f7, #d946ef);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.nx-btn-primary-mobile:hover {
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+    transform: translateY(-2px);
+}
+
+.nx-btn-ghost-mobile {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e4e4e7;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.nx-btn-ghost-mobile:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.nx-btn-danger-mobile {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.nx-btn-danger-mobile:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.nx-mobile-resources {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 0 16px;
+}
+
+.nx-sub-links {
+    padding-left: 46px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.nx-sub-links a {
+    font-size: 16px;
+    font-weight: 500;
+    color: #a1a1aa;
+    text-decoration: none;
+    padding: 8px 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nx-sub-links a:hover {
+    color: #fff;
+    transform: translateX(4px);
+}
+
+/* --- Responsive Layout Switches --- */
+@media (max-width: 991px) {
+    .nx-nav-links { display: none; }
+    .nx-hamburger, .nx-mobile-overlay { display: flex; }
+}
+
+@media (max-width: 640px) {
+    .nx-glass-nav {
+        border-radius: 24px;
+        padding: 10px 16px;
+    }
+    .nx-mobile-overlay {
+        padding-top: 90px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+.nx-mobile-overlay::-webkit-scrollbar { display: none; }
