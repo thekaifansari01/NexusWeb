@@ -14,6 +14,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Nexus Documentation – How to Embed AI Chatbot" />
     <meta name="twitter:description" content="Complete step-by-step guide to install Nexus AI assistant on any website. API keys, domain whitelisting, Groq setup, and troubleshooting." />
+    <meta name="robots" content="index, follow" />
     <link rel="icon" type="image/png" href="assets/favico.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,35 +28,32 @@
         .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 10px; }
         .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
-        
         html { scroll-behavior: smooth; }
-        
         .mac-window { position: relative; border-radius: 16px; background: rgba(12, 12, 14, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
         .mac-window::before { content: ''; position: absolute; top: 1rem; left: 1rem; width: 11px; height: 11px; border-radius: 50%; background: #ff5f56; box-shadow: 19px 0 0 #ffbd2e, 38px 0 0 #27c93f; z-index: 10; }
         .mac-window pre { margin: 0; padding: 3rem 1.5rem 1.5rem 1.5rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; line-height: 1.7; color: #d4d4d8; }
-        
         .toc-link.active-toc { color: #a855f7; background: rgba(168, 85, 247, 0.08); border-left-color: #a855f7; font-weight: 600; }
-        
         .premium-table-wrapper { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow-x: auto; }
         .premium-table { width: 100%; border-collapse: collapse; text-align: left; }
         .premium-table th { padding: 1rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2); }
         .premium-table td { padding: 1.25rem; font-size: 0.85rem; color: #d4d4d8; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: top; }
         .premium-table tr:last-child td { border-bottom: none; }
-        
         .doc-section { scroll-margin-top: 100px; padding-bottom: 4rem; }
         .doc-section h2 { position: relative; padding-bottom: 1rem; margin-bottom: 2rem; }
         .doc-section h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: #a855f7; border-radius: 2px; }
-
         .timeline-step { position: relative; padding-left: 2.5rem; padding-bottom: 3rem; }
         .timeline-step::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: 0; width: 1px; background: rgba(255,255,255,0.1); }
         .timeline-step:last-child::before { display: none; }
         .timeline-step:last-child { padding-bottom: 0; }
         .timeline-number { position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: #09090b; border: 1px solid rgba(168,85,247,0.4); color: #a855f7; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(168,85,247,0.15); z-index: 2; }
-
         .faq-item { padding: 1.5rem; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; background: rgba(255,255,255,0.01); margin-bottom: 1rem; transition: all 0.2s ease; }
         .faq-item:hover { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
         .faq-question { font-weight: 700; color: #fafafa; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 1rem; }
         .faq-question i { color: #a855f7; font-size: 1.25rem; }
+        .search-highlight { background: rgba(168,85,247,0.2); border-radius: 4px; padding: 0 2px; }
+        .doc-section.hidden-section { display: none; }
+        #searchClear { display: none; }
+        #searchClear.visible { display: inline-flex; }
     </style>
     <script type="application/ld+json">
         {
@@ -131,6 +129,39 @@
             ]
         }
     </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://trynexus.site/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Documentation",
+                    "item": "https://trynexus.site/docs"
+                }
+            ]
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "Nexus Documentation",
+            "description": "Complete step-by-step guide to install Nexus AI assistant on any website.",
+            "url": "https://trynexus.site/docs",
+            "about": {
+                "@type": "SoftwareApplication",
+                "name": "Nexus Web Assistant"
+            }
+        }
+    </script>
 </head>
 <body class="flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
 
@@ -164,19 +195,31 @@
             </a>
             <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
-            </a>            
+            </a>
         </nav>
-        <div class="p-4 border-t border-white/5 bg-black/20">
-            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
+        <div class="p-4 border-t border-white/5 bg-black/20" id="sidebarFooter">
+            <div id="sidebarUserInfo" class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner hidden">
                 <img id="sidebarAvatar" src="" alt="avatar" class="w-9 h-9 rounded-full border-2 border-primary/30" />
                 <div class="flex-1 min-w-0">
                     <div id="sidebarName" class="text-sm font-bold text-white truncate tracking-wide">User</div>
                     <div id="sidebarEmail" class="text-xs text-zinc-500 truncate font-medium">user@example.com</div>
                 </div>
             </div>
-            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg">
+            <div id="sidebarGuestInfo" class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner hidden">
+                <div class="w-9 h-9 rounded-full border-2 border-zinc-600 flex items-center justify-center text-zinc-400 text-sm font-bold bg-zinc-800 flex-shrink-0">
+                    <i class="ph-bold ph-user text-lg"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-sm font-bold text-zinc-400 truncate tracking-wide">Guest</div>
+                    <div class="text-xs text-zinc-500 truncate font-medium">Sign in to access dashboard</div>
+                </div>
+            </div>
+            <button id="sidebarSignOut" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-zinc-500 hover:text-red-400 transition-colors py-2 hover:bg-red-500/10 rounded-lg hidden">
                 <i class="ph-bold ph-sign-out"></i> Sign Out
             </button>
+            <a href="/login" id="sidebarLoginBtn" class="w-full mt-3 flex items-center justify-center gap-2 text-sm font-bold text-primary hover:text-primaryHover transition-colors py-2 hover:bg-primary/10 rounded-lg border border-primary/20 hidden">
+                <i class="ph-bold ph-sign-in"></i> Sign In
+            </a>
         </div>
     </aside>
 
@@ -195,13 +238,16 @@
                 </div>
             </div>
             
-            <div class="hidden md:flex flex-1 max-w-md mx-8">
-                <div class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 flex items-center justify-between text-zinc-500 cursor-text hover:bg-white/10 transition-colors group">
-                    <div class="flex items-center gap-2">
+            <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                <div class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 flex items-center justify-between text-zinc-500 hover:bg-white/10 transition-colors group">
+                    <div class="flex items-center gap-2 flex-1">
                         <i class="ph-bold ph-magnifying-glass text-zinc-400 group-hover:text-white transition-colors"></i>
-                        <span class="text-xs font-medium">Search documentation...</span>
+                        <input id="docSearchInput" type="text" placeholder="Search documentation..." class="bg-transparent border-none outline-none text-xs text-white placeholder-zinc-500 w-full" />
+                        <button id="searchClear" class="text-zinc-400 hover:text-white transition-colors text-sm hidden">
+                            <i class="ph-bold ph-x"></i>
+                        </button>
                     </div>
-                    <span class="text-[10px] font-bold bg-black/50 px-1.5 py-0.5 rounded border border-white/10 text-zinc-400">⌘K</span>
+                    <span class="text-[10px] font-bold bg-black/50 px-1.5 py-0.5 rounded border border-white/10 text-zinc-400 whitespace-nowrap ml-2">⌘K</span>
                 </div>
             </div>
 
@@ -216,7 +262,11 @@
             <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 pb-20">
 
                 <div class="flex-1 min-w-0 relative" id="docsContent">
-                    <section id="introduction" class="doc-section pt-2">
+                    <div id="searchStatus" class="text-sm text-zinc-400 mb-4 hidden">
+                        <span id="searchResultCount"></span> results found
+                    </div>
+
+                    <section id="introduction" class="doc-section pt-2" data-searchable="Introduction">
                         <div class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-800/40 via-zinc-900/80 to-black border border-white/10 rounded-[24px] p-8 md:p-12 mb-10 relative overflow-hidden shadow-2xl">
                             <div class="absolute -top-[20%] -right-[10%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(168,85,247,0.15)_0%,transparent_70%)] pointer-events-none"></div>
                             <div class="relative z-10">
@@ -250,7 +300,7 @@
                         </div>
                     </section>
 
-                    <section id="quick-start" class="doc-section">
+                    <section id="quick-start" class="doc-section" data-searchable="Quick Start">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🚀 Quick Start</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-10">Embed the Nexus widget on your website in four simple steps.</p>
 
@@ -301,7 +351,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="configuration" class="doc-section">
+                    <section id="configuration" class="doc-section" data-searchable="Configuration Options">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">⚙️ Configuration Options</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Customize the widget's behaviour by setting the <code class="bg-white/10 px-1.5 py-0.5 rounded text-zinc-200 font-mono text-xs border border-white/5">window.NexusConfig</code> object before the script loads. All properties are optional except <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">apiKey</code>.</p>
 
@@ -376,7 +426,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="integrations" class="doc-section">
+                    <section id="integrations" class="doc-section" data-searchable="Integrations">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔌 Framework Integrations</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Nexus works seamlessly with every major frontend framework. Visit the <a href="/integrations" class="text-primary hover:underline font-bold">Integrations</a> page for framework-specific code snippets.</p>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -408,7 +458,7 @@ window.NexusConfig = {
                         <p class="text-sm text-zinc-500 mt-6 font-medium">Plus WordPress, Shopify, Webflow, Laravel, Vite, Gatsby, Remix, and more. <a href="/integrations" class="text-primary hover:underline font-bold">See full list →</a></p>
                     </section>
 
-                    <section id="theming" class="doc-section">
+                    <section id="theming" class="doc-section" data-searchable="Theming">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🎨 Theming</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-6">Nexus automatically adapts to your website's theme, but you can also force a specific mode or let users toggle it.</p>
                         
@@ -429,7 +479,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="features" class="doc-section">
+                    <section id="features" class="doc-section" data-searchable="Features">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">✨ Key Features</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
@@ -464,7 +514,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="security" class="doc-section">
+                    <section id="security" class="doc-section" data-searchable="Security">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔐 Security Model</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-10">Nexus is built with a <strong class="text-white">zero-trust</strong> approach to API key management. Here's how your keys are protected:</p>
 
@@ -498,7 +548,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="advanced" class="doc-section">
+                    <section id="advanced" class="doc-section" data-searchable="Advanced Customization">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔧 Advanced Customization</h2>
                         
                         <h3 class="text-xl font-bold text-white mt-10 mb-4">Styling Overrides</h3>
@@ -550,7 +600,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="api-reference" class="doc-section">
+                    <section id="api-reference" class="doc-section" data-searchable="API Reference">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔌 API Reference</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">The embedded script interfaces secure communications down your secure proxy entry paths matching endpoint layouts at <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">POST /api/chat</code>. Expected processing payloads follow this structural format:</p>
                         
@@ -566,7 +616,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="playground" class="doc-section">
+                    <section id="playground" class="doc-section" data-searchable="Playground">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🧪 API Playground</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">The <a href="/playground" class="text-primary hover:underline font-bold">Nexus Playground</a> is a live testing environment where you can send requests to the API using your own keys — with zero configuration.</p>
 
@@ -591,7 +641,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="errors" class="doc-section">
+                    <section id="errors" class="doc-section" data-searchable="Error Codes">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">⚠️ Error Codes</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Common HTTP status codes returned by the Nexus proxy and their meanings:</p>
                         
@@ -635,7 +685,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="faq" class="doc-section">
+                    <section id="faq" class="doc-section" data-searchable="FAQ">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">❓ Troubleshooting & FAQ</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Common issues and frequently asked questions.</p>
                         
@@ -659,7 +709,7 @@ window.NexusConfig = {
                         </div>
                     </section>
 
-                    <section id="system-status" class="doc-section">
+                    <section id="system-status" class="doc-section" data-searchable="System Status">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">📊 System Status</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Monitor the health of the Nexus platform in real time. The <a href="/status" class="text-primary hover:underline font-bold">Status Page</a> provides uptime metrics, service latencies, and incident history.</p>
                         
@@ -680,7 +730,7 @@ window.NexusConfig = {
                         <p class="text-sm text-zinc-500 flex items-center gap-2 font-medium"><i class="ph-bold ph-check-circle text-emerald-400 text-lg"></i> Status page updates automatically every 30 seconds. All incidents are documented with timestamps.</p>
                     </section>
 
-                    <section id="self-hosting" class="doc-section">
+                    <section id="self-hosting" class="doc-section" data-searchable="Self-Hosting">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🖥️ Self-Hosting</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Since Nexus is open-source (MIT), you can self-host the widget and backend entirely on your own infrastructure.</p>
                         
@@ -696,7 +746,7 @@ npm run build</code></pre>
                         </div>
                     </section>
 
-                    <section id="support" class="doc-section">
+                    <section id="support" class="doc-section" data-searchable="Support">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🆘 Support</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Need help? We've got you covered.</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -758,15 +808,36 @@ npm run build</code></pre>
         const sidebarName = document.getElementById('sidebarName');
         const sidebarEmail = document.getElementById('sidebarEmail');
         const sidebarSignOut = document.getElementById('sidebarSignOut');
+        const sidebarLoginBtn = document.getElementById('sidebarLoginBtn');
+        const sidebarUserInfo = document.getElementById('sidebarUserInfo');
+        const sidebarGuestInfo = document.getElementById('sidebarGuestInfo');
+
+        function updateSidebar(user) {
+            if (user) {
+                sidebarUserInfo.classList.remove('hidden');
+                sidebarGuestInfo.classList.add('hidden');
+                sidebarSignOut.classList.remove('hidden');
+                sidebarLoginBtn.classList.add('hidden');
+                if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
+                if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
+                if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
+            } else {
+                sidebarUserInfo.classList.add('hidden');
+                sidebarGuestInfo.classList.remove('hidden');
+                sidebarSignOut.classList.add('hidden');
+                sidebarLoginBtn.classList.remove('hidden');
+                if (sidebarAvatar) sidebarAvatar.src = '';
+                if (sidebarEmail) sidebarEmail.textContent = '';
+                if (sidebarName) sidebarName.textContent = '';
+            }
+        }
 
         observeAuthState((user) => {
-            if (!user) {
-                window.location.href = '/login';
-                return;
+            if (user) {
+                updateSidebar(user);
+            } else {
+                updateSidebar(null);
             }
-            if (sidebarAvatar) sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
-            if (sidebarEmail) sidebarEmail.textContent = user.email || 'user@example.com';
-            if (sidebarName) sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
         });
 
         if (sidebarSignOut) {
@@ -834,8 +905,8 @@ npm run build</code></pre>
                     navigator.clipboard.writeText(code.textContent).then(() => {
                         btn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i> Copied!';
                         btn.classList.add('border-emerald-500/30', 'bg-emerald-500/10', 'text-white');
-                        setTimeout(() => { 
-                            btn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy'; 
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
                             btn.classList.remove('border-emerald-500/30', 'bg-emerald-500/10', 'text-white');
                         }, 2000);
                     });
@@ -843,6 +914,134 @@ npm run build</code></pre>
             });
             pre.parentNode.appendChild(btn);
         });
+
+        const searchInput = document.getElementById('docSearchInput');
+        const searchClear = document.getElementById('searchClear');
+        const searchStatus = document.getElementById('searchStatus');
+        const searchResultCount = document.getElementById('searchResultCount');
+        const docSections = document.querySelectorAll('.doc-section');
+
+        function performSearch(query) {
+            const trimmed = query.trim().toLowerCase();
+            let visibleCount = 0;
+
+            if (!trimmed) {
+                searchStatus.classList.add('hidden');
+                searchClear.classList.remove('visible');
+                docSections.forEach(section => {
+                    section.classList.remove('hidden-section');
+                    const items = section.querySelectorAll('.faq-item, .timeline-step, .premium-table tr, .grid-cols-1 > div');
+                    items.forEach(item => {
+                        item.style.display = '';
+                    });
+                });
+                return;
+            }
+
+            searchClear.classList.add('visible');
+            searchStatus.classList.remove('hidden');
+
+            docSections.forEach(section => {
+                const sectionText = section.textContent.toLowerCase();
+                const sectionMatch = sectionText.includes(trimmed);
+                let hasVisibleChild = false;
+
+                const faqItems = section.querySelectorAll('.faq-item');
+                faqItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    if (itemText.includes(trimmed)) {
+                        item.style.display = '';
+                        hasVisibleChild = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                const stepItems = section.querySelectorAll('.timeline-step');
+                stepItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    if (itemText.includes(trimmed)) {
+                        item.style.display = '';
+                        hasVisibleChild = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                const tableRows = section.querySelectorAll('.premium-table tbody tr');
+                tableRows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    if (rowText.includes(trimmed)) {
+                        row.style.display = '';
+                        hasVisibleChild = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                const gridItems = section.querySelectorAll('.grid-cols-1 > div, .grid-cols-2 > div, .grid-cols-3 > div');
+                gridItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    if (itemText.includes(trimmed)) {
+                        item.style.display = '';
+                        hasVisibleChild = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                const regularContent = section.querySelectorAll('p, li, h3, h4, .doc-section > div:not(.grid-cols-1):not(.grid-cols-2):not(.grid-cols-3):not(.premium-table-wrapper):not(.bg-black\\/20)');
+                regularContent.forEach(el => {
+                    const elText = el.textContent.toLowerCase();
+                    if (elText.includes(trimmed) && !el.closest('.faq-item') && !el.closest('.timeline-step') && !el.closest('.premium-table tbody tr') && !el.closest('.grid-cols-1 > div') && !el.closest('.grid-cols-2 > div') && !el.closest('.grid-cols-3 > div')) {
+                        hasVisibleChild = true;
+                    }
+                });
+
+                if (sectionMatch || hasVisibleChild) {
+                    section.classList.remove('hidden-section');
+                    visibleCount++;
+                } else {
+                    section.classList.add('hidden-section');
+                }
+            });
+
+            searchResultCount.textContent = visibleCount;
+            if (visibleCount === 0) {
+                searchStatus.innerHTML = '<span class="text-amber-400">No results found. Try a different keyword.</span>';
+            } else {
+                searchStatus.innerHTML = `<span class="text-zinc-300">${visibleCount}</span> section${visibleCount > 1 ? 's' : ''} found`;
+            }
+        }
+
+        searchInput.addEventListener('input', function() {
+            performSearch(this.value);
+        });
+
+        searchClear.addEventListener('click', function() {
+            searchInput.value = '';
+            performSearch('');
+            searchInput.focus();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                performSearch('');
+                searchInput.blur();
+            }
+        });
+
+        const sidebarFooter = document.getElementById('sidebarFooter');
+        const existingLoginBtn = sidebarFooter.querySelector('.login-cta-btn');
+        if (existingLoginBtn) {
+            existingLoginBtn.remove();
+        }
     </script>
 </body>
 </html>
