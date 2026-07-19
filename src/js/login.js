@@ -39,6 +39,8 @@ let currentTab = 'signin';
 let captchaToken = null;
 let turnstileWidgetId = null;
 let turnstileRetryTimeout = null;
+let turnstileAttempts = 0;
+const MAX_TURNSTILE_RETRIES = 3;
 let typewriterInterval = null;
 let typewriterIndex = 0;
 let isTypewriterDone = false;
@@ -246,6 +248,11 @@ handleRedirectResult();
 
 function switchTab(tab) {
     currentTab = tab;
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.value = '';
+        const errorEl = input.closest('.form-group')?.querySelector('.field-error');
+        if (errorEl) hideFieldError(errorEl);
+    });
     if (tab === 'signin') {
         signInTab.classList.add('active');
         signUpTab.classList.remove('active');
@@ -253,7 +260,7 @@ function switchTab(tab) {
         signUpForm.classList.add('hidden');
         errorMsg.classList.add('hidden');
         resetTurnstile();
-        renderTurnstile('turnstile-container');
+        setTimeout(() => renderTurnstile('turnstile-container'), 150);
         autoFocusField();
     } else {
         signUpTab.classList.add('active');
@@ -262,7 +269,7 @@ function switchTab(tab) {
         signInForm.classList.add('hidden');
         errorMsg.classList.add('hidden');
         resetTurnstile();
-        renderTurnstile('turnstile-container-signup');
+        setTimeout(() => renderTurnstile('turnstile-container-signup'), 150);
         autoFocusField();
     }
 }
@@ -291,7 +298,16 @@ function getSubmitButton(containerId) {
 
 function renderTurnstile(containerId) {
     const container = document.getElementById(containerId);
-    if (!container || !window.turnstile) return;
+    if (!container || !window.turnstile) {
+        if (turnstileAttempts < MAX_TURNSTILE_RETRIES) {
+            turnstileAttempts++;
+            if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+            turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
+        } else {
+            showToast('CAPTCHA temporarily unavailable. Please refresh the page.', 4000, 'error');
+        }
+        return;
+    }
     if (turnstileWidgetId !== null && turnstileWidgetId !== undefined) {
         try { turnstile.remove(turnstileWidgetId); } catch (_) {}
         turnstileWidgetId = null;
@@ -314,6 +330,7 @@ function renderTurnstile(containerId) {
                     btn.classList.add('visible');
                     btn.disabled = false;
                 }
+                turnstileAttempts = 0;
             },
             'expired-callback': function() {
                 captchaToken = null;
@@ -323,6 +340,7 @@ function renderTurnstile(containerId) {
                     btn.classList.remove('visible');
                     btn.disabled = true;
                 }
+                showToast('Verification expired, please re-verify.', 3000, 'warning');
             },
             'error-callback': function() {
                 captchaToken = null;
@@ -332,14 +350,24 @@ function renderTurnstile(containerId) {
                     btn.classList.remove('visible');
                     btn.disabled = true;
                 }
-                if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
-                turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
+                if (turnstileAttempts < MAX_TURNSTILE_RETRIES) {
+                    turnstileAttempts++;
+                    if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+                    turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
+                } else {
+                    showToast('CAPTCHA temporarily unavailable. Please refresh the page.', 4000, 'error');
+                }
             }
         });
         setTimeout(() => container.classList.add('show'), 50);
     } catch (e) {
-        if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
-        turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
+        if (turnstileAttempts < MAX_TURNSTILE_RETRIES) {
+            turnstileAttempts++;
+            if (turnstileRetryTimeout) clearTimeout(turnstileRetryTimeout);
+            turnstileRetryTimeout = setTimeout(() => renderTurnstile(containerId), 2000);
+        } else {
+            showToast('CAPTCHA temporarily unavailable. Please refresh the page.', 4000, 'error');
+        }
     }
 }
 
@@ -351,6 +379,7 @@ function resetTurnstile() {
         }
     } catch (e) {}
     captchaToken = null;
+    turnstileAttempts = 0;
     if (turnstileRetryTimeout) {
         clearTimeout(turnstileRetryTimeout);
         turnstileRetryTimeout = null;
@@ -488,8 +517,20 @@ async function handleEmailSignUp(e) {
         signUpBtn.classList.remove('loading', 'success');
         signUpBtn.innerHTML = '<i class="ph-bold ph-user-plus"></i> Create Account';
         let msg = 'Sign up failed. Please try again.';
-        if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Please sign in.';
-        else if (err.code === 'auth/weak-password') msg = 'Password is too weak. Use at least 6 characters.';
+        if (err.code === 'auth/email-already-in-use') {
+            msg = 'This email is already registered. <a href="#" id="signInLinkFromError" style="color:#a855f7; font-weight:700;">Sign in instead?</a>';
+            showError(msg);
+            const link = document.getElementById('signInLinkFromError');
+            if (link) {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchTab('signin');
+                });
+            }
+            resetTurnstile();
+            renderTurnstile('turnstile-container-signup');
+            return;
+        } else if (err.code === 'auth/weak-password') msg = 'Password is too weak. Use at least 6 characters.';
         else if (err.code === 'auth/invalid-email') msg = 'Invalid email address.';
         else if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your connection.';
         else if (err.message) msg = err.message;
@@ -514,6 +555,10 @@ forgotLink.addEventListener('click', async (e) => {
         }, 2000);
         return;
     }
+    if (!validateEmail(email)) {
+        showFieldError(signInEmailError, 'Please enter a valid email address');
+        return;
+    }
     try {
         await sendPasswordReset(email);
         showToast('Password reset email sent! Check your inbox.', 4000, 'success');
@@ -527,6 +572,18 @@ forgotLink.addEventListener('click', async (e) => {
     }
 });
 
+function getSocialErrorMessage(err) {
+    const code = err.code;
+    const map = {
+        'auth/popup-closed-by-user': 'Popup was closed before completing sign-in.',
+        'auth/popup-blocked': 'Popup was blocked by your browser. Please allow popups.',
+        'auth/network-request-failed': 'Network error. Check your connection.',
+        'auth/cancelled-popup-request': 'Another sign-in attempt is already in progress.',
+        'auth/account-exists-with-different-credential': 'An account with this email already exists using a different sign-in method.'
+    };
+    return map[code] || err.message || `${label} sign-in failed. Please try again.`;
+}
+
 async function executeSocialLogin(providerFn, buttonElement, label) {
     hideError();
     const originalHtml = buttonElement.innerHTML;
@@ -537,9 +594,7 @@ async function executeSocialLogin(providerFn, buttonElement, label) {
     } catch (err) {
         buttonElement.disabled = false;
         buttonElement.innerHTML = originalHtml;
-        let msg = `${label} sign-in failed. Please try again.`;
-        if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your connection.';
-        else if (err.message) msg = err.message;
+        const msg = getSocialErrorMessage(err);
         showError(msg);
     }
 }
@@ -551,23 +606,48 @@ const inputFields = [signInEmail, signInPassword, signUpName, signUpEmail, signU
 inputFields.forEach(input => {
     if (!input) return;
     input.addEventListener('input', () => {
-        validateField(input);
-        if (input.id === 'signUpPassword' || input.id === 'signUpConfirm') {
-            if (signUpPassword && signUpConfirm) {
-                const pass = signUpPassword.value;
-                const confirm = signUpConfirm.value;
-                if (confirm && pass !== confirm) {
-                    showFieldError(signUpConfirmError, 'Passwords do not match');
-                } else if (confirm) {
-                    hideFieldError(signUpConfirmError);
-                }
-            }
-        }
         if (errorMsg.classList.contains('visible')) {
             hideError();
         }
+        const errorEl = input.closest('.form-group')?.querySelector('.field-error');
+        if (errorEl && !errorEl.classList.contains('hidden')) {
+            const id = input.id;
+            if (id === 'signInEmail' || id === 'signUpEmail') {
+                const val = input.value.trim();
+                if (val && validateEmail(val)) {
+                    hideFieldError(errorEl);
+                }
+            } else if (id === 'signInPassword' || id === 'signUpName') {
+                if (input.value.trim()) {
+                    hideFieldError(errorEl);
+                }
+            } else if (id === 'signUpPassword') {
+                if (input.value.length >= 6) {
+                    hideFieldError(errorEl);
+                }
+                updatePasswordStrength(input.value);
+                if (signUpConfirm && signUpConfirm.value) {
+                    const pass = input.value;
+                    const confirm = signUpConfirm.value;
+                    const confirmError = signUpConfirm.closest('.form-group')?.querySelector('.field-error');
+                    if (confirmError && pass !== confirm) {
+                        showFieldError(confirmError, 'Passwords do not match');
+                    } else if (confirmError) {
+                        hideFieldError(confirmError);
+                    }
+                }
+            } else if (id === 'signUpConfirm') {
+                const password = signUpPassword?.value || '';
+                const val = input.value;
+                if (val && val === password) {
+                    hideFieldError(errorEl);
+                }
+            }
+        }
     });
-    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('blur', () => {
+        validateField(input);
+    });
 });
 
 observeAuthState((user) => {
@@ -593,9 +673,17 @@ window.handleOneTap = async (response) => {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (currentTab === 'signin') {
-            if (!signInBtn.disabled && signInBtn.classList.contains('visible')) signInBtn.click();
+            if (!signInBtn.disabled && signInBtn.classList.contains('visible')) {
+                signInBtn.click();
+            } else {
+                showToast('Please complete the CAPTCHA first.', 3000, 'warning');
+            }
         } else {
-            if (!signUpBtn.disabled && signUpBtn.classList.contains('visible')) signUpBtn.click();
+            if (!signUpBtn.disabled && signUpBtn.classList.contains('visible')) {
+                signUpBtn.click();
+            } else {
+                showToast('Please complete the CAPTCHA first.', 3000, 'warning');
+            }
         }
     }
 });
