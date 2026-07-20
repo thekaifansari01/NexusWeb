@@ -1,11 +1,6 @@
-// =================================================================
-// NEXUS NAVBAR MODULE ENGINE (Isolated Selectors)
-// =================================================================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-// Firebase App Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCfa1fP3XGvWUVy0LQJvQH0qYp2hOkHzfU",
     authDomain: "trynexus-6db37.firebaseapp.com",
@@ -16,29 +11,25 @@ const firebaseConfig = {
     measurementId: "G-4LGHBLFG60"
 };
 
-// Initialize Firebase Core
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// DOM Elements Extraction (Using Protected Prefixed IDs)
-const loginBtn = document.getElementById('nx-loginBtn');
-const avatarContainer = document.getElementById('nx-avatarContainer');
-const avatarBtn = document.getElementById('nx-avatarBtn');
-const avatarImg = document.getElementById('nx-avatarImg');
-const avatarInitials = document.getElementById('nx-avatarInitials');
-const dropdownName = document.getElementById('nx-dropdownName');
-const dropdownEmail = document.getElementById('nx-dropdownEmail');
-const avatarDropdown = document.getElementById('nx-avatarDropdown');
-const signOutBtn = document.getElementById('nx-signOutBtn');
+const loginBtn = document.getElementById('signInBtn');
+const avatarContainer = document.getElementById('userArea');
+const avatarBtn = document.getElementById('avatarBtn');
+const avatarImg = document.getElementById('userAvatar');
+const avatarInitials = document.getElementById('avatarInitials');
+const dropdownName = document.getElementById('dropdownName');
+const dropdownEmail = document.getElementById('userEmail');
+const avatarDropdown = document.getElementById('avatarDropdown');
+const signOutBtn = document.getElementById('signOutBtn');
 
-// Mobile UI Element Targets
-const mobileLoginBtn = document.getElementById('nx-mobileLoginBtn');
-const mobileSignOutBtn = document.getElementById('nx-mobileSignOutBtn');
+const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+const mobileSignOutBtn = document.getElementById('mobileSignOutBtn');
 const hamburger = document.getElementById('nx-hamburgerBtn');
 const mobileMenu = document.getElementById('nx-mobileMenu');
 const navbarPanel = document.getElementById('nx-navbar');
 
-// Helper: Process User Name Initials safely
 function getInitials(name) {
     if (!name) return 'U';
     const parts = name.trim().split(' ');
@@ -46,18 +37,16 @@ function getInitials(name) {
     return name.slice(0, 2).toUpperCase();
 }
 
-// Main Dynamic State Manager
 function updateNavbarAuthUI(user) {
     if (user) {
-        // Desktop Authenticated UI Update
-        if(loginBtn) loginBtn.classList.add('hidden');
-        if(avatarContainer) avatarContainer.classList.remove('hidden');
+        if (loginBtn) loginBtn.classList.add('hidden');
+        if (avatarContainer) avatarContainer.classList.remove('hidden');
 
         const displayName = user.displayName || user.email?.split('@')[0] || 'User';
         const email = user.email || 'user@example.com';
         
-        if(dropdownName) dropdownName.textContent = displayName;
-        if(dropdownEmail) dropdownEmail.textContent = email;
+        if (dropdownName) dropdownName.textContent = displayName;
+        if (dropdownEmail) dropdownEmail.textContent = email;
 
         if (user.photoURL && avatarImg && avatarInitials) {
             avatarImg.src = user.photoURL;
@@ -69,7 +58,6 @@ function updateNavbarAuthUI(user) {
             avatarImg.classList.add('hidden');
         }
 
-        // Mobile Authenticated UI Upgrade
         if (mobileLoginBtn) {
             mobileLoginBtn.href = '/dashboard';
             mobileLoginBtn.className = 'nx-btn-primary-mobile';
@@ -78,9 +66,8 @@ function updateNavbarAuthUI(user) {
         if (mobileSignOutBtn) mobileSignOutBtn.classList.remove('hidden');
 
     } else {
-        // Guest State Restoration
-        if(loginBtn) loginBtn.classList.remove('hidden');
-        if(avatarContainer) avatarContainer.classList.add('hidden');
+        if (loginBtn) loginBtn.classList.remove('hidden');
+        if (avatarContainer) avatarContainer.classList.add('hidden');
 
         if (mobileLoginBtn) {
             mobileLoginBtn.href = '/login';
@@ -91,10 +78,8 @@ function updateNavbarAuthUI(user) {
     }
 }
 
-// Listen to Global Auth Changes
 onAuthStateChanged(auth, updateNavbarAuthUI);
 
-// UI Event: Toggle Avatar Dropdown panel safely
 if (avatarBtn && avatarDropdown) {
     avatarBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -107,11 +92,10 @@ if (avatarBtn && avatarDropdown) {
     });
 }
 
-// Logic: Core Authentication Log Out Sequence
 const triggerSignOutSequence = async () => {
     try {
         await signOut(auth);
-        if(avatarDropdown) avatarDropdown.classList.remove('open');
+        if (avatarDropdown) avatarDropdown.classList.remove('open');
         if (mobileMenu && mobileMenu.classList.contains('open')) {
             executeMobileMenuState(false);
         }
@@ -123,9 +107,8 @@ const triggerSignOutSequence = async () => {
 if (signOutBtn) signOutBtn.addEventListener('click', triggerSignOutSequence);
 if (mobileSignOutBtn) mobileSignOutBtn.addEventListener('click', triggerSignOutSequence);
 
-// UI Event: Toggle Mobile Overlay States
 function executeMobileMenuState(forceState) {
-    if(!mobileMenu || !hamburger) return;
+    if (!mobileMenu || !hamburger) return;
     const isNowOpen = forceState !== undefined ? forceState : !mobileMenu.classList.contains('open');
     
     mobileMenu.classList.toggle('open', isNowOpen);
@@ -137,13 +120,11 @@ function executeMobileMenuState(forceState) {
 if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', () => executeMobileMenuState());
     
-    // Auto-Dismiss overlay menu panels upon hyperlink activation
     mobileMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => executeMobileMenuState(false));
     });
 }
 
-// Accessibility Integration: Escape Key monitors
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (mobileMenu && mobileMenu.classList.contains('open')) executeMobileMenuState(false);
@@ -151,9 +132,8 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Performance Engineering: High Frequency Throttled Scroll Engine
 let scrollToken = false;
-if(navbarPanel) {
+if (navbarPanel) {
     window.addEventListener('scroll', () => {
         if (!scrollToken) {
             window.requestAnimationFrame(() => {
