@@ -9,7 +9,6 @@ import { loadKeys, openCreateKeyModal, closeCreateKeyModal } from "./api-keys.js
 import { loadDomains, openAddDomainModal, closeAddDomainModal } from "./domains.js";
 import { loadGroqKey, handleGroqInput, cancelGroqEdit, toggleGroqVisibility, saveGroqKeyHandler, deleteGroqKeyHandler } from "./groq.js";
 import { loadUsage, filterLogs, applyFilter, loadMoreLogs, sortLogs, exportLogs } from "./usage.js";
-import { updateUserPassword, openDeleteAccountModal, closeDeleteAccountModal, confirmDeleteAccount } from "./settings.js";
 import { addDomain } from "./firestore.js";
 
 export function initEvents() {
@@ -154,22 +153,6 @@ export function initEvents() {
       closeCaptchaModal();
     }
   });
-
-  if (dom.updatePasswordBtn) {
-    dom.updatePasswordBtn.addEventListener('click', updateUserPassword);
-  }
-
-  if (dom.deleteAccountBtn) {
-    dom.deleteAccountBtn.addEventListener('click', openDeleteAccountModal);
-  }
-
-  dom.deleteCancelBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    closeDeleteAccountModal();
-  });
-
-  dom.deleteConfirmBtn.addEventListener('click', confirmDeleteAccount);
 
   dom.rangeBtns.forEach(btn => {
     btn.addEventListener('click', () => {

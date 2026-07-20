@@ -49,6 +49,9 @@
             <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
             </a>
+            <a href="/settings" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+                <i class="ph-bold ph-user-gear text-lg"></i> Account Settings
+            </a>
         </nav>
         <div class="p-4 border-t border-white/5 bg-black/20">
             <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-900/50 border border-white/5 shadow-inner">
@@ -99,12 +102,12 @@
                 <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="usage">
                     <i class="ph-bold ph-chart-pie-slice text-lg mr-1.5 align-middle"></i> Usage
                 </button>
-                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent" data-tab="settings">
-                    <i class="ph-bold ph-gear text-lg mr-1.5 align-middle"></i> Settings
+                <button class="tab-btn px-5 py-2.5 text-sm font-semibold rounded-xl transition-all whitespace-nowrap text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent active" data-tab="settings">
+                    <i class="ph-bold ph-plug text-lg mr-1.5 align-middle"></i> Integrations
                 </button>
             </div>
 
-            <section id="tab-overview" class="tab-content fade-in-up">
+            <section id="tab-overview" class="tab-content fade-in-up active">
                 <div class="p-8 rounded-3xl border border-primary/20 mb-8 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-br from-zinc-900/60 to-black shadow-2xl">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-3">
@@ -548,49 +551,8 @@
 
             <section id="tab-settings" class="tab-content hidden fade-in-up">
                 <div class="mb-8">
-                    <h1 class="text-3xl font-black text-white tracking-tight">Vault Settings</h1>
-                    <p class="text-sm text-zinc-400 mt-1 font-medium">Manage your profile, security, and API integrations.</p>
-                </div>
-
-                <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
-                    <h3 class="text-xl font-bold text-white mb-6">Profile Information</h3>
-                    <div class="flex flex-col md:flex-row items-start md:items-center gap-8">
-                        <img id="settingsAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23a855f7' rx='48'/%3E%3Ctext x='48' y='56' font-size='40' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'%3EU%3C/text%3E%3C/svg%3E" alt="avatar" class="w-24 h-24 rounded-full border-[3px] border-primary/30 object-cover shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-opacity duration-300" />
-                        <div class="flex-1 space-y-2">
-                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Full Name</div>
-                            <div id="settingsName" class="text-xl font-black text-white tracking-wide transition-opacity duration-300">User</div>
-                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-4">Email Address</div>
-                            <div id="settingsEmail" class="text-base text-zinc-300 font-medium transition-opacity duration-300">user@example.com</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
-                    <h3 class="text-xl font-bold text-white mb-6">Security & Authentication</h3>
-                    <div id="passwordChangeSection">
-                        <p class="text-sm text-zinc-400 mb-5 font-medium">Change your account password</p>
-                        <div class="space-y-4 max-w-lg">
-                            <div>
-                                <label for="currentPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Current Password</label>
-                                <input type="password" id="currentPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" />
-                            </div>
-                            <div>
-                                <label for="newPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">New Password</label>
-                                <input type="password" id="newPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Min 6 characters" />
-                            </div>
-                            <div>
-                                <label for="confirmPassword" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Confirm New Password</label>
-                                <input type="password" id="confirmPassword" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="••••••••" />
-                            </div>
-                            <button id="updatePasswordBtn" class="bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_4px_15px_rgba(168,85,247,0.3)] mt-2">Update Password</button>
-                        </div>
-                    </div>
-                    <div id="socialAuthInfo" class="hidden bg-primary/5 border border-primary/20 p-5 rounded-2xl mt-4">
-                        <p class="text-sm text-zinc-300 font-medium m-0 flex items-start gap-3">
-                            <i class="ph-fill ph-google-logo text-primary text-xl mt-0.5"></i>
-                            <span>You are signed in with <span id="socialProvider" class="text-primary font-bold">Google</span>. Password management is handled by your provider.</span>
-                        </p>
-                    </div>
+                    <h1 class="text-3xl font-black text-white tracking-tight">Third‑Party Integrations</h1>
+                    <p class="text-sm text-zinc-400 mt-1 font-medium">Manage external API keys and service connections.</p>
                 </div>
 
                 <div class="glass-panel p-8 rounded-3xl mb-8 border border-white/5 bg-zinc-900/30 shadow-lg">
@@ -598,7 +560,7 @@
                     <div class="flex flex-col lg:flex-row gap-10 items-start">
                         <div class="flex-1 lg:max-w-sm">
                             <p class="text-sm text-zinc-400 leading-relaxed font-medium">
-                                Connect your Groq API key to power the AI models. This key is encrypted securely in our vault (AES-256) and is <strong>never</strong> exposed to the frontend browser.
+                                Connect your Groq API key to power the AI models. This key is encrypted securely in our vault (AES‑256) and is <strong>never</strong> exposed to the frontend browser.
                             </p>
                         </div>
                         <div class="flex-[2] w-full bg-black/30 border border-white/5 rounded-2xl p-6 shadow-inner">
@@ -618,22 +580,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="glass-panel p-8 rounded-3xl border-2 border-red-500/30 bg-red-500/10 shadow-[0_0_30px_rgba(239,68,68,0.1)] relative overflow-hidden">
-                    <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-red-500/20 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-center gap-3 mb-4">
-                            <i class="ph-bold ph-warning-octagon text-red-500 text-3xl drop-shadow-[0_0_10px_rgba(239,68,68,0.6)]"></i>
-                            <h3 class="text-xl font-black text-white tracking-tight">Danger Zone</h3>
-                        </div>
-                        <p class="text-sm text-zinc-300 mb-6 font-medium max-w-2xl leading-relaxed">
-                            Once you delete your account, there is no going back. All your data, API keys, whitelisted domains, and usage history will be permanently and irreversibly wiped from our servers.
-                        </p>
-                        <button id="deleteAccountBtn" class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-xl text-sm font-black tracking-wide transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)]">
-                            <i class="ph-bold ph-trash text-lg"></i> DELETE ACCOUNT
-                        </button>
-                    </div>
-                </div>
             </section>
 
             <div id="captchaModal" class="fixed inset-0 bg-black/70 backdrop-blur-xl flex items-center justify-center z-50 hidden transition-opacity">
@@ -644,26 +590,6 @@
                     <div class="flex gap-4">
                         <button id="captchaModalConfirm" class="flex-1 bg-primary hover:bg-primaryHover text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-lg hidden">Confirm</button>
                         <button id="captchaModalCancel" class="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-3 rounded-xl text-sm font-bold transition-all">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="deleteAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center z-[9999] hidden transition-opacity">
-                <div class="bg-zinc-950 border border-red-500/30 rounded-3xl p-10 max-w-md w-full mx-4 shadow-[0_0_50px_rgba(239,68,68,0.3)] relative overflow-hidden" style="pointer-events: auto;">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-400"></div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
-                            <i class="ph-bold ph-warning text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-black text-white tracking-tight">Delete Account?</h3>
-                    </div>
-                    <p class="text-sm text-zinc-300 mb-8 font-medium leading-relaxed">
-                        This action is <strong>permanent</strong> and cannot be undone. All your data, keys, and logs will be immediately erased.
-                    </p>
-                    <div id="deleteTurnstileContainer" class="flex justify-center mb-8 bg-black/50 p-4 rounded-xl border border-white/5"></div>
-                    <div class="flex gap-4">
-                        <button id="deleteConfirmBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(239,68,68,0.4)]" disabled>Delete Forever</button>
-                        <button id="deleteCancelBtn" class="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 px-6 py-3 rounded-xl font-bold transition-all">Keep Account</button>
                     </div>
                 </div>
             </div>
