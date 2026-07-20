@@ -231,20 +231,20 @@
         </div>
 
         <div id="authSection" class="flex items-center gap-4">
-            <a href="/login" id="loginBtn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-zinc-300 hover:text-white transition-all border border-white/10 hover:border-white/30 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+            <a href="/login" id="signInBtn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-zinc-300 hover:text-white transition-all border border-white/10 hover:border-white/30 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                 <i class="ph-bold ph-sign-in text-base"></i> Login
             </a>
 
-            <div id="avatarContainer" class="relative hidden">
+            <div id="userArea" class="relative hidden">
                 <button class="nx-avatar-btn" id="avatarBtn" aria-label="Account">
                     <span id="avatarInitials">U</span>
-                    <img id="avatarImg" src="" alt="Avatar" class="hidden" />
+                    <img id="userAvatar" src="" alt="Avatar" class="hidden" />
                 </button>
 
                 <div class="nx-premium-dropdown nx-avatar-dropdown" id="avatarDropdown" role="menu">
                     <div class="px-4 py-3 border-b border-white/10 mb-1">
                         <div class="font-semibold text-white text-sm tracking-wide" id="dropdownName">User</div>
-                        <div class="text-xs text-zinc-400 mt-1 truncate" id="dropdownEmail">user@example.com</div>
+                        <div class="text-xs text-zinc-400 mt-1 truncate" id="userEmail">user@example.com</div>
                         <span class="inline-block mt-2 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 uppercase tracking-widest shadow-[0_0_10px_rgba(168,85,247,0.2)]">Free</span>
                     </div>
                     <a href="/dashboard" class="nx-dropdown-item"><i class="ph-duotone ph-layout-dashboard"></i> Dashboard</a>
