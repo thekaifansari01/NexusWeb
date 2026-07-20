@@ -84,6 +84,10 @@
       "destination": "/support.html"
     },
     {
+      "source": "/settings",
+      "destination": "/settings.html"
+    },
+    {
       "source": "/blog/post/add-ai-assistant-to-website",
       "destination": "/blog/post/add-ai-assistant-to-website.html"
     },
