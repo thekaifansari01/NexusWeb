@@ -222,11 +222,18 @@ async function handleRedirectResult() {
         githubBtn.disabled = true;
         googleBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
         githubBtn.innerHTML = `<i class="ph-bold ph-circle-notch animate-spin"></i> Wait...`;
+        
         const result = await checkRedirectAuth();
+        
         if (result) {
-            window.location.href = '/dashboard';
-            return;
+            return; 
         }
+
+        googleBtn.disabled = false;
+        githubBtn.disabled = false;
+        googleBtn.innerHTML = originalGoogle;
+        githubBtn.innerHTML = originalGithub;
+        hidePageLoader();
     } catch (err) {
         let msg = 'Social login failed. Please try again.';
         if (err.code === 'auth/account-exists-with-different-credential') {
@@ -235,7 +242,6 @@ async function handleRedirectResult() {
             msg = 'Network error. Check your connection.';
         }
         showError(msg);
-    } finally {
         googleBtn.disabled = false;
         githubBtn.disabled = false;
         googleBtn.innerHTML = originalGoogle;
@@ -581,10 +587,10 @@ function getSocialErrorMessage(err) {
         'auth/cancelled-popup-request': 'Another sign-in attempt is already in progress.',
         'auth/account-exists-with-different-credential': 'An account with this email already exists using a different sign-in method.'
     };
-    return map[code] || err.message || `${label} sign-in failed. Please try again.`;
+    return map[code] || err.message || `Sign-in failed. Please try again.`;
 }
 
-async function executeSocialLogin(providerFn, buttonElement, label) {
+async function executeSocialLogin(providerFn, buttonElement) {
     hideError();
     const originalHtml = buttonElement.innerHTML;
     buttonElement.disabled = true;
@@ -599,8 +605,8 @@ async function executeSocialLogin(providerFn, buttonElement, label) {
     }
 }
 
-googleBtn.addEventListener('click', () => executeSocialLogin(signInWithGoogle, googleBtn, 'Google'));
-githubBtn.addEventListener('click', () => executeSocialLogin(signInWithGithub, githubBtn, 'GitHub'));
+googleBtn.addEventListener('click', () => executeSocialLogin(signInWithGoogle, googleBtn));
+githubBtn.addEventListener('click', () => executeSocialLogin(signInWithGithub, githubBtn));
 
 const inputFields = [signInEmail, signInPassword, signUpName, signUpEmail, signUpPassword, signUpConfirm];
 inputFields.forEach(input => {
