@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Support – Help Center</title>
+    <meta name="description" content="Get help with Nexus AI Web Assistant. Browse FAQs, troubleshooting guides, billing info, and contact our support team." />
+    <link rel="icon" type="image/png" href="assets/favico.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="src/css/tailwind-output.css" />
+    <link rel="stylesheet" href="src/css/layout/navbar.css" />
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <style>
+        .support-hero-gradient {
+            background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.15) 0%, transparent 70%);
+        }
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at top center, black, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at top center, black, transparent 80%);
+        }
+        .support-search-input {
+            background: rgba(24,24,27,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+            width: 100%;
+            max-width: 650px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            outline: none;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+        .support-search-input::placeholder {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .support-search-input:focus {
+            border-color: rgba(168,85,247,0.5);
+            background: rgba(39,39,42,0.8);
+            box-shadow: 0 0 40px rgba(168,85,247,0.15), inset 0 0 0 1px rgba(168,85,247,0.2);
+            transform: translateY(-2px);
+        }
+        .support-search-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 650px;
+        }
+        .support-search-wrapper > i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a1a1aa;
+            font-size: 1.25rem;
+            transition: color 0.3s ease;
+        }
+        .support-search-input:focus + .search-shortcut,
+        .support-search-input:focus ~ i {
+            color: #a855f7;
+        }
+        .search-shortcut {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #71717a;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .support-card {
+            background: rgba(24, 24, 27, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .support-card:hover {
+            background: rgba(24, 24, 27, 0.6);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .support-card .icon-wrap {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        .support-card:hover .icon-wrap {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            border-radius: 4px;
+            background: #a855f7;
+            opacity: 0;
+            transform: scaleY(0);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .faq-item.open::before {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            cursor: pointer;
+            gap: 1rem;
+            user-select: none;
+        }
+        .faq-toggle .faq-question {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+        }
+        .faq-toggle:hover .faq-question {
+            color: #a855f7;
+        }
+        .faq-toggle .faq-chevron {
+            color: #71717a;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 50%;
+            padding: 4px;
+        }
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+            background: rgba(168,85,247,0.1);
+            color: #a855f7;
+            border-color: rgba(168,85,247,0.3);
+        }
+        .faq-item.open .faq-question {
+            color: #a855f7;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            opacity: 0;
+            padding: 0 1rem 0 0;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 400px;
+            opacity: 1;
+            padding: 0 1rem 1.25rem 0;
+        }
+        .faq-answer p {
+            color: #a1a1aa;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(52,211,153,0.3);
+            background: rgba(52,211,153,0.1);
+            color: #34d399;
+            box-shadow: 0 0 15px rgba(52,211,153,0.1);
+            text-transform: uppercase;
+        }
+        .status-indicator .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 8px #34d399;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        .form-input-premium {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            background: rgba(24,24,27,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+        .form-input-premium::placeholder {
+            color: #52525b;
+            font-weight: 500;
+        }
+        .form-input-premium:focus {
+            border-color: rgba(168,85,247,0.4);
+            background: rgba(39,39,42,0.8);
+            box-shadow: 0 0 20px rgba(168,85,247,0.1), inset 0 0 0 1px rgba(168,85,247,0.2);
+        }
+        textarea.form-input-premium {
+            resize: vertical;
+            min-height: 140px;
+        }
+        .btn-premium {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(168,85,247,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-premium::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px -5px rgba(168,85,247,0.6);
+        }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dash-card-ui {
+            background: linear-gradient(145deg, rgba(39,39,42,0.7) 0%, rgba(9,9,11,0.95) 100%);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-left: 1px solid rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-zinc-300 font-sans antialiased scroll-smooth selection:bg-primary/30 selection:text-white">
+
+    <div class="fixed inset-0 bg-grid-pattern z-[-2] pointer-events-none"></div>
+    <div class="ambient-glow fixed top-[-15%] left-1/2 -translate-x-1/2 w-[1000px] h-[700px] max-w-[100vw] z-[-1] pointer-events-none opacity-50"></div>
+
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center" role="banner">
+        <div class="w-full max-w-6xl mx-auto relative select-none">
+
+            <nav class="nx-glass-nav w-full rounded-full px-5 py-3 md:px-8 md:py-3.5 flex items-center justify-between gap-3 fixed top-4 left-1/2 -translate-x-1/2 max-w-[95%] lg:max-w-6xl" id="nx-navbar" role="navigation">
+
+                <a href="/" class="flex items-center gap-3 no-underline group flex-shrink-0">
+                    <div class="nx-logo-icon relative w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary nx-logo-pulse">
+                        <i class="ph-fill ph-brain text-xl"></i>
+                        <div class="nx-logo-ring"></div>
+                    </div>
+                    <span class="text-xl font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus<span class="text-primary">.</span></span>
+                </a>
+
+                <div class="nx-nav-links hidden md:flex items-center gap-8 xl:gap-10">
+                    <a href="/docs" class="nx-nav-link">Docs</a>
+                    <a href="/pricing" class="nx-nav-link">Pricing</a>
+                    <a href="/demo" class="nx-nav-link">Demo</a>
+                    <a href="/about" class="nx-nav-link">About</a>
+
+                    <div class="nx-resources-dropdown">
+                        <button class="nx-resources-toggle" aria-haspopup="true" aria-expanded="false">
+                            Resources <i class="ph-bold ph-caret-down"></i>
+                        </button>
+                        <div class="nx-premium-dropdown nx-resources-menu" role="menu">
+                            <a href="/blog" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-file-text"></i> Blog</a>
+                            <a href="/docs#api-reference" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-code"></i> API Reference</a>
+                            <a href="/changelog" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-clock-counter-clockwise"></i> Changelog</a>
+                            <div class="nx-menu-divider"></div>
+                            <a href="/community" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-users"></i> Community</a>
+                             <a href="/support" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-lifebuoy"></i> Support</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="authSection" class="flex items-center gap-4">
+                    <a href="/login" id="signInBtn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-zinc-300 hover:text-white transition-all border border-white/10 hover:border-white/30 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <i class="ph-bold ph-sign-in text-base"></i> Login
+                    </a>
+
+                    <div id="userArea" class="relative hidden">
+                        <button class="nx-avatar-btn" id="avatarBtn" aria-label="Account">
+                            <span id="avatarInitials">U</span>
+                            <img id="userAvatar" src="" alt="Avatar" class="hidden" />
+                        </button>
+
+                        <div class="nx-premium-dropdown nx-avatar-dropdown" id="avatarDropdown" role="menu">
+                            <div class="px-4 py-3 border-b border-white/10 mb-1">
+                                <div class="font-semibold text-white text-sm tracking-wide" id="dropdownName">User</div>
+                                <div class="text-xs text-zinc-400 mt-1 truncate" id="userEmail">user@example.com</div>
+                                <span class="inline-block mt-2 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 uppercase tracking-widest shadow-[0_0_10px_rgba(168,85,247,0.2)]">Free</span>
+                            </div>
+                            <a href="/dashboard" class="nx-dropdown-item"><i class="ph-duotone ph-layout-dashboard"></i> Dashboard</a>
+                            <a href="/settings" class="nx-dropdown-item"><i class="ph-duotone ph-gear"></i> Settings</a>
+                            <a href="/billing" class="nx-dropdown-item"><i class="ph-duotone ph-credit-card"></i> Billing</a>
+                            <div class="nx-menu-divider"></div>
+                            <button class="nx-dropdown-item nx-danger" id="signOutBtn"><i class="ph-bold ph-sign-out"></i> Sign Out</button>
+                        </div>
+                    </div>
+
+                    <button class="nx-hamburger md:hidden" id="nx-hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+            </nav>
+
+            <div class="nx-mobile-overlay" id="nx-mobileMenu" role="dialog" aria-modal="true">
+                <a href="/docs" class="nx-mobile-link"><i class="ph-duotone ph-book-open"></i> Docs</a>
+                <a href="/pricing" class="nx-mobile-link"><i class="ph-duotone ph-tag"></i> Pricing</a>
+                <a href="/demo" class="nx-mobile-link"><i class="ph-duotone ph-play-circle"></i> Demo</a>
+                <a href="/about" class="nx-mobile-link"><i class="ph-duotone ph-info"></i> About</a>
+                <a href="/playground" class="nx-mobile-link"><i class="ph-duotone ph-code"></i> Playground</a>
+
+                <div class="nx-mobile-resources">
+                    <div class="nx-mobile-link" style="border-bottom:none; cursor: default;">
+                        <i class="ph-duotone ph-folder-open"></i> Resources
+                    </div>
+                    <div class="nx-sub-links">
+                        <a href="/blog"><i class="ph-bold ph-file-text"></i> Blog</a>
+                        <a href="/docs#api-reference"><i class="ph-bold ph-code"></i> API Reference</a>
+                        <a href="/changelog"><i class="ph-bold ph-clock-counter-clockwise"></i> Changelog</a>
+                        <a href="/community"><i class="ph-bold ph-users"></i> Community</a>
+                    </div>
+                </div>
+
+                <div class="nx-mobile-ctas" id="nx-mobileCtas">
+                    <a href="/login" class="nx-btn-ghost-mobile" id="mobileLoginBtn"><i class="ph-bold ph-sign-in"></i> Login</a>
+                    <button id="mobileSignOutBtn" class="nx-btn-danger-mobile hidden"><i class="ph-bold ph-sign-out"></i> Sign Out</button>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="relative z-10 w-full pt-32">
+
+        <section class="support-hero-gradient pt-24 pb-24 px-6 text-center reveal-on-scroll">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <div class="flex justify-center mb-8">
+                    <span class="status-indicator">
+                        <span class="dot"></span> All systems operational
+                    </span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6">
+                    How can we <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-primary to-pink-500">help you?</span>
+                </h1>
+                <p class="text-xl text-zinc-400 max-w-2xl mx-auto font-medium leading-relaxed mb-12">
+                    Find comprehensive guides, troubleshooting steps, and direct support for your Nexus AI integration.
+                </p>
+                <div class="support-search-wrapper group">
+                    <input type="text" class="support-search-input" placeholder="Search for articles, guides, or questions..." aria-label="Search support" id="supportSearch" />
+                    <i class="ph-bold ph-magnifying-glass group-focus-within:text-primary"></i>
+                    <kbd class="search-shortcut hidden sm:inline-block group-focus-within:opacity-0">⌘ K</kbd>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-6 -mt-8 pb-32 reveal-on-scroll">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="supportCardsContainer">
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='Getting started'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-primary/10 text-primary border border-primary/20 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                        <i class="ph-bold ph-rocket"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">Getting Started</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Initial setup, secure embedding, and running your first AI query in minutes.</p>
+                </div>
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='Troubleshooting'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+                        <i class="ph-bold ph-wrench"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">Troubleshooting</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Resolve common CORS errors, domain whitelisting, and initialization issues.</p>
+                </div>
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='Billing'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+                        <i class="ph-bold ph-credit-card"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">Billing &amp; Plans</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Understand the free tier limits, upgrade paths, and usage analytics.</p>
+                </div>
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='Security'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-pink-500/10 text-pink-400 border border-pink-500/20 shadow-[0_0_15px_rgba(236,72,153,0.2)]">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">Security Vault</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Details on encryption at rest, token handling, and compliance standards.</p>
+                </div>
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='API Reference'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                        <i class="ph-bold ph-code"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">API Reference</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Deep dive into endpoints, acceptable parameters, and strict response formatting.</p>
+                </div>
+                <div class="support-card" onclick="document.getElementById('supportSearch').value='Community'; document.getElementById('supportSearch').focus(); document.getElementById('supportSearch').dispatchEvent(new Event('input'));">
+                    <div class="icon-wrap bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                        <i class="ph-bold ph-users"></i>
+                    </div>
+                    <h3 class="text-white font-black text-xl mb-2 tracking-tight">Community</h3>
+                    <p class="text-base text-zinc-400 leading-relaxed font-medium">Join developer discussions, share architectural feedback, and request features.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto px-6 pb-32 reveal-on-scroll">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
+                    Frequently Asked <span class="text-primary">Questions</span>
+                </h2>
+                <p class="text-lg text-zinc-400 font-medium">Quick answers to common integration questions.</p>
+            </div>
+            <div class="glass-panel p-6 md:p-10 rounded-[2rem] border border-white/5 bg-zinc-950/60 backdrop-blur-3xl shadow-2xl dash-card-ui">
+                <div class="space-y-2 px-2" id="faqContainer">
+                    <div class="faq-item open">
+                        <div class="faq-toggle" data-faq role="button" tabindex="0" aria-expanded="true">
+                            <span class="faq-question">What is Nexus?</span>
+                            <i class="faq-chevron ph-bold ph-caret-down text-zinc-500"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Nexus is a secure, drop-in AI assistant that turns any static website into a conversational knowledge base using Groq's ultra-fast Inference Engine. It's built for scale and takes minutes to deploy.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-toggle" data-faq role="button" tabindex="0" aria-expanded="false">
+                            <span class="faq-question">How does domain whitelisting work?</span>
+                            <i class="faq-chevron ph-bold ph-caret-down text-zinc-500"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Domain whitelisting ensures only authorized domains can utilize your generated Nexus API keys. Our edge gateway enforces strict origin verification on every incoming request, instantly blocking unauthorized cross-origin requests.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-toggle" data-faq role="button" tabindex="0" aria-expanded="false">
+                            <span class="faq-question">Is my core API key secure?</span>
+                            <i class="faq-chevron ph-bold ph-caret-down text-zinc-500"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Absolutely. Your master Groq key is heavily encrypted (AES-256) and stored securely in our backend vault. It never reaches the client-side. The frontend widget operates purely on a separate, domain-restricted proxy key.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-toggle" data-faq role="button" tabindex="0" aria-expanded="false">
+                            <span class="faq-question">What models does Nexus support natively?</span>
+                            <i class="faq-chevron ph-bold ph-caret-down text-zinc-500"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Nexus natively supports llama3-8b-8192 for extreme speed, llama3-70b-8192 for complex reasoning, and mixtral-8x7b-32768 for large context windows, all powered seamlessly by Groq.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-toggle" data-faq role="button" tabindex="0" aria-expanded="false">
+                            <span class="faq-question">Is Nexus actually free?</span>
+                            <i class="faq-chevron ph-bold ph-caret-down text-zinc-500"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes. The Hobby tier provides 1,000 requests per month completely free, with no credit card required. As your traffic scales, you can easily upgrade to our Pro tier for enhanced limits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-6xl mx-auto px-6 pb-32 reveal-on-scroll">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                
+                <div class="lg:col-span-3 glass-panel p-8 md:p-12 rounded-[2.5rem] border border-white/5 bg-zinc-950/60 backdrop-blur-3xl shadow-2xl dash-card-ui relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full pointer-events-none -mr-20 -mt-20"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/30 shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                                <i class="ph-bold ph-envelope-simple-open text-2xl"></i>
+                            </div>
+                            <h3 class="text-3xl font-black text-white tracking-tight">Contact Support</h3>
+                        </div>
+                        <form class="space-y-5" id="supportForm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <input type="text" class="form-input-premium" placeholder="Full name" required aria-label="Full name" />
+                                </div>
+                                <div>
+                                    <input type="email" class="form-input-premium" placeholder="work@email.com" required aria-label="Email address" />
+                                </div>
+                            </div>
+                            <div>
+                                <select class="form-input-premium appearance-none" required aria-label="Subject">
+                                    <option value="" disabled selected>Select issue category...</option>
+                                    <option>Technical integration issue</option>
+                                    <option>Billing & Plan upgrade</option>
+                                    <option>Bug report</option>
+                                    <option>Feature request</option>
+                                    <option>General inquiry</option>
+                                </select>
+                            </div>
+                            <div>
+                                <textarea class="form-input-premium" placeholder="Describe your issue in detail. Include error codes if applicable..." required aria-label="Message"></textarea>
+                            </div>
+                            <button type="submit" class="btn-premium w-full mt-2">
+                                <i class="ph-bold ph-paper-plane-right"></i> Send Message
+                            </button>
+                            <p class="text-sm text-zinc-500 text-center mt-4 font-medium">
+                                SLA: Responses typically within 24 hours. For immediate help, check the <a href="/docs" class="text-primary hover:underline">Docs</a>.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 flex flex-col gap-8">
+                    <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] border border-white/5 bg-zinc-950/60 backdrop-blur-3xl shadow-2xl dash-card-ui flex-1">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30 shadow-[0_0_20px_rgba(52,211,153,0.2)]">
+                                <i class="ph-bold ph-link text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-white tracking-tight">Quick Links</h3>
+                        </div>
+                        <ul class="space-y-5 text-base">
+                            <li>
+                                <a href="/docs" class="flex items-center gap-4 text-zinc-400 hover:text-white transition-all group">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
+                                        <i class="ph-bold ph-book-open text-primary group-hover:scale-110 transition-transform"></i>
+                                    </div>
+                                    <span class="font-semibold">Documentation</span>
+                                    <i class="ph-bold ph-arrow-right ml-auto text-zinc-600 group-hover:text-primary transition-colors transform group-hover:translate-x-1"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/docs#api-reference" class="flex items-center gap-4 text-zinc-400 hover:text-white transition-all group">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
+                                        <i class="ph-bold ph-code text-primary group-hover:scale-110 transition-transform"></i>
+                                    </div>
+                                    <span class="font-semibold">API Reference</span>
+                                    <i class="ph-bold ph-arrow-right ml-auto text-zinc-600 group-hover:text-primary transition-colors transform group-hover:translate-x-1"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/thekaifansari01/NexusWeb/issues" target="_blank" class="flex items-center gap-4 text-zinc-400 hover:text-white transition-all group">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
+                                        <i class="ph-bold ph-github-logo text-primary group-hover:scale-110 transition-transform"></i>
+                                    </div>
+                                    <span class="font-semibold">GitHub Issues</span>
+                                    <i class="ph-bold ph-arrow-right ml-auto text-zinc-600 group-hover:text-primary transition-colors transform group-hover:translate-x-1"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/community" class="flex items-center gap-4 text-zinc-400 hover:text-white transition-all group">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
+                                        <i class="ph-bold ph-users text-primary group-hover:scale-110 transition-transform"></i>
+                                    </div>
+                                    <span class="font-semibold">Community</span>
+                                    <i class="ph-bold ph-arrow-right ml-auto text-zinc-600 group-hover:text-primary transition-colors transform group-hover:translate-x-1"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="w-full border-t border-white/10 pt-16 pb-12 bg-black px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+                    <div class="col-span-2 lg:col-span-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/30">
+                                <i class="ph-fill ph-brain text-xl"></i>
+                            </div>
+                            <span class="text-2xl font-black text-white tracking-tight">Nexus</span>
+                        </div>
+                        <p class="text-base text-zinc-400 max-w-sm leading-relaxed font-medium">The most secure, drop-in AI assistant for modern web applications. Powered by Groq for instantaneous inference.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-6 tracking-wide text-lg">Product</h4>
+                        <ul class="space-y-4 text-sm text-zinc-400 font-semibold">
+                            <li><a href="/docs#features" class="hover:text-primary transition-colors">Features</a></li>
+                            <li><a href="/pricing" class="hover:text-primary transition-colors">Pricing</a></li>
+                            <li><a href="/demo" class="hover:text-primary transition-colors">Live Demo</a></li>
+                            <li><a href="/changelog" class="hover:text-primary transition-colors">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-6 tracking-wide text-lg">Resources</h4>
+                        <ul class="space-y-4 text-sm text-zinc-400 font-semibold">
+                            <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
+                            <li><a href="/docs#api-reference" class="hover:text-primary transition-colors">API Reference</a></li>
+                            <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
+                            <li><a href="/community" class="hover:text-primary transition-colors">Community</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-6 tracking-wide text-lg">Company</h4>
+                        <ul class="space-y-4 text-sm text-zinc-400 font-semibold">
+                            <li><a href="/about" class="hover:text-primary transition-colors">About Us</a></li>
+                            <li><a href="/privacyPolicy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li><a href="/termsConditions" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                            <li><a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <p class="text-sm text-zinc-500 font-bold tracking-wide">&copy; 2026 Nexus Web Assistant. All rights reserved.</p>
+                    <div class="flex items-center gap-6 text-zinc-500">
+                        <a href="https://www.linkedin.com/in/thekaifansari01" target="_blank" class="hover:text-white transition-colors text-2xl"><i class="ph-fill ph-linkedin-logo"></i></a>
+                        <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="hover:text-white transition-colors text-2xl"><i class="ph-fill ph-github-logo"></i></a>
+                        <a href="#" class="hover:text-white transition-colors text-2xl"><i class="ph-fill ph-discord-logo"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        document.querySelectorAll('.faq-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const item = this.closest('.faq-item');
+                if (item) {
+                    const wasOpen = item.classList.contains('open');
+                    document.querySelectorAll('.faq-item').forEach(faq => {
+                        faq.classList.remove('open');
+                        faq.querySelector('.faq-toggle').setAttribute('aria-expanded', 'false');
+                    });
+                    if (!wasOpen) {
+                        item.classList.add('open');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            });
+            toggle.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        document.getElementById('supportForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('.btn-premium');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Processing...';
+            btn.style.pointerEvents = 'none';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="ph-bold ph-check-circle"></i> Securely Sent';
+                btn.style.background = 'linear-gradient(135deg, #34d399, #059669)';
+                btn.style.boxShadow = '0 10px 25px -5px rgba(52,211,153,0.4)';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = '';
+                    btn.style.boxShadow = '';
+                    btn.style.pointerEvents = 'auto';
+                    this.reset();
+                }, 2500);
+            }, 1500);
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('supportSearch')?.focus();
+            }
+        });
+
+        document.getElementById('supportSearch')?.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            
+            const faqs = document.querySelectorAll('.faq-item');
+            faqs.forEach(item => {
+                const question = item.querySelector('.faq-question')?.textContent?.toLowerCase() || '';
+                const answer = item.querySelector('.faq-answer p')?.textContent?.toLowerCase() || '';
+                const matches = query === '' || question.includes(query) || answer.includes(query);
+                item.style.display = matches ? '' : 'none';
+                
+                if (query !== '' && matches) {
+                    item.classList.add('open');
+                    item.querySelector('.faq-toggle')?.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            if (query === '') {
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('open');
+                    faq.querySelector('.faq-toggle').setAttribute('aria-expanded', 'false');
+                });
+                const firstFaq = document.querySelector('.faq-item');
+                if(firstFaq) {
+                    firstFaq.classList.add('open');
+                    firstFaq.querySelector('.faq-toggle').setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            const cards = document.querySelectorAll('.support-card');
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                const desc = card.querySelector('p')?.textContent?.toLowerCase() || '';
+                const matches = query === '' || title.includes(query) || desc.includes(query);
+                card.style.display = matches ? '' : 'none';
+            });
+        });
+    </script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js"
+            }
+        }
+    </script>
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>

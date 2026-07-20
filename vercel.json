@@ -80,6 +80,10 @@
       "destination": "/blog/index.html"
     },
     {
+      "source": "/support",
+      "destination": "/support.html"
+    },
+    {
       "source": "/blog/post/add-ai-assistant-to-website",
       "destination": "/blog/post/add-ai-assistant-to-website.html"
     },
