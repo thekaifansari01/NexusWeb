@@ -1,4 +1,5 @@
-import { auth, signOutUser } from "./modules/auth.js";
+import { auth } from "./config/firebase.js";
+import { signOutUser, observeAuthState } from "./modules/auth.js";
 
 const loginBtn = document.getElementById('signInBtn');
 const avatarContainer = document.getElementById('userArea');
@@ -79,8 +80,7 @@ function updateUI(user) {
     }
 }
 
-import { onAuthStateChanged } from "firebase/auth";
-onAuthStateChanged(auth, updateUI);
+observeAuthState(updateUI);
 
 if (avatarBtn && avatarDropdown) {
     avatarBtn.addEventListener('click', (e) => {
