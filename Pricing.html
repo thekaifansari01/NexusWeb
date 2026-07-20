@@ -20,6 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/layout/navbar.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
         .pricing-badge {
@@ -208,43 +209,101 @@
 <body class="bg-background text-zinc-300 font-sans antialiased">
     <div class="ambient-glow"></div>
 
-    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
-        <nav class="glass-panel w-full max-w-5xl rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
-            <a href="/" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                    <i class="ph-fill ph-brain text-lg"></i>
-                </div>
-                <span class="text-lg font-bold tracking-tight">Nexus</span>
-            </a>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/docs" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Docs</a>
-                <a href="/pricing" class="text-sm font-medium text-white transition-colors">Pricing</a>
-                <a href="/demo" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Demo</a>
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
-                    <i class="ph ph-github-logo text-lg"></i> GitHub
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center" role="banner">
+        <div class="w-full max-w-6xl mx-auto relative select-none">
+
+            <nav class="nx-glass-nav w-full rounded-full px-5 py-3 md:px-8 md:py-3.5 flex items-center justify-between gap-3 fixed top-4 left-1/2 -translate-x-1/2 max-w-[95%] lg:max-w-6xl" id="nx-navbar" role="navigation">
+
+                <a href="/" class="flex items-center gap-3 no-underline group flex-shrink-0">
+                    <div class="nx-logo-icon relative w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary nx-logo-pulse">
+                        <i class="ph-fill ph-brain text-xl"></i>
+                        <div class="nx-logo-ring"></div>
+                    </div>
+                    <span class="text-xl font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus<span class="text-primary">.</span></span>
                 </a>
-            </div>
-            <div class="relative" id="auth-container">
-                <button id="signInBtn" class="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
-                    <i class="ph-bold ph-sign-in"></i> Sign In
-                </button>
-                <div id="userArea" class="hidden relative">
-                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
-                        <img id="userAvatar" src="" alt="avatar" />
-                    </div>
-                    <div class="avatar-dropdown" id="avatarDropdown">
-                        <div class="dropdown-email" id="userEmail">user@example.com</div>
-                        <a href="/dashboard" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
-                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
-                        </a>
-                        <button id="signOutBtn">
-                            <i class="ph-bold ph-sign-out"></i> Sign Out
+
+                <div class="nx-nav-links hidden md:flex items-center gap-8 xl:gap-10">
+                    <a href="/docs" class="nx-nav-link">Docs</a>
+                    <a href="/pricing" class="nx-nav-link nx-active">Pricing</a>
+                    <a href="/demo" class="nx-nav-link">Demo</a>
+                    <a href="/about" class="nx-nav-link">About</a>
+
+                    <div class="nx-resources-dropdown">
+                        <button class="nx-resources-toggle" aria-haspopup="true" aria-expanded="false">
+                            Resources <i class="ph-bold ph-caret-down"></i>
                         </button>
+                        <div class="nx-premium-dropdown nx-resources-menu" role="menu">
+                            <a href="/blog" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-file-text"></i> Blog</a>
+                            <a href="/docs#api-reference" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-code"></i> API Reference</a>
+                            <a href="/changelog" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-clock-counter-clockwise"></i> Changelog</a>
+                            <div class="nx-menu-divider"></div>
+                            <a href="/community" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-users"></i> Community</a>
+                            <a href="/support" class="nx-dropdown-item" role="menuitem"><i class="ph-duotone ph-lifebuoy"></i> Support</a>
+                        </div>
                     </div>
                 </div>
+
+                <div id="authSection" class="flex items-center gap-4">
+                    <a href="/login" id="signInBtn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-zinc-300 hover:text-white transition-all border border-white/10 hover:border-white/30 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <i class="ph-bold ph-sign-in text-base"></i> Login
+                    </a>
+
+                    <div id="userArea" class="relative hidden">
+                        <button class="nx-avatar-btn" id="avatarBtn" aria-label="Account">
+                            <span id="avatarInitials">U</span>
+                            <img id="userAvatar" src="" alt="Avatar" class="hidden" />
+                        </button>
+
+                        <div class="nx-premium-dropdown nx-avatar-dropdown" id="avatarDropdown" role="menu">
+                            <div class="px-4 py-3 border-b border-white/10 mb-1">
+                                <div class="font-semibold text-white text-sm tracking-wide" id="dropdownName">User</div>
+                                <div class="text-xs text-zinc-400 mt-1 truncate" id="userEmail">user@example.com</div>
+                                <span class="inline-block mt-2 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 uppercase tracking-widest shadow-[0_0_10px_rgba(168,85,247,0.2)]">Free</span>
+                            </div>
+                            <a href="/dashboard" class="nx-dropdown-item"><i class="ph-duotone ph-layout-dashboard"></i> Dashboard</a>
+                            <a href="/settings" class="nx-dropdown-item"><i class="ph-duotone ph-gear"></i> Settings</a>
+                            <a href="/billing" class="nx-dropdown-item"><i class="ph-duotone ph-credit-card"></i> Billing</a>
+                            <div class="nx-menu-divider"></div>
+                            <button class="nx-dropdown-item nx-danger" id="signOutBtn"><i class="ph-bold ph-sign-out"></i> Sign Out</button>
+                        </div>
+                    </div>
+
+                    <button class="nx-hamburger md:hidden" id="nx-hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+            </nav>
+
+            <div class="nx-mobile-overlay" id="nx-mobileMenu" role="dialog" aria-modal="true">
+                <a href="/docs" class="nx-mobile-link"><i class="ph-duotone ph-book-open"></i> Docs</a>
+                <a href="/pricing" class="nx-mobile-link"><i class="ph-duotone ph-tag"></i> Pricing</a>
+                <a href="/demo" class="nx-mobile-link"><i class="ph-duotone ph-play-circle"></i> Demo</a>
+                <a href="/playground" class="nx-mobile-link"><i class="ph-duotone ph-code"></i> Playground</a>
+
+                <div class="nx-mobile-resources">
+                    <div class="nx-mobile-link" style="border-bottom:none; cursor: default;">
+                        <i class="ph-duotone ph-folder-open"></i> Resources
+                    </div>
+                    <div class="nx-sub-links">
+                        <a href="/blog"><i class="ph-bold ph-file-text"></i> Blog</a>
+                        <a href="/docs#api-reference"><i class="ph-bold ph-code"></i> API Reference</a>
+                        <a href="/changelog"><i class="ph-bold ph-clock-counter-clockwise"></i> Changelog</a>
+                        <a href="/community"><i class="ph-bold ph-users"></i> Community</a>
+                        <a href="/support"><i class="ph-bold ph-lifebuoy"></i> Support</a>
+                    </div>
+                </div>
+
+                <div class="nx-mobile-ctas" id="nx-mobileCtas">
+                    <a href="/login" class="nx-btn-ghost-mobile" id="mobileLoginBtn"><i class="ph-bold ph-sign-in"></i> Login</a>
+                    <button id="mobileSignOutBtn" class="nx-btn-danger-mobile hidden"><i class="ph-bold ph-sign-out"></i> Sign Out</button>
+                </div>
             </div>
-        </nav>
-    </div>
+
+        </div>
+    </header>
 
     <main class="max-w-4xl mx-auto px-6 pt-32 pb-20 relative z-10">
 

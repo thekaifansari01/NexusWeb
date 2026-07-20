@@ -60,45 +60,7 @@
 
     <div class="ambient-glow fixed top-[-15%] left-1/2 -translate-x-1/2 w-[1000px] h-[700px] max-w-[100vw] z-[-1] pointer-events-none opacity-40"></div>
 
-    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-center">
-        <nav class="glass-panel w-full max-w-5xl rounded-full px-8 py-3.5 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 bg-zinc-950/40 backdrop-blur-xl">
-            <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
-                <div class="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.25)] group-hover:scale-105 transition-transform">
-                    <i class="ph-fill ph-brain text-xl"></i>
-                </div>
-                <span class="text-xl font-black tracking-tight text-white group-hover:text-zinc-200 transition-colors">Nexus</span>
-            </a>
-            <div class="hidden md:flex items-center space-x-10">
-                <a href="/docs" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Docs</a>
-                <a href="/pricing" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Pricing</a>
-                <a href="/demo" class="text-sm font-semibold text-zinc-400 hover:text-primary transition-colors tracking-wide">Demo</a>
-                <a href="https://github.com/thekaifansari01/NexusWeb" target="_blank" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5 tracking-wide">
-                    <i class="ph ph-github-logo text-xl"></i> GitHub
-                </a>
-            </div>
-            <div class="relative" id="auth-container">
-                <a href="/login" id="loginLink" class="bg-white text-black hover:bg-zinc-200 px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:-translate-y-0.5">
-                    <i class="ph-bold ph-sign-in"></i> Login
-                </a>
-                <div id="userArea" class="hidden relative">
-                    <div class="user-avatar-btn" id="avatarBtn" title="Account">
-                        <img id="userAvatar" src="" alt="user avatar" />
-                    </div>
-                    <div class="avatar-dropdown" id="avatarDropdown">
-                        <div class="dropdown-email" id="userEmail">user@example.com</div>
-                        <a href="/dashboard" class="w-full text-left px-4 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white flex items-center gap-2 mb-1">
-                            <i class="ph-bold ph-layout-dashboard"></i> Dashboard
-                        </a>
-                        <button id="signOutBtn">
-                            <i class="ph-bold ph-sign-out"></i> Sign Out
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <main class="relative z-10 w-full pt-44">
+    <main class="relative z-10 w-full pt-24">
         <section class="max-w-4xl mx-auto px-6 pb-20 text-center">
             <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight mb-6">
                 What's new in <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-primary">Nexus</span>
