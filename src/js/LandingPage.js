@@ -20,14 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 600);
     }
 });
+
 (function() {
     'use strict';
+
     const glow = document.getElementById('cursorGlow');
     if (glow) {
-        let x = 0,
-            y = 0,
-            tx = 0,
-            ty = 0;
+        let x = 0, y = 0, tx = 0, ty = 0;
         document.addEventListener('mousemove', function(e) {
             tx = e.clientX;
             ty = e.clientY;
@@ -41,13 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         animateGlow();
     }
+
     const wrapper = document.getElementById('mockup3d');
     if (wrapper) {
         const inner = wrapper.querySelector('.mockup-inner');
-        let rotX = 0,
-            rotY = 0,
-            targetX = 0,
-            targetY = 0;
+        let rotX = 0, rotY = 0, targetX = 0, targetY = 0;
         wrapper.addEventListener('mousemove', function(e) {
             const rect = wrapper.getBoundingClientRect();
             const px = (e.clientX - rect.left) / rect.width - 0.5;
@@ -68,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         animateTilt();
     }
+
     const copyBtn = document.getElementById('copyScriptBtn');
     if (copyBtn) {
         copyBtn.addEventListener('click', function() {
@@ -81,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+
     const faqToggles = document.querySelectorAll('[data-faq]');
     for (let i = 0; i < faqToggles.length; i++) {
         const toggle = faqToggles[i];
@@ -111,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
     const siteCount = document.getElementById('liveSiteCount');
     if (siteCount) {
         let base = 1247;
@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             siteCount.textContent = base.toLocaleString();
         }, 4000);
     }
+
     const sections = document.querySelectorAll('.reveal-section');
     const observer = new IntersectionObserver(function(entries) {
         for (let k = 0; k < entries.length; k++) {
@@ -129,23 +130,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
     for (let m = 0; m < sections.length; m++) {
         observer.observe(sections[m]);
-    }
-    const hamburger = document.getElementById('nx-hamburgerBtn');
-    const mobileMenu = document.getElementById('nx-mobileMenu');
-    if (hamburger && mobileMenu) {
-        hamburger.addEventListener('click', function() {
-            const isOpen = mobileMenu.classList.contains('open');
-            mobileMenu.classList.toggle('open', !isOpen);
-            hamburger.classList.toggle('open', !isOpen);
-            document.body.style.overflow = !isOpen ? 'hidden' : '';
-        });
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        for (let n = 0; n < mobileLinks.length; n++) {
-            mobileLinks[n].addEventListener('click', function() {
-                mobileMenu.classList.remove('open');
-                hamburger.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        }
     }
 })();
