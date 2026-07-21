@@ -9,19 +9,11 @@
     },
     {
       "source": "/api/auth/(.*)",
-      "destination": "/api/auth/index.py"
-    },
-    {
-      "source": "/api/chat",
-      "destination": "/api/chat/index.py"
-    },
-    {
-      "source": "/api/groq",
-      "destination": "/api/groq/index.py"
+      "destination": "/api/auth"
     },
     {
       "source": "/api/user/plan",
-      "destination": "/api/user/plan/index.py"
+      "destination": "/api/user/plan"
     },
     {
       "source": "/docs",
