@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Playground · Nexus</title>
+    <title>Playground 路 Nexus</title>
     <link rel="icon" type="image/png" href="assets/favico.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <style>
         * { scroll-behavior: smooth; margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #09090b; color: #d4d4d8; overflow: hidden; }
@@ -87,6 +89,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            z-index: 20;
         }
 
         .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -94,20 +97,73 @@
         .mac-yellow { background: #f59e0b; }
         .mac-green { background: #10b981; }
 
-        .preview-frame { width: 100%; height: 100%; border: none; background: #0c0c0e; flex: 1; }
+        .preview-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            background: #0c0c0e;
+            overflow: hidden;
+        }
+
+        .preview-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            z-index: 1;
+        }
+
+        .preview-frame.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .loader-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(168,85,247,0.1);
+            border-top-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
         .script-box {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             border-radius: 12px;
             padding: 1.5rem;
-            font-family: 'ui-monospace', monospace;
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #e4e4e7;
             overflow-x: auto;
             border: 1px solid rgba(255,255,255,0.08);
             position: relative;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .script-box pre {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .script-box code {
+            font-family: 'ui-monospace', monospace !important;
+            text-shadow: none !important;
         }
 
         .copy-btn {
@@ -127,6 +183,7 @@
             display: flex;
             align-items: center;
             gap: 0.3rem;
+            z-index: 10;
         }
         .copy-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-1px); }
         .copy-btn.copied { background: rgba(52,211,153,0.15); color: #34d399; border-color: rgba(52,211,153,0.3); }
@@ -210,7 +267,7 @@
                 <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Initializing...</span>
             </div>
 
-            <div class="w-full lg:w-[380px] glass-panel-premium rounded-3xl flex flex-col flex-shrink-0 overflow-y-auto scrollbar-custom p-7 gap-6 border border-white/5">
+            <div class="w-full lg:w-[400px] glass-panel-premium rounded-3xl flex flex-col flex-shrink-0 overflow-y-auto scrollbar-custom p-7 gap-6 border border-white/5">
                 
                 <div class="flex items-center gap-3 border-b border-white/5 pb-4">
                     <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-300 border border-white/10">
@@ -231,7 +288,7 @@
 
                 <div>
                     <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Greeting</label>
-                    <input type="text" id="greeting" class="pg-input" placeholder="👋 Hello! How can I assist you?" value="👋 Hello! How can I assist you?">
+                    <input type="text" id="greeting" class="pg-input" placeholder="馃憢 Hello! How can I assist you?" value="馃憢 Hello! How can I assist you?">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -270,7 +327,10 @@
                         <div class="mac-dot mac-green"></div>
                         <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-4">Live Preview</span>
                     </div>
-                    <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+                    <div id="previewContainer" class="preview-container">
+                        <div id="previewLoader" class="loader-spinner"></div>
+                        <iframe id="previewFrameActive" class="preview-frame active" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+                    </div>
                 </div>
 
                 <div class="glass-panel-premium rounded-3xl p-6 border border-white/5 space-y-4 flex-shrink-0">
@@ -284,7 +344,7 @@
                         <button id="copyScriptBtn" class="copy-btn">
                             <i class="ph-bold ph-copy"></i> Copy
                         </button>
-                        <pre id="scriptContent" class="m-0 whitespace-pre-wrap break-all text-emerald-400"></pre>
+                        <pre><code id="scriptContent" class="language-html"></code></pre>
                     </div>
                 </div>
             </div>
@@ -334,7 +394,9 @@
         const themeSelect = document.getElementById('themeSelect');
         const modelSelect = document.getElementById('modelSelect');
         const systemPrompt = document.getElementById('systemPrompt');
-        const previewFrame = document.getElementById('previewFrame');
+        
+        const previewContainer = document.getElementById('previewContainer');
+        const previewLoader = document.getElementById('previewLoader');
         const scriptContent = document.getElementById('scriptContent');
         const copyScriptBtn = document.getElementById('copyScriptBtn');
 
@@ -383,7 +445,7 @@
             return {
                 apiKey: keySelect.value,
                 botName: botName.value.trim() || 'Nexus AI',
-                greeting: greeting.value.trim() || '👋 Hello! How can I assist you?',
+                greeting: greeting.value.trim() || '馃憢 Hello! How can I assist you?',
                 theme: themeSelect.value,
                 model: modelSelect.value,
                 systemPrompt: systemPrompt.value.trim()
@@ -392,28 +454,39 @@
 
         function generateScript(config) {
             const lines = [];
+            lines.push(``);
             lines.push(`<script>`);
-            lines.push(`window.NexusConfig = {`);
-            lines.push(`  apiKey: '${config.apiKey}',`);
-            lines.push(`  model: '${config.model}',`);
-            lines.push(`  botName: '${config.botName.replace(/'/g, "\\'")}',`);
-            lines.push(`  greeting: '${config.greeting.replace(/'/g, "\\'")}',`);
-            lines.push(`  theme: '${config.theme}'`);
+            lines.push(`  window.NexusConfig = {`);
+            lines.push(`    apiKey: '${config.apiKey}',`);
+            lines.push(`    model: '${config.model}',`);
+            lines.push(`    botName: '${config.botName.replace(/'/g, "\\'")}',`);
+            lines.push(`    greeting: '${config.greeting.replace(/'/g, "\\'")}',`);
+            lines.push(`    theme: '${config.theme}'${config.systemPrompt ? ',' : ''}`);
             if (config.systemPrompt) {
-                lines.push(`  systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}'`);
+                lines.push(`    systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}'`);
             }
-            lines.push(`};`);
+            lines.push(`  };`);
             lines.push(`<\/script>`);
             lines.push(`<script defer src="${WIDGET_CDN}"><\/script>`);
             return lines.join('\n');
         }
 
         function updatePreview(config) {
+            const oldFrame = previewContainer.querySelector('.preview-frame.active');
+            
             if (!config.apiKey) {
-                previewFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;">Select an API key to initialize preview</body></html>';
+                if (oldFrame) {
+                    oldFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;">Select an API key to initialize preview</body></html>';
+                }
                 scriptContent.textContent = '';
                 return;
             }
+            
+            scriptContent.textContent = generateScript(config);
+            if (window.Prism) {
+                Prism.highlightElement(scriptContent);
+            }
+
             const html = `
 <!DOCTYPE html>
 <html>
@@ -438,8 +511,29 @@ window.NexusConfig = {
 <script defer src="${WIDGET_CDN}"><\/script>
 </body>
 </html>`;
-            previewFrame.srcdoc = html;
-            scriptContent.textContent = generateScript(config);
+
+            previewLoader.style.opacity = '1';
+            
+            const newFrame = document.createElement('iframe');
+            newFrame.className = 'preview-frame';
+            newFrame.sandbox = 'allow-scripts allow-modals allow-same-origin';
+            
+            newFrame.onload = () => {
+                newFrame.classList.add('active');
+                previewLoader.style.opacity = '0';
+                
+                if (oldFrame && oldFrame !== newFrame) {
+                    oldFrame.classList.remove('active');
+                    setTimeout(() => {
+                        if (oldFrame.parentNode) {
+                            oldFrame.parentNode.removeChild(oldFrame);
+                        }
+                    }, 400);
+                }
+            };
+
+            newFrame.srcdoc = html;
+            previewContainer.appendChild(newFrame);
         }
 
         function debounce(fn, ms = 300) {
@@ -450,7 +544,7 @@ window.NexusConfig = {
         const debouncedUpdate = debounce(() => {
             const config = getConfig();
             updatePreview(config);
-        }, 200);
+        }, 300);
 
         function initListeners() {
             [botName, greeting, themeSelect, modelSelect, systemPrompt].forEach(el => {
@@ -492,7 +586,6 @@ window.NexusConfig = {
                     }
                     debouncedUpdate();
                 } catch (e) {
-                    console.error(e);
                 }
                 loadingOverlay.style.display = 'none';
             });
