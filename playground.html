@@ -3,77 +3,145 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Playground · Nexus</title>
-    <link rel="icon" type="image/png" href="assets/favico.png">
+    <title>Playground · Nexus</title>
+    <link rel="icon" type="image/png" href="assets/favico.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-    <link rel="stylesheet" href="src/css/tailwind-output.css" />
-    <link rel="stylesheet" href="src/css/styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .scrollbar-custom::-webkit-scrollbar { width: 5px; height: 5px; }
+        * { scroll-behavior: smooth; margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #09090b; color: #d4d4d8; overflow: hidden; }
+        
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+        
+        .ambient-glow {
+            background: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.15) 0%, rgba(9, 9, 11, 0) 70%);
+        }
+
+        .scrollbar-custom::-webkit-scrollbar { width: 6px; height: 6px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
         
-        .pg-select { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 0.6rem 0.8rem; border-radius: 10px; outline: none; width: 100%; font-size: 0.85rem; font-weight: 500; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.8rem center; transition: all 0.2s ease; }
-        .pg-select:focus { border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
+        .glass-panel-premium {
+            background: linear-gradient(145deg, rgba(39,39,42,0.3) 0%, rgba(24,24,27,0.7) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .pg-select, .pg-input {
+            background: rgba(9,9,11,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            font-family: inherit;
+        }
+        
+        .pg-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .pg-select:focus, .pg-input:focus {
+            border-color: rgba(168,85,247,0.5);
+            background: rgba(24,24,27,0.8);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 2px rgba(168,85,247,0.2);
+        }
+        
+        .pg-input::placeholder { color: #52525b; font-weight: 500; }
         .pg-select option { background: #09090b; }
-        
-        .pg-input { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 0.6rem 0.8rem; border-radius: 10px; outline: none; width: 100%; font-size: 0.85rem; transition: all 0.2s ease; }
-        .pg-input:focus { border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
-        
-        .pg-range { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; outline: none; }
-        .pg-range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); transition: transform 0.1s; }
-        .pg-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        
-        .chat-bubble { max-width: 85%; padding: 1rem 1.25rem; border-radius: 18px; font-size: 0.9rem; line-height: 1.6; word-wrap: break-word; }
-        .chat-user { background: #27272a; color: #fff; border-bottom-right-radius: 4px; margin-left: auto; }
-        .chat-ai { background: rgba(168, 85, 247, 0.1); color: #e4e4e7; border: 1px solid rgba(168, 85, 247, 0.2); border-bottom-left-radius: 4px; margin-right: auto; }
-        
-        .chat-ai pre { background: #18181b; padding: 1rem; border-radius: 8px; position: relative; margin: 0.75rem 0; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .chat-ai code { font-family: 'ui-monospace', monospace; font-size: 0.85em; }
-        .chat-ai p { margin-bottom: 0.5rem; }
-        .chat-ai p:last-child { margin-bottom: 0; }
-        .chat-ai ul, .chat-ai ol { margin-left: 1.5rem; margin-bottom: 0.5rem; }
-        .chat-ai ul { list-style-type: disc; }
-        .chat-ai ol { list-style-type: decimal; }
-        .chat-ai a { color: #a855f7; text-decoration: underline; }
-        
-        .copy-code-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: bold; transition: all 0.2s; backdrop-filter: blur(4px); }
-        .copy-code-btn:hover { background: rgba(255,255,255,0.2); }
-        
-        .chat-think-box { margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(0,0,0,0.2); overflow: hidden; }
-        .chat-think-summary { padding: 0.75rem 1rem; font-size: 0.8rem; font-weight: 600; color: #a1a1aa; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; user-select: none; transition: background 0.2s; outline: none; }
-        .chat-think-summary:hover { background: rgba(255,255,255,0.05); color: #e4e4e7; }
-        .chat-think-content { padding: 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: #a1a1aa; background: rgba(0,0,0,0.3); }
 
-        .raw-view pre { font-family: 'ui-monospace', monospace; font-size: 0.8rem; color: #a1a1aa; line-height: 1.5; white-space: pre-wrap; }
-        .raw-view .string { color: #86efac; }
-        .raw-view .number { color: #fca5a5; }
-        .raw-view .boolean { color: #93c5fd; }
-        .raw-view .null { color: #d8b4fe; }
-        .raw-view .key { color: #93c5fd; font-weight: 600; }
+        .preview-wrapper {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
 
-        .typing-indicator { display: flex; gap: 4px; padding: 0.5rem; }
-        .typing-indicator span { width: 6px; height: 6px; background: #a855f7; border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        .preview-header {
+            background: rgba(24,24,27,0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .mac-red { background: #ef4444; }
+        .mac-yellow { background: #f59e0b; }
+        .mac-green { background: #10b981; }
+
+        .preview-frame { width: 100%; height: 100%; border: none; background: #0c0c0e; flex: 1; }
+
+        .script-box {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'ui-monospace', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e4e4e7;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #a1a1aa;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-1px); }
+        .copy-btn.copied { background: rgba(52,211,153,0.15); color: #34d399; border-color: rgba(52,211,153,0.3); }
+
+        .sidebar-link.active { background: rgba(168,85,247,0.1); color: #a855f7; border-color: rgba(168,85,247,0.2); box-shadow: inset 0 0 15px rgba(168,85,247,0.1); }
+        .sidebar-link { transition: all 0.2s ease; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
     </style>
 </head>
-<body class="bg-[#09090b] text-zinc-300 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary/30 selection:text-white">
+<body class="flex h-screen selection:bg-primary/30 selection:text-white">
 
-    <aside id="sidebarMenu" class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-40 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all">
+    <div class="fixed inset-0 bg-grid-pattern z-0 pointer-events-none"></div>
+    <div class="ambient-glow fixed top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] max-w-[100vw] z-0 pointer-events-none opacity-50"></div>
+
+    <aside id="sidebarMenu" class="w-64 bg-zinc-950/80 border-r border-white/5 hidden md:flex flex-col flex-shrink-0 relative z-40 shadow-[4px_0_24px_rgba(0,0,0,0.4)] backdrop-blur-xl">
         <div class="h-16 flex items-center justify-between px-6 border-b border-white/5">
             <a href="/" class="flex items-center gap-2.5 cursor-pointer group">
                 <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(168,85,247,0.2)] group-hover:scale-105 transition-transform">
@@ -84,28 +152,28 @@
             <button id="closeMobileMenuBtn" class="md:hidden text-zinc-400 hover:text-white"><i class="ph-bold ph-x text-lg"></i></button>
         </div>
         <nav class="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scrollbar-custom">
-            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/dashboard" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/docs" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-book-open text-lg"></i> Documentation
             </a>
-            <a href="/intergrations" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/intergrations" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-plug text-lg"></i> Intergrations
             </a>
-            <a href="/playground" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
+            <a href="/playground" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold bg-primary/10 text-primary border border-primary/20 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
                 <i class="ph-bold ph-code text-lg"></i> Playground
             </a>
-            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/billing" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-credit-card text-lg"></i> Billing
             </a>
-            <a href="/status" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/status" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-chart-line text-lg"></i> Status
             </a>
-            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/activity" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-clock-counter-clockwise text-lg"></i> Activity
             </a>
-            <a href="/settings" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5 hover:text-white text-zinc-400">
+            <a href="/settings" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-zinc-400 hover:text-white">
                 <i class="ph-bold ph-user-gear text-lg"></i> Settings
             </a>
         </nav>
@@ -123,41 +191,61 @@
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 h-screen relative bg-[#09090b]">
-        
-        <header class="h-16 flex items-center justify-between px-6 border-b border-white/5 bg-zinc-950/60 backdrop-blur-xl z-10 flex-shrink-0">
+    <div class="flex-1 flex flex-col min-w-0 h-screen relative z-10">
+        <header class="h-16 flex items-center justify-between px-6 border-b border-white/5 bg-zinc-950/40 backdrop-blur-md flex-shrink-0">
             <div class="flex items-center gap-4">
                 <button class="md:hidden text-zinc-400 hover:text-white transition-colors" id="mobileMenuBtn">
                     <i class="ph-bold ph-list text-2xl"></i>
                 </button>
-                <div class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
-                    <span class="text-white font-bold tracking-wide">Playground</span>
+                <div class="text-sm flex items-center gap-2">
+                    <span class="text-white font-black tracking-wide text-lg">Playground</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest ml-2">Beta</span>
                 </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <button id="viewCodeBtn" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-bold text-zinc-300 border border-white/10 transition-colors">
-                    <i class="ph-bold ph-code"></i> View Code
-                </button>
             </div>
         </header>
 
-        <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-            <div id="loadingOverlay" class="absolute inset-0 z-50 bg-[#09090b] flex flex-col items-center justify-center gap-4">
-                <div class="w-10 h-10 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                <span class="text-sm font-semibold text-zinc-500 uppercase tracking-widest">Loading Environment...</span>
+        <div class="flex-1 flex flex-col lg:flex-row overflow-hidden p-6 gap-6">
+            <div id="loadingOverlay" class="absolute inset-0 z-50 bg-[#09090b]/90 backdrop-blur-sm flex flex-col items-center justify-center gap-5">
+                <div class="w-12 h-12 border-[3px] border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Initializing...</span>
             </div>
 
-            <div class="w-full lg:w-[320px] bg-zinc-950/40 border-r border-white/5 flex flex-col flex-shrink-0 overflow-y-auto scrollbar-custom p-5">
-                <div class="space-y-6">
+            <div class="w-full lg:w-[380px] glass-panel-premium rounded-3xl flex flex-col flex-shrink-0 overflow-y-auto scrollbar-custom p-7 gap-6 border border-white/5">
+                
+                <div class="flex items-center gap-3 border-b border-white/5 pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-300 border border-white/10">
+                        <i class="ph-bold ph-sliders text-xl"></i>
+                    </div>
+                    <h2 class="text-lg font-black text-white tracking-tight">Configuration</h2>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Nexus API Key</label>
+                    <select id="keySelect" class="pg-select"></select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Bot Name</label>
+                    <input type="text" id="botName" class="pg-input" placeholder="Nexus AI" value="Nexus AI">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Greeting</label>
+                    <input type="text" id="greeting" class="pg-input" placeholder="👋 Hello! How can I assist you?" value="👋 Hello! How can I assist you?">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Authentication</label>
-                        <select id="keySelect" class="pg-select"></select>
+                        <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Theme</label>
+                        <select id="themeSelect" class="pg-select">
+                            <option value="auto">Auto (System)</option>
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                        </select>
                     </div>
 
                     <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Model</label>
-                        </div>
+                        <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Model</label>
                         <select id="modelSelect" class="pg-select">
                             <option value="llama-3.3-70b-versatile">Llama 3 (70B)</option>
                             <option value="llama-3.1-8b-instant">Llama 3.1 (8B)</option>
@@ -166,89 +254,39 @@
                             <option value="openai/gpt-oss-120b">GPT OSS (120B)</option>
                         </select>
                     </div>
+                </div>
 
-                    <div>
-                        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">System Instructions</label>
-                        <textarea id="systemPrompt" class="pg-input min-h-[120px] resize-y scrollbar-custom" placeholder="You are a helpful AI assistant."></textarea>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Temperature</label>
-                            <span id="tempValue" class="text-xs font-mono text-zinc-300 bg-white/5 px-2 py-0.5 rounded">0.7</span>
-                        </div>
-                        <input type="range" id="tempSlider" class="pg-range" min="0" max="2" step="0.1" value="0.7">
-                        <div class="flex justify-between text-[9px] text-zinc-600 mt-2 font-medium">
-                            <span>Precise</span>
-                            <span>Creative</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Max Tokens</label>
-                            <span id="tokensValue" class="text-xs font-mono text-zinc-300 bg-white/5 px-2 py-0.5 rounded">1024</span>
-                        </div>
-                        <input type="range" id="tokensSlider" class="pg-range" min="1" max="8192" step="1" value="1024">
-                    </div>
+                <div class="flex-1 min-h-[140px] flex flex-col">
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-2">System Prompt <span class="text-zinc-600 font-normal normal-case">(optional)</span></label>
+                    <textarea id="systemPrompt" class="pg-input flex-1 resize-none scrollbar-custom" placeholder="You are a helpful assistant."></textarea>
                 </div>
             </div>
 
-            <div class="flex-1 flex flex-col relative bg-[#09090b]">
-                
-                <div class="absolute top-0 inset-x-0 p-4 flex justify-center z-20 pointer-events-none">
-                    <div class="bg-black/50 backdrop-blur-md border border-white/10 p-1 rounded-xl flex gap-1 pointer-events-auto">
-                        <button id="tabChat" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white/10 text-white">Chat</button>
-                        <button id="tabRaw" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white">Raw JSON</button>
+            <div class="flex-1 flex flex-col gap-6 overflow-hidden">
+                <div class="flex-1 preview-wrapper glass-panel-premium rounded-3xl border border-white/5">
+                    <div class="preview-header">
+                        <div class="mac-dot mac-red"></div>
+                        <div class="mac-dot mac-yellow"></div>
+                        <div class="mac-dot mac-green"></div>
+                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-4">Live Preview</span>
                     </div>
+                    <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
                 </div>
 
-                <div id="chatView" class="flex-1 overflow-y-auto scrollbar-custom p-6 pt-20 flex flex-col gap-6">
-                    <div class="mt-auto hidden" id="chatEmptyState">
-                        <div class="text-center py-10">
-                            <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 border border-white/10">
-                                <i class="ph-bold ph-paper-plane-tilt text-2xl text-zinc-500"></i>
-                            </div>
-                            <h3 class="text-white font-bold mb-1">Start a conversation</h3>
-                            <p class="text-xs text-zinc-500">Configure parameters on the left and send a message.</p>
+                <div class="glass-panel-premium rounded-3xl p-6 border border-white/5 space-y-4 flex-shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                            <i class="ph-bold ph-code text-lg"></i>
                         </div>
+                        <span class="text-sm font-black text-white tracking-tight">Deployment Script</span>
                     </div>
-                    <div id="chatContainer" class="flex flex-col gap-6"></div>
-                </div>
-
-                <div id="rawView" class="flex-1 overflow-y-auto scrollbar-custom p-6 pt-20 hidden">
-                    <div class="raw-view bg-black/40 border border-white/5 rounded-2xl p-5 min-h-full">
-                        <pre id="jsonOutput" class="m-0">No request made yet.</pre>
-                    </div>
-                </div>
-
-                <div class="p-4 border-t border-white/5 bg-zinc-950/80 backdrop-blur-md">
-                    <div class="max-w-4xl mx-auto relative">
-                        <textarea id="messageInput" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-4 pr-16 py-3.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-primary/50 focus:bg-black/50 transition-all resize-none scrollbar-custom" rows="1" placeholder="Type your message... (Shift+Enter for new line)"></textarea>
-                        <button id="sendBtn" class="absolute right-2.5 bottom-2.5 w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center hover:bg-primaryHover transition-colors disabled:opacity-50 disabled:bg-zinc-700">
-                            <i class="ph-bold ph-arrow-up"></i>
+                    <div class="script-box" id="scriptBox">
+                        <button id="copyScriptBtn" class="copy-btn">
+                            <i class="ph-bold ph-copy"></i> Copy
                         </button>
-                    </div>
-                    <div class="flex justify-between items-center max-w-4xl mx-auto mt-2 px-2">
-                        <span id="statusMetric" class="text-[10px] font-mono text-zinc-500">Ready</span>
-                        <button id="clearChatBtn" class="text-[10px] uppercase tracking-widest font-bold text-zinc-600 hover:text-rose-400 transition-colors">Clear Chat</button>
+                        <pre id="scriptContent" class="m-0 whitespace-pre-wrap break-all text-emerald-400"></pre>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="codeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity">
-        <div class="w-full max-w-2xl bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-            <div class="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-zinc-900/50">
-                <span class="text-xs font-bold text-white uppercase tracking-widest">cURL Request</span>
-                <button id="closeCodeBtn" class="text-zinc-500 hover:text-white"><i class="ph-bold ph-x text-lg"></i></button>
-            </div>
-            <div class="p-4 bg-[#0c0c0e] overflow-x-auto scrollbar-custom relative group">
-                <button id="copyCodeBtn" class="absolute top-4 right-4 px-3 py-1.5 bg-white/10 border border-white/10 rounded-lg text-xs font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 backdrop-blur-md">
-                    <i class="ph-bold ph-copy"></i> Copy
-                </button>
-                <pre id="curlCode" class="text-xs font-mono text-zinc-300 leading-relaxed"></pre>
             </div>
         </div>
     </div>
@@ -263,6 +301,209 @@
             }
         }
     </script>
-    <script type="module" src="src/js/playground.js"></script>
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+        import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEptheO-640PV6s7lbDZ_4pxkRoCXe_VE",
+            authDomain: "www.trynexus.site",
+            projectId: "nexuswebassistant",
+            storageBucket: "nexuswebassistant.firebasestorage.app",
+            messagingSenderId: "69132729895",
+            appId: "1:69132729895:web:1fc74209c95486e241d802",
+            measurementId: "G-WEPDV083FB"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const sidebarName = document.getElementById('sidebarName');
+        const sidebarEmail = document.getElementById('sidebarEmail');
+        const sidebarSignOut = document.getElementById('sidebarSignOut');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+        const sidebar = document.getElementById('sidebarMenu');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        const keySelect = document.getElementById('keySelect');
+        const botName = document.getElementById('botName');
+        const greeting = document.getElementById('greeting');
+        const themeSelect = document.getElementById('themeSelect');
+        const modelSelect = document.getElementById('modelSelect');
+        const systemPrompt = document.getElementById('systemPrompt');
+        const previewFrame = document.getElementById('previewFrame');
+        const scriptContent = document.getElementById('scriptContent');
+        const copyScriptBtn = document.getElementById('copyScriptBtn');
+
+        let currentUser = null;
+        let keys = [];
+        let selectedKey = '';
+
+        const WIDGET_CDN = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.1.0/dist/nexus-assistant.min.js';
+
+        function updateSidebar(user) {
+            if (!user) return;
+            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+            sidebarAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=a855f7&color=fff&size=40`;
+            sidebarName.textContent = displayName;
+            sidebarEmail.textContent = user.email || 'user@example.com';
+        }
+
+        function loadKeys(user) {
+            const q = query(collection(db, 'apiKeys'), where('userId', '==', user.uid));
+            return getDocs(q).then(snapshot => {
+                const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                return items.filter(k => k.status === 'active');
+            });
+        }
+
+        function populateKeySelect(keysArray) {
+            keySelect.innerHTML = '';
+            if (keysArray.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No active keys';
+                keySelect.appendChild(opt);
+                return;
+            }
+            keysArray.forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k.key;
+                opt.textContent = `${k.name} (${k.key.slice(0,8)}...)`;
+                keySelect.appendChild(opt);
+            });
+            keySelect.value = keysArray[0]?.key || '';
+            selectedKey = keySelect.value;
+        }
+
+        function getConfig() {
+            return {
+                apiKey: keySelect.value,
+                botName: botName.value.trim() || 'Nexus AI',
+                greeting: greeting.value.trim() || '👋 Hello! How can I assist you?',
+                theme: themeSelect.value,
+                model: modelSelect.value,
+                systemPrompt: systemPrompt.value.trim()
+            };
+        }
+
+        function generateScript(config) {
+            const lines = [];
+            lines.push(`<script>`);
+            lines.push(`window.NexusConfig = {`);
+            lines.push(`  apiKey: '${config.apiKey}',`);
+            lines.push(`  model: '${config.model}',`);
+            lines.push(`  botName: '${config.botName.replace(/'/g, "\\'")}',`);
+            lines.push(`  greeting: '${config.greeting.replace(/'/g, "\\'")}',`);
+            lines.push(`  theme: '${config.theme}'`);
+            if (config.systemPrompt) {
+                lines.push(`  systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}'`);
+            }
+            lines.push(`};`);
+            lines.push(`<\/script>`);
+            lines.push(`<script defer src="${WIDGET_CDN}"><\/script>`);
+            return lines.join('\n');
+        }
+
+        function updatePreview(config) {
+            if (!config.apiKey) {
+                previewFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;">Select an API key to initialize preview</body></html>';
+                scriptContent.textContent = '';
+                return;
+            }
+            const html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { margin: 0; min-height: 100vh; background: ${config.theme === 'light' ? '#f4f4f5' : '#0c0c0e'}; display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; }
+</style>
+</head>
+<body>
+<script>
+window.NexusConfig = {
+  apiKey: '${config.apiKey}',
+  model: '${config.model}',
+  botName: '${config.botName.replace(/'/g, "\\'")}',
+  greeting: '${config.greeting.replace(/'/g, "\\'")}',
+  theme: '${config.theme}',
+  ${config.systemPrompt ? `systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}',` : ''}
+};
+<\/script>
+<script defer src="${WIDGET_CDN}"><\/script>
+</body>
+</html>`;
+            previewFrame.srcdoc = html;
+            scriptContent.textContent = generateScript(config);
+        }
+
+        function debounce(fn, ms = 300) {
+            let timer;
+            return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+        }
+
+        const debouncedUpdate = debounce(() => {
+            const config = getConfig();
+            updatePreview(config);
+        }, 200);
+
+        function initListeners() {
+            [botName, greeting, themeSelect, modelSelect, systemPrompt].forEach(el => {
+                el.addEventListener('input', debouncedUpdate);
+                el.addEventListener('change', debouncedUpdate);
+            });
+            keySelect.addEventListener('change', () => {
+                selectedKey = keySelect.value;
+                debouncedUpdate();
+            });
+            copyScriptBtn.addEventListener('click', () => {
+                const text = scriptContent.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    copyScriptBtn.innerHTML = '<i class="ph-bold ph-check"></i> Copied!';
+                    copyScriptBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyScriptBtn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
+                        copyScriptBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {});
+            });
+        }
+
+        function initAuth() {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+                currentUser = user;
+                updateSidebar(user);
+                try {
+                    const activeKeys = await loadKeys(user);
+                    keys = activeKeys;
+                    populateKeySelect(keys);
+                    if (keys.length > 0) {
+                        keySelect.value = keys[0].key;
+                        selectedKey = keys[0].key;
+                    }
+                    debouncedUpdate();
+                } catch (e) {
+                    console.error(e);
+                }
+                loadingOverlay.style.display = 'none';
+            });
+        }
+
+        sidebarSignOut.addEventListener('click', () => signOut(auth));
+        mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
+        closeMobileMenuBtn.addEventListener('click', () => sidebar.classList.add('hidden'));
+
+        initListeners();
+        initAuth();
+    </script>
 </body>
 </html>
