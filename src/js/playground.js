@@ -1,347 +1,284 @@
-import { observeAuthState, signOutUser } from "./modules/auth.js";
-import { getApiKeys } from "./modules/firestore.js";
+ import { initializeApp } from "firebase/app";
+        import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+        import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 
-const dom = {
-    loadingOverlay: document.getElementById('loadingOverlay'),
-    keySelect: document.getElementById('keySelect'),
-    modelSelect: document.getElementById('modelSelect'),
-    systemPrompt: document.getElementById('systemPrompt'),
-    tempSlider: document.getElementById('tempSlider'),
-    tempValue: document.getElementById('tempValue'),
-    tokensSlider: document.getElementById('tokensSlider'),
-    tokensValue: document.getElementById('tokensValue'),
-    tabChat: document.getElementById('tabChat'),
-    tabRaw: document.getElementById('tabRaw'),
-    chatView: document.getElementById('chatView'),
-    rawView: document.getElementById('rawView'),
-    chatContainer: document.getElementById('chatContainer'),
-    chatEmptyState: document.getElementById('chatEmptyState'),
-    jsonOutput: document.getElementById('jsonOutput'),
-    messageInput: document.getElementById('messageInput'),
-    sendBtn: document.getElementById('sendBtn'),
-    clearChatBtn: document.getElementById('clearChatBtn'),
-    statusMetric: document.getElementById('statusMetric'),
-    viewCodeBtn: document.getElementById('viewCodeBtn'),
-    codeModal: document.getElementById('codeModal'),
-    closeCodeBtn: document.getElementById('closeCodeBtn'),
-    copyCodeBtn: document.getElementById('copyCodeBtn'),
-    curlCode: document.getElementById('curlCode'),
-    sidebarMenu: document.getElementById('sidebarMenu'),
-    mobileMenuBtn: document.getElementById('mobileMenuBtn'),
-    closeMobileMenuBtn: document.getElementById('closeMobileMenuBtn'),
-    sidebarAvatar: document.getElementById('sidebarAvatar'),
-    sidebarName: document.getElementById('sidebarName'),
-    sidebarEmail: document.getElementById('sidebarEmail'),
-    sidebarSignOut: document.getElementById('sidebarSignOut')
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEptheO-640PV6s7lbDZ_4pxkRoCXe_VE",
+            authDomain: "www.trynexus.site",
+            projectId: "nexuswebassistant",
+            storageBucket: "nexuswebassistant.firebasestorage.app",
+            messagingSenderId: "69132729895",
+            appId: "1:69132729895:web:1fc74209c95486e241d802",
+            measurementId: "G-WEPDV083FB"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-let chatHistory = [];
-const MAX_HISTORY_LENGTH = 16;
-let currentRawData = null;
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const sidebarName = document.getElementById('sidebarName');
+        const sidebarEmail = document.getElementById('sidebarEmail');
+        const sidebarSignOut = document.getElementById('sidebarSignOut');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+        const sidebar = document.getElementById('sidebarMenu');
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
-function init() {
-    dom.tempSlider.addEventListener('input', (e) => dom.tempValue.textContent = e.target.value);
-    dom.tokensSlider.addEventListener('input', (e) => dom.tokensValue.textContent = e.target.value);
-    dom.tabChat.addEventListener('click', () => switchTab('chat'));
-    dom.tabRaw.addEventListener('click', () => switchTab('raw'));
-    dom.messageInput.addEventListener('input', autoResizeTextarea);
-    dom.messageInput.addEventListener('keydown', handleEnterKey);
-    dom.sendBtn.addEventListener('click', sendMessage);
-    dom.clearChatBtn.addEventListener('click', clearChat);
-    dom.viewCodeBtn.addEventListener('click', showCodeModal);
-    dom.closeCodeBtn.addEventListener('click', hideCodeModal);
-    dom.copyCodeBtn.addEventListener('click', copyCode);
-    if (dom.mobileMenuBtn && dom.sidebarMenu) dom.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    if (dom.closeMobileMenuBtn && dom.sidebarMenu) dom.closeMobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    if (dom.sidebarSignOut) dom.sidebarSignOut.addEventListener('click', signOutUser);
-}
-
-function toggleMobileMenu() {
-    if (dom.sidebarMenu.classList.contains('hidden')) {
-        dom.sidebarMenu.classList.remove('hidden');
-        dom.sidebarMenu.classList.add('absolute', 'inset-y-0', 'left-0');
-    } else {
-        dom.sidebarMenu.classList.add('hidden');
-        dom.sidebarMenu.classList.remove('absolute', 'inset-y-0', 'left-0');
-    }
-}
-
-function switchTab(tab) {
-    if (tab === 'chat') {
-        dom.tabChat.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white/10 text-white';
-        dom.tabRaw.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white';
-        dom.chatView.classList.remove('hidden');
-        dom.rawView.classList.add('hidden');
-        scrollToBottom();
-    } else {
-        dom.tabRaw.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white/10 text-white';
-        dom.tabChat.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white';
-        dom.rawView.classList.remove('hidden');
-        dom.chatView.classList.add('hidden');
-    }
-}
-
-function autoResizeTextarea() {
-    dom.messageInput.style.height = 'auto';
-    dom.messageInput.style.height = Math.min(dom.messageInput.scrollHeight, 150) + 'px';
-}
-
-function handleEnterKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-    }
-}
-
-function syntaxHighlight(json) {
-    if (typeof json != 'string') json = JSON.stringify(json, undefined, 2);
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\\b(true|false|null)\\b|-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)/g, function (match) {
-        let cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) cls = 'key';
-            else cls = 'string';
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
-
-function updateRawView(payload, response) {
-    const rawObj = {
-        timestamp: new Date().toISOString(),
-        requestPayload: payload,
-        responseContent: response
-    };
-    currentRawData = rawObj;
-    dom.jsonOutput.innerHTML = syntaxHighlight(rawObj);
-}
-
-function scrollToBottom() {
-    dom.chatView.scrollTop = dom.chatView.scrollHeight;
-}
-
-function appendBubble(role, text) {
-    dom.chatEmptyState.classList.add('hidden');
-    const bubble = document.createElement('div');
-    bubble.className = `chat-bubble ${role === 'user' ? 'chat-user' : 'chat-ai'}`;
-    
-    if (role === 'ai') {
-        let thoughtProcess = "";
-        let finalAnswer = text;
+        const keySelect = document.getElementById('keySelect');
+        const botName = document.getElementById('botName');
+        const greeting = document.getElementById('greeting');
+        const themeSelect = document.getElementById('themeSelect');
+        const modelSelect = document.getElementById('modelSelect');
+        const systemPrompt = document.getElementById('systemPrompt');
         
-        const thinkMatch = text.match(/<think>([\s\S]*?)<\/think>/);
-        if (thinkMatch) {
-            thoughtProcess = thinkMatch[1].trim();
-            finalAnswer = text.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+        const previewContainer = document.getElementById('previewContainer');
+        const previewLoader = document.getElementById('previewLoader');
+        const scriptContent = document.getElementById('scriptContent');
+        const copyScriptBtn = document.getElementById('copyScriptBtn');
+
+        const tabPreview = document.getElementById('tab-preview');
+        const tabCode = document.getElementById('tab-code');
+        const panePreview = document.getElementById('pane-preview');
+        const paneCode = document.getElementById('pane-code');
+
+        let currentUser = null;
+        let keys = [];
+        let selectedKey = '';
+
+        const WIDGET_CDN = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.1.0/dist/nexus-assistant.min.js';
+
+        tabPreview.addEventListener('click', () => {
+            tabPreview.classList.add('border-primary', 'text-primary');
+            tabPreview.classList.remove('border-transparent', 'text-zinc-500');
+            tabCode.classList.remove('border-primary', 'text-primary');
+            tabCode.classList.add('border-transparent', 'text-zinc-500');
+            panePreview.classList.remove('hidden');
+            paneCode.classList.add('hidden');
+        });
+
+        tabCode.addEventListener('click', () => {
+            tabCode.classList.add('border-primary', 'text-primary');
+            tabCode.classList.remove('border-transparent', 'text-zinc-500');
+            tabPreview.classList.remove('border-primary', 'text-primary');
+            tabPreview.classList.add('border-transparent', 'text-zinc-500');
+            paneCode.classList.remove('hidden');
+            panePreview.classList.add('hidden');
+        });
+
+        function updateSidebar(user) {
+            if (!user) return;
+            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+            sidebarAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=a855f7&color=fff&size=40`;
+            sidebarName.textContent = displayName;
+            sidebarEmail.textContent = user.email || 'user@example.com';
         }
 
-        let bubbleHtml = "";
-        
-        if (thoughtProcess) {
-            const safeThought = DOMPurify.sanitize(marked.parse(thoughtProcess));
-            bubbleHtml += `<details class="chat-think-box"><summary class="chat-think-summary"><i class="ph-bold ph-brain"></i> AI Thought Process</summary><div class="chat-think-content">${safeThought}</div></details>`;
-        }
-        
-        const safeHtml = DOMPurify.sanitize(marked.parse(finalAnswer));
-        bubbleHtml += safeHtml;
-        bubble.innerHTML = bubbleHtml;
-        Prism.highlightAllUnder(bubble);
-        
-        const preElements = bubble.querySelectorAll('pre');
-        preElements.forEach((pre) => {
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'copy-code-btn';
-            copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>';
-            copyBtn.title = 'Copy code';
-            copyBtn.addEventListener('click', () => {
-                const codeBlock = pre.querySelector('code');
-                const textToCopy = codeBlock ? codeBlock.innerText : pre.innerText;
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    copyBtn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i>';
-                    setTimeout(() => copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i>', 2000);
-                });
+        function loadKeys(user) {
+            const q = query(collection(db, 'apiKeys'), where('userId', '==', user.uid));
+            return getDocs(q).then(snapshot => {
+                const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                return items.filter(k => k.status === 'active');
             });
-            pre.appendChild(copyBtn);
-        });
-    } else {
-        bubble.textContent = text;
-    }
-    
-    dom.chatContainer.appendChild(bubble);
-    scrollToBottom();
-    return bubble;
-}
+        }
 
-function showTyping() {
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble chat-ai typing-indicator';
-    bubble.id = 'typingBubble';
-    bubble.innerHTML = '<span></span><span></span><span></span>';
-    dom.chatContainer.appendChild(bubble);
-    scrollToBottom();
-}
-
-function removeTyping() {
-    const t = document.getElementById('typingBubble');
-    if (t) t.remove();
-}
-
-async function sendMessage() {
-    const text = dom.messageInput.value.trim();
-    if (!text || !dom.keySelect.value) return;
-
-    const apiKey = dom.keySelect.value;
-    const model = dom.modelSelect.value;
-    const sysPrompt = dom.systemPrompt.value.trim();
-    const temp = parseFloat(dom.tempSlider.value);
-    const maxTokens = parseInt(dom.tokensSlider.value);
-
-    dom.messageInput.value = '';
-    autoResizeTextarea();
-    dom.sendBtn.disabled = true;
-
-    chatHistory.push({ role: 'user', content: text });
-    if (chatHistory.length > MAX_HISTORY_LENGTH) chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
-
-    appendBubble('user', text);
-    showTyping();
-    dom.statusMetric.textContent = 'Processing request...';
-
-    const payloadMessages = [];
-    if (sysPrompt) payloadMessages.push({ role: 'system', content: sysPrompt });
-    payloadMessages.push(...chatHistory);
-
-    const payload = {
-        nexusKey: apiKey,
-        model: model,
-        messages: payloadMessages,
-        temperature: temp,
-        max_tokens: maxTokens
-    };
-
-    const startTime = performance.now();
-
-    try {
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-        const endTime = performance.now();
-        const elapsed = Math.round(endTime - startTime);
-
-        removeTyping();
-
-        let aiText = '';
-        if (data.choices && data.choices[0] && data.choices[0].message) aiText = data.choices[0].message.content;
-        else if (data.error) aiText = `Error: ${data.error.message || JSON.stringify(data.error)}`;
-        else aiText = JSON.stringify(data);
-
-        chatHistory.push({ role: 'assistant', content: aiText });
-        if (chatHistory.length > MAX_HISTORY_LENGTH) chatHistory = chatHistory.slice(chatHistory.length - MAX_HISTORY_LENGTH);
-
-        appendBubble('ai', aiText);
-        updateRawView(payload, data);
-        
-        let tokens = data.usage ? data.usage.total_tokens : 'N/A';
-        dom.statusMetric.textContent = `${response.status} OK • ${elapsed}ms • ${tokens} tokens`;
-    } catch (err) {
-        removeTyping();
-        appendBubble('ai', `System Error: ${err.message}`);
-        dom.statusMetric.textContent = `Failed • ${err.message}`;
-    }
-
-    dom.sendBtn.disabled = false;
-    dom.messageInput.focus();
-}
-
-function clearChat() {
-    chatHistory = [];
-    dom.chatContainer.innerHTML = '';
-    dom.jsonOutput.textContent = 'No request made yet.';
-    dom.statusMetric.textContent = 'Ready';
-    dom.chatEmptyState.classList.remove('hidden');
-}
-
-function showCodeModal() {
-    const apiKey = dom.keySelect.value || 'YOUR_NEXUS_KEY';
-    const model = dom.modelSelect.value;
-    const sysPrompt = dom.systemPrompt.value.trim();
-    const text = dom.messageInput.value.trim() || 'Hello AI!';
-    
-    const msgs = [];
-    if (sysPrompt) msgs.push({ role: 'system', content: sysPrompt });
-    msgs.push({ role: 'user', content: text });
-
-    const payload = {
-        nexusKey: apiKey,
-        model: model,
-        messages: msgs,
-        temperature: parseFloat(dom.tempSlider.value),
-        max_tokens: parseInt(dom.tokensSlider.value)
-    };
-
-    const curl = `curl -X POST https://your-domain.com/api/chat \\\n  -H "Content-Type: application/json" \\\n  -d '${JSON.stringify(payload, null, 2)}'`;
-    dom.curlCode.textContent = curl;
-    dom.codeModal.classList.remove('hidden');
-    setTimeout(() => dom.codeModal.classList.remove('opacity-0'), 10);
-}
-
-function hideCodeModal() {
-    dom.codeModal.classList.add('opacity-0');
-    setTimeout(() => dom.codeModal.classList.add('hidden'), 300);
-}
-
-function copyCode() {
-    navigator.clipboard.writeText(dom.curlCode.textContent).then(() => {
-        const originalText = dom.copyCodeBtn.innerHTML;
-        dom.copyCodeBtn.innerHTML = '<i class="ph-bold ph-check text-emerald-400"></i> Copied!';
-        dom.copyCodeBtn.classList.add('border-emerald-500/30', 'text-emerald-400');
-        setTimeout(() => {
-            dom.copyCodeBtn.innerHTML = originalText;
-            dom.copyCodeBtn.classList.remove('border-emerald-500/30', 'text-emerald-400');
-        }, 2000);
-    });
-}
-
-observeAuthState(async (user) => {
-    if (!user) {
-        window.location.href = '/login';
-        return;
-    }
-    
-    if (dom.sidebarAvatar) dom.sidebarAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=40';
-    if (dom.sidebarEmail) dom.sidebarEmail.textContent = user.email || 'user@example.com';
-    if (dom.sidebarName) dom.sidebarName.textContent = user.displayName || user.email.split('@')[0] || 'User';
-
-    try {
-        const keys = await getApiKeys(user.uid);
-        const activeKeys = keys.filter(k => k.status === 'active');
-        dom.keySelect.innerHTML = '';
-        if (activeKeys.length === 0) {
-            dom.keySelect.innerHTML = '<option value="">No active keys found</option>';
-            dom.sendBtn.disabled = true;
-        } else {
-            activeKeys.forEach(key => {
+        function populateKeySelect(keysArray) {
+            keySelect.innerHTML = '';
+            if (keysArray.length === 0) {
                 const opt = document.createElement('option');
-                opt.value = key.key;
-                opt.textContent = `${key.name} (${key.key.slice(0,8)}...)`;
-                dom.keySelect.appendChild(opt);
+                opt.value = '';
+                opt.textContent = 'No active keys';
+                keySelect.appendChild(opt);
+                return;
+            }
+            keysArray.forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k.key;
+                opt.textContent = `${k.name} (${k.key.slice(0,8)}...)`;
+                keySelect.appendChild(opt);
             });
-            dom.sendBtn.disabled = false;
+            keySelect.value = keysArray[0]?.key || '';
+            selectedKey = keySelect.value;
         }
-    } catch(e) {
-        console.error(e);
-    }
-    
-    dom.loadingOverlay.classList.add('hidden');
-    dom.chatEmptyState.classList.remove('hidden');
-});
 
-init();
+        function getConfig() {
+            return {
+                apiKey: keySelect.value,
+                botName: botName.value.trim() || 'Nexus AI',
+                greeting: greeting.value.trim() || '👋 Hello! How can I assist you?',
+                theme: themeSelect.value,
+                model: modelSelect.value,
+                systemPrompt: systemPrompt.value.trim()
+            };
+        }
+
+        function generateScript(config) {
+            const lines = [];
+            lines.push(`<script>`);
+            lines.push(`  window.NexusConfig = {`);
+            lines.push(`    apiKey: '${config.apiKey}',`);
+            lines.push(`    model: '${config.model}',`);
+            lines.push(`    botName: '${config.botName.replace(/'/g, "\\'")}',`);
+            lines.push(`    greeting: '${config.greeting.replace(/'/g, "\\'")}',`);
+            lines.push(`    theme: '${config.theme}'${config.systemPrompt ? ',' : ''}`);
+            if (config.systemPrompt) {
+                lines.push(`    systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}'`);
+            }
+            lines.push(`  };`);
+            lines.push(`<\/script>`);
+            lines.push(`<script defer src="${WIDGET_CDN}"><\/script>`);
+            return lines.join('\n');
+        }
+
+        function updatePreview(config) {
+            const oldFrame = previewContainer.querySelector('.preview-frame.active');
+            
+            if (!config.apiKey) {
+                if (oldFrame) {
+                    oldFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;margin:0;height:100vh;overflow:hidden;">Select an API key to initialize preview</body></html>';
+                }
+                scriptContent.textContent = '';
+                return;
+            }
+            
+            scriptContent.textContent = generateScript(config);
+            if (window.Prism) {
+                Prism.highlightElement(scriptContent);
+            }
+
+            const isDark = config.theme === 'light' ? false : true;
+            
+            const html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { 
+      margin: 0; 
+      height: 100vh; 
+      background: ${isDark ? '#0c0c0e' : '#f4f4f5'}; 
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden; 
+      box-sizing: border-box;
+  }
+  .dummy-website {
+      padding: 40px 60px;
+      max-width: 900px;
+      margin: 0;
+      opacity: ${isDark ? '0.05' : '0.1'};
+      pointer-events: none;
+      color: ${isDark ? '#ffffff' : '#000000'};
+  }
+  .skeleton-box { background: currentColor; border-radius: 8px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="dummy-website">
+    <div class="skeleton-box" style="height: 40px; width: 35%; margin-bottom: 40px;"></div>
+    <div class="skeleton-box" style="height: 16px; width: 100%;"></div>
+    <div class="skeleton-box" style="height: 16px; width: 85%;"></div>
+    <div class="skeleton-box" style="height: 16px; width: 92%; margin-bottom: 50px;"></div>
+    <div class="skeleton-box" style="height: 180px; width: 100%; border-radius: 16px;"></div>
+</div>
+
+<script>
+window.NexusConfig = {
+  apiKey: '${config.apiKey}',
+  model: '${config.model}',
+  botName: '${config.botName.replace(/'/g, "\\'")}',
+  greeting: '${config.greeting.replace(/'/g, "\\'")}',
+  theme: '${config.theme}',
+  ${config.systemPrompt ? `systemPrompt: '${config.systemPrompt.replace(/'/g, "\\'")}',` : ''}
+};
+<\/script>
+<script defer src="${WIDGET_CDN}"><\/script>
+</body>
+</html>`;
+
+            previewLoader.style.opacity = '1';
+            
+            const newFrame = document.createElement('iframe');
+            newFrame.className = 'preview-frame';
+            newFrame.sandbox = 'allow-scripts allow-modals allow-same-origin';
+            
+            newFrame.onload = () => {
+                newFrame.classList.add('active');
+                previewLoader.style.opacity = '0';
+                
+                if (oldFrame && oldFrame !== newFrame) {
+                    oldFrame.classList.remove('active');
+                    setTimeout(() => {
+                        if (oldFrame.parentNode) {
+                            oldFrame.parentNode.removeChild(oldFrame);
+                        }
+                    }, 400);
+                }
+            };
+
+            newFrame.srcdoc = html;
+            previewContainer.appendChild(newFrame);
+        }
+
+        function debounce(fn, ms = 300) {
+            let timer;
+            return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+        }
+
+        const debouncedUpdate = debounce(() => {
+            const config = getConfig();
+            updatePreview(config);
+        }, 300);
+
+        function initListeners() {
+            [botName, greeting, themeSelect, modelSelect, systemPrompt].forEach(el => {
+                el.addEventListener('input', debouncedUpdate);
+                el.addEventListener('change', debouncedUpdate);
+            });
+            keySelect.addEventListener('change', () => {
+                selectedKey = keySelect.value;
+                debouncedUpdate();
+            });
+            copyScriptBtn.addEventListener('click', () => {
+                const text = scriptContent.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    copyScriptBtn.innerHTML = '<i class="ph-bold ph-check"></i> Copied!';
+                    copyScriptBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyScriptBtn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
+                        copyScriptBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {});
+            });
+        }
+
+        function initAuth() {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+                currentUser = user;
+                updateSidebar(user);
+                try {
+                    const activeKeys = await loadKeys(user);
+                    keys = activeKeys;
+                    populateKeySelect(keys);
+                    if (keys.length > 0) {
+                        keySelect.value = keys[0].key;
+                        selectedKey = keys[0].key;
+                    }
+                    debouncedUpdate();
+                } catch (e) {
+                }
+                loadingOverlay.style.display = 'none';
+            });
+        }
+
+        sidebarSignOut.addEventListener('click', () => signOut(auth));
+        mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
+        closeMobileMenuBtn.addEventListener('click', () => sidebar.classList.add('hidden'));
+
+        initListeners();
+        initAuth();
