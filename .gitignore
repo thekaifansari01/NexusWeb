@@ -144,3 +144,5 @@ media/
 sessions/
 *.session
 *.cookie
+.vercel
+.env*
