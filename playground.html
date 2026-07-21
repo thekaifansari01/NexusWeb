@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Playground · Nexus</title>
+    <title>Playground 路 Nexus</title>
     <link rel="icon" type="image/png" href="assets/favico.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,28 +76,6 @@
         .pg-input::placeholder { color: #52525b; font-weight: 500; }
         .pg-select option { background: #09090b; }
 
-        .preview-wrapper {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-            flex: 1; 
-            min-height: 400px;
-        }
-
-        .preview-header {
-            background: rgba(24,24,27,0.8);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 20;
-        }
-
         .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
         .mac-red { background: #ef4444; }
         .mac-yellow { background: #f59e0b; }
@@ -147,19 +125,6 @@
 
         @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        .script-box {
-            background: rgba(0,0,0,0.6);
-            border-radius: 12px;
-            padding: 1.5rem;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            border: 1px solid rgba(255,255,255,0.08);
-            position: relative;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
-            max-height: 260px;
-            overflow-y: auto;
-        }
-
         .script-box pre,
         .script-box code {
             margin: 0 !important;
@@ -170,12 +135,14 @@
             font-family: 'ui-monospace', monospace !important;
             white-space: pre-wrap !important;
             word-break: break-word !important;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
         .copy-btn {
-            position: sticky;
-            float: right;
-            top: 0;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             color: #a1a1aa;
@@ -197,6 +164,8 @@
         .sidebar-link.active { background: rgba(168,85,247,0.1); color: #a855f7; border-color: rgba(168,85,247,0.2); box-shadow: inset 0 0 15px rgba(168,85,247,0.1); }
         .sidebar-link { transition: all 0.2s ease; }
         .sidebar-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        
+        .tab-btn { transition: all 0.2s ease; }
     </style>
 </head>
 <body class="flex h-screen selection:bg-primary/30 selection:text-white">
@@ -274,7 +243,6 @@
             </div>
 
             <div class="w-full lg:w-[380px] glass-panel-premium rounded-3xl flex flex-col flex-shrink-0 overflow-y-auto scrollbar-custom p-7 gap-6 border border-white/5">
-                
                 <div class="flex items-center gap-3 border-b border-white/5 pb-4">
                     <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-300 border border-white/10">
                         <i class="ph-bold ph-sliders text-xl"></i>
@@ -325,36 +293,34 @@
                 </div>
             </div>
 
-            <div class="flex-1 flex flex-col gap-6 overflow-hidden">
-                
-                <div class="preview-wrapper glass-panel-premium rounded-3xl border border-white/5">
-                    <div class="preview-header">
-                        <div class="mac-dot mac-red"></div>
-                        <div class="mac-dot mac-yellow"></div>
-                        <div class="mac-dot mac-green"></div>
-                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-4">Live Preview</span>
+            <div class="flex-1 glass-panel-premium rounded-3xl border border-white/5 flex flex-col overflow-hidden">
+                <div class="bg-zinc-900/80 border-b border-white/5 px-4 flex items-center justify-between z-20">
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-1.5 ml-2 hidden sm:flex">
+                            <div class="mac-dot mac-red"></div>
+                            <div class="mac-dot mac-yellow"></div>
+                            <div class="mac-dot mac-green"></div>
+                        </div>
+                        <div class="flex gap-2 pt-3">
+                            <button id="tab-preview" class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 border-primary text-primary">Live Preview</button>
+                            <button id="tab-code" class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-zinc-500 hover:text-zinc-300">Script</button>
+                        </div>
                     </div>
-                    <div id="previewContainer" class="preview-container">
+                </div>
+
+                <div id="pane-preview" class="flex-1 relative bg-[#0c0c0e]">
+                    <div class="preview-container">
                         <div id="previewLoader" class="loader-spinner"></div>
                         <iframe id="previewFrameActive" class="preview-frame active" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
                     </div>
                 </div>
 
-                <div class="glass-panel-premium rounded-3xl p-6 border border-white/5 flex flex-col flex-shrink-0 gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                            <i class="ph-bold ph-code text-lg"></i>
-                        </div>
-                        <span class="text-sm font-black text-white tracking-tight">Deployment Script</span>
-                    </div>
-                    <div class="script-box scrollbar-custom" id="scriptBox">
-                        <button id="copyScriptBtn" class="copy-btn">
-                            <i class="ph-bold ph-copy"></i> Copy
-                        </button>
-                        <pre><code id="scriptContent" class="language-html"></code></pre>
-                    </div>
+                <div id="pane-code" class="hidden flex-1 relative bg-black/60 p-6 overflow-auto scrollbar-custom script-box">
+                    <button id="copyScriptBtn" class="copy-btn">
+                        <i class="ph-bold ph-copy"></i> Copy
+                    </button>
+                    <pre><code id="scriptContent" class="language-html"></code></pre>
                 </div>
-
             </div>
         </div>
     </div>
@@ -408,11 +374,34 @@
         const scriptContent = document.getElementById('scriptContent');
         const copyScriptBtn = document.getElementById('copyScriptBtn');
 
+        const tabPreview = document.getElementById('tab-preview');
+        const tabCode = document.getElementById('tab-code');
+        const panePreview = document.getElementById('pane-preview');
+        const paneCode = document.getElementById('pane-code');
+
         let currentUser = null;
         let keys = [];
         let selectedKey = '';
 
         const WIDGET_CDN = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.1.0/dist/nexus-assistant.min.js';
+
+        tabPreview.addEventListener('click', () => {
+            tabPreview.classList.add('border-primary', 'text-primary');
+            tabPreview.classList.remove('border-transparent', 'text-zinc-500');
+            tabCode.classList.remove('border-primary', 'text-primary');
+            tabCode.classList.add('border-transparent', 'text-zinc-500');
+            panePreview.classList.remove('hidden');
+            paneCode.classList.add('hidden');
+        });
+
+        tabCode.addEventListener('click', () => {
+            tabCode.classList.add('border-primary', 'text-primary');
+            tabCode.classList.remove('border-transparent', 'text-zinc-500');
+            tabPreview.classList.remove('border-primary', 'text-primary');
+            tabPreview.classList.add('border-transparent', 'text-zinc-500');
+            paneCode.classList.remove('hidden');
+            panePreview.classList.add('hidden');
+        });
 
         function updateSidebar(user) {
             if (!user) return;
@@ -484,7 +473,7 @@
             
             if (!config.apiKey) {
                 if (oldFrame) {
-                    oldFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;">Select an API key to initialize preview</body></html>';
+                    oldFrame.srcdoc = '<html><body style="background:#0c0c0e;color:#71717a;display:flex;align-items:center;justify-content:center;font-family:system-ui;font-size:14px;font-weight:600;margin:0;height:100vh;overflow:hidden;">Select an API key to initialize preview</body></html>';
                 }
                 scriptContent.textContent = '';
                 return;
@@ -506,16 +495,17 @@
 <style>
   body { 
       margin: 0; 
-      min-height: 100vh; 
+      height: 100vh; 
       background: ${isDark ? '#0c0c0e' : '#f4f4f5'}; 
       font-family: system-ui, -apple-system, sans-serif;
-      position: relative;
+      overflow: hidden; 
+      box-sizing: border-box;
   }
   .dummy-website {
       padding: 40px 60px;
       max-width: 900px;
       margin: 0;
-      opacity: ${isDark ? '0.07' : '0.12'};
+      opacity: ${isDark ? '0.05' : '0.1'};
       pointer-events: none;
       color: ${isDark ? '#ffffff' : '#000000'};
   }
