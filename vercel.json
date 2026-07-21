@@ -12,6 +12,10 @@
       "destination": "/api/auth"
     },
     {
+      "source": "/api/chat",
+      "destination": "/api/chat"
+    },
+    {
       "source": "/api/user/plan",
       "destination": "/api/user/plan"
     },
