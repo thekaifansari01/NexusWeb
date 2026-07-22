@@ -1,4 +1,4 @@
-// firestore.js
+// src/js/modules/firestore.js
 import { db } from "../config/firebase.js";
 import {
     collection, query, where, getDocs, addDoc, deleteDoc, doc,
@@ -9,29 +9,10 @@ const KEYS_COLLECTION = "apiKeys";
 const DOMAINS_COLLECTION = "authorizedDomains";
 const GROQ_COLLECTION = "userGroqKeys";
 
-export async function createApiKey(userId, name, key) {
-    const docRef = await addDoc(collection(db, KEYS_COLLECTION), {
-        userId,
-        name,
-        key,
-        status: "active",
-        createdAt: Timestamp.now()
-    });
-    return docRef.id;
-}
-
 export async function getApiKeys(userId) {
     const q = query(collection(db, KEYS_COLLECTION), where("userId", "==", userId));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-}
-
-export async function deleteApiKey(keyId) {
-    await deleteDoc(doc(db, KEYS_COLLECTION, keyId));
-}
-
-export async function revokeApiKey(keyId) {
-    await updateDoc(doc(db, KEYS_COLLECTION, keyId), { status: "revoked" });
 }
 
 export async function getDomains(userId) {
@@ -45,30 +26,62 @@ export async function getDomains(userId) {
     });
 }
 
+export async function deleteApiKey(keyId) {
+    const res = await fetch('/api/keys', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyId })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to delete key');
+    }
+    return res.json();
+}
+
 export async function addDomain(userId, domain) {
-    const q = query(
-        collection(db, DOMAINS_COLLECTION),
-        where("userId", "==", userId),
-        where("domain", "==", domain)
-    );
-    const existing = await getDocs(q);
-    if (!existing.empty) throw new Error("Domain already exists");
+    const res = await fetch('/api/domains', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to add domain');
+    }
+    return res.json();
+}
 
-    const countQ = query(collection(db, DOMAINS_COLLECTION), where("userId", "==", userId));
-    const countSnapshot = await getDocs(countQ);
-    if (countSnapshot.size >= 10) throw new Error("Maximum 10 domains allowed");
+export async function deleteDomain(domainId) {
+    const res = await fetch('/api/domains', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domainId })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to delete domain');
+    }
+    return res.json();
+}
 
-    const docRef = await addDoc(collection(db, DOMAINS_COLLECTION), {
+
+export async function createApiKey(userId, name, key) {
+    const docRef = await addDoc(collection(db, KEYS_COLLECTION), {
         userId,
-        domain: domain.toLowerCase().trim(),
-        createdAt: Timestamp.now(),
-        status: "active"
+        name,
+        key,
+        status: "active",
+        createdAt: Timestamp.now()
     });
     return docRef.id;
 }
 
-export async function deleteDomain(domainId) {
-    await deleteDoc(doc(db, DOMAINS_COLLECTION, domainId));
+export async function revokeApiKey(keyId) {
+    await updateDoc(doc(db, KEYS_COLLECTION, keyId), { status: "revoked" });
 }
 
 export async function toggleDomainStatus(domainId, currentStatus) {
