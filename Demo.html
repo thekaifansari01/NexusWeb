@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,10 +19,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/css/tailwind-output.css">
     <link rel="stylesheet" href="src/css/layout/navbar.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
         .demo-badge {
             display: inline-block;
             background: rgba(168, 85, 247, 0.12);
@@ -54,14 +69,14 @@
             color: #d4d4d8;
         }
         pre {
-            background: rgba(24, 24, 27, 0.6);
+            background: rgba(24, 24, 27, 0.6) !important;
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
-            padding: 1.2rem;
+            padding: 1.2rem !important;
             overflow-x: auto;
         }
         pre code {
-            background: transparent;
+            background: transparent !important;
             padding: 0;
             color: #d4d4d8;
             font-size: 0.85rem;
@@ -309,16 +324,13 @@
                         <i class="ph-bold ph-code text-primary"></i> Embed in 2 Steps
                     </h2>
                     <p class="text-zinc-400 mt-2 text-sm">Add the following code to your website:</p>
-                    <pre class="mt-4"><code>&lt;!-- 1. Configure the widget --&gt;
-                        &lt;script&gt;
-                        window.NexusConfig = {
-                        apiKey: 'YOUR_NEXUS_KEY',
-                        theme: 'auto'
-                        };
-                        &lt;/script&gt;
-
-                        &lt;!-- 2. Load the widget (CDN or local) --&gt;
-                    &lt;script src="https://cdn.nexus.ai/widget.js"&gt;&lt;/script&gt;</code></pre>
+                    <pre class="mt-4"><code class="language-html">&lt;script&gt;
+    window.NexusConfig = {
+        apiKey: 'YOUR_NEXUS_KEY',
+        theme: 'auto'
+    };
+&lt;/script&gt;
+&lt;script src="https://cdn.nexus.ai/widget.js"&gt;&lt;/script&gt;</code></pre>
                     <p class="text-xs text-zinc-500 mt-3 flex items-start gap-1">
                         <i class="ph-bold ph-info text-primary mt-0.5"></i>
                         <span>For local development, use <code>import('./src/js/index.js')</code> with importmap. See the <a href="/docs" class="text-primary hover:underline">docs</a> for advanced options.</span>
@@ -426,6 +438,7 @@
         };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.1.0/dist/nexus-assistant.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
     <script type="importmap">
         {
