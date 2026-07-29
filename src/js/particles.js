@@ -1,13 +1,12 @@
-// src/js/particles.js
 (function() {
     let particlesContainer;
     const MIN_WIDTH = 969;
-    const MAX_PARTICLES = 60; 
+    const MAX_PARTICLES = 25;
 
     function getParticleColor() {
         const theme = document.documentElement.getAttribute('data-theme');
         if (theme === 'dark') {
-            return ['#ffffff', '#a855f7', '#d8b4fe']; 
+            return ['#ffffff', '#a855f7', '#d8b4fe'];
         }
         return ['#333333', '#a855f7', '#777777'];
     }
@@ -17,7 +16,6 @@
             console.warn("tsParticles library not loaded");
             return;
         }
-
         if (particlesContainer) return;
 
         try {
@@ -35,29 +33,17 @@
                             type: "circle",
                         },
                         size: {
-                            value: { min: 1, max: 3 }, 
-                            animation: {
-                                enable: true,
-                                speed: 0.5,
-                                minimumValue: 0.5,
-                                sync: false,
-                            },
+                            value: { min: 1, max: 3 },
                         },
                         opacity: {
-                            value: { min: 0.1, max: 0.4 }, 
-                            animation: {
-                                enable: true,
-                                speed: 0.2,
-                                minimumValue: 0.05,
-                                sync: false,
-                            },
+                            value: { min: 0.1, max: 0.4 },
                         },
                         move: {
-                            direction: "top", 
+                            direction: "top",
                             enable: true,
                             outModes: { default: "out" },
                             random: true,
-                            speed: 0.3, 
+                            speed: 0.3,
                             straight: false,
                         },
                         number: {
@@ -66,7 +52,7 @@
                             limit: MAX_PARTICLES,
                         },
                         links: {
-                            enable: false, 
+                            enable: false,
                         },
                     },
                     background: {
@@ -75,18 +61,9 @@
                     interactivity: {
                         events: {
                             onHover: {
-                                enable: true,
-                                mode: "bubble", 
+                                enable: false,
                             },
                             resize: true,
-                        },
-                        modes: {
-                            bubble: {
-                                distance: 200,
-                                size: 4,
-                                duration: 2,
-                                opacity: 0.8,
-                            },
                         },
                     },
                     detectRetina: true,
