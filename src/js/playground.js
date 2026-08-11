@@ -45,7 +45,7 @@
         let keys = [];
         let selectedKey = '';
 
-        const WIDGET_CDN = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@3.1.0/dist/nexus-assistant.min.js';
+        const WIDGET_CDN = 'https://cdn.jsdelivr.net/npm/nexus-web-assistant@4.1.0/dist/nexus-assistant.min.js';
 
         tabPreview.addEventListener('click', () => {
             tabPreview.classList.add('border-primary', 'text-primary');
