@@ -15,12 +15,12 @@
     <meta name="twitter:title" content="Nexus Documentation – How to Embed AI Chatbot" />
     <meta name="twitter:description" content="Complete step-by-step guide to install Nexus AI assistant on any website. API keys, domain whitelisting, Groq setup, and troubleshooting." />
     <meta name="robots" content="index, follow" />
-    <link rel="icon" type="image/png" href="assets/favico.png">
+    <link rel="icon" type="image/png" href="assets/favico.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="src/css/tailwind-output.css">
+    <link rel="stylesheet" href="src/css/tailwind-output.css" />
     <link rel="stylesheet" href="src/css/styles.css" />
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #09090b; }
@@ -99,7 +99,7 @@
                     "name": "Why is my Nexus widget not showing up?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Ensure window.NexusConfig.apiKey is set correctly. Check the browser console for errors. Verify your domain is whitelisted in the Dashboard → Domains tab."
+                        "text": "Ensure window.NexusConfig.apiKey is set correctly. Check the browser console for errors. Verify your domain is whitelisted in the Dashboard → Domains tab. Also, if you have set disableScrollHide: false, the input bar may hide near the footer; scroll up to reveal it."
                     }
                 },
                 {
@@ -240,7 +240,7 @@
                     <span id="breadcrumbCurrent" class="text-white font-bold tracking-wide">Documentation</span>
                 </div>
             </div>
-            
+
             <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
                 <div class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 flex items-center justify-between text-zinc-500 hover:bg-white/10 transition-colors group">
                     <div class="flex items-center gap-2 flex-1">
@@ -331,14 +331,16 @@
                                 <div class="w-full min-w-0">
                                     <h3 class="text-lg font-bold text-white mb-2">Add the script tag</h3>
                                     <p class="text-zinc-400 text-sm font-medium leading-loose mb-6">Paste the following code into your HTML, preferably just before the closing <code class="bg-white/10 px-1.5 py-0.5 rounded text-zinc-200 font-mono text-xs border border-white/5">&lt;/body&gt;</code> tag.</p>
-                                    
+
                                     <div class="mac-window group">
                                         <pre><code class="language-html">&lt;script&gt;
 window.NexusConfig = {
   apiKey: 'YOUR_NEXUS_API_KEY',
   model: 'meta-llama/llama-4-scout-17b-16e-instruct',
   botName: 'Nexus AI',
-  greeting: '👋 Hello! How can I assist you today?'
+  greeting: '👋 Hello! How can I assist you today?',
+  // Optional: disable auto-hide near footer
+  // disableScrollHide: true
 };
 &lt;/script&gt;
 
@@ -405,6 +407,12 @@ window.NexusConfig = {
                                         <td><code class="text-zinc-500 font-mono text-xs">'auto'</code></td>
                                         <td class="leading-relaxed">Accepts <code class="text-zinc-400">dark</code>, <code class="text-zinc-400">light</code>, or <code class="text-zinc-400">auto</code> (detects from website).</td>
                                     </tr>
+                                    <tr>
+                                        <td><code class="text-zinc-200 font-bold">disableScrollHide</code></td>
+                                        <td><span class="bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-md font-mono text-xs border border-white/10">boolean</span></td>
+                                        <td><code class="text-zinc-500 font-mono text-xs">false</code></td>
+                                        <td class="leading-relaxed">When set to <code class="text-zinc-400">true</code>, the floating input bar will never hide automatically (even near the page footer). Useful for pages where you want the bar always visible.</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -418,7 +426,8 @@ window.NexusConfig = {
   botName: 'DocBot',
   greeting: '📚 Welcome to our docs! Ask me anything.',
   systemPrompt: 'You are a helpful assistant. Cite sources.',
-  theme: 'dark'
+  theme: 'dark',
+  disableScrollHide: true   // ← bar will never hide
 };</code></pre>
                             </div>
                         </div>
@@ -426,6 +435,11 @@ window.NexusConfig = {
                         <div class="bg-primary/5 border-l-2 border-primary p-6 rounded-r-2xl mt-8 flex items-start gap-4">
                             <i class="ph-fill ph-info text-primary text-2xl shrink-0 mt-0.5"></i>
                             <p class="text-sm text-zinc-300 font-medium leading-loose"><strong class="text-white">System Prompt Tip:</strong> Your custom prompt is appended to the page context. The AI will always prioritize the page content over general knowledge.</p>
+                        </div>
+
+                        <div class="bg-amber-500/5 border-l-2 border-amber-500 p-6 rounded-r-2xl mt-6 flex items-start gap-4">
+                            <i class="ph-fill ph-lightbulb text-amber-400 text-2xl shrink-0 mt-0.5"></i>
+                            <p class="text-sm text-zinc-300 font-medium leading-loose"><strong class="text-white">Scroll Hide Behaviour:</strong> By default, the input bar hides when you scroll near the footer (bottom 100px) to avoid blocking content. Set <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">disableScrollHide: true</code> to keep it always visible.</p>
                         </div>
                     </section>
 
@@ -464,10 +478,10 @@ window.NexusConfig = {
                     <section id="theming" class="doc-section" data-searchable="Theming">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🎨 Theming</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-6">Nexus automatically adapts to your website's theme, but you can also force a specific mode or let users toggle it.</p>
-                        
+
                         <h3 class="text-xl font-bold text-white mt-10 mb-4">Auto-detection Engine</h3>
                         <p class="text-zinc-400 text-sm font-medium leading-loose mb-6">By default (<code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">theme: 'auto'</code>), the widget tracks visual context signals in this sequential order:</p>
-                        
+
                         <ol class="list-decimal pl-6 text-zinc-400 space-y-3 mb-8 text-sm font-medium leading-loose">
                             <li>Explicit execution setup via <code class="text-primary font-mono">window.NexusConfig.theme</code></li>
                             <li>Cached environment flag matching persistent state indicators inside <code class="text-zinc-200 font-mono">localStorage</code></li>
@@ -484,7 +498,7 @@ window.NexusConfig = {
 
                     <section id="features" class="doc-section" data-searchable="Features">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">✨ Key Features</h2>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
                             <div class="bg-zinc-900/30 border border-white/5 rounded-[20px] p-8 hover:-translate-y-1 transition-all hover:border-white/20 shadow-md">
                                 <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 border border-primary/20">
@@ -553,10 +567,10 @@ window.NexusConfig = {
 
                     <section id="advanced" class="doc-section" data-searchable="Advanced Customization">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔧 Advanced Customization</h2>
-                        
+
                         <h3 class="text-xl font-bold text-white mt-10 mb-4">Styling Overrides</h3>
                         <p class="text-zinc-400 text-sm font-medium leading-loose mb-6">Customize the widget's appearance by overriding targeted layout variables mapped straight on the custom identity layer selector target parameter <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">#ai-widget-root</code>.</p>
-                        
+
                         <div class="mac-window group mb-10">
                             <pre><code class="language-css">#ai-widget-root {
   --bg-panel: rgba(10, 10, 10, 0.92);
@@ -572,7 +586,7 @@ window.NexusConfig = {
 
                         <h3 class="text-xl font-bold text-white mt-10 mb-4">Programmatic API Control</h3>
                         <p class="text-zinc-400 text-sm font-medium leading-loose mb-6">The widget ecosystem injects flexible custom methods straight inside the window browser context container layer. Execute these methods directly within local custom application files:</p>
-                        
+
                         <div class="premium-table-wrapper mb-8">
                             <table class="premium-table">
                                 <thead>
@@ -606,7 +620,7 @@ window.NexusConfig = {
                     <section id="api-reference" class="doc-section" data-searchable="API Reference">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🔌 API Reference</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">The embedded script interfaces secure communications down your secure proxy entry paths matching endpoint layouts at <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs border border-white/10">POST /api/chat</code>. Expected processing payloads follow this structural format:</p>
-                        
+
                         <div class="mac-window group mb-8">
                             <pre><code class="language-json">{
   "nexusKey": "nxs_abc123def456",
@@ -647,7 +661,7 @@ window.NexusConfig = {
                     <section id="errors" class="doc-section" data-searchable="Error Codes">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">⚠️ Error Codes</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Common HTTP status codes returned by the Nexus proxy and their meanings:</p>
-                        
+
                         <div class="premium-table-wrapper error-table mb-10">
                             <table class="premium-table">
                                 <thead>
@@ -691,11 +705,11 @@ window.NexusConfig = {
                     <section id="faq" class="doc-section" data-searchable="FAQ">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">❓ Troubleshooting & FAQ</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Common issues and frequently asked questions.</p>
-                        
+
                         <div class="bg-black/20 rounded-[24px] p-6 border border-white/5 shadow-inner">
                             <div class="faq-item">
                                 <div class="faq-question"><i class="ph-bold ph-question"></i> Widget is not showing up on my page.</div>
-                                <p class="text-sm text-zinc-400 leading-loose ml-9">Ensure <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs">window.NexusConfig.apiKey</code> is set correctly. Check the browser console for errors. Also verify that your domain is whitelisted in the Dashboard → Domains.</p>
+                                <p class="text-sm text-zinc-400 leading-loose ml-9">Ensure <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs">window.NexusConfig.apiKey</code> is set correctly. Check the browser console for errors. Also verify that your domain is whitelisted in the Dashboard → Domains. If the input bar is hidden near the footer, scroll up to reveal it, or set <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs">disableScrollHide: true</code>.</p>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-question"><i class="ph-bold ph-question"></i> I get a 403 Forbidden error.</div>
@@ -709,13 +723,17 @@ window.NexusConfig = {
                                 <div class="faq-question"><i class="ph-bold ph-question"></i> What happens when I hit the free tier limit?</div>
                                 <p class="text-sm text-zinc-400 leading-loose ml-9">Once you exceed 1,000 requests in a month, the API will return a <strong class="text-zinc-200">429 Too Many Requests</strong> error. Usage resets on the 1st of every month. <a href="/pricing" class="text-primary hover:underline">Upgrade your plan</a> for higher limits.</p>
                             </div>
+                            <div class="faq-item">
+                                <div class="faq-question"><i class="ph-bold ph-question"></i> Can I keep the input bar always visible?</div>
+                                <p class="text-sm text-zinc-400 leading-loose ml-9">Yes — set <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs">disableScrollHide: true</code> in your <code class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono text-xs">window.NexusConfig</code>. The bar will never hide automatically, even near the footer.</p>
+                            </div>
                         </div>
                     </section>
 
                     <section id="system-status" class="doc-section" data-searchable="System Status">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">📊 System Status</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Monitor the health of the Nexus platform in real time. The <a href="/status" class="text-primary hover:underline font-bold">Status Page</a> provides uptime metrics, service latencies, and incident history.</p>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                             <div class="bg-zinc-900/30 border border-white/5 rounded-2xl p-8 text-center shadow-sm hover:border-white/10 transition-all">
                                 <div class="text-4xl font-black text-emerald-400 mb-2">99.99%</div>
@@ -736,7 +754,7 @@ window.NexusConfig = {
                     <section id="self-hosting" class="doc-section" data-searchable="Self-Hosting">
                         <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">🖥️ Self-Hosting</h2>
                         <p class="text-zinc-400 font-medium leading-loose mb-8">Since Nexus is open-source (MIT), you can self-host the widget and backend entirely on your own infrastructure.</p>
-                        
+
                         <div class="bg-zinc-900/40 border border-white/5 rounded-[24px] p-8 shadow-lg mb-8">
                             <div class="mac-window group">
                                 <pre><code class="language-bash">git clone https://github.com/thekaifansari01/NexusWeb.git
@@ -1048,7 +1066,8 @@ npm run build</code></pre>
     </script>
     <script>
         window.NexusConfig = {
-            apiKey: 'e0415383ab2f7ffb5c0bbeb2412849068e515047ed8ca17058a25383fcfca14d'
+            apiKey: 'e0415383ab2f7ffb5c0bbeb2412849068e515047ed8ca17058a25383fcfca14d',
+            disableScrollHide: false  // ← default, bar hides near footer; set true to keep always visible
         };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/nexus-web-assistant@4.2.0/dist/nexus-assistant.min.js"></script>
