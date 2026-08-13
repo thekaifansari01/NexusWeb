@@ -1,7 +1,9 @@
 # robots.txt
+# Allow all crawlers, but block sensitive/admin areas
 
 User-agent: *
 Allow: /
+
 Disallow: /dashboard
 Disallow: /login
 Disallow: /activity
@@ -11,4 +13,5 @@ Disallow: /api/
 Disallow: /src/
 Disallow: /assets/
 
-Sitemap: https://trynexus.site/sitemap.xml
+# Sitemap location
+Sitemap: https://www.trynexus.site/sitemap.xml
